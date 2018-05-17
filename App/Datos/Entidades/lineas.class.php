@@ -9,31 +9,35 @@
 	include_once PATH_DATOS.'BaseDatos/sql.class.php';
 	include_once PATH_DATOS.'Entidades/usuarioperfil.class.php';
 
-	class Impresoras
+	class Lineas
 	{			
 		/*#####################################*/
 		/* DECLARACIONES / GETTERS AND SETTERS */
 		/*#####################################*/
 
-		private $_serialNro;
-		public function getSerialNro(){ return $this->_serialNro; }
-		public function setSerialNro($serialNro){ $this->_serialNro =$serialNro; }
+		private $_nroLinea;
+		public function getNroLinea(){ return $this->_nroLinea; }
+		public function setNroLinea($nroLinea){ $this->_nroLinea =$nroLinea; }
 		
-		private $_marca;
-		public function getMarca(){ return $this->_marca; }
-		public function setMarca($marca){ $this->_marca =$marca; }
+		private $_empresa;
+		public function getEmpresa(){ return $this->_empresa; }
+		public function setEmpresa($empresa){ $this->_empresa =$empresa; }
 
-		private $_modelo;
-		public function getModelo(){ return $this->_modelo; }
-		public function setModelo($modelo){ $this->_modelo =$modelo; }
+		private $_nombrePlan;
+		public function getNombrePlan(){ return $this->_nombrePlan; }
+		public function setNombrePlan($nombrePlan){ $this->_nombrePlan =$nombrePlan; }
 		
-		private $_fechaCompra;
-		public function getFechaCompra(){ return $this->_fechaCompra; }
-		public function setFechaCompra($fechaCompra){ $this->_fechaCompra =$fechaCompra; }
+		private $_fechaAlta;
+		public function getFechaAlta(){ return $this->_fechaAlta; }
+		public function setFechaAlta($fechaAlta){ $this->_fechaAlta =$fechaAlta; }
 
-		private $_precioCompra;
-		public function getPrecioCompra(){ return $this->_precioCompra; }
-		public function setPrecioCompra($precioCompra){ $this->_precioCompra =$precioCompra; }
+		private $_costo;
+		public function getCosto(){ return $this->_costo; }
+		public function setCosto($costo){ $this->_costo =$costo; }
+
+		private $_consEstimado;
+		public function getConsEstimado(){ return $this->_consEstimado; }
+		public function setConsEstimado($consEstimado){ $this->_consEstimado =$consEstimado; }
 
 		private $_fechaBaja;
 		public function getFechaBaja(){ return $this->_fechaBaja; }
@@ -42,6 +46,14 @@
 		private $_obs;
 		public function getObs(){ return $this->_obs; }
 		public function setObs($obs){ $this->_obs =$obs; }
+		
+		private $_asocEq;
+		public function getAsocEq(){ return $this->_asocEq; }
+		public function setAsocEq($asocEq){ $this->_asocEq =$asocEq; }
+		
+		private $_asocUs;
+		public function getAsocUs(){ return $this->_asocUs; }
+		public function setAsocUs($asocUs){ $this->_asocUs =$asocUs; }
 
 
 		/*#############*/
@@ -49,13 +61,16 @@
 		/*#############*/
 
 		function __construct(){
-			$this->setSerialNro('');
-			$this->setMarca('');
-			$this->setModelo('');
-			$this->setFechaCompra('');
-			$this->setPrecioCompra(0);
+			$this->setNroLinea('');
+			$this->setEmpresa('');
+			$this->setNombrePlan('');
+			$this->setFechaAlta('');
+			$this->setCosto(0);
+			$this->setConsEstimado(0);
 			$this->setFechaBaja('');
 			$this->setObs('');
+			$this->setAsocEq(0);
+			$this->setAsocUs(0);
 			
 		}
 
@@ -67,20 +82,22 @@
 		{
 			try {
 
-				$query="INSERT INTO impresoras (
-										serialNro,
-		        						marca,	
-		        						modelo,
-		        						fechaCompra,
-		        						precioCompra,
-		        						obs
+				$query="INSERT INTO lineas (
+										nroLinea,
+		        						empresa,	
+		        						nombrePlan,
+		        						fechaAlta,
+		        						costo,
+		        						consEstimado,
+		        						obs,
 	        			) VALUES (
-	        							'".$this->getSerialNro()."',   	
-	        							'".$this->getMarca()."',     	
-	        							'".$this->getModelo()."',
-	        							'".$this->getFechaCompra()."',
-	        							".$this->getPrecioCompra().",
-	        							'".$this->getObs()."'
+	        							'".$this->getNroLinea()."',   	
+	        							'".$this->getEmpresa()."',     	
+	        							'".$this->getNombrePlan()."',
+	        							'".$this->getFechaAlta()."',
+	        							".$this->getCosto().",
+	        							".$this->getConsEstimado().",
+	        							'".$this->getObs()."',
 	        			)";        
 		
 				# Ejecucion 					
@@ -96,20 +113,17 @@
 			try {
 
 				# Validaciones 			
-				if(empty($this->getSerialNro()))
+				if(empty($this->getNroLinea()))
 					throw new Exception("Impresora no identificada");
 
 				
 				# Query 			
-				$query="UPDATE impresoras SET
-								serialNro='".$this->getSerialNro()."',
-								marca='".$this->getMarca()."',
-								modelo='".$this->getModelo()."',
-								fechaCompra='".$this->getFechaCompra()."',
-								precioCompra=".$this->getPrecioCompra().",
+				$query="UPDATE lineas SET
 								fechaBaja='".$this->getFechaBaja()."',
-								obs='".$this->getObs()."'
-							WHERE serialNro=".$this->getSerialNro();
+								obs='".$this->getObs()."',
+								asocEq=".$this->getAsocEq().",
+								asocUs=".$this->getAsocUs().",
+							WHERE nroLinea=".$this->getNroLinea();
 
 				# Ejecucion 					
 				return SQL::update($conexion,$query);	
@@ -124,13 +138,13 @@
 			try {
 				
 				# Validaciones 			
-				if(empty($this->getSerialNro()))
+				if(empty($this->getNroLinea()))
 					throw new Exception("Impresora no identificada");
 			
 				# Query 			
-				$query="UPDATE impresoras SET							
-								fechaBaja = '".$this->getFecha()."
-							WHERE serialNro='".$this->getSerialNro()."'";
+				$query="UPDATE lineas SET							
+								fechaBaja = '".$this->getFechaBaja()."
+							WHERE nroLinea='".$this->getNroLinea()."'";
 
 				# Ejecucion 	
 				return SQL::delete($conexion,$query);
@@ -144,10 +158,10 @@
 		{			
 			try {
 											
-				$query = "SELECT * FROM impresoras order by fechaBaja";
+				$query = "SELECT * FROM lineas order by fechaBaja";
 				
 				# Ejecucion 					
-				$result = SQL::selectObject($query, new Impresoras);
+				$result = SQL::selectObject($query, new Lineas);
 						
 				return $result;
 
@@ -164,14 +178,14 @@
 				# Query
 				if($plaza=='' || $plaza == '0'){
 					$query = "SELECT 
-					impresoras.serialNro, impresoras.modelo, impresoras.marca, 
-					impresoras.fechaCompra, impresoras.precioCompra, impresoras.fechaBaja, impresoras.obs
+					impresoras.nroLinea, impresoras.nombrePlan, impresoras.empresa, 
+					impresoras.fechaAlta, impresoras.costo, impresoras.fechaBaja, impresoras.obs
 					FROM impresoras left join impresora_plaza 
-					on impresoras.serialNro = impresora_plaza.serialNro
+					on impresoras.nroLinea = impresora_plaza.nroLinea
 					WHERE fechaDev is null or fechaBaja is null
 					order by fechaBaja";
 				} else {
-					$query = "SELECT * FROM impresoras inner join impresora_plaza on impresoras.serialNro = impresora_plaza.serialNro WHERE fechaDev is null and plaza='".$plaza."'";
+					$query = "SELECT * FROM impresoras inner join impresora_plaza on impresoras.nroLinea = impresora_plaza.nroLinea WHERE fechaDev is null and plaza='".$plaza."'";
 				}
 
 				# Ejecucion 					
@@ -192,14 +206,14 @@
 				# Query
 				if($gestorId=='' || $gestorId == '0'){
 					$query = "SELECT 
-					impresoras.serialNro, impresoras.modelo, impresoras.marca, 
-					impresoras.fechaCompra, impresoras.precioCompra, impresoras.fechaBaja, impresoras.obs
+					impresoras.nroLinea, impresoras.nombrePlan, impresoras.empresa, 
+					impresoras.fechaAlta, impresoras.costo, impresoras.fechaBaja, impresoras.obs
 					FROM impresoras left join impresora_plaza 
-					on impresoras.serialNro = impresora_plaza.serialNro 
+					on impresoras.nroLinea = impresora_plaza.nroLinea 
 					WHERE fechaDev is null or fechaBaja is null
 					order by fechaBaja";
 				} else {
-					$query = "SELECT * FROM impresoras inner join impresora_plaza on impresoras.serialNro = impresora_plaza.serialNro WHERE fechaDev is null and gestorId='".$gestorId."'";
+					$query = "SELECT * FROM impresoras inner join impresora_plaza on impresoras.nroLinea = impresora_plaza.nroLinea WHERE fechaDev is null and gestorId='".$gestorId."'";
 				}
 
 				# Ejecucion 					
@@ -213,11 +227,11 @@
 
 		}
 
-		public function getMarcaConSerial($serialNro)
+		public function getEmpresaConSerial($nroLinea)
 		{			
 			try {
 				# Query
-				$query="SELECT * FROM impresoras WHERE serialNro='".$serialNro."'";
+				$query="SELECT * FROM lineas WHERE nroLinea='".$nroLinea."'";
 	
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new Impresoras);
@@ -236,49 +250,37 @@
 
 		}
 
-		public function bajaImpresora($conexion)
-		{
-			try {
-
-				# Query 			
-				$query="UPDATE impresoras SET
-								fechaBaja='".$this->getFechaBaja()."',
-								obs='".$this->getObs()."'
-							WHERE serialNro=".$this->getSerialNro();
-
-				# Ejecucion 					
-				return SQL::update($conexion,$query);	
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());
-			}		
-		}
-
 		public function setPropiedadesBySelect($filas)
 		{	
 			if(empty($filas)){
 				$this->cleanClass();
 			}
 			else{
-				$this->setSerialNro($filas['serialNro']);
-				$this->setMarca(trim($filas['marca']));			
-				$this->setModelo(trim($filas['modelo']));			
-				$this->setFechaCompra($filas['fechaCompra']);			
-				$this->setPrecioCompra(trim($filas['precioCompra']));			
+				$this->setNroLinea($filas['nroLinea']);
+				$this->setEmpresa(trim($filas['empresa']));			
+				$this->setNombrePlan(trim($filas['nombrePlan']));			
+				$this->setFechaAlta($filas['fechaAlta']);			
+				$this->setCosto(trim($filas['costo']));			
+				$this->setConsEstimado(trim($filas['consEstimado']));			
 				$this->setFechaBaja($filas['fechaBaja']);			
 				$this->setObs($filas['obs']);
+				$this->setAsocEq($filas['asocEq']);
+				$this->setAsocUs($filas['asocUs']);
 			}
 		}
 
 		private function cleanClass()
 		{
-			$this->setSerialNro(0);
-			$this->setMarca('');
-			$this->setModelo('');
-			$this->setFechaCompra('');
-			$this->setPrecioCompra(0);
+			$this->setNroLinea('');
+			$this->setEmpresa('');
+			$this->setNombrePlan('');
+			$this->setFechaAlta('');
+			$this->setCosto(0);
+			$this->setConsEstimado(0);
 			$this->setFechaBaja('');
 			$this->setObs('');
+			$this->setAsocEq(0);
+			$this->setAsocUs(0);
 		}
 
 		private function createTable()

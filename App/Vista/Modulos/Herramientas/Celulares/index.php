@@ -21,12 +21,11 @@
   $handlerUs = new HandlerUsuarios;
 
   $user = $usuarioActivoSesion;
-  $fplaza=(isset($_GET["fplaza"])?$_GET["fplaza"]:'');
   $fgestor=(isset($_GET["fgestor"])?$_GET["fgestor"]:'');
   $fgestorId=(isset($_GET["fgestorId"])?$_GET["fgestorId"]:0);
   $arrCoordinador = $handler->selectAllPlazasArray();
   $arrGestor = $handler->selectAllGestor($fplaza); 
-  $arrUsuarios = $handlerUs->selectGestores();
+  $arrUsuarios = $handlerUs->selectTodos();
 
   /*$url_detalle = "index.php?view=impresora_detalle";
   $url_asignacion = "index.php?view=asignar_imp";
@@ -219,14 +218,6 @@
 <script type="text/javascript">        
   $(document).ready(function(){                
     $("#mnu_herramientas").addClass("active");
-  });
-
-  $(document).ready(function() {
-    $("#slt_plaza").select2({
-        placeholder: "Seleccionar",                  
-    }).on('change', function (e) { 
-      filtrarReporte(); 
-    });
   });
 
   $(document).ready(function() {

@@ -9,7 +9,7 @@
 	include_once PATH_DATOS.'Entidades/asoc_lineas.class.php';
 	include_once PATH_DATOS.'Entidades/equipos.class.php';
 	include_once PATH_DATOS.'Entidades/lineas.class.php';
-	include_once PATH_DATOS.'Entidades/consumos_mes.class.php';
+	//include_once PATH_DATOS.'Entidades/consumos_mes.class.php';
 	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
 	
 	class HandlerCelulares{

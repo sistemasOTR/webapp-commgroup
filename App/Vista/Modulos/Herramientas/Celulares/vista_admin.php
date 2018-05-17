@@ -7,7 +7,7 @@
 <div class="box box-solid">
   <div class="box-header with-border">
     <i class="fa fa-list"></i>
-    <h3 class="box-title">Listado de Impresoras</h3>
+    <h3 class="box-title">Líneas entregadas</h3>
 
     
     <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-nuevo'>

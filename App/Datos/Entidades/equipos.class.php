@@ -9,15 +9,15 @@
 	include_once PATH_DATOS.'BaseDatos/sql.class.php';
 	include_once PATH_DATOS.'Entidades/usuarioperfil.class.php';
 
-	class Impresoras
+	class Equipos
 	{			
 		/*#####################################*/
 		/* DECLARACIONES / GETTERS AND SETTERS */
 		/*#####################################*/
 
-		private $_serialNro;
-		public function getSerialNro(){ return $this->_serialNro; }
-		public function setSerialNro($serialNro){ $this->_serialNro =$serialNro; }
+		private $_IMEI;
+		public function getIMEI(){ return $this->_IMEI; }
+		public function setIMEI($IMEI){ $this->_IMEI =$IMEI; }
 		
 		private $_marca;
 		public function getMarca(){ return $this->_marca; }
@@ -39,9 +39,29 @@
 		public function getFechaBaja(){ return $this->_fechaBaja; }
 		public function setFechaBaja($fechaBaja){ $this->_fechaBaja =$fechaBaja; }
 		
-		private $_obs;
-		public function getObs(){ return $this->_obs; }
-		public function setObs($obs){ $this->_obs =$obs; }
+		private $_obsBaja;
+		public function getObsBaja(){ return $this->_obsBaja; }
+		public function setObsBaja($obsBaja){ $this->_obsBaja =$obsBaja; }
+
+		private $_fechaPerd;
+		public function getFechaPerd(){ return $this->_fechaPerd; }
+		public function setFechaPerd($fechaPerd){ $this->_fechaPerd =$fechaPerd; }
+		
+		private $_obsPerd;
+		public function getObsPerd(){ return $this->_obsPerd; }
+		public function setObsPerd($obsPerd){ $this->_obsPerd =$obsPerd; }
+
+		private $_fechaRobo;
+		public function getFechaRobo(){ return $this->_fechaRobo; }
+		public function setFechaRobo($fechaRobo){ $this->_fechaRobo =$fechaRobo; }
+		
+		private $_obsRobo;
+		public function getObsRobo(){ return $this->_obsRobo; }
+		public function setObsRobo($obsRobo){ $this->_obsRobo =$obsRobo; }
+
+		private $_asocLinea;
+		public function getAsocLinea(){ return $this->_asocLinea; }
+		public function setAsocLinea($asocLinea){ $this->_asocLinea =$asocLinea; }
 
 
 		/*#############*/
@@ -49,13 +69,18 @@
 		/*#############*/
 
 		function __construct(){
-			$this->setSerialNro('');
+			$this->setIMEI(0);
 			$this->setMarca('');
 			$this->setModelo('');
 			$this->setFechaCompra('');
 			$this->setPrecioCompra(0);
 			$this->setFechaBaja('');
-			$this->setObs('');
+			$this->setObsBaja('');
+			$this->setFechaPerd('');
+			$this->setObsPerd('');
+			$this->setFechaRobo('');
+			$this->setObsRobo('');
+			$this->setAsocLinea(0);
 			
 		}
 
@@ -67,20 +92,18 @@
 		{
 			try {
 
-				$query="INSERT INTO impresoras (
-										serialNro,
+				$query="INSERT INTO equipos (
+										IMEI,
 		        						marca,	
 		        						modelo,
 		        						fechaCompra,
 		        						precioCompra,
-		        						obs
 	        			) VALUES (
-	        							'".$this->getSerialNro()."',   	
+	        							".$this->getIMEI().",
 	        							'".$this->getMarca()."',     	
 	        							'".$this->getModelo()."',
 	        							'".$this->getFechaCompra()."',
 	        							".$this->getPrecioCompra().",
-	        							'".$this->getObs()."'
 	        			)";        
 		
 				# Ejecucion 					
@@ -96,20 +119,20 @@
 			try {
 
 				# Validaciones 			
-				if(empty($this->getSerialNro()))
+				if(empty($this->getIMEI()))
 					throw new Exception("Impresora no identificada");
 
 				
 				# Query 			
-				$query="UPDATE impresoras SET
-								serialNro='".$this->getSerialNro()."',
+				$query="UPDATE equipos SET
+								IMEI=".$this->getIMEI().",
 								marca='".$this->getMarca()."',
 								modelo='".$this->getModelo()."',
 								fechaCompra='".$this->getFechaCompra()."',
 								precioCompra=".$this->getPrecioCompra().",
 								fechaBaja='".$this->getFechaBaja()."',
-								obs='".$this->getObs()."'
-							WHERE serialNro=".$this->getSerialNro();
+								obs='".$this->getObsBaja()."'
+							WHERE IMEI=".$this->getIMEI();
 
 				# Ejecucion 					
 				return SQL::update($conexion,$query);	
@@ -124,13 +147,13 @@
 			try {
 				
 				# Validaciones 			
-				if(empty($this->getSerialNro()))
+				if(empty($this->getIMEI()))
 					throw new Exception("Impresora no identificada");
 			
 				# Query 			
-				$query="UPDATE impresoras SET							
-								fechaBaja = '".$this->getFecha()."
-							WHERE serialNro='".$this->getSerialNro()."'";
+				$query="UPDATE equipos SET							
+								fechaBaja = '".$this->getFechaBaja()."
+							WHERE IMEI=".$this->getIMEI();
 
 				# Ejecucion 	
 				return SQL::delete($conexion,$query);
@@ -144,10 +167,10 @@
 		{			
 			try {
 											
-				$query = "SELECT * FROM impresoras order by fechaBaja";
+				$query = "SELECT * FROM equipos order by fechaBaja";
 				
 				# Ejecucion 					
-				$result = SQL::selectObject($query, new Impresoras);
+				$result = SQL::selectObject($query, new Equipos);
 						
 				return $result;
 
@@ -155,103 +178,6 @@
 				throw new Exception($e->getMessage());						
 			}
 
-		}
-
-		public function selectXPlaza($plaza)
-		{			
-			try {
-											
-				# Query
-				if($plaza=='' || $plaza == '0'){
-					$query = "SELECT 
-					impresoras.serialNro, impresoras.modelo, impresoras.marca, 
-					impresoras.fechaCompra, impresoras.precioCompra, impresoras.fechaBaja, impresoras.obs
-					FROM impresoras left join impresora_plaza 
-					on impresoras.serialNro = impresora_plaza.serialNro
-					WHERE fechaDev is null or fechaBaja is null
-					order by fechaBaja";
-				} else {
-					$query = "SELECT * FROM impresoras inner join impresora_plaza on impresoras.serialNro = impresora_plaza.serialNro WHERE fechaDev is null and plaza='".$plaza."'";
-				}
-
-				# Ejecucion 					
-				$result = SQL::selectObject($query, new Impresoras);
-						
-				return $result;
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());						
-			}
-
-		}
-
-		public function selectXGestor($gestorId)
-		{			
-			try {
-											
-				# Query
-				if($gestorId=='' || $gestorId == '0'){
-					$query = "SELECT 
-					impresoras.serialNro, impresoras.modelo, impresoras.marca, 
-					impresoras.fechaCompra, impresoras.precioCompra, impresoras.fechaBaja, impresoras.obs
-					FROM impresoras left join impresora_plaza 
-					on impresoras.serialNro = impresora_plaza.serialNro 
-					WHERE fechaDev is null or fechaBaja is null
-					order by fechaBaja";
-				} else {
-					$query = "SELECT * FROM impresoras inner join impresora_plaza on impresoras.serialNro = impresora_plaza.serialNro WHERE fechaDev is null and gestorId='".$gestorId."'";
-				}
-
-				# Ejecucion 					
-				$result = SQL::selectObject($query, new Impresoras);
-						
-				return $result;
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());						
-			}
-
-		}
-
-		public function getMarcaConSerial($serialNro)
-		{			
-			try {
-				# Query
-				$query="SELECT * FROM impresoras WHERE serialNro='".$serialNro."'";
-	
-				# Ejecucion 					
-				$result = SQL::selectObject($query, new Impresoras);
-				if(is_null($result)){
-					return $result;
-				} else {
-					$result= get_object_vars($result);
-
-					return $result;
-
-				}
-				
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());		
-			}
-
-		}
-
-		public function bajaImpresora($conexion)
-		{
-			try {
-
-				# Query 			
-				$query="UPDATE impresoras SET
-								fechaBaja='".$this->getFechaBaja()."',
-								obs='".$this->getObs()."'
-							WHERE serialNro=".$this->getSerialNro();
-
-				# Ejecucion 					
-				return SQL::update($conexion,$query);	
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());
-			}		
 		}
 
 		public function setPropiedadesBySelect($filas)
@@ -260,25 +186,35 @@
 				$this->cleanClass();
 			}
 			else{
-				$this->setSerialNro($filas['serialNro']);
+				$this->setIMEI($filas['IMEI']);
 				$this->setMarca(trim($filas['marca']));			
 				$this->setModelo(trim($filas['modelo']));			
 				$this->setFechaCompra($filas['fechaCompra']);			
-				$this->setPrecioCompra(trim($filas['precioCompra']));			
+				$this->setPrecioCompra(trim($filas['precioCompra']));
 				$this->setFechaBaja($filas['fechaBaja']);			
-				$this->setObs($filas['obs']);
+				$this->setObsBaja($filas['obBaja']);
+				$this->setFechaPerd($filas['fechaPerd']);			
+				$this->setObsPerd($filas['obsPerd']);
+				$this->setFechaRobo($filas['fechaRobo']);			
+				$this->setObsRobo($filas['obsRobo']);
+				$this->setAsocLinea($filas['asocLinea']);
 			}
 		}
 
 		private function cleanClass()
 		{
-			$this->setSerialNro(0);
+			$this->setIMEI(0);
 			$this->setMarca('');
 			$this->setModelo('');
 			$this->setFechaCompra('');
 			$this->setPrecioCompra(0);
 			$this->setFechaBaja('');
-			$this->setObs('');
+			$this->setObsBaja('');
+			$this->setFechaPerd('');
+			$this->setObsPerd('');
+			$this->setFechaRobo('');
+			$this->setObsRobo('');
+			$this->setAsocLinea(0);
 		}
 
 		private function createTable()
