@@ -6,10 +6,10 @@
 		include_once "../../Config/config.ini.php";
 		
 	include_once PATH_DATOS.'BaseDatos/conexionapp.class.php';
-	include_once PATH_DATOS.'Entidades/equipos_asoc.class.php';
+	include_once PATH_DATOS.'Entidades/asoc_lineas.class.php';
 	include_once PATH_DATOS.'Entidades/equipos.class.php';
 	include_once PATH_DATOS.'Entidades/lineas.class.php';
-	include_once PATH_DATOS.'Entidades/planes.class.php';
+	include_once PATH_DATOS.'Entidades/consumos_mes.class.php';
 	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
 	
 	class HandlerCelulares{

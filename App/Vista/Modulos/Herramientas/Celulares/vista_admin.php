@@ -1,5 +1,5 @@
 <?php 
-  $arrDatos = $handlerimpresoras->AllImpresoras($fplaza,$fgestorId);
+ // $arrDatos = $handlerimpresoras->AllImpresoras($fplaza,$fgestorId);
 
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.2.1/jquery.quicksearch.js"></script>
@@ -34,64 +34,7 @@
 
       <tbody>
       <?php    
-        $i = 0;
-        if(!empty($arrDatos)){
-          foreach ($arrDatos as $key => $value) {                    
-
-
-            if(is_null($handlerimpresoras->PlazaImpresoras($value->getSerialNro())["_fechaDev"]) && !is_null($handlerimpresoras->PlazaImpresoras($value->getSerialNro()))){
-				      $fecha = $handlerimpresoras->PlazaImpresoras($value->getSerialNro())["_fechaAsig"]->format('d-m-Y');
-            	$asig = "<a href='#' data-toggle='modal' id='".$handlerimpresoras->PlazaImpresoras($value->getSerialNro())['_asigId']."' data-target='#modal-devolver' data-asigId='".$handlerimpresoras->PlazaImpresoras($value->getSerialNro())['_asigId']."' data-obs='".$handlerimpresoras->PlazaImpresoras($value->getSerialNro())['_obs']."' onclick='cargarDatos(".$handlerimpresoras->PlazaImpresoras($value->getSerialNro())["_asigId"].")'><i class='ion-arrow-return-left text-maroon'></i></a>";
-            	$plaza = $handlerimpresoras->PlazaImpresoras($value->getSerialNro())["_plaza"];
-            	if($handlerimpresoras->PlazaImpresoras($value->getSerialNro())["_gestorId"] != 0){
-	              	$gestorId = $handlerimpresoras->PlazaImpresoras($value->getSerialNro())["_gestorId"];
-                  $gestorXId = $handlerUs->selectById($gestorId);
-	              	$nombre = $gestorXId->getNombre(). " " . $gestorXId->getApellido();
-                  $baja= "<a href='".$url_impresion."fserialNro=".$value->getSerialNro()."&fgestor=".$gestorXId->getId()."&fasigId=".$handlerimpresoras->PlazaImpresoras($value->getSerialNro())["_asigId"]."' target='_blank'><i class='ion-document text-yellow' data-toggle='tooltip' title='Ver Comodato'></i></a>"; 
-	              } else {
-	              	$nombre = '-';
-                  $baja= ""; 
-	              }
-
-
-            } else {
-            	$fecha = '-';
-      				$plaza = '-';
-      				$nombre = '-';
-      				$asig= "<a href='".$url_asignacion."&fserialNro=".$value->getSerialNro()."'><i class='ion-location text-green'></i></a>";
-              $baja = "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-baja' data-serialnro='".$value->getSerialNro()."' data-obsimp='".$value->getObs()."' onclick='bajaImp(".$i.")'><i class='ion-close text-red'></i></a>";
-            }
-
-
-
-
-            if(!is_null($value->getFechaBaja())){
-              $estado = '<span class = "label label-danger" style="font-size: 13px; font-weight: normal;">Inactiva</span>';
-              $asig= "<i class='ion-location text-gray'></i>";
-            } elseif($plaza=='MANTENIMIENTO') {
-              $estado = '<span class = "label label-warning" style="font-size: 13px; font-weight: normal;">Averiada</span>';
-            } else {
-              $estado = '<span class = "label label-success" style="font-size: 13px; font-weight: normal;">Activa</span>';
-            }
-
-
-            echo 
-            "<tr>
-                <td>".$value->getSerialNro()."</td>
-                <td>".$value->getMarca()."</td>
-                <td>".$value->getModelo()."</td>
-                <td>".$estado."</td>
-                <td>".$plaza."</td>
-                <td>".$nombre."</td>
-                <td>".$fecha."</td>";
-                echo "<td style='font-size: 20px;' width='40'> <a href='".$url_detalle."&fserialNro=".$value->getSerialNro()."'><i class='ion-eye text-blue'></i></a></td>";
-                echo "<td style='font-size: 20px;' width='40'> ".$asig."</td>";
-                echo "<td style='font-size: 20px;' width='40'> ".$baja."</td>";
-
-
-            echo "</tr>";
-          }
-        }
+        
 
       ?>                        
       </tbody>

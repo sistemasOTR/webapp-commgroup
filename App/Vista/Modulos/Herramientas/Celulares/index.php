@@ -28,13 +28,13 @@
   $arrGestor = $handler->selectAllGestor($fplaza); 
   $arrUsuarios = $handlerUs->selectGestores();
 
-  $url_detalle = "index.php?view=impresora_detalle";
+  /*$url_detalle = "index.php?view=impresora_detalle";
   $url_asignacion = "index.php?view=asignar_imp";
-  $url_impresion = PATH_VISTA.'Modulos/Herramientas/Impresoras/imprimir_comodato.php?';
+  $url_impresion = PATH_VISTA.'Modulos/Herramientas/Impresoras/imprimir_comodato.php?';*/
 
-  $url_action_guardar = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_guardar.php';
+  /*$url_action_guardar = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_guardar.php';
   $url_action_devolver = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_devolver.php';
-  $url_action_baja = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_baja.php';
+  $url_action_baja = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_baja.php';*/
   
 
 ?>
@@ -48,7 +48,7 @@
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
       <li>Herramientas</li>
-      <li class="active">Impresoras</li>
+      <li class="active">Celulares</li>
     </ol>
   </section>        
   
