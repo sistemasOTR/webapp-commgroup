@@ -13,11 +13,11 @@
 
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
   include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";
-  include_once PATH_NEGOCIO."Modulos/handlerimpresoras.class.php";
+  include_once PATH_NEGOCIO."Modulos/handlercelulares.class.php";
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php";
 
   $handler = new HandlerSistema;
-  $handlerimpresoras = new HandlerImpresoras;
+  $handlerCel = new HandlerCelulares;
   $handlerUs = new HandlerUsuarios;
 
   $user = $usuarioActivoSesion;
@@ -61,12 +61,12 @@
       <div class="col-md-12">
         <div class="box box-solid">
           <div class="box-header with-border">   
-            <i class="fa fa-print"></i>       
-            <h3 class="box-title">Impresoras</h3>          
+            <i class="fa fa-mobile"></i>       
+            <h3 class="box-title">Equipos</h3>          
           </div>
           <div class="box-body">
 
-           <?php include_once "filtro_plaza.php"; ?>
+           <?php include_once "filtros.php"; ?>
           <div class='col-md-2' style="display: none;">                
             <label></label>                
               <?php 
