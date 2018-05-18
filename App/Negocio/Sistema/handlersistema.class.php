@@ -1774,6 +1774,42 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
 			}
+		}
+
+
+		public function contarRecibidos($fecha, $empresa, $plaza){
+			try {
+
+				$f = new Fechas;
+				$tmp = $f->FormatearFechas($fecha,"Y-m-d","Y-m-d");
+				$filtro_fecha = "SERTT11_FECSER = '".$tmp."' AND ";
+				$filtro_estado = "SERTT91_AUDITADO = 'R' AND ";
+				
+				$filtro_empresa="";
+				if(!empty($empresa))								
+					$filtro_empresa = "SERTT91_CODEMPRE = ".$empresa." AND ";
+				$filtro_plaza="";
+				if(!empty($plaza))								
+					$filtro_plaza = "SERTT91_COOALIAS = '".$plaza."'";
+				
+				$query = "SELECT COUNT(SERTT11_FECSER) as CANTIDAD  
+					FROM SERVTT
+					WHERE  				 
+						".$filtro_fecha." 
+						".$filtro_estado." 
+						".$filtro_empresa." 
+						".$filtro_plaza;
+				
+				//echo $query;				
+				//exit;
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
 		}		
 	}
 	

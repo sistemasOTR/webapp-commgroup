@@ -26,7 +26,8 @@
     $f_dd_dni = (isset($_GET["f_dd_dni"])?$_GET["f_dd_dni"]:'');
 
     $url_detalle = "index.php?view=detalle_servicio";     
-    $url_upload = "index.php?view=upload_file";    
+    $url_upload = "index.php?view=upload_file"; 
+    $url_impresion = PATH_VISTA.'Modulos/Servicio/imprimir_recibidos.php?';   
 
     $arrEstados = $handler->selectAllEstados();    
     $allEstados = $handler->selectAllEstados();        
@@ -114,10 +115,18 @@
     <div class="row">
       <div class="col-md-12">
 
-        <div class="box box-solid">
+        <div class="box box-solid" id="ID_DIV">
           <div class="box-header with-border">
             <i class="fa fa-list"></i>
-            <h3 class="box-title">Servicios Encontrados</h3>          
+            <h3 class="box-title">Servicios Encontrados</h3>
+            <?php if($user->getUsuarioPerfil()->getNombre() == 'COORDINADOR'){?>
+
+              <a href="#" class="btn btn-primary pull-right" data-toggle='modal' data-target='#modal-imprimir'>
+                  <i class="fa fa-print"></i> Imprimir Recibidos
+              </a>
+
+             <?php } ?>
+
           </div>
           
           <div class="box-body table-responsive">          
@@ -178,6 +187,63 @@
 
       </div>
     </div>
+    <a onclick="javascript:window.imprimirDIV('ID_DIV');">Print </a>
+<script>
+    function imprimirDIV(contenido) {
+        var ficha = document.getElementById(contenido);
+        var ventanaImpresion = window.open(' ', 'popUp');
+        ventanaImpresion.document.write(ficha.innerHTML);
+        ventanaImpresion.document.close();
+        ventanaImpresion.print();
+        ventanaImpresion.close();
+    }
+</script>
+
+    <div class="modal fade in" id="modal-imprimir">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">Imprimir Recibidos</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-4">
+                  <label>Fecha</label>
+                  <input type="date" name="fechaRecep" id="fechaRecep" class="form-control">
+                </div>
+                <div class="col-md-4" style="display: none;">
+                  <label>Plaza</label>
+                  <input type="text" id="plaza" name="plaza" class="form-control" value="<?php echo $user->getAliasUserSistema(); ?>">
+                </div>           
+                <div class="col-md-8">
+                  <label>Clientes </label>                
+                  <select id="cuenta" class="form-control" style="width: 100%" name="cuenta" onchange="crearHref()">                              
+                    <option value=''></option>
+                    <option value='0'>TODOS</option>
+                    <?php
+                      if(!empty($arrCliente))
+                      {                        
+                        foreach ($arrCliente as $key => $value) {                                                  
+                          if($fcliente==$value->EMPTT11_CODIGO)
+                            echo "<option value='".trim($value->EMPTT11_CODIGO)."' selected>".$value->EMPTT21_NOMBREFA."</option>";
+                          else
+                            echo "<option value='".trim($value->EMPTT11_CODIGO)."'>".$value->EMPTT21_NOMBREFA."</option>";
+                        }
+                      }                      
+                    ?>
+                  </select>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Terminar</button>
+            <a href="#" class="btn btn-primary" target="_blank" id="btn-imprimir">Imprimir</a>
+          </div>
+      </div>
+    </div>
+  </div>
 
   </section>
 </div>
@@ -234,6 +300,49 @@
         placeholder: "Seleccionar",                  
     });
   });
+
+  $(document).ready(function() {
+    $("#fecha").on('change', function (e) { 
+      filtrarReporte(); 
+    });
+  });
+
+  $(document).ready(function() {
+    $("#fechaRecep").on('change', function (e) { 
+      linkImprimir()(); 
+    });
+  });
+
+  $(document).ready(function() {
+    $("#cuenta").select2({
+        placeholder: "Seleccionar",                  
+    }).on('change', function (e) { 
+      linkImprimir(); 
+    });
+  });
+
+  function linkImprimir(){
+    f_fechaRecep = $('#fechaRecep').val();
+    f_plaza = $('#plaza').val();
+    f_cuenta = $('#cuenta').val();
+
+    if(f_fechaRecep!=undefined)
+      if(f_fechaRecep!='')
+        url_imprimir="App/Vista/Modulos/Servicio/imprimir_recibidos.php?fechaR="+f_fechaRecep;
+
+    if(f_plaza!=undefined)
+      if(f_plaza!='')
+        url_imprimir = url_imprimir + "&plaza=" + f_plaza;
+
+
+    if(f_cuenta!=undefined)
+      if(f_cuenta!='')
+        url_imprimir = url_imprimir + "&cuenta=" + f_cuenta;
+
+    $("#btn-imprimir").attr("href", url_imprimir);
+
+    document.cookie = "url-tmp-back="+url_imprimir;
+  }
 
   $('#sandbox-container .input-daterange').datepicker({
     format: "dd/mm/yyyy",
