@@ -67,6 +67,11 @@
 		public function getPasswordAux(){ return $this->_passwordAux; }
 		public function setPasswordAux($passwordAux){ $this->_passwordAux = $passwordAux; }
 
+		private $_cambioRol;
+		public function getCambioRol(){ return $this->_cambioRol; }
+		public function setCambioRol($cambioRol){ $this->_cambioRol = $cambioRol; }
+
+
 		/*#############*/
 		/* CONSTRUCTOR */
 		/*#############*/
@@ -83,7 +88,8 @@
 			$this->setUserSistema(0);
 			$this->setAliasUserSistema('');
 			$this->setEstado(true);		
-			$this->setPasswordAux('');				
+			$this->setPasswordAux('');		
+			$this->setCambioRol(false);
 		}
 
 		/*###################*/
@@ -107,7 +113,8 @@
 		        						foto_perfil,	        						
 		        						id_usuario_perfil,
 		        						estado,
-		        						password_aux
+		        						password_aux,
+		        						cambio_rol
 	        			) VALUES (
 	        							'".$this->getNombre()."',
 	        							'".$this->getApellido()."',
@@ -116,7 +123,8 @@
 	        							'".$this->getFotoPerfil()."',
 	        							".$this->getUsuarioPerfil()->getId().",	        							
 	        							'".$this->getEstado()."',
-	        							'".$this->getPasswordAux()."'
+	        							'".$this->getPasswordAux()."',
+	        							'".$this->getCambioRol()."'
 	        			)";        
 				
 				# Ejecucion 	
@@ -148,7 +156,8 @@
 								id_usuario_perfil=".$this->getUsuarioPerfil()->getId().",
 								estado='".$this->getEstado()."',
 								password='".$this->getPassword()."', 	
-								password_aux='".$this->getPasswordAux()."'	
+								password_aux='".$this->getPasswordAux()."',
+								cambio_rol='".$this->getCambioRol()."'
 							WHERE id=".$this->getId();
 
 				# Ejecucion
@@ -235,6 +244,8 @@
 				$this->setUserSistema($filas['id_user_sistema']);
 				$this->setAliasUserSistema(trim($filas['alias_user_sistema']));
 				$this->setEstado($filas['estado']);
+
+				$this->setCambioRol($filas['cambio_rol']);
 			}
 		}
 
@@ -251,8 +262,8 @@
 			$this->setUserSistema(0);
 			$this->setAliasUserSistema('');
 			$this->setEstado(true);	
-
 			$this->setPasswordAux('');				
+			$this->setCambioRol(false);
 		}
 
 		private function createTable()
@@ -366,6 +377,30 @@
 			}					
 		}
 
+		public function updatePerfilUsuario($id,$perfil)
+		{		
+			try {
+
+				# Validaciones 			
+				if(empty($id))
+					throw new Exception("Usuario no identificado");	
+				
+				# Query 			
+				$query="UPDATE usuario SET
+								id_usuario_perfil=".$perfil."								
+							WHERE id=".$this->getId();
+
+				//echo $query;
+				//exit();
+
+				# Ejecucion
+				return SQL::update(false,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}					
+		}
+
 		public function selectGestores()
 		{		
 			try {
@@ -381,7 +416,7 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());		
 			}					
-		}
+		}		
 	}
 ?>
 

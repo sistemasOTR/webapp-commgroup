@@ -375,5 +375,41 @@
 				throw new Exception($e->getMessage());						
 			}			
 		}
+
+		public function selectMiLicencias($usuario)
+		{			
+			try {
+															
+				$query="SELECT * FROM licencias WHERE id_usuario=".$usuario." AND estado='true' ORDER BY fecha DESC";
+				
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new Licencias);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+
+		public function huboLicencias($usuario,$fecha){
+			try {
+
+				$query="SELECT * FROM licencias WHERE id_usuario=".$usuario." AND fecha='".$fecha."' AND estado='true' ORDER BY fecha DESC";
+				
+				//echo $query;
+				//exit();
+
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new Licencias);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());							
+			}
+		}
 	}
 ?>

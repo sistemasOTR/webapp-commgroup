@@ -41,6 +41,11 @@
 		public function getEstado(){ return var_export($this->_estado,true); }
 		public function setEstado($estado){ $this->_estado=$estado; }			
 
+		private $_fechaHora;
+		public function getFechaHora(){ return $this->_fechaHora; }
+		public function setFechaHora($fechaHora){ $this->_fechaHora=$fechaHora;}
+
+
 		/*#############*/
 		/* CONSTRUCTOR */
 		/*#############*/
@@ -52,6 +57,7 @@
 			$this->setIdTipoImportacion(new TipoImportacion);
 			$this->setPlaza('');
 			$this->setEstado(true);
+			$this->setFechaHora('');
 		}
 
 		/*###################*/
@@ -81,13 +87,15 @@
 		        						id_empresa_sistema,
 		        						id_tipo_importacion,
 		        						plaza,
-		        						estado
+		        						estado,
+		        						fecha_hora
 	        			) VALUES (
 	        							'".$this->getFecha()."',
 	        							".$this->getIdEmpresaSistema().",
 	        							".$this->getIdTipoImportacion().",
 	        							'".$this->getPlaza()."',
-	        							'".$this->getEstado()."'
+	        							'".$this->getEstado()."',
+	        							'".$this->getFechaHora()."'
 	        			)";        					        		        		
 
 	        			//echo $query;
@@ -127,7 +135,8 @@
 								id_empresa_sistema=".$this->getIdEmpresaSistema().",					
 								id_tipo_importacion=".$this->getIdTipoImportacion().",					
 								plaza='".$this->getPlaza()."',
-								estado='".$this->getEstado()."'
+								estado='".$this->getEstado()."',
+								fecha_hora='".$this->getFechaHora()."'			
 							WHERE id=".$this->getId();
 
 				# Ejecucion 					
@@ -202,6 +211,7 @@
 
 				$this->setId($filas['id']);
 				$this->setFecha($filas['fecha']);				
+				$this->setFechaHora($filas['fecha_hora']);				
 				$this->setIdEmpresaSistema($filas['id_empresa_sistema']);				
 				
 				$ti = new TipoImportacion;
@@ -218,6 +228,7 @@
 		{
 			$this->setId(0);
 			$this->setFecha('');
+			$this->setFechaHora('');
 			$this->setIdEmpresaSistema(0);						
 			$this->setIdTipoImportacion(0);
 			$this->setPlaza('');

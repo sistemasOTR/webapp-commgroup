@@ -660,6 +660,40 @@
 				throw new Exception($e->getMessage());					
 			}
 		}
+		
+		public function countSinPlaza(){
+			try {
+
+				$impo = new ImportacionTipo1;				
+				$datos = $impo->selecionarImportacionSinPlaza(null, null, null);				
+
+				if(is_object($datos))
+					$datos = array($datos);
+
+				return count($datos);				
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());					
+			}
+		}		
+		public function countSinImportar(){
+			try {
+				$impo = new ImportacionTipo1;				
+				$datos = $impo->selecionarImportacionSinImportar();			
+
+				$contador = 0;
+				if(!empty($datos)){
+					foreach ($datos as $key => $value) {
+						$contador = $contador + $value["TOTAL"];
+					}
+				}
+				
+				return $contador;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());					
+			}
+		}			
 
 	}
 

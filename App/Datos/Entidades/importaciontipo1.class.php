@@ -534,9 +534,35 @@
 									".$filtro_fhasta." 										
 									".$filtro_cliente."
 									".$filtro_estado."
-									".$filtro_sinplaza;
+									".$filtro_sinplaza."
+								ORDER BY importacion_tipo1.fecha DESC";		
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new ImportacionTipo1);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
+		public function selecionarImportacionTipo1SinPlazaGroupCliente(){
+			try {				
+																	
+				$filtro_estado = "importacion_tipo1.estado = 'false' AND";
+				$filtro_sinplaza = "importacion_tipo1.sin_plaza = 'true'";
+
+
+				$query="SELECT importacion.id_empresa_sistema as EMPRESA, count(*) as TOTAL
+								FROM importacion_tipo1 
+								INNER JOIN importacion ON
+									importacion.id = importacion_tipo1.id_importacion													
+								WHERE
+									".$filtro_estado."
+									".$filtro_sinplaza."
+								GROUP BY importacion.id_empresa_sistema";
+				# Ejecucion 					
+				$result = SQL::selectArray_2($query);
 						
 				return $result;
 
@@ -564,6 +590,69 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());			
 			}
+		}
+
+		public function selecionarImportacionSinImportar(){
+			try {				
+																	
+				$filtro_estado = "importacion_tipo1.estado = 'true' AND";
+				$filtro_sinimportar = "importacion_tipo1.numero_tt IS NULL";
+
+
+				$query="SELECT importacion.id_empresa_sistema as EMPRESA, count(*) as TOTAL
+								FROM importacion_tipo1 
+								INNER JOIN importacion ON
+									importacion.id = importacion_tipo1.id_importacion													
+								WHERE
+									".$filtro_estado."
+									".$filtro_sinimportar."
+								GROUP BY importacion.id_empresa_sistema";			
+
+				//echo $query;
+				//exit();
+
+				# Ejecucion 					
+				$result = SQL::selectArray_2($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}		
+
+		public function selecionarImportacionSinImportarByCliente($fcliente){
+			try {				
+
+				$filtro_cliente="";
+				if(!empty($fcliente))								
+					$filtro_cliente = "importacion.id_empresa_sistema = ".$fcliente." AND ";				
+																	
+				$filtro_estado = "importacion_tipo1.estado = 'true' AND";
+				$filtro_sinimportar = "importacion_tipo1.numero_tt IS NULL";
+
+				$query="SELECT importacion_tipo1.*
+								FROM importacion_tipo1 
+								INNER JOIN importacion ON
+									importacion.id = importacion_tipo1.id_importacion													
+								WHERE
+									".$filtro_cliente."
+									".$filtro_estado."
+									".$filtro_sinimportar."
+								ORDER BY importacion.id_empresa_sistema, importacion_tipo1.fecha DESC";							
+
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new ImportacionTipo1);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}	
+
+		public function getDireccion(){
+			return $this->getCalle()." ".$this->getNumero()." ".$this->getPiso()." ".$this->getDpto();
 		}
 	}
 ?>

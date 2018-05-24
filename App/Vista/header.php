@@ -68,7 +68,7 @@
             <ul class="nav navbar-nav">
 
               <!-- IMPORTACIONES -->
-              <?php include_once PATH_VISTA.'Notificaciones/importaciones.php'; ?>
+              <?php //include_once PATH_VISTA.'Notificaciones/importaciones.php'; ?>
               <!-- FIN IMPORTACIONES -->
 
               <li class="dropdown notifications-menu">

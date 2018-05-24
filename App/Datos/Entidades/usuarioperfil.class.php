@@ -142,6 +142,8 @@
 		public function getModuloHerramientasBoolean(){ return $this->_moduloHerramientas; }
 		public function setModuloHerramientas($moduloHerramientas){ $this->_moduloHerramientas=$moduloHerramientas; }	
 
+
+
 		/*#############*/
 		/* CONSTRUCTOR */
 		/*#############*/

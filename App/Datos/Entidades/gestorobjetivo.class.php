@@ -139,7 +139,7 @@
 				}
 				else{
 					if(empty($this->getId()))
-						throw new Exception("No se selecciono el Id de la categoria");		
+						throw new Exception("No se selecciono el Id del gestor");		
 
 					$query="SELECT * FROM gestor_objetivo WHERE id=".$this->getId();
 				}

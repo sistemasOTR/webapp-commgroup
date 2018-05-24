@@ -154,6 +154,42 @@
 			}
 		}
 
+		public static function selectArray_2 ($query)
+		{
+			try {
+				
+				# Setea Conexion: abre una nueva conexion a la base de datos
+				$conn = new ConexionApp();
+				$link = $conn->conectar(); 				
+
+				# Realiza la consulta
+				$result = sqlsrv_query($conn->getConn(),$query);
+
+				# Desconecta la conexion activa si encuentro algun error
+		        if (!$result){
+		        	$err = sqlsrv_errors()[0]["message"];
+		        	$conn->desconectar();
+		        	throw new Exception('Error en la consulta: '.$err);	       
+		        }
+
+		        # Genera un array para retornar
+		        $row = null;
+		        while ($fila = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+					$row[]= $fila;
+				}
+
+				# Desconecta la conexion activa
+				$conn->desconectar();
+
+				
+				return $row;
+				
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
 		public static function lastId($conn) {
 			try {
 				/*				

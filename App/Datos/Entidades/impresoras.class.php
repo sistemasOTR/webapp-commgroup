@@ -199,7 +199,7 @@
 					WHERE fechaDev is null or fechaBaja is null
 					order by fechaBaja, gestorId desc";
 				} else {
-					$query = "SELECT * FROM impresoras inner join impresora_plaza on impresoras.serialNro = impresora_plaza.serialNro WHERE fechaDev is null and gestorId='".$gestorId."'";
+					$query = "SELECT * FROM impresoras inner join impresora_plaza on impresoras.serialNro = impresora_plaza.serialNro WHERE fechaDev is null and gestorId='".$gestorId."' order by gestorId desc";
 				}
 
 				# Ejecucion 					

@@ -408,7 +408,7 @@
                         <i class="fa fa-print"></i> <span>Impresoras</span>
                       </a>
                     </li>
-                    <!--<li id="mnu_celulares">
+                    <li id="mnu_celulares">
                       <a href=<?php echo $url_celulares; ?>>
                         <i class="fa fa-mobile"></i> <span>Celulares</span>
                       </a>
@@ -417,7 +417,7 @@
                     <a href=<?php echo $url_insumos; ?>> 
                       <i class="fa fa-cubes"></i> <span>Insumos</span> </i>
                     </a>
-                  </li>-->
+                  </li>
                 </ul>
               </li>
             <?php 

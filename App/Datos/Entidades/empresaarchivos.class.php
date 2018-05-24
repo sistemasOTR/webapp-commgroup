@@ -47,6 +47,10 @@
 		public function getEstado(){ return var_export($this->_estado,true); }
 		public function setEstado($estado){ $this->_estado=$estado; }		
 
+		private $_url;
+		public function getUrl(){ return $this->_url; }
+		public function setUrl($url){ $this->_url=$url; }
+
 		/*#############*/
 		/* CONSTRUCTOR */
 		/*#############*/
@@ -60,6 +64,7 @@
 			$this->setExtencion('');			
 			$this->setPublicado('');
 			$this->setEstado(true);				
+			$this->setUrl('');			
 		}
 
 		/*###################*/
@@ -82,6 +87,9 @@
 
 				if(empty($this->getRuta()))
 					throw new Exception("Ruta vacia");
+				
+				if(empty($this->getUrl()))
+					throw new Exception("Link vacio");
 
 				if(empty($this->getExtencion()))
 					throw new Exception("Extencion vacia");				
@@ -91,8 +99,9 @@
 		        						fecha_sistema,
 		        						nro_sistema,
 		        						categoria,
-		        						ruta,
+		        						ruta,		        						
 		        						extencion,
+		        						url,
 		        						estado
 	        			) VALUES (
 	        							'".$this->getFechaSistema()."',
@@ -100,6 +109,7 @@
 	        							'".$this->getCategoria()."',
 	        							'".$this->getRuta()."',
 	        							'".$this->getExtencion()."',
+	        							'".$this->getUrl()."',
 	        							'".$this->getEstado()."'
 	        			)";        
 				
@@ -128,6 +138,9 @@
 				if(empty($this->getRuta()))
 					throw new Exception("Ruta vacia");
 
+				if(empty($this->getUrl()))
+					throw new Exception("Link vacio");
+
 				if(empty($this->getExtencion()))
 					throw new Exception("Extencion vacia");
 				
@@ -138,6 +151,7 @@
 								categoria='".$this->getCategoria()."', 
 								ruta='".$this->getRuta()."', 
 								extencion ='".$this->getExtencion()."', 
+								url ='".$this->getUrl()."', 
 								estado='".$this->getEstado()."'
 							WHERE id=".$this->getId();
 
@@ -209,6 +223,7 @@
 				$this->setCategoria(trim($filas['categoria']));
 				$this->setRuta(trim($filas['ruta']));
 				$this->setExtencion(trim($filas['extencion']));
+				$this->setUrl(trim($filas['url']));
 				$this->setPublicado($filas['publicado']);
 				$this->setEstado($filas['estado']);
 			}
@@ -220,10 +235,11 @@
 			$this->setFechaSistema('');			
 			$this->setNroSistema(0);			
 			$this->setCategoria('');
-			$this->setRuta('');			
+			$this->setRuta('');						
 			$this->setExtencion('');		
 			$this->setPublicado('');	
-			$this->setEstado(true);				
+			$this->setEstado(true);		
+			$this->setUrl('');				
 		}
 
 		private function createTable()
