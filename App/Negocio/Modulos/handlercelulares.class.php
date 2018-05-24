@@ -14,17 +14,11 @@
 	
 	class HandlerCelulares{
 				
-		public function getCelus($plaza,$gestorId){
+		public function getLineasEntregadas(){
 			try {
-				$handlerImp = new Impresoras;								
-				if(($plaza != '' && $plaza != '0') && ($gestorId == '' || $gestorId == 0)){
-					$data = $handlerImp->selectXPlaza($plaza);
-				} elseif ($gestorId !='' && $gestorId != 0) {
-					$data = $handlerImp->selectXGestor($gestorId);
-				} else {
-					$data = $handlerImp->select();
-				}
-
+				$handlerLinea = new LineaUsuario;								
+				$data = $handlerLinea->getLineasEntregadas();
+				
 				if(count($data)==1){
 					$data = array('' => $data );                   
 					return $data;
@@ -32,6 +26,223 @@
 				else{
 					return $data;
 				}
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+				
+		public function getLineasLibres(){
+			try {
+				$handlerLinea = new Lineas;								
+				$data = $handlerLinea->getLineasLibres();
+				
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+				
+		public function getEquiposLibres(){
+			try {
+				$handlerLinea = new Equipos;
+				$data = $handlerLinea->getEquiposLibres();
+				
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function getEquipoLinea($IMEI){
+			try {
+				$handlerEquipo = new Equipos;								
+				$data = $handlerEquipo->getEquipoLinea($IMEI);
+				
+				if(count($data)==0){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function getUsuarioLinea($asocUs){
+			try {
+				$handlerEquipo = new LineaUsuario;								
+				$data = $handlerEquipo->getUsuarioLinea($asocUs);
+				
+				if(count($data)==0){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function getEntrega($nroLinea){
+			try {
+				$handlerEquipo = new LineaUsuario;								
+				$data = $handlerEquipo->getEntrega($nroLinea);
+				
+				if(count($data)==0){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function getHistEntregas($nroLinea){
+			try {
+				$handlerEquipo = new LineaUsuario;								
+				$data = $handlerEquipo->getHistEntregas($nroLinea);
+				
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function entregar($fechaEntrega,$nroLinea,$equipo,$usuarioId,$obs){
+			try {
+				$handlerEntrega = new LineaUsuario;
+				$handlerLinea = new Lineas;
+				$handlerEquipo = new Equipos;
+
+				$handlerEntrega->setNroLinea($nroLinea);
+				$handlerEntrega->setIMEI($equipo);
+				$handlerEntrega->setFechaEntrega($fechaEntrega);
+				$handlerEntrega->setUsId($usuarioId);
+				$handlerEntrega->setObsEntrega($obs);
+
+				$handlerLinea->setNroLinea($nroLinea);
+				$handlerLinea->entregada(false);
+				if ($equipo!='') {
+					$handlerEquipo->setIMEI($equipo);
+					$handlerEquipo->entregado(false);
+				}
+				
+				$handlerEntrega->insert(false);
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function devolverLinea($entId,$fechaDev,$devNroLinea,$devIMEI,$obs){
+			try {
+				$handlerEntrega = new LineaUsuario;
+				$handlerLinea = new Lineas;
+				$handlerEquipo = new Equipos;
+
+				$handlerEntrega->setEntId($entId);
+				$handlerEntrega->setFechaDev($fechaDev);
+				$handlerEntrega->setObsDev($obs);
+
+				$handlerLinea->setNroLinea($devNroLinea);
+				$handlerLinea->devolver(false);
+				if ($devIMEI!='') {
+					$handlerEquipo->setIMEI($devIMEI);
+					$handlerEquipo->devolver(false);
+				}
+				
+				$handlerEntrega->devolver(false);
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function nuevaLinea($fechaAlta,$nroLinea,$empresa,$plan,$costo,$consumo,$obs){
+			try {
+				$handlerLinea = new Lineas;
+
+				$handlerLinea->setNroLinea($nroLinea);
+				$handlerLinea->setFechaAlta($fechaAlta);
+				$handlerLinea->setEmpresa($empresa);
+				$handlerLinea->setNombrePlan($plan);
+				$handlerLinea->setCosto($costo);
+				$handlerLinea->setConsEstimado($consumo);
+				$handlerLinea->setObs($obs);
+
+				$handlerLinea->insert(false);
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function getDatosByNroLinea($nroLinea){
+			try {
+				$handlerLinea = new Lineas;
+				$data = $handlerLinea->getDatosByNroLinea($nroLinea);
+				
+				if(count($data)==0){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function nuevoEquipo($fechaCompra,$IMEI,$marca,$modelo,$precioCompra){
+			try {
+				$handlerEquipo = new Equipos;
+
+				$handlerEquipo->setIMEI($IMEI);
+				$handlerEquipo->setFechaCompra($fechaCompra);
+				$handlerEquipo->setMarca($marca);
+				$handlerEquipo->setModelo($modelo);
+				$handlerEquipo->setPrecioCompra($precioCompra);
+				
+				$handlerEquipo->insert(false);
+
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				

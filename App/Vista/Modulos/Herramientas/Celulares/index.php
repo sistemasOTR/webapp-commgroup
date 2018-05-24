@@ -24,7 +24,6 @@
   $fgestor=(isset($_GET["fgestor"])?$_GET["fgestor"]:'');
   $fgestorId=(isset($_GET["fgestorId"])?$_GET["fgestorId"]:0);
   $arrCoordinador = $handler->selectAllPlazasArray();
-  $arrGestor = $handler->selectAllGestor($fplaza); 
   $arrUsuarios = $handlerUs->selectTodos();
 
   /*$url_detalle = "index.php?view=impresora_detalle";
@@ -37,12 +36,14 @@
   
 
 ?>
-
+<style>
+  .box-header.with-border {height: 55px;}
+</style>
 <div class="content-wrapper">  
   <section class="content-header">
     <h1>
-      Herramientas
-      <small>ABM de herramientas </small>
+      Líneas y Equipos
+      <small>Control de líneas y equipos</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -56,7 +57,7 @@
     <?php include_once PATH_VISTA."error.php"; ?>
     <?php include_once PATH_VISTA."info.php"; ?>
 
-    <div class="row">
+    <div class="row" style="display: none;">
       <div class="col-md-12">
         <div class="box box-solid">
           <div class="box-header with-border">   
@@ -83,7 +84,7 @@
       </div>                
     </div>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-7">
 
          
 
@@ -104,53 +105,51 @@
           
 
       </div>
-    </div>
-  </section>
-  <div class="modal fade in" id="modal-nuevo">
-    <div class="modal-dialog">
-      <div class="modal-content">
+    <div class="col-md-2">
 
-        <form action="<?php echo $url_action_guardar; ?>" method="post">
-          <input type="hidden" name="estado" value="NUEVO">
+         
 
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span></button>
-            <h4 class="modal-title">Nueva Impresora</h4>
-          </div>
-          <div class="modal-body">
-              <div class="row">
-                  <div class="col-md-4">
-                    <label>Fecha</label>
-                    <input type="date" name="fechaCompra" class="form-control">
-                  </div>           
-                  <div class="col-md-8">
-                    <label>Serial</label>
-                    <input type="text" name="serialNro" class="form-control">
-                  </div>
-                  <div class="col-md-6">
-                    <label>Marca</label>
-                    <input type="text" name="marca" class="form-control">
-                  </div>
-                  <div class="col-md-6">
-                    <label>Modelo</label>
-                    <input type="text" name="modelo" class="form-control">
-                  </div>
-                  <div class="col-md-4 col-md-offset-8">
-                    <label>Precio</label>
-                    <input type="number" name="precioCompra" class="form-control">
-                  </div> 
-              </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn btn-primary">Guardar</button>
-          </div>
-        </form>
+            <?php 
+              switch ($user->getUsuarioPerfil()->getNombre()) {
+                //case 'COORDINADOR':
+
+                  //  include_once "vista_coordinador.php";
+                    
+                 // break;
+
+                case 'GERENCIA' || 'BACK OFFICE':
+                    include_once "lineas_libres_admin.php";
+                    
+                  break;                                            
+              }
+            ?>
+          
+
+      </div>
+    <div class="col-md-3">
+
+         
+
+            <?php 
+              switch ($user->getUsuarioPerfil()->getNombre()) {
+                //case 'COORDINADOR':
+
+                  //  include_once "vista_coordinador.php";
+                    
+                 // break;
+
+                case 'GERENCIA' || 'BACK OFFICE':
+                    include_once "equipos_libres_admin.php";
+                    
+                  break;                                            
+              }
+            ?>
+          
 
       </div>
     </div>
-  </div>
+  </section>
+  
   <div class="modal fade in" id="modal-devolver">
     <div class="modal-dialog">
       <div class="modal-content">

@@ -2,15 +2,19 @@
         include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";
         
         $url_panelcontrol = "index.php?view=panelcontrol";
+
         $url_servicio = "index.php?view=servicio";
         $url_inbox = "index.php?view=inbox";
         $url_usuariosABM = "index.php?view=usuarioABM";  
         $url_cambiarUsuario = "index.php?view=cambiarUsuario";  
+        $url_cambiorol = "index.php?view=cambioRol";  
         $url_estadisticas = "index.php?view=estadisticas";
         $url_configuraciones = "index.php?view=configuraciones";
         $url_importacion = "index.php?view=importacion";
+        $url_importacion_manual = "index.php?view=importacion_manual";
         $url_plaza_cp = "index.php?view=cp_plaza";
         $url_importacion_sin_plaza = "index.php?view=importaciones_sin_plaza";
+        $url_importacion_sin_importar = "index.php?view=importaciones_sin_importar";
         
         $url_ayuda = "index.php?view=ayuda";
         $url_grupo_ayuda = "index.php?view=grupo_ayuda";
@@ -23,22 +27,25 @@
         $url_tickets_control = "index.php?view=tickets_control";
         $url_tickets_aprobar = "index.php?view=tickets_aprobar";
         $url_tickets_conceptos = "index.php?view=tickets_conceptos";
+        $url_tickets_fechas = "index.php?view=tickets_fechas_inhabilitadas";
         
         $url_licencias_carga = "index.php?view=licencias_carga";
         $url_licencias_control = "index.php?view=licencias_control";
         $url_tipo_licencias_abm = "index.php?view=tipo_licencias";
         
         $url_capacitaciones = "index.php?view=capacitaciones";
-        
-        $url_puntajes_gestor = "index.php?view=puntajes_gestor";
-        $url_puntajes_general = "index.php?view=puntajes_general";
 
-        $url_stock = "index.php?view=stock";
-        $url_enviadas = "index.php?view=enviadas";
         $url_herramientas = "index.php?view=herramientas";
         $url_impresorasxplaza = "index.php?view=impresorasxplaza";
         $url_celulares = "index.php?view=celulares";
         $url_insumos = "index.php?view=insumos";
+        
+        $url_puntajes_gestor = "index.php?view=puntajes_gestor";
+        $url_puntajes_coordinador = "index.php?view=puntajes_coordinador";
+        $url_puntajes_general = "index.php?view=puntajes_general";
+
+        $url_stock = "index.php?view=stock";
+        $url_enviadas = "index.php?view=enviadas";
         $url_roles = "index.php?view=roles";        
 
         $url_exp_control = "index.php?view=exp_control";
@@ -50,53 +57,8 @@
         $url_guias_control_empresa = "index.php?view=guias_control_empresa";
         $url_guias_envios = "index.php?view=guias_envios";
         $url_guias_seguimiento = "index.php?view=guias_seguimiento";
-        
-        $handler = new HandlerUsuarios;
-        $permiso = $handler->selectPerfil($usuarioActivoSesion->getId());                        
+      
         $perfil =$usuarioActivoSesion->getUsuarioPerfil()->getId();
-        
-        $esAdmin = false;
-        $esGerencia = false; 
-        $esCliente = false;                            
-        $esBO = false;                        
-        $esCoordinador = false;                         
-        $esGestor = false;
-        $esIngresante = false;
-        $esDesarrollo = false;
-
-        switch ($permiso->getNombre()) {
-          case "ADMINISTRADOR":
-            $esAdmin = true;
-            break;
-
-          case "GERENCIA":
-            $esGerencia = true;
-            break;
-          
-          case "BACK OFFICE":
-            $esBO = true;
-            break;
-
-          case "COORDINADOR":
-            $esCoordinador = true;
-            break;
-
-          case "GESTOR":
-            $esGestor = true;
-            break;
-
-          case "CLIENTE":
-            $esCliente = true;
-            break;   
-
-          case "INGRESANTE":
-            $esIngresante = true;
-            break;   
-
-          case "PRUEBA-DESA":
-            $esDesarrollo = true;
-            break;                                      
-        }        
 
 
       ?>
@@ -110,11 +72,13 @@
             <?php
               if($permiso->getModuloPanelBoolean()){  
             ?>          
+   
               <li class="treeview" id="mnu_panelcontrol">
                 <a href=<?php echo $url_panelcontrol; ?>>
                   <i class="fa fa-dashboard"></i> <span>Panel de Control</span> </i>
                 </a>              
-              </li>   
+              </li>
+
             <?php 
               }
             ?>  
@@ -126,7 +90,7 @@
                 <a href="#"><i class="fa fa-archive"></i> <span>Legajos</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
 
-                  <?php if($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante){ ?>
+                  <?php if($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante || $esSupervisor){ ?>
                     <li class="treeview" id="mnu_legajos_carga">
                       <a href=<?php echo $url_legajos_carga; ?>> 
                         <i class="fa fa-plus-square"></i> <span>Cargar</span> </i>
@@ -134,7 +98,7 @@
                     </li>   
                   <?php } ?>
 
-                  <?php if($esBO){ ?>
+                  <?php if($esBO || $esCoordinador){ ?>  
                     <li class="treeview" id="mnu_legajos_control">
                       <a href=<?php echo $url_legajos_control; ?>> 
                         <i class="fa fa-tasks"></i> <span>Control</span> </i>
@@ -154,7 +118,7 @@
                 <a href="#"><i class="fa fa-ticket"></i> <span>Tickets</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
 
-                  <?php if($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante){ ?>           
+                  <?php if($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante || $esSupervisor){ ?>           
                     <li class="treeview" id="mnu_tickets_carga">
                       <a href=<?php echo $url_tickets_carga; ?>> 
                         <i class="fa fa-plus-square"></i> <span>Cargar</span> </i>
@@ -179,13 +143,21 @@
                   <?php } ?>    
 
                   
-                  <?php if($esGerencia || $esBO || $esCoordinador){ ?>   
+                  <?php if($esGerencia || $esBO || $esCoordinador || $esSupervisor){ ?>   
                     <li class="treeview" id="mnu_tickets_concepto">
                       <a href=<?php echo $url_tickets_conceptos; ?>> 
                         <i class="fa fa-edit"></i> <span>Conceptos</span> </i>
                       </a>              
                     </li>                      
-                  <?php } ?>                                  
+                  <?php } ?>         
+
+                  <?php if($esGerencia || $esBO || $esCoordinador || $esSupervisor){ ?>   
+                    <li class="treeview" id="mnu_tickets_concepto">
+                      <a href=<?php echo $url_tickets_fechas; ?>> 
+                        <i class="fa fa-edit"></i> <span>Fechas Inhabilitadas</span> </i>
+                      </a>              
+                    </li>                      
+                  <?php } ?>                                            
                 </ul>
               </li>                               
             <?php 
@@ -199,7 +171,7 @@
                 <a href="#"><i class="fa fa-certificate"></i> <span>Licencias</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
 
-                  <?php if($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante){ ?>
+                  <?php if($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante || $esSupervisor){ ?>
                     <li id="mnu_licencias_carga">
                       <a href=<?php echo $url_licencias_carga; ?>>
                         <i class="fa fa-plus-square"></i> <span>Generar</span>
@@ -248,7 +220,18 @@
                 </a>              
               </li>   
             <?php 
-              }elseif($permiso->getModuloPuntajesBoolean() && !$esGestor){
+              } 
+
+              if($permiso->getModuloPuntajesBoolean() && $esCoordinador){
+            ?>  
+              <li class="treeview" id="mnu_puntajes">
+                <a href=<?php echo $url_puntajes_coordinador; ?>> 
+                  <i class="fa fa-percent"></i> <span>Puntajes</span> </i>
+                </a>              
+              </li>              
+            <?php 
+              }
+              if($permiso->getModuloPuntajesBoolean() && $esGerencia){
             ?>  
               <li class="treeview" id="mnu_puntajes">
                 <a href=<?php echo $url_puntajes_general; ?>> 
@@ -281,13 +264,21 @@
                 
                   <?php if($esCliente){ ?>
                     <li class="treeview" id="mnu_importacion">
+                      <a href=<?php echo $url_importacion_manual; ?>>
+                        <i class="fa fa-file-text-o"></i> <span>Carga Simple</span> </i>
+                      </a>              
+                    </li>
+                  <?php } ?>
+
+                  <?php if($esCliente){ ?>
+                    <li class="treeview" id="mnu_importacion">
                       <a href=<?php echo $url_importacion; ?>>
                         <i class="fa fa-file-excel-o"></i> <span>Importación por Lote</span> </i>
                       </a>              
                     </li>
                   <?php } ?>
 
-                  <?php if($esGerencia || $esBO || $esCoordinador){ ?>            
+                  <?php if($esGerencia || $esBO || $esCoordinador || $esSupervisor){ ?>            
                     <li class="treeview" id="mnu_importacion">
                       <a href=<?php echo $url_plaza_cp; ?>>
                         <i class="fa fa-map-pin"></i> <span>CP por Plaza</span> </i>
@@ -295,10 +286,18 @@
                     </li>
                   <?php } ?>
 
-                  <?php if($esGerencia || $esBO || $esCoordinador){ ?>            
+                  <?php if($esGerencia || $esBO || $esCoordinador || $esSupervisor){ ?>            
                     <li class="treeview" id="mnu_importacion">
                       <a href=<?php echo $url_importacion_sin_plaza; ?>>
-                        <i class="fa fa-plus-circle"></i> <span>Importacion sin Plaza</span> </i>
+                        <i class="fa fa-plus-circle"></i> <span>Sin Plaza</span> </i>
+                      </a>              
+                    </li>
+                  <?php } ?>
+
+                  <?php if($esGerencia || $esBO || $esCoordinador || $esSupervisor){ ?>            
+                    <li class="treeview" id="mnu_importacion">
+                      <a href=<?php echo $url_importacion_sin_importar; ?>>
+                        <i class="fa fa-plus-circle"></i> <span>Pendientes</span> </i>
                       </a>              
                     </li>
                   <?php } ?>
@@ -396,6 +395,34 @@
             <?php 
               }
             ?>
+            <?php
+              if($permiso->getModuloHerramientasBoolean()){  
+            ?>              
+              <li class="treeview" id="mnu_herramientas">
+                <a href="#"><i class="fa fa-wrench"></i> <span>Herramientas</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+
+                  
+                    <li id="mnu_impresorasxplaza">
+                      <a href=<?php echo $url_impresorasxplaza; ?>>
+                        <i class="fa fa-print"></i> <span>Impresoras</span>
+                      </a>
+                    </li>
+                    <!--<li id="mnu_celulares">
+                      <a href=<?php echo $url_celulares; ?>>
+                        <i class="fa fa-mobile"></i> <span>Celulares</span>
+                      </a>
+                    </li>
+                  <li id="mnu_insumos">
+                    <a href=<?php echo $url_insumos; ?>> 
+                      <i class="fa fa-cubes"></i> <span>Insumos</span> </i>
+                    </a>
+                  </li>-->
+                </ul>
+              </li>
+            <?php 
+              }
+            ?>
 
             <?php
               if($permiso->getModuloEnviadasBoolean()){  
@@ -416,35 +443,6 @@
                 <a href=<?php echo $url_estadisticas; ?>>
                   <i class="fa fa-area-chart"></i> <span>Estadisticas</span> </i>
                 </a>              
-              </li>
-            <?php 
-              }
-            ?>
-
-            <?php
-              if($permiso->getModuloHerramientasBoolean()){  
-            ?>              
-              <li class="treeview" id="mnu_herramientas">
-                <a href="#"><i class="fa fa-wrench"></i> <span>Herramientas</span> <i class="fa fa-angle-left pull-right"></i></a>
-                <ul class="treeview-menu">
-
-                  
-                    <li id="mnu_impresorasxplaza">
-                      <a href=<?php echo $url_impresorasxplaza; ?>>
-                        <i class="fa fa-print"></i> <span>Impresoras x Plaza</span>
-                      </a>
-                    </li>
-                    <li id="mnu_celulares">
-                      <a href=<?php echo $url_celulares; ?>>
-                        <i class="fa fa-mobile"></i> <span>Celulares</span>
-                      </a>
-                    </li>
-                  <li id="mnu_insumos">
-                    <a href=<?php echo $url_insumos; ?>> 
-                      <i class="fa fa-cubes"></i> <span>Insumos</span> </i>
-                    </a>
-                  </li> 
-                </ul>
               </li>
             <?php 
               }
@@ -504,6 +502,18 @@
             <?php 
               }
             ?>     
+
+            <?php
+              if($usuarioActivoSesion->getCambioRol()){               
+            ?>
+              <li class="treeview" id="mnu_cambiorol">
+                <a href=<?php echo $url_cambiorol; ?>> 
+                  <i class="fa fa-refresh"></i> <span>Cambiar Perfil</span> </i>
+                </a>              
+              </li>  
+            <?php 
+              }
+            ?>
 
             <?php              
               if($permiso->getModuloUsuariosBoolean() ||

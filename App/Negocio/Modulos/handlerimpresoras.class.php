@@ -112,6 +112,7 @@
 						$handler->setFechaAsig($fechaAsig);
 					}
 					$handler->setObs($obs);
+					
 
 					$handler->insert(false);
 				
@@ -130,6 +131,7 @@
 					$handler->setAsigId($asigId);
 					$handler->setFechaDev($fechaDev);
 					$handler->setObs($obs);
+
 
 					$handler->devolver(false);
 				

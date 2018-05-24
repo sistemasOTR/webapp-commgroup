@@ -41,8 +41,9 @@
 
             if($usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="GESTOR" ||
                 $usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="CLIENTE" ||
-                $usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="COORDINADOR"){
-              
+                $usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="COORDINADOR" || 
+                $usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="SUPERVISOR" ){
+                
               if(is_object($usuarioActivoSesion->getTipoUsuario()))
                 $strTipoLogin = $usuarioActivoSesion->getUsuarioPerfil()->getNombre()." - ".$usuarioActivoSesion->getAliasUserSistema();
               else
@@ -66,136 +67,91 @@
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
 
-            <li class="dropdown notifications-menu">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                <i class="fa fa-bullhorn"></i>                     
-                <?php 
-                    
-                  if($usuarioActivoSesion->getUsuarioPerfil()->getId()==1 || $usuarioActivoSesion->getUsuarioPerfil()->getId()==3){
-                    echo "<span id='contador_noti_admin' class='label' style='font-size:12px;'></span>";
-                  }
+              <!-- IMPORTACIONES -->
+              <?php include_once PATH_VISTA.'Notificaciones/importaciones.php'; ?>
+              <!-- FIN IMPORTACIONES -->
 
-                  if($usuarioActivoSesion->getUsuarioPerfil()->getId()==2){                         
-                    echo "<span id='contador_noti_user' class='label' style='font-size:12px;'></span>";
-                  }
-
-                  if(!is_null($usuarioActivoSesion->getTipoUsuario())){
+              <li class="dropdown notifications-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                  <i class="fa fa-bullhorn"></i>                     
+                  <?php 
                       
-                    if(count($usuarioActivoSesion->getTipoUsuario())==1){
-
-                      if($usuarioActivoSesion->getTipoUsuario()->getId()==1){                                        
-                        echo "<span id='contador_noti_empresa' class='label' style='font-size:12px;'></span>";
-                      }                  
+                    if($usuarioActivoSesion->getUsuarioPerfil()->getId()==1 || $usuarioActivoSesion->getUsuarioPerfil()->getId()==3){
+                      echo "<span id='contador_noti_admin' class='label' style='font-size:12px;'></span>";
                     }
-                  }
-                ?>
 
-              </a>
-              <ul class="dropdown-menu">                
-                <li>                      
-                  <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: auto;">
-                    <ul class="menu" style="overflow: auto; width: 100%; height: auto;">
-                      <?php          
+                    if($usuarioActivoSesion->getUsuarioPerfil()->getId()==2){                         
+                      echo "<span id='contador_noti_user' class='label' style='font-size:12px;'></span>";
+                    }
 
-                        if(!is_null($usuarioActivoSesion->getUsuarioPerfil())){         
-                          if($usuarioActivoSesion->getUsuarioPerfil()->getId()==1 || $usuarioActivoSesion->getUsuarioPerfil()->getId()==3)
-                          {  
-                            
-                            if(!empty($arrNotificaiones)){                              
+                    if(!is_null($usuarioActivoSesion->getTipoUsuario())){
+                        
+                      if(count($usuarioActivoSesion->getTipoUsuario())==1){
 
-                              foreach ($arrNotificaiones as $key => $value) {                              
+                        if($usuarioActivoSesion->getTipoUsuario()->getId()==1){                                        
+                          echo "<span id='contador_noti_empresa' class='label' style='font-size:12px;'></span>";
+                        }                  
+                      }
+                    }
+                  ?>
 
-                                if(isset($_GET["view"]))
-                                  $url_borrar_notificacion = PATH_VISTA.'Notificaciones/action_borrar.php?id='.$value->getId()."&vista=".$_GET["view"];
-                                else
-                                  $url_borrar_notificacion = PATH_VISTA.'Notificaciones/action_borrar.php?id='.$value->getId()."&vista=";
+                </a>
+                <ul class="dropdown-menu">                
+                  <li>                      
+                    <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: auto;">
+                      <ul class="menu" style="overflow: auto; width: 100%; height: auto;">
+                        <?php          
 
-                                $data = $handler->establerFormatOrigen($value->getOrigen());
-                                $url_link_notificacion = "index.php?".$data["link"];
+                          if(!is_null($usuarioActivoSesion->getUsuarioPerfil())){         
+                            if($usuarioActivoSesion->getUsuarioPerfil()->getId()==1 || $usuarioActivoSesion->getUsuarioPerfil()->getId()==3)
+                            {  
+                              
+                              if(!empty($arrNotificaiones)){                              
 
-                                //SI ES ADMIN
-                                if(!is_null($usuarioActivoSesion->getUsuarioPerfil())){
-                                  if($usuarioActivoSesion->getUsuarioPerfil()->getId()==(int) $data["perfil_usuario"]){
-                                    
-                                    /*if(!is_null($usuarioActivoSesion->getTipoUsuario())){
-                                      if($usuarioActivoSesion->getTipoUsuario()->getId()==(int) $data["tipo_usuario"]){*/
+                                foreach ($arrNotificaiones as $key => $value) {                              
 
-                                        echo "
-                                          <li>
-                                            <a class='pull-right close' href='".$url_borrar_notificacion."'>×</a>                                
-                                            <a href='".$url_link_notificacion."'>"
-                                              .$value->getFechaHora()->format('d/m/Y')." | ".$value->getFechaHora()->format('H:i')." HS. <br>
-                                              <b>".$value->getOrigen()."</b><br>"
-                                              .$value->getDetalle().
-                                            "</a>
-                                          </li>";
+                                  if(isset($_GET["view"]))
+                                    $url_borrar_notificacion = PATH_VISTA.'Notificaciones/action_borrar.php?id='.$value->getId()."&vista=".$_GET["view"];
+                                  else
+                                    $url_borrar_notificacion = PATH_VISTA.'Notificaciones/action_borrar.php?id='.$value->getId()."&vista=";
 
-                                          $i_contador_admin=$i_contador_admin+1;
-                                      /*}
-                                    }*/
+                                  $data = $handler->establerFormatOrigen($value->getOrigen());
+                                  $url_link_notificacion = "index.php?".$data["link"];
 
-                                  }
-                                }
+                                  //SI ES ADMIN
+                                  if(!is_null($usuarioActivoSesion->getUsuarioPerfil())){
+                                    if($usuarioActivoSesion->getUsuarioPerfil()->getId()==(int) $data["perfil_usuario"]){
+                                      
+                                      /*if(!is_null($usuarioActivoSesion->getTipoUsuario())){
+                                        if($usuarioActivoSesion->getTipoUsuario()->getId()==(int) $data["tipo_usuario"]){*/
 
-                              }
-                            }
-                          }
-                        }
+                                          echo "
+                                            <li>
+                                              <a class='pull-right close' href='".$url_borrar_notificacion."'>×</a>                                
+                                              <a href='".$url_link_notificacion."'>"
+                                                .$value->getFechaHora()->format('d/m/Y')." | ".$value->getFechaHora()->format('H:i')." HS. <br>
+                                                <b>".$value->getOrigen()."</b><br>"
+                                                .$value->getDetalle().
+                                              "</a>
+                                            </li>";
 
-                        if(!is_null($usuarioActivoSesion->getUsuarioPerfil())){
-                          if($usuarioActivoSesion->getUsuarioPerfil()->getId()==2)
-                            if(!empty($arrNotificaionesUsuario)){                              
+                                            $i_contador_admin=$i_contador_admin+1;
+                                        /*}
+                                      }*/
 
-                              foreach ($arrNotificaionesUsuario as $key => $value) {   
-                                
-                                if(isset($_GET["view"]))
-                                  $url_borrar_notificacion = PATH_VISTA.'Notificaciones/action_borrar.php?id='.$value->getId()."&vista=".$_GET["view"];
-                                else
-                                  $url_borrar_notificacion = PATH_VISTA.'Notificaciones/action_borrar.php?id='.$value->getId()."&vista=";
-
-
-                                $data = $handler->establerFormatOrigen($value->getOrigen());
-                                $url_link_notificacion = "index.php?".$data["link"];                            
-
-                                //SI ES USUARIO
-                                if(!is_null($usuarioActivoSesion->getUsuarioPerfil())){
-                                  if($usuarioActivoSesion->getUsuarioPerfil()->getId()==(int)  $data["perfil_usuario"]){
-                                    
-                                    if(!is_null($usuarioActivoSesion->getTipoUsuario())){
-                                      if($usuarioActivoSesion->getTipoUsuario()->getId()==(int) $data["tipo_usuario"]){
-
-                                        echo "
-                                          <li>
-                                            <a class='pull-right close' href='".$url_borrar_notificacion."'>×</a>                                
-                                            <a href='".$url_link_notificacion."'>"
-                                              .$value->getFechaHora()->format('d/m/Y')." | ".$value->getFechaHora()->format('H:i')." HS. <br>
-                                              <b>".$value->getOrigen()."</b><br>"
-                                              .$value->getDetalle().
-                                            "</a>
-                                          </li>";
-
-
-                                          $i_contador_user=$i_contador_user+1;
-                                      }                            
                                     }
+                                  }
 
                                 }
                               }
                             }
                           }
-                        }
 
-                        if(!is_null($usuarioActivoSesion->getTipoUsuario())){
-                            
-                          if(count($usuarioActivoSesion->getTipoUsuario())==1){
+                          if(!is_null($usuarioActivoSesion->getUsuarioPerfil())){
+                            if($usuarioActivoSesion->getUsuarioPerfil()->getId()==2)
+                              if(!empty($arrNotificaionesUsuario)){                              
 
-                            if($usuarioActivoSesion->getTipoUsuario()->getId()==1){
-                              if(!empty($arrNotificaionesEmpresa)){                              
-
-                                foreach ($arrNotificaionesEmpresa as $key => $value) {   
-
-                                  //var_dump("asdasdasldjaksld");
-                                  //exit();
+                                foreach ($arrNotificaionesUsuario as $key => $value) {   
                                   
                                   if(isset($_GET["view"]))
                                     $url_borrar_notificacion = PATH_VISTA.'Notificaciones/action_borrar.php?id='.$value->getId()."&vista=".$_GET["view"];
@@ -206,34 +162,83 @@
                                   $data = $handler->establerFormatOrigen($value->getOrigen());
                                   $url_link_notificacion = "index.php?".$data["link"];                            
 
-                                  
+                                  //SI ES USUARIO
+                                  if(!is_null($usuarioActivoSesion->getUsuarioPerfil())){
+                                    if($usuarioActivoSesion->getUsuarioPerfil()->getId()==(int)  $data["perfil_usuario"]){
+                                      
+                                      if(!is_null($usuarioActivoSesion->getTipoUsuario())){
+                                        if($usuarioActivoSesion->getTipoUsuario()->getId()==(int) $data["tipo_usuario"]){
 
-                                  echo "
-                                    <li>
-                                      <a class='pull-right close' href='".$url_borrar_notificacion."'>×</a>                                
-                                      <a href='".$url_link_notificacion."'>"
-                                        .$value->getFechaHora()->format('d/m/Y')." | ".$value->getFechaHora()->format('H:i')." HS. <br>
-                                        <b>".$value->getOrigen()."</b><br>"
-                                        .$value->getPlaza()." envío guías
-                                        </a>
-                                    </li>";
+                                          echo "
+                                            <li>
+                                              <a class='pull-right close' href='".$url_borrar_notificacion."'>×</a>                                
+                                              <a href='".$url_link_notificacion."'>"
+                                                .$value->getFechaHora()->format('d/m/Y')." | ".$value->getFechaHora()->format('H:i')." HS. <br>
+                                                <b>".$value->getOrigen()."</b><br>"
+                                                .$value->getDetalle().
+                                              "</a>
+                                            </li>";
 
 
-                                    $i_contador_empresa=$i_contador_empresa+1;
-                                       
+                                            $i_contador_user=$i_contador_user+1;
+                                        }                            
+                                      }
+
+                                  }
                                 }
                               }
                             }
                           }
-                        }                        
-                      ?>
-                    </ul>                    
-                  </div>
-                </li>                
-              </ul>
-            </li>
 
-              
+                          if(!is_null($usuarioActivoSesion->getTipoUsuario())){
+                              
+                            if(count($usuarioActivoSesion->getTipoUsuario())==1){
+
+                              if($usuarioActivoSesion->getTipoUsuario()->getId()==1){
+                                if(!empty($arrNotificaionesEmpresa)){                              
+
+                                  foreach ($arrNotificaionesEmpresa as $key => $value) {   
+
+                                    //var_dump("asdasdasldjaksld");
+                                    //exit();
+                                    
+                                    if(isset($_GET["view"]))
+                                      $url_borrar_notificacion = PATH_VISTA.'Notificaciones/action_borrar.php?id='.$value->getId()."&vista=".$_GET["view"];
+                                    else
+                                      $url_borrar_notificacion = PATH_VISTA.'Notificaciones/action_borrar.php?id='.$value->getId()."&vista=";
+
+
+                                    $data = $handler->establerFormatOrigen($value->getOrigen());
+                                    $url_link_notificacion = "index.php?".$data["link"];                            
+
+                                    
+
+                                    echo "
+                                      <li>
+                                        <a class='pull-right close' href='".$url_borrar_notificacion."'>×</a>                                
+                                        <a href='".$url_link_notificacion."'>"
+                                          .$value->getFechaHora()->format('d/m/Y')." | ".$value->getFechaHora()->format('H:i')." HS. <br>
+                                          <b>".$value->getOrigen()."</b><br>"
+                                          .$value->getPlaza()." envío guías
+                                          </a>
+                                      </li>";
+
+
+                                      $i_contador_empresa=$i_contador_empresa+1;
+                                         
+                                  }
+                                }
+                              }
+                            }
+                          }                        
+                        ?>
+                      </ul>                    
+                    </div>
+                  </li>                
+                </ul>
+              </li>
+
+
               <?php                
                   if(StringUser::emptyUser($usuarioActivoSesion->getFotoPerfil()))
                     $foto_perfil = PATH_VISTA."assets/dist/img/sinlogo_usuario.png";                                                        

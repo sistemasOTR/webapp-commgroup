@@ -169,9 +169,9 @@
 					FROM impresoras left join impresora_plaza 
 					on impresoras.serialNro = impresora_plaza.serialNro
 					WHERE fechaDev is null or fechaBaja is null
-					order by fechaBaja";
+					order by fechaBaja, gestorId desc";
 				} else {
-					$query = "SELECT * FROM impresoras inner join impresora_plaza on impresoras.serialNro = impresora_plaza.serialNro WHERE fechaDev is null and plaza='".$plaza."'";
+					$query = "SELECT * FROM impresoras inner join impresora_plaza on impresoras.serialNro = impresora_plaza.serialNro WHERE fechaDev is null and plaza='".$plaza."' order by gestorId desc";
 				}
 
 				# Ejecucion 					
@@ -197,7 +197,7 @@
 					FROM impresoras left join impresora_plaza 
 					on impresoras.serialNro = impresora_plaza.serialNro 
 					WHERE fechaDev is null or fechaBaja is null
-					order by fechaBaja";
+					order by fechaBaja, gestorId desc";
 				} else {
 					$query = "SELECT * FROM impresoras inner join impresora_plaza on impresoras.serialNro = impresora_plaza.serialNro WHERE fechaDev is null and gestorId='".$gestorId."'";
 				}

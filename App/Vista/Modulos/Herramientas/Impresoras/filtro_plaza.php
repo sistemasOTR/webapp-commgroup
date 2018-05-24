@@ -1,4 +1,6 @@
-
+<?php 
+ $arrGestor = $handler->selectAllGestor($fplaza); 
+ ?>
 <!-- Filtro por plaza -->
 <div class="col-md-4 col-md-offset-2">
   <label>Plazas</label>

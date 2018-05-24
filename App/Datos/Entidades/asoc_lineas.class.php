@@ -9,172 +9,6 @@
 	include_once PATH_DATOS.'BaseDatos/sql.class.php';
 	include_once PATH_DATOS.'Entidades/usuarioperfil.class.php';
 
-	class LineaEquipo
-	{			
-		/*#####################################*/
-		/* DECLARACIONES / GETTERS AND SETTERS */
-		/*#####################################*/
-
-		private $_asocId;
-		public function getAsocId(){ return $this->_asocId; }
-		public function setAsocId($asocId){ $this->_asocId =$asocId; }
-		
-		private $_nroLinea;
-		public function getNroLinea(){ return $this->_nroLinea; }
-		public function setNroLinea($nroLinea){ $this->_nroLinea =$nroLinea; }
-
-		private $_IMEI;
-		public function getIMEI(){ return $this->_IMEI; }
-		public function setIMEI($IMEI){ $this->_IMEI =$IMEI; }
-		
-		private $_fechaAsoc;
-		public function getFechaAsoc(){ return $this->_fechaAsoc; }
-		public function setFechaAsoc($fechaAsoc){ $this->_fechaAsoc =$fechaAsoc; }
-
-		private $_fechaDesv;
-		public function getFechaDesv(){ return $this->_fechaDesv; }
-		public function setFechaDesv($fechaDesv){ $this->_fechaDesv =$fechaDesv; }
-		
-		private $_obs;
-		public function getObs(){ return $this->_obs; }
-		public function setObs($obs){ $this->_obs =$obs; }
-
-
-		/*#############*/
-		/* CONSTRUCTOR */
-		/*#############*/
-
-		function __construct(){
-			$this->setAsocId(0);
-			$this->setNroLinea('');
-			$this->setIMEI(0);
-			$this->setFechaAsoc('');
-			$this->setFechaDesv('');
-			$this->setObs('');
-			
-		}
-
-		/*###################*/
-		/* METODOS GENERICOS */
-		/*###################*/
-
-		public function insert($conexion)
-		{
-			try {
-
-				$query="INSERT INTO asoc_lc (
-										nroLinea,	
-		        						IMEI,
-		        						fechaAsoc,
-		        						obs
-	        			) VALUES (
-	        							'".$this->getNroLinea()."',     	
-	        							".$this->getIMEI().",
-	        							'".$this->getFechaAsoc()."',
-	        							'".$this->getObs()."'
-	        			)";        
-		
-				# Ejecucion 					
-				return SQL::insert($conexion,$query);
-			
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());
-			}		
-		}
-
-		public function update($conexion)
-		{
-			try {
-
-				# Validaciones 			
-				if(empty($this->getAsocId()))
-					throw new Exception("Impresora no identificada");
-
-				
-				# Query 			
-				$query="UPDATE asoc_lc SET
-								nroLinea='".$this->getNroLinea()."',
-								IMEI=".$this->getIMEI().",
-								fechaAsoc='".$this->getFechaAsoc()."',
-								fechaDesv='".$this->getFechaDesv()."',
-								obs='".$this->getObs()."'
-							WHERE asocId=".$this->getAsocId();
-
-				# Ejecucion 					
-				return SQL::update($conexion,$query);	
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());
-			}		
-		}
-
-		
-		public function select()
-		{			
-			try {
-											
-				$query = "SELECT * FROM asoc_lc order by fechaAsoc";
-				
-				# Ejecucion 					
-				$result = SQL::selectObject($query, new LineaEquipo);
-						
-				return $result;
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());						
-			}
-
-		}
-
-		public function setPropiedadesBySelect($filas)
-		{	
-			if(empty($filas)){
-				$this->cleanClass();
-			}
-			else{
-				$this->setAsocId($filas['asocId']);
-				$this->setNroLinea(trim($filas['nroLinea']));			
-				$this->setIMEI(trim($filas['IMEI']));			
-				$this->setFechaAsoc($filas['fechaAsoc']);			
-				$this->setFechaDesv($filas['fechaDesv']);			
-				$this->setObs($filas['obs']);
-			}
-		}
-
-		private function cleanClass()
-		{
-			$this->setAsocId(0);
-			$this->setNroLinea('');
-			$this->setIMEI(0);
-			$this->setFechaAsoc('');
-			$this->setFechaDesv('');
-			$this->setObs('');
-		}
-
-		private function createTable()
-		{
-			return 'CREATE TABLE IF NOT EXISTS';
-		}
-
-		/*########################*/
-		/* METODOS PERSONALIZADOS */
-		/*########################*/
-
-		public function getNombreRoles(){
-			$handler = new UsuarioPerfil;
-			$roles = explode("|", $this->getRoles());
-			
-			$nombre_roles = "";
-			foreach ($roles as $key => $value) {
-				if(!empty($value)){
-					$handler->setId($value);
-					$nombre_roles = $nombre_roles.$handler->select()->getNombre().",";				
-				}
-			}			
-			return $nombre_roles;
-		}
-	}
-
 	class LineaUsuario
 	{			
 		/*#####################################*/
@@ -188,6 +22,10 @@
 		private $_nroLinea;
 		public function getNroLinea(){ return $this->_nroLinea; }
 		public function setNroLinea($nroLinea){ $this->_nroLinea =$nroLinea; }
+		
+		private $_IMEI;
+		public function getIMEI(){ return $this->_IMEI; }
+		public function setIMEI($IMEI){ $this->_IMEI =$IMEI; }
 
 		private $_usId;
 		public function getUsId(){ return $this->_usId; }
@@ -217,6 +55,7 @@
 		function __construct(){
 			$this->setEntId(0);
 			$this->setNroLinea('');
+			$this->setIMEI('');
 			$this->setUsId(0);
 			$this->setFechaEntrega('');
 			$this->setFechaDev('');
@@ -235,11 +74,13 @@
 
 				$query="INSERT INTO asoc_lu (
 										nroLinea,	
+										IMEI,	
 		        						usId,
 		        						fechaEntrega,
 		        						obsEntrega
 	        			) VALUES (
 	        							'".$this->getNroLinea()."',     	
+	        							'".$this->getIMEI()."',     	
 	        							".$this->getUsId().",
 	        							'".$this->getFechaEntrega()."',
 	        							'".$this->getObsEntrega()."'
@@ -265,10 +106,29 @@
 				# Query 			
 				$query="UPDATE asoc_lu SET
 								nroLinea='".$this->getNroLinea()."',
+								IMEI='".$this->getIMEI()."',
 								usId=".$this->getUsId().",
 								fechaEntrega='".$this->getFechaEntrega()."',
 								fechaDev='".$this->getFechaDev()."',
 								obsEntrega='".$this->getObsEntrega()."',
+								obsDev='".$this->getObsDev()."'
+							WHERE entId=".$this->getEntId();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+		public function devolver($conexion)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE asoc_lu SET
+								fechaDev='".$this->getFechaDev()."',
 								obsDev='".$this->getObsDev()."'
 							WHERE entId=".$this->getEntId();
 
@@ -298,6 +158,75 @@
 
 		}
 
+		public function getLineasEntregadas()
+		{			
+			try {
+											
+				$query = "SELECT * FROM asoc_lu where fechaDev is null";
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new LineaUsuario);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+
+		public function getEntrega($nroLinea)
+		{			
+			try {
+											
+				$query = "SELECT * FROM asoc_lu where fechaDev is null AND nroLinea=".$nroLinea;
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new LineaUsuario);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+
+		public function getHistEntregas($nroLinea)
+		{			
+			try {
+											
+				$query = "SELECT * FROM asoc_lu where fechaDev is not null AND nroLinea=".$nroLinea." order by fechaEntrega desc";
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new LineaUsuario);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+
+		
+		public function getUsuarioLinea($asocUs)
+		{			
+			try {
+											
+				$query = "SELECT * FROM asoc_lu where entId=".$asocUs;
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new LineaUsuario);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+
 		public function setPropiedadesBySelect($filas)
 		{	
 			if(empty($filas)){
@@ -306,6 +235,7 @@
 			else{
 				$this->setEntId($filas['entId']);
 				$this->setNroLinea(trim($filas['nroLinea']));			
+				$this->setIMEI(trim($filas['IMEI']));			
 				$this->setUsId(trim($filas['usId']));			
 				$this->setFechaEntrega($filas['fechaEntrega']);			
 				$this->setFechaDev($filas['fechaDev']);			
@@ -318,6 +248,7 @@
 		{
 			$this->setEntId(0);
 			$this->setNroLinea('');
+			$this->setIMEI('');
 			$this->setUsId(0);
 			$this->setFechaEntrega('');
 			$this->setFechaDev('');

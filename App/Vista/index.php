@@ -42,6 +42,61 @@
 
 	$include="";
 
+	//##################################
+	//   Seteo el permiso del usuario
+	//##################################	
+        
+        $esAdmin = false;
+        $esGerencia = false; 
+        $esCliente = false;                            
+        $esBO = false;                        
+        $esCoordinador = false;                         
+        $esGestor = false;
+        $esIngresante = false;
+        $esDesarrollo = false;
+        $esSupervisor = false;
+
+        $handler = new HandlerUsuarios;
+        $permiso = $handler->selectPerfil($usuarioActivoSesion->getId());                        
+        
+        switch ($permiso->getNombre()) {
+          case "ADMINISTRADOR":
+            $esAdmin = true;
+            break;
+
+          case "GERENCIA":
+            $esGerencia = true;
+            break;
+          
+          case "BACK OFFICE":
+            $esBO = true;
+            break;
+
+          case "COORDINADOR":
+            $esCoordinador = true;
+            break;
+
+          case "GESTOR":
+            $esGestor = true;
+            break;
+
+          case "CLIENTE":
+            $esCliente = true;
+            break;   
+
+          case "INGRESANTE":
+            $esIngresante = true;
+            break;   
+
+          case "PRUEBA-DESA":
+            $esDesarrollo = true;
+            break;   
+
+          case "SUPERVISOR":
+            $esSupervisor = true;
+            break;
+        }        
+
 	//############################
 	//   Ruteo de la aplicacion
 	//############################
@@ -61,12 +116,12 @@
 		 /* PANEL CONTROL */
 		/*###############*/		
 		case 'panelcontrol':			
-			if($permiso->getModuloPanelBoolean() && $esCliente)	
+			if($permiso->getModuloPanelBoolean() && $esCliente)
 				$include = 'Modulos/PanelControl/cliente.php';			
 			elseif ($permiso->getModuloPanelBoolean() && $esGestor)
-				$include = 'Modulos/PanelControl/cliente.php';		
+				$include = 'Modulos/PanelControl/gestor.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esCoordinador)	
-				$include = 'Modulos/PanelControl/coordinador.php';		
+				$include = 'Modulos/PanelControl/v2/coordinador.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esGerencia)
 				$include = 'Modulos/PanelControl/gerencia.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esBO)
@@ -75,7 +130,39 @@
 				$include = 'Modulos/PanelControl/ingresante.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esDesarrollo)
 				$include = 'Modulos/PanelControl/desarrollo.php';		
+			elseif ($permiso->getModuloPanelBoolean() && $esSupervisor)
+				$include = 'Modulos/PanelControl/supervisor.php';				
+			break;		
+
+		// *****************************
+		// FALTAN DESARROLLAR
+		// *****************************
+		case 'panel-cliente':			
+			$include = 'Modulos/PanelControl/_revisar/clientes.php';			
 			break;
+
+		case 'panel-gestor':			
+			$include = 'Modulos/PanelControl/_revisar/gestor.php';			
+			break;
+
+		case 'panel-gerencia':			
+			$include = 'Modulos/PanelControl/_revisar/gerencia.php';			
+			break;
+
+		case 'panel-supervisor':			
+			$include = 'Modulos/PanelControl/_revisar/supervisor.php';						
+			break;
+
+		case 'metrica-rosario':			
+			$include = 'Modulos/PanelControl/_revisar/metrica_rosario.php';						
+			break;
+
+		case 'metrica-servicio':			
+			$include = 'Modulos/PanelControl/_revisar/metrica_servicios.php';						
+			break;						
+
+
+
 
 		  /*###########*/
 		 /* SERVICIOS */
@@ -172,6 +259,14 @@
 			break;			
 
 		  /*##############*/
+		 /* ROL USUARIO */
+		/*##############*/
+		case 'cambioRol':			
+			if($usuarioActivoSesion->getCambioRol())
+				$include = 'Modulos/UsuariosAdmin/cambiar_rol_usuario.php';
+			break;	
+
+		  /*##############*/
 		 /* USUARIOS ABM */
 		/*##############*/
 		case 'usuarioABM':
@@ -206,6 +301,15 @@
 			}
 			break;
 
+		case 'importacion_manual':
+			if($permiso->getModuloImportacionBoolean() && $esCliente){
+				if(is_object($usuarioActivoSesion->getTipoUsuario())){
+					if($usuarioActivoSesion->getTipoUsuario()->getId()==1)
+						$include = 'Modulos/Importacion/index_formulario.php';
+				}
+			}
+			break;
+
 		case 'importacion_1':
 			if($permiso->getModuloImportacionBoolean() && $esCliente){
 				if(is_object($usuarioActivoSesion->getTipoUsuario())){
@@ -233,15 +337,30 @@
 			}
 			break;
 
+		case 'importacion_detalle':
+			if($permiso->getModuloImportacionBoolean() && $esCliente){
+				if(is_object($usuarioActivoSesion->getTipoUsuario())){
+					if($usuarioActivoSesion->getTipoUsuario()->getId()==1)
+						$include = 'Modulos/Importacion/index_detalle.php';
+				}
+			}
+			break;
+
 		case 'cp_plaza':
-			if($permiso->getModuloImportacionBoolean() && ($esGerencia || $esBO || $esCoordinador)){								
+			if($permiso->getModuloImportacionBoolean() && ($esGerencia || $esBO || $esCoordinador || $esSupervisor)){								
 				$include = 'Modulos/Importacion/cp_abm.php';				
 			}
 			break;
 
 		case 'importaciones_sin_plaza':
-			if($permiso->getModuloImportacionBoolean() && ($esGerencia || $esBO || $esCoordinador)){								
+			if($permiso->getModuloImportacionBoolean() && ($esGerencia || $esBO || $esCoordinador || $esSupervisor)){								
 				$include = 'Modulos/Importacion/importacion_sin_plaza.php';				
+			}
+			break;
+
+		case 'importaciones_sin_importar':
+			if($permiso->getModuloImportacionBoolean() && ($esGerencia || $esBO || $esCoordinador || $esSupervisor)){								
+				$include = 'Modulos/Importacion/importacion_sin_importar.php';				
 			}
 			break;
 
@@ -283,17 +402,17 @@
 		 /* LEGAJOS */
 		/*#########*/
 		case 'legajos_carga':			
-			if($permiso->getModuloLegajosBoolean()  && ($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante))
+			if($permiso->getModuloLegajosBoolean()  && ($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante || $esSupervisor))
 				$include = 'Modulos/Legajos/carga.php';
 			break;		
 
 		case 'legajos_control':			
-			if($permiso->getModuloLegajosBoolean() && $esBO)
+			if($permiso->getModuloLegajosBoolean() && ($esBO || $esCoordinador))
 				$include = 'Modulos/Legajos/control.php';
 			break;	
 
 		case 'legajos_actualizar':			
-			if($permiso->getModuloLegajosBoolean() && $esBO)
+			if($permiso->getModuloLegajosBoolean() && ($esBO || $esCoordinador))
 				$include = 'Modulos/Legajos/actualizar.php';
 			break;	
 
@@ -301,7 +420,7 @@
 		 /* TICKET */
 		/*########*/
 		case 'tickets_carga':			
-			if($permiso->getModuloTicketsBoolean() && ($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante))
+			if($permiso->getModuloTicketsBoolean() && ($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante || $esSupervisor))
 				$include = 'Modulos/Ticket/index.php';
 			break;	
 
@@ -316,15 +435,20 @@
 			break;	
 
 		case 'tickets_conceptos':			
-			if($permiso->getModuloTicketsBoolean() && ($esGerencia || $esBO || $esCoordinador))
+			if($permiso->getModuloTicketsBoolean() && ($esGerencia || $esBO || $esCoordinador || $esSupervisor))
 				$include = 'Modulos/Ticket/conceptos_abm.php';
+			break;	
+
+		case 'tickets_fechas_inhabilitadas':			
+			if($permiso->getModuloTicketsBoolean() && ($esGerencia || $esBO || $esCoordinador || $esSupervisor))
+				$include = 'Modulos/Ticket/fechasinhabilitadas_abm.php';
 			break;	
 
 		  /*###########*/
 		 /* LICENCIAS */
 		/*###########*/
 		case 'licencias_carga':			
-			if($permiso->getModuloLicenciasBoolean() && ($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante))
+			if($permiso->getModuloLicenciasBoolean() && ($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante || $esSupervisor))
 				$include = 'Modulos/Licencias/generar.php';
 			break;	
 
@@ -364,10 +488,64 @@
 				$include = 'Modulos/Puntajes/view_gestor_detalle.php';
 			break;	
 
+		case 'puntajes_coordinador':			
+			if($permiso->getModuloPuntajesBoolean() && $esCoordinador)
+				$include = 'Modulos/Puntajes/view_coordinador.php';
+			break;	
+
+		case 'puntajes_coordinador_detalle':	
+			if($permiso->getModuloPuntajesBoolean() && $esCoordinador)
+				$include = 'Modulos/Puntajes/view_coordinador_detalle.php';
+			break;	
+
 		case 'puntajes_general':			
-			if($permiso->getModuloPuntajesBoolean() && !$esGestor)
+			if($permiso->getModuloPuntajesBoolean() && $esGerencia)
 				$include = 'Modulos/Puntajes/view_general.php';
 			break;	
+
+		case 'puntajes_general_detalle':			
+			if($permiso->getModuloPuntajesBoolean() && $esGerencia)
+				$include = 'Modulos/Puntajes/view_general_detalle.php';
+			break;
+
+		  /*##############*/
+		 /* HERRAMIENTAS */
+		/*##############*/
+		case 'herramientas':			
+			if($permiso->getModuloHerramientasBoolean())
+				$include = 'Modulos/Herramientas/index.php';		
+			break;
+
+		case 'impresorasxplaza':			
+			if($permiso->getModuloHerramientasBoolean())
+				$include = 'Modulos/Herramientas/Impresoras/index.php';		
+			break;
+		
+		case 'impresora_detalle':			
+			if($permiso->getModuloHerramientasBoolean())
+				$include = 'Modulos/Herramientas/Impresoras/detalle.php';		
+			break;
+		
+		case 'asignar_imp':			
+			if($permiso->getModuloHerramientasBoolean())
+				$include = 'Modulos/Herramientas/Impresoras/asignar_imp.php';		
+			break;
+
+		case 'imprimir_comodato':			
+			if($permiso->getModuloHerramientasBoolean())
+				$include = 'Modulos/Herramientas/Impresoras/imprimir_comodato.php';		
+			break;
+
+		case 'celulares':			
+			if($permiso->getModuloHerramientasBoolean())
+				$include = 'Modulos/Herramientas/Celulares/index.php';		
+			break;
+			
+		case 'insumos':			
+			if($permiso->getModuloHerramientasBoolean())
+				$include = 'Modulos/Herramientas/Insumos/index.php';		
+			break;
+
 
 	      /*########*/
 		 /* UPLOAD */
@@ -393,69 +571,6 @@
 				$include = 'Modulos/Enviadas/index.php';		
 			break;
 
-		  /*##############*/
-		 /* HERRAMIENTAS */
-		/*##############*/
-		case 'herramientas':			
-			if($permiso->getModuloHerramientasBoolean())
-				$include = 'Modulos/Herramientas/index.php';		
-			break;
-
-		  /*##############*/
-		 /* HERRAMIENTAS */
-		/*##############*/
-		case 'impresorasxplaza':			
-			if($permiso->getModuloHerramientasBoolean())
-				$include = 'Modulos/Herramientas/Impresoras/index.php';		
-			break;
-		  /*##############*/
-		 /* HERRAMIENTAS */
-		/*##############*/
-		
-		case 'impresora_detalle':			
-			if($permiso->getModuloHerramientasBoolean())
-				$include = 'Modulos/Herramientas/Impresoras/detalle.php';		
-			break;
-		  		  /*##############*/
-		 /* HERRAMIENTAS */
-		/*##############*/
-		
-		case 'asignar_imp':			
-			if($permiso->getModuloHerramientasBoolean())
-				$include = 'Modulos/Herramientas/Impresoras/asignar_imp.php';		
-			break;
-		  /*##############*/
-		 /* HERRAMIENTAS */
-		/*##############*/
-
-		case 'imprimir_comodato':			
-			if($permiso->getModuloHerramientasBoolean())
-				$include = 'Modulos/Herramientas/Impresoras/imprimir_comodato.php';		
-			break;
-		  /*##############*/
-		 /* HERRAMIENTAS */
-		/*##############*/
-		
-		case 'impresorasxgestor':			
-			if($permiso->getModuloHerramientasBoolean())
-				$include = 'Modulos/Herramientas/ImpresorasxGestor/index.php';		
-			break;
-		  /*##############*/
-		 /* HERRAMIENTAS */
-		/*##############*/
-		case 'celulares':			
-			if($permiso->getModuloHerramientasBoolean())
-				$include = 'Modulos/Herramientas/Celulares/index.php';		
-			break;
-		  /*##############*/
-		 /* HERRAMIENTAS */
-		/*##############*/
-		case 'insumos':			
-			if($permiso->getModuloHerramientasBoolean())
-				$include = 'Modulos/Herramientas/Insumos/index.php';		
-			break;
-
-
 	      /*##########*/
 		 /* ROLES */
 		/*##########*/
@@ -473,9 +588,9 @@
 			if($permiso->getModuloPanelBoolean() && $esCliente)	
 				$include = 'Modulos/PanelControl/cliente.php';			
 			elseif ($permiso->getModuloPanelBoolean() && $esGestor)
-				$include = 'Modulos/PanelControl/cliente.php';		
+				$include = 'Modulos/PanelControl/gestor.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esCoordinador)	
-				$include = 'Modulos/PanelControl/coordinador.php';		
+				$include = 'Modulos/PanelControl/v2/coordinador.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esGerencia)
 				$include = 'Modulos/PanelControl/gerencia.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esBO)

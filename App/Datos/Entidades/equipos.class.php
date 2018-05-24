@@ -59,17 +59,13 @@
 		public function getObsRobo(){ return $this->_obsRobo; }
 		public function setObsRobo($obsRobo){ $this->_obsRobo =$obsRobo; }
 
-		private $_asocLinea;
-		public function getAsocLinea(){ return $this->_asocLinea; }
-		public function setAsocLinea($asocLinea){ $this->_asocLinea =$asocLinea; }
-
 
 		/*#############*/
 		/* CONSTRUCTOR */
 		/*#############*/
 
 		function __construct(){
-			$this->setIMEI(0);
+			$this->setIMEI('');
 			$this->setMarca('');
 			$this->setModelo('');
 			$this->setFechaCompra('');
@@ -80,7 +76,6 @@
 			$this->setObsPerd('');
 			$this->setFechaRobo('');
 			$this->setObsRobo('');
-			$this->setAsocLinea(0);
 			
 		}
 
@@ -98,12 +93,14 @@
 		        						modelo,
 		        						fechaCompra,
 		        						precioCompra,
+		        						ocupado
 	        			) VALUES (
-	        							".$this->getIMEI().",
+	        							'".$this->getIMEI()."',
 	        							'".$this->getMarca()."',     	
 	        							'".$this->getModelo()."',
 	        							'".$this->getFechaCompra()."',
 	        							".$this->getPrecioCompra().",
+	        							'false'
 	        			)";        
 		
 				# Ejecucion 					
@@ -125,7 +122,7 @@
 				
 				# Query 			
 				$query="UPDATE equipos SET
-								IMEI=".$this->getIMEI().",
+								IMEI='".$this->getIMEI()."',
 								marca='".$this->getMarca()."',
 								modelo='".$this->getModelo()."',
 								fechaCompra='".$this->getFechaCompra()."',
@@ -134,6 +131,40 @@
 								obs='".$this->getObsBaja()."'
 							WHERE IMEI=".$this->getIMEI();
 
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+
+		public function entregado($conexion)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE equipos SET
+								ocupado='true'
+							WHERE IMEI='".$this->getIMEI()."'";
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+
+		public function devolver($conexion)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE equipos SET
+								ocupado='false'
+							WHERE IMEI='".$this->getIMEI()."'";
 				# Ejecucion 					
 				return SQL::update($conexion,$query);	
 
@@ -154,6 +185,7 @@
 				$query="UPDATE equipos SET							
 								fechaBaja = '".$this->getFechaBaja()."
 							WHERE IMEI=".$this->getIMEI();
+
 
 				# Ejecucion 	
 				return SQL::delete($conexion,$query);
@@ -180,30 +212,64 @@
 
 		}
 
+		public function getEquipoLinea($nroIMEI)
+		{			
+			try {
+											
+				$query = "SELECT * FROM equipos where IMEI =".$nroIMEI;
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new Equipos);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+
+		public function getEquiposLibres()
+		{			
+			try {
+											
+				$query = "SELECT * FROM equipos where ocupado = 'false'";
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new Equipos);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+
 		public function setPropiedadesBySelect($filas)
 		{	
 			if(empty($filas)){
 				$this->cleanClass();
 			}
 			else{
-				$this->setIMEI($filas['IMEI']);
+				$this->setIMEI(trim($filas['IMEI']));
 				$this->setMarca(trim($filas['marca']));			
 				$this->setModelo(trim($filas['modelo']));			
 				$this->setFechaCompra($filas['fechaCompra']);			
 				$this->setPrecioCompra(trim($filas['precioCompra']));
 				$this->setFechaBaja($filas['fechaBaja']);			
-				$this->setObsBaja($filas['obBaja']);
+				$this->setObsBaja($filas['obsBaja']);
 				$this->setFechaPerd($filas['fechaPerd']);			
 				$this->setObsPerd($filas['obsPerd']);
 				$this->setFechaRobo($filas['fechaRobo']);			
 				$this->setObsRobo($filas['obsRobo']);
-				$this->setAsocLinea($filas['asocLinea']);
+				
 			}
 		}
 
 		private function cleanClass()
 		{
-			$this->setIMEI(0);
+			$this->setIMEI('');
 			$this->setMarca('');
 			$this->setModelo('');
 			$this->setFechaCompra('');
@@ -214,7 +280,6 @@
 			$this->setObsPerd('');
 			$this->setFechaRobo('');
 			$this->setObsRobo('');
-			$this->setAsocLinea(0);
 		}
 
 		private function createTable()

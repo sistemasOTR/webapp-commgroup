@@ -47,13 +47,9 @@
 		public function getObs(){ return $this->_obs; }
 		public function setObs($obs){ $this->_obs =$obs; }
 		
-		private $_asocEq;
-		public function getAsocEq(){ return $this->_asocEq; }
-		public function setAsocEq($asocEq){ $this->_asocEq =$asocEq; }
-		
-		private $_asocUs;
-		public function getAsocUs(){ return $this->_asocUs; }
-		public function setAsocUs($asocUs){ $this->_asocUs =$asocUs; }
+		private $_ocupada;
+		public function getOcupada(){ return $this->_ocupada; }
+		public function setOcupada($ocupada){ $this->_ocupada =$ocupada; }
 
 
 		/*#############*/
@@ -69,8 +65,7 @@
 			$this->setConsEstimado(0);
 			$this->setFechaBaja('');
 			$this->setObs('');
-			$this->setAsocEq(0);
-			$this->setAsocUs(0);
+			$this->setOcupada(false);
 			
 		}
 
@@ -90,6 +85,7 @@
 		        						costo,
 		        						consEstimado,
 		        						obs,
+		        						ocupada
 	        			) VALUES (
 	        							'".$this->getNroLinea()."',   	
 	        							'".$this->getEmpresa()."',     	
@@ -98,7 +94,8 @@
 	        							".$this->getCosto().",
 	        							".$this->getConsEstimado().",
 	        							'".$this->getObs()."',
-	        			)";        
+	        							'false'
+	        			)"; 
 		
 				# Ejecucion 					
 				return SQL::insert($conexion,$query);
@@ -121,8 +118,40 @@
 				$query="UPDATE lineas SET
 								fechaBaja='".$this->getFechaBaja()."',
 								obs='".$this->getObs()."',
-								asocEq=".$this->getAsocEq().",
-								asocUs=".$this->getAsocUs().",
+							WHERE nroLinea=".$this->getNroLinea();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+		public function entregada($conexion)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE lineas SET
+								ocupada='true'
+							WHERE nroLinea=".$this->getNroLinea();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+		public function devolver($conexion)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE lineas SET
+								ocupada='false'
 							WHERE nroLinea=".$this->getNroLinea();
 
 				# Ejecucion 					
@@ -171,84 +200,41 @@
 
 		}
 
-		public function selectXPlaza($plaza)
+		public function getLineasLibres()
 		{			
 			try {
 											
-				# Query
-				if($plaza=='' || $plaza == '0'){
-					$query = "SELECT 
-					impresoras.nroLinea, impresoras.nombrePlan, impresoras.empresa, 
-					impresoras.fechaAlta, impresoras.costo, impresoras.fechaBaja, impresoras.obs
-					FROM impresoras left join impresora_plaza 
-					on impresoras.nroLinea = impresora_plaza.nroLinea
-					WHERE fechaDev is null or fechaBaja is null
-					order by fechaBaja";
-				} else {
-					$query = "SELECT * FROM impresoras inner join impresora_plaza on impresoras.nroLinea = impresora_plaza.nroLinea WHERE fechaDev is null and plaza='".$plaza."'";
-				}
-
-				# Ejecucion 					
-				$result = SQL::selectObject($query, new Impresoras);
-						
-				return $result;
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());						
-			}
-
-		}
-
-		public function selectXGestor($gestorId)
-		{			
-			try {
-											
-				# Query
-				if($gestorId=='' || $gestorId == '0'){
-					$query = "SELECT 
-					impresoras.nroLinea, impresoras.nombrePlan, impresoras.empresa, 
-					impresoras.fechaAlta, impresoras.costo, impresoras.fechaBaja, impresoras.obs
-					FROM impresoras left join impresora_plaza 
-					on impresoras.nroLinea = impresora_plaza.nroLinea 
-					WHERE fechaDev is null or fechaBaja is null
-					order by fechaBaja";
-				} else {
-					$query = "SELECT * FROM impresoras inner join impresora_plaza on impresoras.nroLinea = impresora_plaza.nroLinea WHERE fechaDev is null and gestorId='".$gestorId."'";
-				}
-
-				# Ejecucion 					
-				$result = SQL::selectObject($query, new Impresoras);
-						
-				return $result;
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());						
-			}
-
-		}
-
-		public function getEmpresaConSerial($nroLinea)
-		{			
-			try {
-				# Query
-				$query="SELECT * FROM lineas WHERE nroLinea='".$nroLinea."'";
-	
-				# Ejecucion 					
-				$result = SQL::selectObject($query, new Impresoras);
-				if(is_null($result)){
-					return $result;
-				} else {
-					$result= get_object_vars($result);
-
-					return $result;
-
-				}
+				$query = "SELECT * FROM lineas where ocupada = 'false' ";
 				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new Lineas);
+						
+				return $result;
+
 			} catch (Exception $e) {
-				throw new Exception($e->getMessage());		
+				throw new Exception($e->getMessage());						
 			}
 
 		}
+
+		public function getDatosByNroLinea($nroLinea)
+		{			
+			try {
+											
+				$query = "SELECT * FROM lineas where nroLinea =".$nroLinea;
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new Lineas);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+
+		
 
 		public function setPropiedadesBySelect($filas)
 		{	
@@ -256,16 +242,15 @@
 				$this->cleanClass();
 			}
 			else{
-				$this->setNroLinea($filas['nroLinea']);
+				$this->setNroLinea(trim($filas['nroLinea']));
 				$this->setEmpresa(trim($filas['empresa']));			
 				$this->setNombrePlan(trim($filas['nombrePlan']));			
-				$this->setFechaAlta($filas['fechaAlta']);			
+				$this->setFechaAlta($filas['fechaAlta']);
 				$this->setCosto(trim($filas['costo']));			
 				$this->setConsEstimado(trim($filas['consEstimado']));			
 				$this->setFechaBaja($filas['fechaBaja']);			
 				$this->setObs($filas['obs']);
-				$this->setAsocEq($filas['asocEq']);
-				$this->setAsocUs($filas['asocUs']);
+				$this->setOcupada(trim($filas['ocupada']));
 			}
 		}
 
@@ -279,8 +264,7 @@
 			$this->setConsEstimado(0);
 			$this->setFechaBaja('');
 			$this->setObs('');
-			$this->setAsocEq(0);
-			$this->setAsocUs(0);
+			$this->setOcupada(false);
 		}
 
 		private function createTable()
