@@ -27,8 +27,8 @@
   $arrUsuarios = $handlerUs->selectTodos();
 
   /*$url_detalle = "index.php?view=impresora_detalle";
-  $url_asignacion = "index.php?view=asignar_imp";
-  $url_impresion = PATH_VISTA.'Modulos/Herramientas/Impresoras/imprimir_comodato.php?';*/
+  $url_asignacion = "index.php?view=asignar_imp";*/
+  $url_impresion = PATH_VISTA.'Modulos/Herramientas/Celulares/imprimir_comodato.php?';
 
   /*$url_action_guardar = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_guardar.php';
   $url_action_devolver = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_devolver.php';
@@ -84,7 +84,7 @@
       </div>                
     </div>
     <div class="row">
-      <div class="col-md-7">
+      <div class="col-md-8">
 
          
 
@@ -105,48 +105,37 @@
           
 
       </div>
-    <div class="col-md-2">
+      <div class="col-md-4">
+        <div class="col-md-12">
+          <?php 
+            switch ($user->getUsuarioPerfil()->getNombre()) {
+              //case 'COORDINADOR':
+              //  include_once "vista_coordinador.php";
+              // break;
 
-         
+              case 'GERENCIA' || 'BACK OFFICE':
+                  include_once "lineas_libres_admin.php";
+                  break;
+            }
+          ?>
+              
 
-            <?php 
-              switch ($user->getUsuarioPerfil()->getNombre()) {
-                //case 'COORDINADOR':
+          </div>
+        <div class="col-md-12">
+          <?php 
+            switch ($user->getUsuarioPerfil()->getNombre()) {
+              //case 'COORDINADOR':
+                //include_once "vista_coordinador.php";
+                //break;
+              case 'GERENCIA' || 'BACK OFFICE':
+                include_once "equipos_libres_admin.php";
+                break;
+            }
+          ?>
+              
 
-                  //  include_once "vista_coordinador.php";
-                    
-                 // break;
-
-                case 'GERENCIA' || 'BACK OFFICE':
-                    include_once "lineas_libres_admin.php";
-                    
-                  break;                                            
-              }
-            ?>
-          
-
-      </div>
-    <div class="col-md-3">
-
-         
-
-            <?php 
-              switch ($user->getUsuarioPerfil()->getNombre()) {
-                //case 'COORDINADOR':
-
-                  //  include_once "vista_coordinador.php";
-                    
-                 // break;
-
-                case 'GERENCIA' || 'BACK OFFICE':
-                    include_once "equipos_libres_admin.php";
-                    
-                  break;                                            
-              }
-            ?>
-          
-
-      </div>
+          </div>
+        </div>
     </div>
   </section>
   

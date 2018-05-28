@@ -408,6 +408,7 @@
                         <i class="fa fa-print"></i> <span>Impresoras</span>
                       </a>
                     </li>
+                    <?php if($esGerencia || $esBO){ ?>
                     <li id="mnu_celulares">
                       <a href=<?php echo $url_celulares; ?>>
                         <i class="fa fa-mobile"></i> <span>Celulares</span>
@@ -418,6 +419,7 @@
                       <i class="fa fa-cubes"></i> <span>Insumos</span> </i>
                     </a>
                   </li>
+                <?php } ?>
                 </ul>
               </li>
             <?php 

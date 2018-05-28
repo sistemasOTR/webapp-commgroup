@@ -545,6 +545,11 @@
 			if($permiso->getModuloHerramientasBoolean())
 				$include = 'Modulos/Herramientas/Celulares/detalle_linea.php';		
 			break;
+
+		case 'detalle_equipo':			
+			if($permiso->getModuloHerramientasBoolean())
+				$include = 'Modulos/Herramientas/Celulares/detalle_equipo.php';		
+			break;
 			
 		case 'insumos':			
 			if($permiso->getModuloHerramientasBoolean())

@@ -20,7 +20,8 @@
       <thead>
         <tr>
           <th class='text-center' width="100">IMEI</th>
-          <th class='text-center' width="100" colspan="2">MODELO</th>
+          <th class='text-center' width="100">MODELO</th>
+          <th class='text-center' width="100">ESTADO</th>
         </tr>
       </thead>
 
@@ -28,11 +29,24 @@
       <?php    
         if(!empty($arrELibres)){
           foreach ($arrELibres as $equipo) {
-            
+            if(!is_null($equipo->getFechaBaja())){
+              $class_estado = 'text-red';
+              $estado = 'Averiado';
+            } elseif(!is_null($equipo->getFechaRobo())) {
+              $class_estado = 'text-red';
+              $estado = 'Robado';
+            } elseif (!is_null($equipo->getFechaPerd())) {
+              $class_estado = 'text-red';
+              $estado = 'Perdido';
+            } else {
+              $class_estado = 'text-green';
+              $estado = 'OK';
+            }
             echo "<tr>";
               echo "<td>".$equipo->getIMEI()."</td>";
               echo "<td>".$equipo->getMarca()." ".$equipo->getModelo()."</td>";
-              echo "<td style='font-size: 20px;' width='30'><i class='ion-eye text-blue'></i></td>";
+              echo "<td class='".$class_estado."'>".$estado."</td>";
+              echo "<td style='font-size: 20px;' width='30'><a href='".$url_detalle_equipo."&fIMEI=".$equipo->getIMEI()."'><i class='ion-eye text-blue'></i></a></td>";
              echo "</tr>";
           }
         }

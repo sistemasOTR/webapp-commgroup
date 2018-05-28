@@ -30,6 +30,23 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
 			}
+		}		
+		public function getLineaEntregada($entId){
+			try {
+				$handlerLinea = new LineaUsuario;								
+				$data = $handlerLinea->getLineaEntregada($entId);
+				
+				if(count($data)==0){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
 		}
 				
 		public function getLineasLibres(){
@@ -140,6 +157,24 @@
 			}
 		}
 		
+		public function getHistEntregasXIMEI($IMEI){
+			try {
+				$handlerEquipo = new LineaUsuario;								
+				$data = $handlerEquipo->getHistEntregasXIMEI($IMEI);
+				
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
 		public function entregar($fechaEntrega,$nroLinea,$equipo,$usuarioId,$obs){
 			try {
 				$handlerEntrega = new LineaUsuario;
@@ -231,6 +266,25 @@
 			}
 		}
 		
+		public function getDatosByIMEI($IMEI){
+			try {
+				$handlerEquipo = new Equipos;
+				$data = $handlerEquipo->getEquipoLinea($IMEI);
+				
+				if(count($data)==0){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
 		public function nuevoEquipo($fechaCompra,$IMEI,$marca,$modelo,$precioCompra){
 			try {
 				$handlerEquipo = new Equipos;
@@ -242,6 +296,33 @@
 				$handlerEquipo->setPrecioCompra($precioCompra);
 				
 				$handlerEquipo->insert(false);
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function bajaEquipo($IMEI,$fechaBaja,$obs,$tipoBaja){
+			try {
+				$handlerEquipo = new Equipos;
+				$handlerEquipo->setIMEI($IMEI);
+
+				if ($tipoBaja == 'roto') {
+					$handlerEquipo->setFechaBaja($fechaBaja);
+					$handlerEquipo->setObsBaja($obs);
+					$handlerEquipo->rotura(false);
+				} elseif ($tipoBaja == 'robo') {
+					$handlerEquipo->setFechaRobo($fechaBaja);
+					$handlerEquipo->setObsRobo($obs);
+					$handlerEquipo->robo(false);
+				} elseif ($tipoBaja == 'perd') {
+					$handlerEquipo->setFechaPerd($fechaBaja);
+					$handlerEquipo->setObsPerd($obs);
+					$handlerEquipo->perdida(false);
+				}
+
+				
 
 
 			} catch (Exception $e) {

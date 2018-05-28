@@ -175,6 +175,23 @@
 
 		}
 
+		public function getLineaEntregada($entId)
+		{			
+			try {
+											
+				$query = "SELECT * FROM asoc_lu where entId=".$entId;
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new LineaUsuario);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+
 		public function getEntrega($nroLinea)
 		{			
 			try {
@@ -198,6 +215,24 @@
 											
 				$query = "SELECT * FROM asoc_lu where fechaDev is not null AND nroLinea=".$nroLinea." order by fechaEntrega desc";
 				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new LineaUsuario);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+
+		public function getHistEntregasXIMEI($IMEI)
+		{			
+			try {
+											
+				$query = "SELECT * FROM asoc_lu where fechaDev is not null AND IMEI='".$IMEI."' order by fechaEntrega desc";
+				
+
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new LineaUsuario);
 						

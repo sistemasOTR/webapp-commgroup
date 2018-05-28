@@ -5,6 +5,7 @@
   $url_action_entregar = PATH_VISTA.'Modulos/Herramientas/Celulares/action_entregar.php';
   $url_action_devolver = PATH_VISTA.'Modulos/Herramientas/Celulares/action_devolver.php';
   $url_detalle_linea = "index.php?view=detalle_linea";
+  $url_detalle_equipo = "index.php?view=detalle_equipo";
 
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.2.1/jquery.quicksearch.js"></script>
@@ -68,7 +69,7 @@
               echo "<td style='max-width:150px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; '><i ".$visible." class='fa fa-sort-down pull-left' data-toggle='tooltip' data-placement='bottom' title='' data-original-title='".trim(strip_tags($nroLinea->getObsEntrega()))."'></i>".trim(strip_tags($nroLinea->getObsEntrega()))."</td>";
               echo "<td style='font-size: 20px;' width='30'><a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."'><i class='ion-eye text-blue'></i></td>";
               echo "<td style='font-size: 20px;' width='30'>".$devolucion."</td>";
-              echo "<td style='font-size: 20px;' width='30'><i class='ion-document text-yellow' data-toggle='tooltip' title='Ver Comodato'></i></td>";
+              echo "<td style='font-size: 20px;' width='30'><a href='".$url_impresion."fID=".$nroLinea->getEntId()."' target='_blank'><i class='ion-document text-yellow' data-toggle='tooltip' title='Ver Comodato'></i></td>";
             echo "</tr>";
           }
         }
@@ -127,7 +128,9 @@
                       <?php 
                         if(!empty($arrELibres)){
                           foreach ($arrELibres as $equipo) {
-                            echo "<option value='".$equipo->getIMEI()."'>".$equipo->getMarca()." ".$equipo->getModelo()." IMEI: ".$equipo->getIMEI()."</option>";
+                            if(is_null($equipo->getFechaBaja()) && is_null($equipo->getFechaRobo()) && is_null($equipo->getFechaPerd())){
+                              echo "<option value='".$equipo->getIMEI()."'>".$equipo->getMarca()." ".$equipo->getModelo()." IMEI: ".$equipo->getIMEI()."</option>";
+                            }
                           } 
                         }
                       ?>

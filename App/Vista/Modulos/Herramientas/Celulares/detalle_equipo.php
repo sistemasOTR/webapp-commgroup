@@ -13,31 +13,50 @@
 
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
   include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";
-  include_once PATH_NEGOCIO."Modulos/handlerimpresoras.class.php";
+  include_once PATH_NEGOCIO."Modulos/handlercelulares.class.php";
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php";
 
-  $handler = new HandlerSistema;
-  $handlerimpresoras = new HandlerImpresoras;
+  $handlerCel = new HandlerCelulares;
   $handlerUs = new HandlerUsuarios;
 
-  $user = $usuarioActivoSesion;
-  $fserialNro=(isset($_GET["fserialNro"])?$_GET["fserialNro"]:'');
-  $url_action_guardar = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_guardar.php';
-  $arrUsuarios = $handlerUs->selectGestores();
-  $impresora = $handlerimpresoras->getDatosConSerial($fserialNro);
-  $arrDatos = $handlerimpresoras->getAsignaciones($impresora['_serialNro']);
+  $IMEI = (isset($_GET["fIMEI"])?$_GET["fIMEI"]:'');
+  $datosEquipo = $handlerCel->getDatosByIMEI($IMEI);
+  if(!is_null($datosEquipo->getFechaBaja())){
+    $estado = 'Roto';
+    $class_estado = 'text-red';
+  } elseif (!is_null($datosEquipo->getFechaPerd())) {
+    $estado = 'Perdido';
+    $class_estado = 'text-red';
+  } elseif (!is_null($datosEquipo->getFechaRobo())) {
+    $estado = 'Robado';
+    $class_estado = 'text-red';
+  } else {
+    $estado = 'Activo';
+    $class_estado = 'text-green';
+  }
+  
+  $url_action_baja_equipo = PATH_VISTA.'Modulos/Herramientas/Celulares/action_baja_equipo.php';
+
+
+
+  $histEntregas = $handlerCel->getHistEntregasXIMEI($IMEI);
+
+
 
 ?>
-
+<style>
+  .table td {border:none !important;}
+  hr {margin-bottom: 10px;margin-top: 10px;}
+</style>
 <div class="content-wrapper">  
   <section class="content-header">
     <h1>
-      Impresora <?php echo $impresora["_marca"]." ".$impresora["_modelo"];?>
+      Datos del Equipo
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
       <li>Herramientas</li>
-      <li class="active">Impresoras</li>
+      <li class="active">Celulares</li>
     </ol>
   </section>        
   
@@ -51,78 +70,132 @@
         <div class="box box-solid">
           <div class="box-header with-border">
             <i class="ion-clipboard" style="font-size: 20px; margin-right: 5px;"></i>
-            <h3 class="box-title"> Detalle de la impresora</h3>
+            <h3 class="box-title"> Detalle</h3>
+            <?php if($estado == 'Activo'){ ?>
+              <a href="#" class="btn btn-danger pull-right" data-toggle='modal' data-target='#modal-baja-equipo'>
+                  <i class="ion-close"></i> Baja
+              </a>
+            <?php } ?>
+            <!--<a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-editar-equipo'>
+                <i class="ion-edit"></i> Editar
+            </a>-->
           </div>
           <div class="box-body">
-            <h4>Fecha de compra: <?php if(is_null($impresora["_fechaCompra"])){ echo "";} else {echo $impresora["_fechaCompra"]->format('d-m-Y');} ?></h4>
-            <h4>Precio de compra: <?php echo $impresora["_precioCompra"] ?></h4>
-            <h4>Fecha de baja: <?php if(is_null($impresora["_fechaBaja"])){ echo "";} else {echo $impresora["_fechaBaja"]->format('d-m-Y');}  ?></h4>
-            <h4>Observaciones: <?php echo $impresora["_obs"] ?></h4>
+            <table class="table " style="font-size: 16px;">
+              <tbody>
+                <tr>
+                  <td width="40%">Marca:</td>
+                  <td><?php echo $datosEquipo->getMarca() ?></td>
+                </tr>
+                <tr>
+                  <td width="40%">Modelo:</td>
+                  <td><?php echo $datosEquipo->getModelo() ?></td>
+                </tr>
+                <tr>
+                  <td width="40%">IMEI:</td>
+                  <td><?php echo $datosEquipo->getIMEI() ?></td>
+                </tr>
+                <tr>
+                  <td width="40%">Fecha de compra:</td>
+                  <td><?php echo $datosEquipo->getFechaCompra()->format('d-m-Y') ?></td>
+                </tr>
+                <tr>
+                  <td width="40%">Precio:</td>
+                  <td>$ <?php echo $datosEquipo->getPrecioCompra()?></td>
+                </tr>
+                <tr>
+                  <td width="40%">Estado:</td>
+                  <td class="<?php echo $class_estado ?>"><?php echo $estado; ?></td>
+                </tr>
+                <?php 
+                  if ($estado == 'Roto') { ?>
+                    <tr>
+                      <td width="40%">Fecha de Baja:</td>
+                      <td><?php echo $datosEquipo->getFechaBaja()->format('d-m-Y')?></td>
+                    </tr>
+                    <tr>
+                      <td width="40%">Observaciones:</td>
+                      <td><?php echo $datosEquipo->getObsBaja()?></td>
+                    </tr>
+                <?php } ?>
+                <?php 
+                  if ($estado == 'Perdido') { ?>
+                    <tr>
+                      <td width="40%">Fecha de Pérdida:</td>
+                      <td><?php echo $datosEquipo->getFechaPerd()->format('d-m-Y')?></td>
+                    </tr>
+                    <tr>
+                      <td width="40%">Observaciones:</td>
+                      <td><?php echo $datosEquipo->getObsPerd()?></td>
+                    </tr>
+                <?php } ?>
+                <?php 
+                  if ($estado == 'Robado') { ?>
+                    <tr>
+                      <td width="40%">Fecha de Robo:</td>
+                      <td><?php echo $datosEquipo->getFechaRobo()->format('d-m-Y')?></td>
+                    </tr>
+                    <tr>
+                      <td width="40%">Observaciones:</td>
+                      <td><?php echo $datosEquipo->getObsRobo()?></td>
+                    </tr>
+                <?php } ?>
+
+                
+
+              </tbody>
+            </table>
             <br>
-            <a href="javascript:history.go(-1)" class="pull-left btn btn-default"><i class="ion-chevron-left"></i> Volver</a>
+            <a href="index.php?view=celulares" class="pull-left btn btn-default"><i class="ion-chevron-left"></i> Volver</a>
           </div>
         </div>
       </div>
-
-      <!-- Tabla de asignaciones -->
-
-      <div class="col-md-9">
+      <div class="col-xs-9">
         <div class="box box-solid">
           <div class="box-header with-border">
             <i class="ion-clipboard" style="font-size: 20px; margin-right: 5px;"></i>
-            <h3 class="box-title"> Asignaciones</h3>
+            <h3 class="box-title"> Histórico de entregas</h3>
           </div>
           <div class="box-body">
-            <table class="table table-striped table-condensed" id="tabla-plaza" cellspacing="0" width="100%" style="text-align:center;">
+            <table class="table table-striped table-condensed" cellspacing="0" width="100%">
               <thead>
-                <tr>
-                  <th class='text-center' width="200">Plaza</th>
-                  <th class='text-center' width="200">Gestor</th>
-                  <th class='text-center' width="150">Asignación</th>
-                  <th class='text-center' width="150">Devolución</th>
-                  <th class='text-left'>Observaciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php 
-                  foreach ($arrDatos as $asignaciones) {
-                    //Armado de los datos
-                    $plaza = $asignaciones->getPlaza();
-                    if($asignaciones->getGestorId() != 0){
-                        $gestorId = $asignaciones->getGestorId();
-                        $gestorXId = $handlerUs->selectById($gestorId);
-                        $nombre = $gestorXId->getNombre(). " " . $gestorXId->getApellido();
-                      } else {
-                        $nombre = '-';
+                  <tr>
+                    <th>Usuario</th>
+                    <th>Línea</th>
+                    <th>Fecha Entrega</th>
+                    <th>Obs Entrega</th>
+                    <th>Fecha Devolución</th>
+                    <th>Obs Devolución</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php 
+                    if(!empty($histEntregas)){
+
+                      foreach ($histEntregas as $entrega) {
+                        $nroLinea = $entrega->getNroLinea();
+                        $usuarioId = $entrega->getUsId();
+                        $usuario = $handlerUs->selectById($usuarioId);
+                      
+                        echo "<tr>";
+                          echo "<td>".$usuario->getNombre()." ".$usuario->getApellido()."</td>";
+                          echo "<td>".$nroLinea."</td>";
+                          echo "<td>".$entrega->getFechaEntrega()->format('d-m-Y')."</td>";
+                          echo "<td>".$entrega->getObsEntrega()."</td>";
+                          echo "<td>".$entrega->getFechaDev()->format('d-m-Y')."</td>";
+                          echo "<td>".$entrega->getObsDev()."</td>";
+                        echo "</tr>";
                       }
-                    if(is_null($asignaciones->getFechaAsig())){
-                      $fechaAsig='-';
-                    } else {
-                      $fechaAsig = $asignaciones->getFechaAsig()->format('d-m-Y');
                     }
-                    if(is_null($asignaciones->getFechaDev())){
-                      $fechaDev='-';
-                    } else {
-                      $fechaDev = $asignaciones->getFechaDev()->format('d-m-Y');
-                    }
-                    $obs = $asignaciones->getObs();
+                   ?>
 
-                    //Impresión de los datos
-                    echo "<tr>
-                    <td>".$plaza."</td>
-                    <td>".$nombre."</td>
-                    <td>".$fechaAsig."</td>
-                    <td>".$fechaDev."</td>
-                    <td class='text-left'>".$obs."</td>
-                    </tr>";
-                  }
-                 ?>
-
-              </tbody>
+                </tbody>
               </table>
           </div>
         </div>
       </div>
+
+      
 
 
     </div>
@@ -131,39 +204,66 @@
 
 </div>
 
-<script type="text/javascript">        
-  $(document).ready(function(){                
-    $("#mnu_herramientas").addClass("active");
-  });
 
-  $(document).ready(function() {
-    $("#slt_plaza").select2({
-        placeholder: "Seleccionar",                  
-    }).on('change', function (e) { 
-      filtrarReporte(); 
+  <!-- Baja de equipo -->
+  <div class="modal fade in" id="modal-baja-equipo">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form action="<?php echo $url_action_baja_equipo; ?>" method="post">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Baja del equipo <?php echo $datosEquipo->getMarca()." ".$datosEquipo->getModelo(); ?></h4>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                  <div class="col-md-6">
+                    <label>Fecha</label>
+                    <input type="date" name="txtFecha" id="txtFecha" class="form-control">
+                    <input type="text" name="txtFechaCompra" id="txtFechaCompra" class="form-control" value="<?php echo $datosEquipo->getFechaCompra()->format('Y-m-d') ?>" style="display: none;">
+                    <input type="text" name="txtIMEI" class="form-control" value="<?php echo $datosEquipo->getIMEI() ?>" style="display: none;">
+                  </div>
+                  <div class="col-md-6">
+                    <label>Tipo de baja</label>
+                    <select name="txtTipoBaja" id="txtTipoBaja" class="form-control">
+                      <option value="0">Seleccionar...</option>
+                      <option value="roto">Rotura del equipo</option>
+                      <option value="robo">Robo del equipo</option>
+                      <option value="perd">Pérdida del equipo</option>
+                    </select>
+                  </div>
+                  <div class="col-md-12">
+                    <label>Observaciones</label>
+                    <textarea name="txtObs" id="txtObs" class="form-control" rows="5"></textarea>
+                  </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-danger">Dar de baja</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $("#txtFecha").on('change', function (e) { 
+        controlFecha();
+      });
     });
-  });
 
-  crearHref();
-  function crearHref()
-  {
-    f_plaza = $("#slt_plaza").val();   
-    
-    url_filtro_reporte="index.php?view=impresorasxplaza";
+    function controlFecha(){
+      fechabaja = document.getElementById("txtFecha").value;
+      fechacompra = document.getElementById("txtFechaCompra").value;
+      
+      if(fechabaja<fechacompra){
+        alert("La fecha de baja no puede ser anterior a la fecha de compra del equipo");
+        document.getElementById("txtFecha").value = fechacompra;
+      } 
 
-    if(f_plaza!=undefined)
-      if(f_plaza!='')
-        url_filtro_reporte= url_filtro_reporte + "&fplaza="+f_plaza;
-
-    $("#filtro_reporte").attr("href", url_filtro_reporte);
-
-    document.cookie = "url-tmp-back="+url_filtro_reporte;
-  } 
-
-  function filtrarReporte()
-  {
-    crearHref();
-    window.location = $("#filtro_reporte").attr("href");
-  }
-
-</script>
+    }
+  </script>

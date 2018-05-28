@@ -173,7 +173,7 @@
 			}		
 		}
 
-		public function delete($conexion)
+		public function rotura($conexion)
 		{
 			try {
 				
@@ -183,8 +183,45 @@
 			
 				# Query 			
 				$query="UPDATE equipos SET							
-								fechaBaja = '".$this->getFechaBaja()."
-							WHERE IMEI=".$this->getIMEI();
+						fechaBaja = '".$this->getFechaBaja()."',
+						obsBaja='".$this->getObsBaja()."'
+						WHERE IMEI=".$this->getIMEI()."'";
+
+
+				# Ejecucion 	
+				return SQL::delete($conexion,$query);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
+		public function robo($conexion)
+		{
+			try {
+				# Query 			
+				$query="UPDATE equipos SET							
+						fechaRobo = '".$this->getFechaRobo()."',
+						obsRobo='".$this->getObsRobo()."'
+						WHERE IMEI='".$this->getIMEI()."'";
+
+				# Ejecucion 	
+				return SQL::delete($conexion,$query);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
+		public function perdida($conexion)
+		{
+			try {
+				
+				# Query 			
+				$query="UPDATE equipos SET							
+						fechaPerd = '".$this->getFechaPerd()."',
+						obsPerd='".$this->getObsPerd()."'
+						WHERE IMEI='".$this->getIMEI()."'";
 
 
 				# Ejecucion 	
@@ -233,7 +270,7 @@
 		{			
 			try {
 											
-				$query = "SELECT * FROM equipos where ocupado = 'false'";
+				$query = "SELECT * FROM equipos where ocupado = 'false' order by fechaBaja , fechaPerd , fechaRobo ";
 				
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new Equipos);

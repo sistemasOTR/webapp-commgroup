@@ -43,12 +43,12 @@
                   $gestorXId = $handlerUs->selectById($gestorId);
                   $nombre = $gestorXId->getNombre(). " " . $gestorXId->getApellido();
                   $estado = '<span class = "text-green" >En Calle</span>';
-                  $asig = "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-devGestor' data-gestorId='".$impresoraEnPlaza['_gestorId']."' data-fechaEnt='".$fechaDev."' data-serialNro='".$impresoraEnPlaza['_serialNro']."' data-asigId='".$impresoraEnPlaza['_asigId']."' data-obs='".$impresoraEnPlaza['_obs']."' onclick='cargarDatosDev(".$i.")'><i class='fa fa-user-times text-blue'></i></a>";
+                  $asig = "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-devGestor' data-gestorId='".$impresoraEnPlaza['_gestorId']."' data-fechaEnt='".$fechaDev."' data-serialNro='".$impresoraEnPlaza['_serialNro']."' data-asigId='".$impresoraEnPlaza['_asigId']."' onclick='cargarDatosDev(".$i.")'><i class='fa fa-user-times text-blue'></i></a>";
                   $baja= "<a href='".$url_impresion."fserialNro=".$value->getSerialNro()."&fgestor=".$gestorXId->getId()."&fasigId=".$impresoraEnPlaza["_asigId"]."' target='_blank'><i class='ion-document text-yellow' data-toggle='tooltip' title='Ver Comodato'></i></a>"; 
                 } else {
                   $nombre = '-';
-                  $asig = "<a href='#' data-toggle='modal' id='".$impresoraEnPlaza['_asigId']."' data-target='#modal-devolver' data-asigId='".$impresoraEnPlaza['_asigId']."' data-obs='".$impresoraEnPlaza['_obs']."' onclick='cargarDatos(".$impresoraEnPlaza["_asigId"].")'><i class='ion-arrow-return-left text-maroon'></i></a>";
-                  $baja= "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-asigGestor' data-gestorId='".$impresoraEnPlaza['_gestorId']."' data-serialNro='".$impresoraEnPlaza['_serialNro']."' data-asigId='".$impresoraEnPlaza['_asigId']."' data-obs='".$impresoraEnPlaza['_obs']."' onclick='cargarDatosAsig(".$i.")'><i class='fa fa-user-plus text-green'></i></a>";
+                  $asig = "<a href='#' data-toggle='modal' id='".$impresoraEnPlaza['_asigId']."' data-target='#modal-devolver' data-asigId='".$impresoraEnPlaza['_asigId']."' onclick='cargarDatos(".$impresoraEnPlaza["_asigId"].")'><i class='ion-arrow-return-left text-maroon'></i></a>";
+                  $baja= "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-asigGestor' data-gestorId='".$impresoraEnPlaza['_gestorId']."' data-serialNro='".$impresoraEnPlaza['_serialNro']."' data-asigId='".$impresoraEnPlaza['_asigId']."' onclick='cargarDatosAsig(".$i.")'><i class='fa fa-user-plus text-green'></i></a>";
                   $estado = '<span class = "text-yellow">En Oficina</span>';
                 }
 
@@ -181,25 +181,21 @@
   function cargarDatosAsig(id){
     
     asigId = document.getElementById(id+'_edit').getAttribute('data-asigId');
-    obs = document.getElementById(id+'_edit').getAttribute('data-obs');
     serialNro = document.getElementById(id+'_edit').getAttribute('data-serialNro');
     
     document.getElementById("serialNro").value = serialNro  ;
     document.getElementById("asigId").value = asigId;
-    document.getElementById("txtObs").value = obs;
     
   }
   function cargarDatosDev(id){
     
     asigId = document.getElementById(id+'_edit').getAttribute('data-asigId');
-    obs = document.getElementById(id+'_edit').getAttribute('data-obs');
     serialNro = document.getElementById(id+'_edit').getAttribute('data-serialNro');
     fechaEnt = document.getElementById(id+'_edit').getAttribute('data-fechaEnt');
     
     document.getElementById("devSerialNro").value = serialNro  ;
     document.getElementById("fechaEnt").value = fechaEnt  ;
     document.getElementById("devAsigId").value = asigId;
-    document.getElementById("txtDevObs").value = obs;
     
   }
 

@@ -40,7 +40,7 @@
             if(is_null($impresoraEnPlaza["_fechaDev"]) && !is_null($impresoraEnPlaza)){
               $fecha = $impresoraEnPlaza["_fechaAsig"]->format('d-m-Y');
 				      $fechaDev = $impresoraEnPlaza["_fechaAsig"]->format('Y-m-d');
-            	$asig = "<a href='#' data-toggle='modal' id='".$impresoraEnPlaza['_asigId']."' data-target='#modal-devolver' data-asigId='".$impresoraEnPlaza['_asigId']."' data-fechaEnt='".$fechaDev."' data-obs='".$impresoraEnPlaza['_obs']."' onclick='cargarDatos(".$impresoraEnPlaza["_asigId"].")'><i class='ion-arrow-return-left text-maroon'></i></a>";
+            	$asig = "<a href='#' data-toggle='modal' id='".$impresoraEnPlaza['_asigId']."' data-target='#modal-devolver' data-asigId='".$impresoraEnPlaza['_asigId']."' data-fechaEnt='".$fechaDev."' onclick='cargarDatos(".$impresoraEnPlaza["_asigId"].")'><i class='ion-arrow-return-left text-maroon'></i></a>";
             	$plaza = $impresoraEnPlaza["_plaza"];
             	if($impresoraEnPlaza["_gestorId"] != 0){
 	              	$gestorId = $impresoraEnPlaza["_gestorId"];
@@ -226,12 +226,10 @@
   function cargarDatos(id){
     
     asigId = document.getElementById(id).getAttribute('data-asigId');
-    obs = document.getElementById(id).getAttribute('data-obs');
     fechaEnt = document.getElementById(id).getAttribute('data-fechaEnt');
     
     document.getElementById("fechaEnt").value = fechaEnt  ;
     document.getElementById("asigId").value = asigId;
-    document.getElementById("txtObs").value = obs;
     
   }
 
