@@ -89,6 +89,10 @@
                 
                         <div class="col-md-12">
                           <input type="checkbox" name="chk_perfil" <?php echo ($perfil->getModuloPerfilBoolean()?'checked':''); ?>> <b>Perfil</b>
+                        </div>      
+                
+                        <div class="col-md-12">
+                          <input type="checkbox" name="chk_herramientas" <?php echo ($perfil->getModuloHerramientasBoolean()?'checked':''); ?>> <b>Herramientas</b>
                         </div>
 
                       </div>

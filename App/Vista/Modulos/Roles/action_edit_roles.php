@@ -26,6 +26,7 @@
 	$datos["chk_multiusuario"] = (isset($_POST['chk_multiusuario'])? $_POST['chk_multiusuario']:'');
 	$datos["chk_perfil"] = (isset($_POST['chk_perfil'])? $_POST['chk_perfil']:'');
 	$datos["chk_usuarios"] = (isset($_POST['chk_usuarios'])? $_POST['chk_usuarios']:'');
+	$datos["chk_herramientas"] = (isset($_POST['chk_herramientas'])? $_POST['chk_herramientas']:'');
 	$datos["chk_roles"] = (isset($_POST['chk_roles'])? $_POST['chk_roles']:'');
 	$datos["chk_configuraciones"] = (isset($_POST['chk_configuraciones'])? $_POST['chk_configuraciones']:'');
 

@@ -79,6 +79,7 @@
 				$up->setModuloInbox(($datos['chk_inbox']=="on"?true:false));	
 				$up->setModuloPanel(($datos['chk_panel']=="on"?true:false));	
 				$up->setModuloMultiusuario(($datos['chk_multiusuario']=="on"?true:false));	
+				$up->setModuloHerramientas(($datos['chk_herramientas']=="on"?true:false));	
 
 				$up->update();
 			} catch (Exception $e) {

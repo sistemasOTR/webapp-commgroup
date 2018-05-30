@@ -9,7 +9,7 @@
 	include_once PATH_DATOS.'Entidades/asoc_lineas.class.php';
 	include_once PATH_DATOS.'Entidades/equipos.class.php';
 	include_once PATH_DATOS.'Entidades/lineas.class.php';
-	//include_once PATH_DATOS.'Entidades/consumos_mes.class.php';
+	include_once PATH_DATOS.'Entidades/consumos_lineas.class.php';
 	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
 	
 	class HandlerCelulares{
@@ -324,6 +324,45 @@
 
 				
 
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function agregarConsumo($nroLinea,$idUsuario,$mesConsumo,$basico,$real,$excedente,$conceptoExc){
+			try {
+				$handlerConsumo = new ConsumoLinea;
+
+				$mesConsumo= $mesConsumo . "-01";
+				$handlerConsumo->setNroLinea($nroLinea);
+				$handlerConsumo->setIdUsuario(intval($idUsuario));
+				$handlerConsumo->setMesConsumo($mesConsumo);
+				$handlerConsumo->setBasico(floatval($basico));
+				$handlerConsumo->setConsReal(floatval($real));
+				$handlerConsumo->setExcedente(floatval($excedente));
+				$handlerConsumo->setConceptoExc($conceptoExc);
+
+				$handlerConsumo->insert(false);
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function getConsumos($nroLinea){
+			try {
+				$handlerConsumo = new ConsumoLinea;								
+				$data = $handlerConsumo->getConsumos($nroLinea);
+				
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				

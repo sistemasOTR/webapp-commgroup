@@ -56,6 +56,7 @@
                     <th>Multiusuario</th> 
                     <th>Perfil</th>                  
                     <th>Usuarios</th>                  
+                    <th>Herramientas</th>                  
                     <th>Roles</th>                                                          
                     <th>Configuracion</th>                                                                
                     <th>Accion</th>            
@@ -79,6 +80,7 @@
                     $mMetricas = ($value->getModuloMetricasBoolean()?"<span class='label label-success'>SI</span>":"<span class='label label-danger'>NO</span>");
                     $mPuntajes = ($value->getModuloPuntajesBoolean()?"<span class='label label-success'>SI</span>":"<span class='label label-danger'>NO</span>");
                     $mUsuarios = ($value->getModuloUsuariosBoolean()?"<span class='label label-success'>SI</span>":"<span class='label label-danger'>NO</span>");
+                    $mHerramientas = ($value->getModuloHerramientasBoolean()?"<span class='label label-success'>SI</span>":"<span class='label label-danger'>NO</span>");
                     $mRoles = ($value->getModuloRolesBoolean()?"<span class='label label-success'>SI</span>":"<span class='label label-danger'>NO</span>");
                     $mServicios = ($value->getModuloServiciosBoolean()?"<span class='label label-success'>SI</span>":"<span class='label label-danger'>NO</span>");
                     $mUpload = ($value->getModuloUploadBoolean()?"<span class='label label-success'>SI</span>":"<span class='label label-danger'>NO</span>");
@@ -110,6 +112,7 @@
                     echo "<td class='text-center'>".$mMultiusuario."</td>";
                     echo "<td class='text-center'>".$mPerfil."</td>";
                     echo "<td class='text-center'>".$mUsuarios."</td>";
+                    echo "<td class='text-center'>".$mHerramientas."</td>";
                     echo "<td class='text-center'>".$mRoles."</td>";
                     echo "<td class='text-center'>".$mConfiguraciones."</td>";
                     echo "<td class='text-center'><a href='".$url_edit."' class='btn btn-default btn-xs'>Editar</a></td>";

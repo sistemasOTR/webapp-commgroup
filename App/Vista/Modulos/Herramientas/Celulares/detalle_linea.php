@@ -37,6 +37,8 @@
     $lineaLibre = '<h4>Línea Libre</h4>';
   }
   $histEntregas = $handlerCel->getHistEntregas($nroLinea);
+  $consumosLinea = $handlerCel->getConsumos($nroLinea);
+  $url_action_agregar_consumo = PATH_VISTA.'Modulos/Herramientas/Celulares/action_agregar_consumo.php'
 
 
 
@@ -68,9 +70,9 @@
           <div class="box-header with-border">
             <i class="ion-clipboard" style="font-size: 20px; margin-right: 5px;"></i>
             <h3 class="box-title"> Detalle de la línea</h3>
-            <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-editar-linea'>
+            <!--<a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-editar-linea'>
                 <i class="ion-edit"></i> Editar
-            </a>
+            </a>-->
           </div>
           <div class="box-body">
             <table class="table " style="font-size: 16px;">
@@ -114,12 +116,6 @@
             <a href="index.php?view=celulares" class="pull-left btn btn-default"><i class="ion-chevron-left"></i> Volver</a>
           </div>
         </div>
-      </div>
-
-      <!-- Tabla de asignaciones -->
-
-      <div class="col-md-9">
-        <div class="col-md-4">
         <div class="box box-solid">
           <div class="box-header with-border">
             <i class="ion-clipboard" style="font-size: 20px; margin-right: 5px;"></i>
@@ -159,29 +155,56 @@
               </table>
             </div>
           </div>
-        </div>
-        <div class="col-md-8">
-          <div class="box box-solid">
-          <div class="box-header with-border">
-            <i class="ion-clipboard" style="font-size: 20px; margin-right: 5px;"></i>
-            <h3 class="box-title"> Últimos Consumos</h3>
-          </div>
-          <div class="box-body">
-              <table class="table" style="font-size: 16px;">
-                <thead>
-                  
-                </thead>
-                <tbody>
-                  <?php 
-                    
-                   ?>
+      </div>
 
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-12">
+      <!-- Tabla de asignaciones -->
+
+      <div class="col-md-9">
+		<div class="box box-solid">
+			<div class="box-header with-border">
+				<i class="ion-clipboard" style="font-size: 20px; margin-right: 5px;"></i>
+				<h3 class="box-title"> Últimos Consumos</h3>
+				<a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-agregar-consumo'>
+	                <i class="ion-plus"></i> Nuevo
+	            </a>
+			</div>
+			<div class="box-body">
+				<table class="table" style="font-size: 16px;">
+					<thead>
+						<th>Mes</th>
+						<th>Usuario</th>
+						<th>Básico</th>
+						<th>Real</th>
+						<th>Excedente</th>
+						<th>Concepto</th>
+					</thead>
+					<tbody>
+						<?php 
+							if(!empty($consumosLinea)){
+								foreach ($consumosLinea as $consumo) {
+
+									echo "<tr>";
+										echo "<td>".$consumo->getMesConsumo()->format('m-Y')."</td>";
+										if($consumo->getIdUsuario() != 0){
+											$usuarioCons = $handlerUs->selectById($consumo->getIdUsuario());
+											echo "<td>".$usuarioCons->getNombre()." ".$usuarioCons->getApellido()."</td>";
+										} else {
+											echo "<td>Línea libre</td>";
+										}
+										echo "<td> $".$consumo->getBasico()."</td>";
+										echo "<td> $".$consumo->getConsReal()."</td>";
+										echo "<td> $".$consumo->getExcedente()."</td>";
+										echo "<td>".$consumo->getConceptoExc()."</td>";
+										
+									echo "</tr>";
+								}
+							}
+						?>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
         <div class="box box-solid">
           <div class="box-header with-border">
             <i class="ion-clipboard" style="font-size: 20px; margin-right: 5px;"></i>
@@ -205,7 +228,7 @@
 
                       foreach ($histEntregas as $entrega) {
                       	$IMEI = $entrega->getIMEI();
-                        $usuarioId = $entrega->getUsId();
+                        $usuarioIdHist = $entrega->getUsId();
                         if($IMEI != ''){
                           $equipo = $handlerCel->getEquipoLinea($IMEI);
                           $telefono = $equipo->getMarca()." ".$equipo->getModelo();
@@ -213,10 +236,10 @@
                           $telefono='Propio';
                           $IMEI = 'Desconocido';
                         }
-                        $usuario = $handlerUs->selectById($usuarioId);
+                        $usuarioHist = $handlerUs->selectById($usuarioIdHist);
                       
 	                      echo "<tr>";
-	                        echo "<td>".$usuario->getNombre()." ".$usuario->getApellido()."</td>";
+	                        echo "<td>".$usuarioHist->getNombre()." ".$usuarioHist->getApellido()."</td>";
 	                        echo "<td>".$telefono." - IMEI: ".$IMEI."</td>";
 	                        echo "<td>".$entrega->getFechaEntrega()->format('d-m-Y')."</td>";
 	                        echo "<td>".$entrega->getObsEntrega()."</td>";
@@ -231,7 +254,6 @@
               </table>
           </div>
         </div>
-      </div>
     </div>
 
 
@@ -240,44 +262,45 @@
 
 
 </div>
-<div class="modal fade in" id="modal-editar-linea">
+<div class="modal fade in" id="modal-agregar-consumo">
     <div class="modal-dialog">
       <div class="modal-content">
 
-        <form action="<?php echo $url_action_nueva_linea; ?>" method="post">
+        <form action="<?php echo $url_action_agregar_consumo; ?>" method="post">
 
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span></button>
-            <h4 class="modal-title"><i class="ion-edit"></i> Editar línea <?php echo $datosLinea->getNroLinea() ?></h4>
+            <h4 class="modal-title"><i class="fa fa-dollar"></i> <i class="fa fa-dollar"></i> Consumo línea <?php echo $datosLinea->getNroLinea() ?></h4>
           </div>
           <div class="modal-body">
               <div class="row">
                   <div class="col-md-6">
-                    <label>Empresa</label>
-                    <input type="text" name="txtEmpresa" class="form-control" value="<?php echo $datosLinea->getEmpresa() ?>">
+                    <label>Mes</label>
+                    <input type="month" name="txtMesConsumo" class="form-control">
                     <input type="text" name="txtNroLinea" class="form-control" value="<?php echo $datosLinea->getNroLinea() ?>" style="display: none;">
+                    <input type="text" name="txtIdUsuario" class="form-control" value="<?php if(!empty($usuario)){echo $usuario->getId();} else { echo '0';} ?>" style="display: none;">
+                  </div>
+                  <div class="col-md-6">
+                    <label>Consumo Básico</label>
+                    <input type="number" name="txtBasico" class="form-control" value="<?php echo $datosLinea->getConsEstimado()?>">
                   </div>          
                   <div class="col-md-6">
-                    <label>Plan</label>
-                    <input type="text" name="txtNombrePlan" class="form-control" value="<?php echo $datosLinea->getNombrePlan() ?>">
+                    <label>Consumo Real</label>
+                    <input type="number" name="txtReal" class="form-control">
                   </div>
                   <div class="col-md-6">
-                    <label>Consumo Estimado</label>
-                    <input type="text" name="txtConsEstimado" class="form-control" value="<?php echo $datosLinea->getConsEstimado()?>">
-                  </div>
-                  <div class="col-md-6">
-                    <label>Costo</label>
-                    <input type="text" name="txtCosto" class="form-control" value="<?php echo $datosLinea->getCosto()?>">
+                    <label>Excedente</label>
+                    <input type="number" name="txtExcedente" class="form-control">
                   </div>
                   <div class="col-md-12">
-                    <label>Observaciones</label>
-                    <textarea name="txtObs" id="txtObs" class="form-control" rows="5"><?php echo $datosLinea->getObs()?></textarea>
+                    <label>Conceptos de Excedentes</label>
+                    <textarea name="txtObs" id="txtObs" class="form-control" rows="5"></textarea>
                   </div>
               </div>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="submit" class="btn btn-primary">Agregar</button>
           </div>
         </form>
 
