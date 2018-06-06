@@ -6,6 +6,8 @@
   $href2 = '?view=configuraciones&config=config2';
   $href3 = '?view=configuraciones&config=config3';
   $href4 = '?view=configuraciones&config=config4';
+  $href5 = '?view=configuraciones&config=config5';
+  $href6 = '?view=configuraciones&config=config6';
 ?>
 
 <div class="content-wrapper">  
@@ -37,6 +39,8 @@
               <li><a href="<?php echo $href2; ?>"><i class="fa fa-cog"></i> Importación de servicios</a></li>              
               <li><a href="<?php echo $href3; ?>"><i class="fa fa-cog"></i> Puntajes por Clientes</a></li>              
               <li><a href="<?php echo $href4; ?>"><i class="fa fa-cog"></i> Puntajes por Gestores</a></li>              
+              <li><a href="<?php echo $href5; ?>"><i class="fa fa-cog"></i> Puntajes por Gestores</a></li>              
+              <li><a href="<?php echo $href6; ?>"><i class="fa fa-cog"></i> Puntajes por Gestores</a></li>              
             </ul>
           </div>  
         </div>
@@ -58,6 +62,14 @@
 
             case 'config4':
               include_once "config4.php";              
+              break;
+
+            case 'config5':
+              include_once "config5.php";              
+              break;
+
+            case 'config6':
+              include_once "config6.php";              
               break;                            
           }
         ?>  

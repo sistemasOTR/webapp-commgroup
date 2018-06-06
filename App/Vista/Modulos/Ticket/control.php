@@ -137,8 +137,13 @@
                           if($value->getAledanio())
                             $class_estilos_aledanio = "<span class='label label-success'>SI</span>";
                           else
-                            $class_estilos_aledanio = "<span class='label label-danger'>NO</span>";                          
+                            $class_estilos_aledanio = "<span class='label label-danger'>NO</span>";
 
+                          $fechaT = $value->getFechaHora()->format('Y-m-d');
+                          $usuarioSist = $value->getUsuarioId()->getUserSistema();
+                          $countServ = new HandlerSistema;
+                          $cantServ = $countServ->selectCountServicios($fechaT, $fechaT, 100, null, $usuarioSist, null, null, null);
+                          
                           echo "<tr>";                            
                             echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
                             echo "<td>".$value->getFechaHora()->format('d/m/Y h:s')."</td>";
@@ -151,7 +156,7 @@
                             echo "<td>$ ".round($value->getImporte(),2)."</td>";                          
                             echo "<td>$ ".round($value->getImporteReintegro(),2)."</td>";
                             echo "<td>".$class_estilos_aledanio."</td>";
-                            echo "<td>".round($value->getCantOperaciones(),0)."</td>";                            
+                            echo "<td>".$cantServ[0]->CANTIDAD_SERVICIOS."</td>";                            
                             echo "<td>".$class_estilos_enviado."</td>";
                             echo "<td>".$class_estilos_aprobado."</td>";
                             echo "<td><a href='".$value->getAdjunto()."' target='_blank'>VER</a></td>";                       

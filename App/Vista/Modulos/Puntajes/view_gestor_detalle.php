@@ -81,7 +81,12 @@
 
                         $handlerP = new HandlerPuntaje;
                         $objetivo = $handlerP->buscarObjetivo($value->COD_GESTOR);                        
-                        $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
+                        $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
+                        if ($value->FECHA->format('d-m-Y')>= $fechaPuntajeActual->format('d-m-Y')) {
+                          $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
+                        } else {
+                          $puntaje = $handlerP->buscarPuntajeFecha($value->COD_EMPRESA,$value->FECHA->format('Y-m-d'));
+                        }
 
                         if(empty($objetivo))                                                  
                           $objetivo = 0;

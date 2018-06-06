@@ -11,12 +11,12 @@
     <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-nueva-linea'>
         <i class="fa fa-phone"></i> Nueva
     </a>
-    <!--<div class="col-xs-12 col-md-3 pull-right"><input type="text" id="search" class="form-control" placeholder="Escribe para buscar..." /></div>-->
+    <div class="col-xs-12 col-md-6 pull-right"><input type="text" id="search-linea" class="form-control" placeholder="Escribe para buscar..." /></div>
   </div>
 
   <div class="box-body table-responsive"> 
     
-    <table class="table table-striped table-condensed" id="tabla-plaza" cellspacing="0" width="100%" style="text-align:center;">
+    <table class="table table-striped table-condensed" id="tabla-lineas" cellspacing="0" width="100%" style="text-align:center;">
       <thead>
         <tr>
           <th class='text-center' width="100" colspan="2">Nro Línea</th>
@@ -45,7 +45,7 @@
 
   $(function () {
 
-  $('#search').quicksearch('table tbody tr');               
+  $('#search-linea').quicksearch('#tabla-lineas tbody tr');               
 });
        
 </script>

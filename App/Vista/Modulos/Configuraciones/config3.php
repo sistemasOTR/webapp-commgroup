@@ -10,13 +10,19 @@
 
 <div class='col-md-12'>
 	<form action="<?php echo $url_action; ?>" method="post">
-		<div class="box">
-			<div class="box-header">
+		<div class="box box-solid">
+			<div class="box-header with-border">
 				<i class="fa fa-cog"></i>
-			  	<h3 class="box-title">Puntajes por clientes</h3>	
-			  	<div class="form-group">
-	            	<button type="submit" class="btn btn-success pull-right">Guardar</button>            
-	            </div>  
+			  	<h3 class="box-title">Puntajes por clientes</h3>
+			  	<?php 
+			  		$handlerFecha = new HandlerPuntaje;
+					$fechaPuntaje = $handlerFecha->buscarFechaPuntaje();
+					echo "<p style='padding-left:25px;'>Fecha de vigencia: <strong>".$fechaPuntaje->format('d-m-Y')."</strong></p>";
+			  	 ?>
+			  	 <label style="float: left;margin-right: 15px;padding-top: 6px;padding-left: 25px;">Nueva Vigencia</label>
+			  	 <input type="date" class="form-control" style="width: 200px; float: left;" name="txtFechaVigencia" id="txtFechaVigencia" value="<?php echo date('Y-m-d'); ?>">
+			  	<a href="index.php?view=configuraciones" class="btn btn-default pull-right"><i class="ion-chevron-left"></i> Volver</a>            
+	            
 			</div>
 			<div class="box-body">
 				<div class="box-body table-responsive">
@@ -26,17 +32,20 @@
 						    	<th style='width: 25%;'>EMPRESA</th>
 						      	<th>PUNTAJE 
 						      		<i class="fa fa-question-circle" data-toggle="tooltip" title="" data-original-title="Valor por servicio para cálculo en puntajes del gestor"></i>
-						      	</th>					      	
+						      	</th>
 						    </tr>
 						</thead>
 						<tbody>
 							<?php
+								
+
 						    	if(!empty($arrCliente))
 						    	{
 						    		foreach ($arrCliente as $key => $value) {	
 						    			
 						    			$handlerP = new HandlerPuntaje;
 						    			$puntaje = $handlerP->buscarPuntaje($value->EMPTT11_CODIGO);
+						    			
 
 						    			echo "
 					    				<tr>

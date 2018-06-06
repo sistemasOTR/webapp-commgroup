@@ -4,13 +4,16 @@
 	include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php"; 	
 
 	$handler = new HandlerSistema;
-	$arrCliente = $handler->selectAllEmpresaFiltro(null,null,null,null,null);
-	
+	$arrCliente = $handler->selectAllEmpresa();
+
 	$datos="";
 	foreach ($arrCliente as $key => $value) {
 		$datos[]= array('empresa' => $value->EMPTT11_CODIGO,
 					  'puntaje' => $_POST["id_".$value->EMPTT11_CODIGO]);	
 	}
+
+	$fechaCambioVigencia = (isset($_POST["txtFechaVigencia"])?$_POST["txtFechaVigencia"]:'');
+
 
 	$err = "../../../../index.php?view=configuraciones&config=config3&err=";
 	$info = "../../../../index.php?view=configuraciones&config=config3&info=";	
@@ -20,7 +23,7 @@
 		if(!empty($datos)){
 
 			$handlerTI = new HandlerPuntaje;			
-			$handlerTI->guardarPuntajeByEmpresa($datos);					
+			$handlerTI->guardarPuntajeByEmpresa($datos,$fechaCambioVigencia);					
 
 			$msj="Se actualizaron todos los puntajes";
 			header("Location: ".$info.$msj);				

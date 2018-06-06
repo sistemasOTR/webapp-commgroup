@@ -20,7 +20,7 @@
   $fgestor= $user->getUserSistema();
 
   $handler =  new HandlerConsultas;
-  $consulta = $handler->consultaPuntajes($fdesde, $fhasta, $fgestor);
+  
 ?>
 
 <div class="content-wrapper">  
@@ -41,41 +41,15 @@
     <?php include_once PATH_VISTA."info.php"; ?>
 
     <div class="row">
-
-      <div class='col-md-12'>
-          <div class="box box-solid">
-              <div class="box-header with-border">
-                <i class="fa fa-filter"></i>
-                <h3 class="box-title">Filtros Disponibles</h3>
-                <button type="button" class="btn btn-box-tool pull-right bg-red" data-widget="collapse"><i class="fa fa-minus"></i></button>
-              </div>    
-              <div class="box-body">
-                <div class='row'>     
-                  <div class="col-md-10">     
-                <div class="col-md-3" id='sandbox-container'>
-                  <label>Fecha Resolucion Desde - Hasta </label>                
-                  <div class="input-daterange input-group" id="datepicker">
-                      <input type="text" class="input-sm form-control" onchange="crearHref()" id="start" name="start" value="<?php echo $dFecha->FormatearFechas($fdesde,'Y-m-d','d/m/Y'); ?>"/>
-                      <span class="input-group-addon">a</span>
-                        <input type="text" class="input-sm form-control" onchange="crearHref()" id="end" name="end" value="<?php echo $dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y'); ?>"/>
-                    </div>  
-                </div>
-                
-                <div class="col-md-2" style="margin-top: 30px;">              
-                    <label></label>                
-                  <a class="btn btn-warning btn-xs" href="<?php echo $view_detalle."&fdesde=".$fdesde."&fhasta=".$fhasta; ?>"> Ver detalle</a>                         
-                </div>
-              </div>
-              <div class="col-md-2">              
-                  <label></label>                
-                <a class="btn btn-block btn-success" id="filtro_reporte" onclick="crearHref()"><i class='fa fa-filter'></i> Filtrar</a>                         
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>      
-      <div class="row">      
+     
         <?php
+        for ($i=0; $i <= 5 ; $i++) { 
+            $monthsMinus = '- '.$i .' month';
+            $fdesde = date('Y-m-01',strtotime($monthsMinus));
+            $fhasta = date('Y-m-t',strtotime($monthsMinus));
+            setlocale(LC_TIME, 'spanish');  
+            $nombreMES = strftime("%B",mktime(0, 0, 0, date('m',strtotime($monthsMinus)), 1, 2000));      
+            $anioMES = date('Y',strtotime($monthsMinus));
             $total_servicios = 0;
             $total_servicios_cerrados = 0;
             $total_efectividad = 0;
@@ -85,6 +59,7 @@
             $total_puntajes_enviadas = 0;
 
             $objetivo=0;
+            $consulta = $handler->consultaPuntajes($fdesde, $fhasta, $fgestor);
 
             if(!empty($consulta))
             {
@@ -92,7 +67,12 @@
 
                 $handlerP = new HandlerPuntaje;
                 $objetivo = $handlerP->buscarObjetivo($value->COD_GESTOR);                        
-                $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
+                $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
+                if ($value->FECHA->format('d-m-Y')>= $fechaPuntajeActual->format('d-m-Y')) {
+                  $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
+                } else {
+                  $puntaje = $handlerP->buscarPuntajeFecha($value->COD_EMPRESA,$value->FECHA->format('Y-m-d'));
+                }
 
                 if(empty($objetivo))                                                  
                   $objetivo = 0;
@@ -122,116 +102,108 @@
               }
             }
 
-            if(!empty($total_servicios))
-              $total_efectividad = round($total_servicios_cerrados/$total_servicios,2) *100;
-            else
-              $total_efectividad = 0;                    
+            if($objetivo != 0){
+              if ($total_puntajes_enviadas > $objetivo) {
+                $clase_medidor = 'class="info-box bg-green"';
+                $puntajePorciento = round(($total_puntajes_enviadas - $objetivo)*100/$objetivo,2);
+              } else {
+                $clase_medidor = 'class="info-box bg-yellow"';
+                $puntajePorciento = round(($total_puntajes_enviadas) * 100 /$objetivo,2);
+              }
+
+            } else {
+              $clase_medidor = 'class="info-box bg-yellow"';
+              $puntajePorciento = 50;
+            }
+
+            if(!empty($total_servicios)){
+              $total_efectividad = round(($total_servicios_enviadas+$total_servicios_cerrados)/$total_servicios,2) *100;
+              if ($total_efectividad > 70) {
+                $clase_efectividad = 'class="info-box-icon bg-green"';
+              } else if($total_efectividad < 60){
+                $clase_efectividad = 'class="info-box-icon bg-red"';
+              } else {
+                $clase_efectividad = 'class="info-box-icon bg-yellow"';
+              }
+             } else {
+              $total_efectividad = 0;
+              $clase_efectividad = 'class="info-box-icon bg-red"';
+            }
         ?>
 
-        
-        <div class="col-md-12">
-          <!--
-          <div class="col-md-4 col-sm-6 col-xs-12">
-            <div class="info-box">
-              <span class="info-box-icon bg-green"><i class="fa fa-trophy"></i></span>
+        <div class="col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+            <div class="box box-solid">
+              <div class="box-header with-border">
+                <h3 class="box-title" style="text-transform: uppercase;"><?php echo $nombreMES ?> <?php echo $anioMES ?></h3>
+              </div>    
+              <div class="box-body">
 
-              <div class="info-box-content">
-                <span class="info-box-text">OBJETIVO</span>
-                <span class="info-box-number"><?php echo $objetivo; ?> puntos</span>
+                <div class="col-sm-12">
+                <div <?php echo $clase_medidor; ?>>
+                      <span class="info-box-icon"><i class="ion-calculator"></i></span>
+                      <div class="info-box-content">
+                        <span class="info-box-text">PUNTAJE</span>
+                        <span class="info-box-number"><?php echo $puntajePorciento."%"; ?></span>
+
+                        <div class="progress">
+                          <div class="progress-bar" style="width: <?php echo $puntajePorciento ?>%"></div>
+                        </div>
+                        <span class="progress-description">
+                          <small>Enviados: </small><?php echo $total_puntajes_enviadas ?> <span class="pull-right"><small>Objetivo: </small><?php echo $objetivo; ?></span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="info-box">
+                    <span class="info-box-icon bg-yellow"><i class="ion-lock-combination"></i></span>
+
+                    <div class="info-box-content">
+                      <span class="info-box-text">CERRADOS</span>
+                      <span class="info-box-number"><?php echo $total_servicios_cerrados; ?></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="info-box">
+                    <span class="info-box-icon bg-aqua"><i class="ion-ios-paperplane"></i></span>
+
+                    <div class="info-box-content">
+                      <span class="info-box-text">ENVIADOS</span>
+                      <span class="info-box-number"><?php echo $total_servicios_enviadas; ?></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="info-box">
+                    <span class="info-box-icon bg-blue"><i class="ion-briefcase"></i></span>
+
+                    <div class="info-box-content">
+                      <span class="info-box-text">TOTAL</span>
+                      <span class="info-box-number"><?php echo $total_servicios; ?></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3">
+                  <div class="info-box">
+                    <span <?php echo $clase_efectividad; ?>><i class="ion-arrow-graph-up-right"></i></span>
+
+                    <div class="info-box-content">
+                      <span class="info-box-text">EFECTIVIDAD</span>
+                      <span class="info-box-number"><?php echo $total_efectividad; ?> %</span>
+                    </div>
+                  </div>
+                </div>
+                
               </div>
             </div>
-         </div>
-          -->
-
-          <div class="col-md-4 col-sm-6 col-xs-12">
-            <div class="info-box">
-              <span class="info-box-icon bg-red"><i class="fa fa-calendar"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">FECHA DESDE / FECHA HASTA</span>
-                <span class="info-box-number"><?php echo $dFecha->FormatearFechas($fdesde,'Y-m-d','d/m/Y')." al ".$dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y'); ?></span>
-              </div>
-            </div>
-          </div>
-
-          <!--
-          <div class="col-md-4 col-sm-6 col-xs-12">
-            <div class="info-box">
-              <span class="info-box-icon bg-gray"><i class="fa fa-truck" style="color: white;"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">TOTAL DE SERVICIOS</span>
-                <span class="info-box-number"><?php echo $total_servicios; ?></span>
-              </div>
-            </div>
-          </div>
-          -->
-          
-        </div>            
-        
-
-        <div class="col-md-12">
-          <div class="col-md-4 col-sm-6 col-xs-12">
-            <div class="info-box">
-              <span class="info-box-icon bg-yellow"><i class="fa fa-briefcase"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">SERVICIOS CERRADOS</span>
-                <span class="info-box-number"><?php echo $total_servicios_cerrados." de ".$total_servicios; ?></span>
-              </div>
-            </div>
-          </div>
-                 
-          <div class="col-md-4 col-sm-6 col-xs-12">
-            <div class="info-box">
-              <span class="info-box-icon bg-yellow"><i class="fa fa-calculator"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">PUNTAJE</span>
-                <span class="info-box-number"><?php echo $total_puntajes_cerrados."/".$objetivo; ?></span>
-              </div>
-            </div>
-          </div>
-                 
-          <div class="col-md-4 col-sm-6 col-xs-12">
-            <div class="info-box">
-              <span class="info-box-icon bg-yellow"><i class="fa fa-sliders"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">EFECTIVIDAD</span>
-                <span class="info-box-number"><?php echo $total_efectividad; ?> %</span>
-              </div>
-            </div>
-          </div>
-        </div>        
-
-        <div class="col-md-12">
-          <div class="col-md-4 col-sm-6 col-xs-12">
-            <div class="info-box">
-              <span class="info-box-icon bg-aqua"><i class="fa fa-paper-plane-o"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">SERVICIOS ENVIADOS</span>
-                <span class="info-box-number"><?php echo $total_servicios_enviadas." de ".$total_servicios; ?></span>
-              </div>
-            </div>
-          </div>
-                 
-          <div class="col-md-4 col-sm-6 col-xs-12">
-            <div class="info-box">
-              <span class="info-box-icon bg-aqua"><i class="fa fa-calculator"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">PUNTAJE</span>
-                <span class="info-box-number"><?php echo $total_puntajes_enviadas."/".$objetivo; ?></span>
-              </div>
-            </div>
-          </div>
-
         </div>
-
-      </div>                
+      <?php }  ?>
+                
     </div>
+
+  </section>
+
 
   </section>
 </div>

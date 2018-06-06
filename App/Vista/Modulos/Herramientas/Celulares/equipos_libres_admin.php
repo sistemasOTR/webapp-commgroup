@@ -11,12 +11,12 @@
     <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-nuevo-equipo'>
         <i class="fa fa-mobile"></i> Nuevo
     </a>
-    <!--<div class="col-xs-12 col-md-3 pull-right"><input type="text" id="search" class="form-control" placeholder="Escribe para buscar..." /></div>-->
+    <div class="col-xs-12 col-md-6 pull-right"><input type="text" id="search-equipos" class="form-control" placeholder="Escribe para buscar..." /></div>
   </div>
 
   <div class="box-body table-responsive"> 
     
-    <table class="table table-striped table-condensed" id="tabla-plaza" cellspacing="0" width="100%" style="text-align:center;">
+    <table class="table table-striped table-condensed" id="tabla-equipos" cellspacing="0" width="100%" style="text-align:center;">
       <thead>
         <tr>
           <th class='text-center' width="100">IMEI</th>
@@ -60,7 +60,7 @@
 
   $(function () {
 
-  $('#search').quicksearch('table tbody tr');               
+  $('#search-equipos').quicksearch('#tabla-equipos tbody tr');               
 });
        
 </script>

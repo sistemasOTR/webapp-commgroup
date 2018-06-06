@@ -18,18 +18,18 @@
 								'nombre' => 'JUAN CARLOS ZARATE',
 								'plazas' =>  array(
 										array('alias' => 'CABA'),
-										array('alias' => 'FAGUAGA'),
+										array('alias' => 'CORDOBA'),
 										array('alias' => 'MAR DEL PLATA'),
-										array('alias' => 'FERREYRA'),
+										array('alias' => 'SANTA FE - PARANA'),
 									),
 								),
 							array(
 								'id' => 2, 
 								'nombre' => 'ADOLFO CORIA',
 								'plazas' =>  array(
-										array('alias' => 'SALINAS'),
+										array('alias' => 'ROSARIO'),
 										array('alias' => 'MENDOZA'),
-										array('alias' => 'ROMANO'),
+										array('alias' => 'TUCUMAN'),
 										array('alias' => 'NEUQUEN'),
 									),
 								)

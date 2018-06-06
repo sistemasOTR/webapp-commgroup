@@ -22,6 +22,7 @@
 
         $url_legajos_carga = "index.php?view=legajos_carga";
         $url_legajos_control = "index.php?view=legajos_control";
+        $url_imprimir_credencial = PATH_VISTA.'Modulos/Legajos/imprimir_credencial.php?';
 
         $url_tickets_carga = "index.php?view=tickets_carga";
         $url_tickets_control = "index.php?view=tickets_control";
@@ -562,6 +563,14 @@
             <?php 
               }
             ?>
+
+            <?php if($esGestor || $esCoordinador || $esIngresante || $esSupervisor || $esBO || $esGerencia){ ?>
+              <li class="treeview" id="mnu_legajos_credencial">
+                <a href=<?php echo $url_imprimir_credencial."userId=".$usuarioActivoSesion->getId(); ?> target="_blank"> 
+                  <i class="fa fa-print"></i> <span>Credencial</span> </i>
+                </a>              
+              </li>   
+            <?php } ?>
           </ul>
 
         </section>        

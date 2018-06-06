@@ -912,8 +912,8 @@
 
 					$filtro_fhasta="";
 					if(!empty($fhasta)){					
-						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
-						$filtro_fhasta = "SERTT41_FECEST='".$tmp."' AND ";
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");
+						$filtro_fhasta = "SERTT41_FECEST=DATEADD(d,1,'".$tmp."') AND ";
 					}
 				}
 				else
@@ -927,9 +927,9 @@
 					$filtro_fhasta="";
 					if(!empty($fhasta)){					
 						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
-						$filtro_fhasta = "SERTT41_FECEST<='".$tmp."' AND ";
+						$filtro_fhasta = "SERTT41_FECEST<=DATEADD(d,1,'".$tmp."') AND ";
 					}
-				}				
+				}
 
 				$filtro_gestor="";
 				if(!empty($gestor))								
@@ -942,8 +942,8 @@
 								SERVTT.SERTT91_CODEMPRE as COD_EMPRESA,
 								EMPRESASTT.EMPTT21_NOMBRE as NOM_EMPRESA,								
 								SUM(CASE WHEN SERTT91_ESTADO=6 THEN 1 ELSE 0 END) AS CERRADO,							
-								SUM(CASE WHEN SERTT91_ESTADO=9 THEN 1 ELSE 0 END) AS ENVIADO,
-								SUM(1) AS TOTAL_SERVICIOS														
+								SUM(CASE WHEN (SERTT91_ESTADO=9 OR SERTT91_ESTADO=10) THEN 1 ELSE 0 END) AS ENVIADO,
+								SUM(CASE WHEN SERTT91_ESTADO<>12 THEN 1 ELSE 0 END) AS TOTAL_SERVICIOS
 						FROM SERVTT
 						INNER JOIN EMPRESASTT ON
 							SERVTT.SERTT91_CODEMPRE = EMPRESASTT.EMPTT11_CODIGO 
@@ -959,6 +959,144 @@
 							GESTOR11_CODIGO, GESTOR21_ALIAS, SERTT91_CODEMPRE, EMPTT21_NOMBRE, CONVERT(DATE,SERTT41_FECEST)
 						ORDER BY 
 							GESTOR11_CODIGO, GESTOR21_ALIAS, SERTT91_CODEMPRE, EMPTT21_NOMBRE, CONVERT(DATE,SERTT41_FECEST)";
+				
+					#echo $query;
+					#exit;
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}	
+	
+
+		public function consultaPuntajesCoordinador($fdesde, $fhasta, $coordinador){
+			try {
+
+				$f = new Fechas;
+
+				if($fdesde==$fhasta)
+				{
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "SERTT41_FECEST='".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "SERTT41_FECEST=DATEADD(d,1,'".$tmp."') AND ";
+					}
+				}
+				else
+				{					
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "SERTT41_FECEST>='".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "SERTT41_FECEST<=DATEADD(d,1,'".$tmp."') AND ";
+					}
+				}				
+
+				$filtro_coordinador="";
+				if(!empty($coordinador))								
+					$filtro_coordinador = "SERTT91_COOALIAS='".$coordinador."' AND ";				
+
+
+				$query = "SELECT SERTT91_COOALIAS as ALIAS_COORDINADOR,
+								CONVERT(DATE,SERTT41_FECEST) as FECHA, 
+								SERVTT.SERTT91_CODEMPRE as COD_EMPRESA,
+								EMPRESASTT.EMPTT21_NOMBRE as NOM_EMPRESA,								
+								SUM(CASE WHEN SERTT91_ESTADO=6 THEN 1 ELSE 0 END) AS CERRADO,							
+								SUM(CASE WHEN (SERTT91_ESTADO=9 OR SERTT91_ESTADO=10) THEN 1 ELSE 0 END) AS ENVIADO,
+								SUM(CASE WHEN SERTT91_ESTADO<>12 THEN 1 ELSE 0 END) AS TOTAL_SERVICIOS
+						FROM SERVTT
+						INNER JOIN EMPRESASTT ON
+							SERVTT.SERTT91_CODEMPRE = EMPRESASTT.EMPTT11_CODIGO 	
+						WHERE  				
+							".$filtro_fdesde." 
+							".$filtro_fhasta." 							
+							".$filtro_coordinador." 							
+							SERTT91_CODEMPRE = EMPTT11_CODIGO 			
+						GROUP BY 
+							SERTT91_COOALIAS, SERTT91_CODEMPRE, EMPTT21_NOMBRE, CONVERT(DATE,SERTT41_FECEST)
+						ORDER BY 
+							SERTT91_COOALIAS, SERTT91_CODEMPRE, EMPTT21_NOMBRE, CONVERT(DATE,SERTT41_FECEST)";
+				
+					//echo $query;
+					//exit;
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}	
+
+		public function consultaPuntajesGeneral($fdesde, $fhasta){
+			try {
+
+				$f = new Fechas;
+
+				if($fdesde==$fhasta)
+				{
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "SERTT41_FECEST='".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "SERTT41_FECEST=DATEADD(d,1,'".$tmp."') AND ";
+					}
+				}
+				else
+				{					
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "SERTT41_FECEST>='".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "SERTT41_FECEST<=DATEADD(d,1,'".$tmp."') AND ";
+					}
+				}						
+
+
+				$query = "SELECT 
+								CONVERT(DATE,SERTT41_FECEST) as FECHA, 
+								SERVTT.SERTT91_CODEMPRE as COD_EMPRESA,
+								EMPRESASTT.EMPTT21_NOMBRE as NOM_EMPRESA,								
+								SUM(CASE WHEN SERTT91_ESTADO=6 THEN 1 ELSE 0 END) AS CERRADO,							
+								SUM(CASE WHEN (SERTT91_ESTADO=9 OR SERTT91_ESTADO=10) THEN 1 ELSE 0 END) AS ENVIADO,
+								SUM(CASE WHEN SERTT91_ESTADO<>12 THEN 1 ELSE 0 END) AS TOTAL_SERVICIOS														
+						FROM SERVTT
+						INNER JOIN EMPRESASTT ON
+							SERVTT.SERTT91_CODEMPRE = EMPRESASTT.EMPTT11_CODIGO 	
+						WHERE  				
+							".$filtro_fdesde." 
+							".$filtro_fhasta." 									
+							SERTT91_CODEMPRE = EMPTT11_CODIGO 			
+						GROUP BY 
+							SERTT91_CODEMPRE, EMPTT21_NOMBRE, CONVERT(DATE,SERTT41_FECEST)
+						ORDER BY 
+							SERTT91_CODEMPRE, EMPTT21_NOMBRE, CONVERT(DATE,SERTT41_FECEST)";
 				
 					//echo $query;
 					//exit;

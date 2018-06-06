@@ -28,7 +28,15 @@
 
 		private $_estado;
 		public function getEstado(){ return var_export($this->_estado,true); }
-		public function setEstado($estado){ $this->_estado=$estado; }		
+		public function setEstado($estado){ $this->_estado=$estado; }
+
+		private $_fechaDesde;
+		public function getFechaDesde(){ return $this->_fechaDesde; }
+		public function setFechaDesde($fechaDesde){ $this->_fechaDesde=$fechaDesde; }
+
+		private $_fechaHasta;
+		public function getFechaHasta(){ return $this->_fechaHasta; }
+		public function setFechaHasta($fechaHasta){ $this->_fechaHasta=$fechaHasta; }
 
 		/*#############*/
 		/* CONSTRUCTOR */
@@ -38,7 +46,9 @@
 			$this->setId(0);
 			$this->setIdEmpresaSistema(0);			
 			$this->setPuntaje(0);
-			$this->setEstado(true);				
+			$this->setEstado(true);
+			$this->setFechaDesde('');
+			$this->setFechaHasta('');				
 		}
 
 		/*###################*/
@@ -60,11 +70,13 @@
 				$query="INSERT INTO empresa_puntaje (
 		        						id_empresa_sistema,
 		        						puntaje,
-		        						estado
+		        						estado,
+		        						fechaDesde
 	        			) VALUES (
 	        							".$this->getIdEmpresaSistema().",
 	        							".$this->getPuntaje().",
-	        							'".$this->getEstado()."'
+	        							'".$this->getEstado()."',
+	        							'".$this->getFechaDesde()."'
 	        			)";        
 				
 				# Ejecucion 	
@@ -95,6 +107,23 @@
 								puntaje=".$this->getCategoria().", 
 								estado='".$this->getEstado()."'
 							WHERE id=".$this->getId();
+
+				# Ejecucion
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}					
+		}
+
+		public function deBaja($conexion,$fechaCambioVigencia)
+		{		
+			try {
+				# Query 			
+				$query="UPDATE empresa_puntaje SET
+								fechaHasta='".$fechaCambioVigencia."'
+							WHERE fechaHasta is NULL";
+				
 
 				# Ejecucion
 				return SQL::update($conexion,$query);	
@@ -135,7 +164,7 @@
 					if(empty($this->getIdEmpresaSistema()))
 						throw new Exception("No se selecciono la empresa de referencia");		
 
-					$query = "SELECT * FROM empresa_puntaje WHERE id_empresa_sistema=".$this->getIdEmpresaSistema()." AND estado='true'";
+					$query = "SELECT * FROM empresa_puntaje WHERE id_empresa_sistema=".$this->getIdEmpresaSistema()." AND estado='true' AND fechaHasta is NULL";
 				}
 				else{
 					if(empty($this->getId()))
@@ -144,6 +173,44 @@
 					$query="SELECT * FROM empresa_puntaje WHERE id=".$this->getId();
 				}
 
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new EmpresaPuntaje);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
+
+		public function selectActual()
+		{			
+			try {
+				
+				# Query
+				$query = "SELECT * FROM empresa_puntaje WHERE estado='true' AND fechaHasta is NULL";
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new EmpresaPuntaje);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
+
+		public function buscarPuntajeFecha($empresa_id,$fechaOperacion)
+		{			
+			try {
+				
+				# Query
+				$query = "SELECT * FROM empresa_puntaje WHERE id_empresa_sistema=".$empresa_id." AND estado='true' AND fechaHasta >'".$fechaOperacion."'";
+				
 				# Ejecucion 				
 				$result = SQL::selectObject($query, new EmpresaPuntaje);
 						
@@ -166,6 +233,8 @@
 				$this->setIdEmpresaSistema(trim($filas['id_empresa_sistema']));
 				$this->setPuntaje(trim($filas['puntaje']));											
 				$this->setEstado($filas['estado']);
+				$this->setFechaDesde($filas['fechaDesde']);
+				$this->setFechaHasta($filas['fechaHasta']);
 			}
 		}
 
@@ -174,7 +243,9 @@
 			$this->setId(0);
 			$this->setIdEmpresaSistema(0);
 			$this->setPuntaje(0);			
-			$this->setEstado(true);				
+			$this->setEstado(true);
+			$this->setFechaDesde('');
+			$this->setFechaHasta('');
 		}
 
 		private function createTable()

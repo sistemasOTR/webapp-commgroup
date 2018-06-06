@@ -3,27 +3,37 @@
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";  
   include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
-
+  include_once PATH_NEGOCIO."Parametros/handlerparametros.class.php";  
   include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php"; 
-    
+  
+  $view_detalle= "index.php?view=puntajes_general_detalle";
+
+  $user = $usuarioActivoSesion;
+
   $dFecha = new Fechas;
 
-  $handler = new HandlerSistema;
-  $arrGestor = $handler->selectAllGestorFiltro(null,null,null,null,null);  
+  //$handler = new HandlerSistema;
+  //$arrCoordinador = $handler->selectAllCoordinadorFiltro(null,null,null,null,null);  
 
   $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());      
-  $fgestor=(isset($_GET["fgestor"])?$_GET["fgestor"]:'');
 
   $handler =  new HandlerConsultas;
-  $consulta = $handler->consultaPuntajes($fdesde, $fhasta, $fgestor);
+  
+
+  $p_handler = new HandlerPuntaje;
+  $puntos = $p_handler->buscarObjetivoSupervisor(1) + $p_handler->buscarObjetivoSupervisor(2) ; 
+
+  //$p_handler = new HandlerParametros;  
+  //$puntos = $p_handler->seleccionarById(3)["valor_int"]; 
+
 ?>
 
 <div class="content-wrapper">  
   <section class="content-header">
     <h1>
       Puntajes
-      <small>Puntajes de los gestores</small>
+      <small>Puntajes generados desde los servicios</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -37,7 +47,6 @@
     <?php include_once PATH_VISTA."info.php"; ?>
 
     <div class="row">
-
       <div class='col-md-12'>
           <div class="box box-solid">
               <div class="box-header with-border">
@@ -56,26 +65,11 @@
                         <input type="text" class="input-sm form-control" onchange="crearHref()" id="end" name="end" value="<?php echo $dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y'); ?>"/>
                     </div>  
                 </div>
-
-                <div class="col-md-3">
-                  <label>Gestor </label>                
-                  <select id="slt_gestor" class="form-control" style="width: 100%" name="slt_gestor" onchange="crearHref()">                              
-                    <option value=''></option>
-                    <option value='0'>TODOS</option>
-                    <?php
-                      if(!empty($arrGestor))
-                      {                        
-                        foreach ($arrGestor as $key => $value) {                                                  
-                          if($fgestor==$value->GESTOR11_CODIGO)
-                            echo "<option value='".trim($value->GESTOR11_CODIGO)."' selected>".$value->GESTOR21_ALIAS."</option>";
-                          else
-                            echo "<option value='".trim($value->GESTOR11_CODIGO)."'>".$value->GESTOR21_ALIAS."</option>";
-                        }
-                      }                      
-                    ?>
-                  </select>
-                </div>
                 
+                <div class="col-md-2" style="margin-top: 30px;">              
+                    <label></label>                
+                  <a class="btn btn-warning btn-sm pull-right" href="<?php echo $view_detalle."&fdesde=".$fdesde."&fhasta=".$fhasta; ?>"> Ver detalle</a>                         
+                </div>
               </div>
               <div class="col-md-2">              
                   <label></label>                
@@ -84,114 +78,147 @@
             </div>
           </div>
         </div>
-      </div>      
-      <div class="col-md-12">
-        <div class="box box-solid">
-          <div class="box-header with-border">   
-            <i class="fa fa-percent"></i>       
-            <h3 class="box-title">Puntajes</h3>          
-          </div>
-          <div class="box-body table-responsive">
-            <table class="table table-striped table-condensed" id='tabla'>
-              <thead>
-                <tr>                  
-                  <th>GESTOR</th>
-                  <th>OBJETIVO</th>
-                  <th>FECHA</th>                  
-                  <th>EMPRESA</th>                  
-                  <th>TOTAL SERVICIOS</th>                 
-                  <th>CERRADAS</th>
-                  <th>EFECTIVDAD</th>                 
-                  <th>PUNTAJE</th>                                                                                   
-                  <th>ENVIADAS</th>     
-                  <th>PUNTAJE</th>     
-                </tr>
-              </thead>
-              <tbody>
-                <?php
-                    $total_servicios = 0;
-                    $total_servicios_cerrados = 0;
-                    $total_efectividad = 0;
-                    $total_puntajes_cerrados = 0;
+      </div>
 
-                    $total_servicios_enviadas = 0;
-                    $total_puntajes_enviadas = 0;
+      
+        <?php
+         for ($i=0; $i <= 5 ; $i++) { 
+            $monthsMinus = '- '.$i .' month';
+            $fdesde = date('Y-m-01',strtotime($monthsMinus));
+            $fhasta = date('Y-m-t',strtotime($monthsMinus));
+            setlocale(LC_TIME, 'spanish');  
+            $nombreMES = strftime("%B",mktime(0, 0, 0, date('m',strtotime($monthsMinus)), 1, 2000));      
+            $anioMES = date('Y',strtotime($monthsMinus));
+            $total_servicios = 0;
+            $total_servicios_cerrados = 0;
+            $total_efectividad = 0;
+            $total_puntajes_cerrados = 0;
 
-                    $objetivo=0;
-                    
-                    if(!empty($consulta))
-                    {
-                      foreach ($consulta as $key => $value) { 
+            $total_servicios_enviadas = 0;
+            $total_puntajes_enviadas = 0;
 
-                        $handlerP = new HandlerPuntaje;
-                        $objetivo = $handlerP->buscarObjetivo($value->COD_GESTOR);                        
-                        $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
+            $objetivo=0;
+            $consulta = $handler->consultaPuntajesGeneral($fdesde, $fhasta);
 
-                        if(empty($objetivo))                                                  
-                          $objetivo = 0;
+            if(!empty($consulta))
+            {
+              foreach ($consulta as $key => $value) { 
 
-                        if(empty($puntaje))
-                          $puntaje_cerrados = 0;
-                        else
-                          $puntaje_cerrados = round($value->CERRADO*$puntaje,2);
+                $handlerP = new HandlerPuntaje;
+                $objetivo = $puntos;
+                $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
+                if ($value->FECHA->format('d-m-Y')>= $fechaPuntajeActual->format('d-m-Y')) {
+                  $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
+                } else {
+                  $puntaje = $handlerP->buscarPuntajeFecha($value->COD_EMPRESA,$value->FECHA->format('Y-m-d'));
+                }
 
-                        if(empty($puntaje))
-                          $puntaje_enviadas = 0;
-                        else
-                          $puntaje_enviadas = round($value->ENVIADO*$puntaje,2);                        
+                if(empty($objetivo))                                                  
+                  $objetivo = 0;
 
-                        if(!empty($value->TOTAL_SERVICIOS))
-                          $efectividad = round($value->CERRADO/$value->TOTAL_SERVICIOS,2) * 100;
-                        else
-                          $efectividad = 0;
+                if(empty($puntaje))
+                  $puntaje_cerrados = 0;
+                else
+                  $puntaje_cerrados = round($value->CERRADO*$puntaje,2);
 
-                        echo "
-                        <tr>                          
-                          <td>".$value->NOM_GESTOR."</td>
-                          <td style='background:#00800080;'>".$objetivo."</td>
-                          <td>".$value->FECHA->format('d M')."</td>                            
-                          <td>".$value->NOM_EMPRESA."</td>      
-                          <td style='background:#ff000080;'>".$value->TOTAL_SERVICIOS."</td>
-                          <td style='background:#0000ff80;'>".$value->CERRADO."</td>
-                          <td style='background:#0000ff80;'>".$efectividad." %</td>
-                          <td style='background:#0000ff80;'>".$puntaje_cerrados."</td>                          
-                          <td style='background:#ffa50080;'>".$value->ENVIADO."</td>                          
-                          <td style='background:#ffa50080;'>".$puntaje_enviadas."</td>                          
-                        </tr>";
+                if(empty($puntaje))
+                  $puntaje_enviadas = 0;
+                else
+                  $puntaje_enviadas = round($value->ENVIADO*$puntaje,2);                        
 
+                if(!empty($value->TOTAL_SERVICIOS))
+                  $efectividad = round($value->CERRADO/$value->TOTAL_SERVICIOS,2) * 100;
+                else
+                  $efectividad = 0;
+                
 
-                        $total_servicios = $total_servicios + $value->TOTAL_SERVICIOS;
-                        $total_servicios_cerrados = $total_servicios_cerrados + $value->CERRADO;
-                        $total_puntajes_cerrados = $total_puntajes_cerrados + $puntaje_cerrados;                        
+                $total_servicios = $total_servicios + $value->TOTAL_SERVICIOS;
+                $total_servicios_cerrados = $total_servicios_cerrados + $value->CERRADO;
+                $total_puntajes_cerrados = $total_puntajes_cerrados + $puntaje_cerrados;                        
 
-                        $total_servicios_enviadas = $total_servicios_enviadas + $value->ENVIADO;
-                        $total_puntajes_enviadas = $total_puntajes_enviadas + $puntaje_enviadas;                        
-                      }
-                    }
+                $total_servicios_enviadas = $total_servicios_enviadas + $value->ENVIADO;
+                $total_puntajes_enviadas = $total_puntajes_enviadas + $puntaje_enviadas;                        
+              }
+            }
 
-                    if(!empty($total_servicios))
-                      $total_efectividad = round($total_servicios_cerrados/$total_servicios,2)*100;
-                    else
-                      $total_efectividad = 0;                    
-                  ?>
-                  <tr style="font-weight: bold;">
-                    <td style="background: #9e9e9e; font-size: 17px; color: white;">TOTAL</td>
-                    <td style="background: #008000; font-size: 17px; color: white;"><?php echo $objetivo; ?></td>
-                    <td></td>
-                    <td></td>
-                    <td style="background: #ff0000; font-size: 17px; color: white;"><?php echo $total_servicios; ?></td>
-                    <td style="background: #0000ff; font-size: 17px; color: white;"><?php echo $total_servicios_cerrados; ?></td>
-                    <td style="background: #0000ff; font-size: 17px; color: white;"><?php echo $total_efectividad; ?> %</td>
-                    <td style="background: #0000ff; font-size: 17px; color: white;"><?php echo $total_puntajes_cerrados; ?></td>
-                    <td style="background: #ffa500; font-size: 17px; color: white;"><?php echo $total_servicios_enviadas; ?></td>
-                    <td style="background: #ffa500; font-size: 17px; color: white;"><?php echo $total_puntajes_enviadas; ?></td>                                        
-                  </tr>          
+            if($objetivo != 0){
+              if ($total_puntajes_enviadas > $objetivo) {
+                $clase_medidor = 'class="info-box bg-green"';
+                $puntajePorciento = round(($total_puntajes_enviadas - $objetivo)*100/$objetivo,2);
+                $txtPuntajePorciento = round($total_puntajes_enviadas * 100/$objetivo,2);
+              } else {
+                $clase_medidor = 'class="info-box bg-yellow"';
+                $puntajePorciento = round(($total_puntajes_enviadas) * 100 /$objetivo,2);
+                $txtPuntajePorciento = round($total_puntajes_enviadas * 100/$objetivo,2);
+              }
 
-              </tbody>
-            </table>
-          </div>
+            } else {
+              $clase_medidor = 'class="info-box bg-yellow"';
+              $puntajePorciento = 50;
+              $txtPuntajePorciento = 50.00;
+            }
+
+            if(!empty($total_servicios)){
+              $total_efectividad = round(($total_servicios_enviadas+$total_servicios_cerrados)*100/$total_servicios,2) ;
+              if ($total_efectividad > 70) {
+                $clase_efectividad = 'class="text-center text-green"';
+              } else if($total_efectividad < 60){
+                $clase_efectividad = 'class="text-center text-red"';
+              } else {
+                $clase_efectividad = 'class="text-center text-yellow"';
+              }
+             } else {
+              $total_efectividad = 0;
+              $clase_efectividad = 'class="text-center text-red"';
+            }
+        ?>
+
+        <div class="col-sm-6 col-md-4">
+            <div class="box box-solid">
+              <div class="box-header with-border">
+                <h3 class="box-title" style="text-transform: uppercase;"><?php echo $nombreMES ?> <?php echo $anioMES ?></h3>
+                <a class="text-navy pull-right" href="<?php echo $view_detalle."&fdesde=".$fdesde."&fhasta=".$fhasta; ?>"><i class="fa fa-search"></i></a>
+              </div>    
+              <div class="box-body">
+
+                <div class="col-xs-12 no-padding">
+                <div <?php echo $clase_medidor; ?>>
+                      <span class="info-box-icon"><i class="ion-calculator"></i></span>
+                      <div class="info-box-content">
+                        <span class="info-box-text">Objetivo</span>
+                        <span class="info-box-number"><?php echo $txtPuntajePorciento."%"; ?></span>
+
+                        <div class="progress">
+                          <div class="progress-bar" style="width: <?php echo $puntajePorciento ?>%"></div>
+                        </div>
+                        <span class="progress-description">
+                          <small>Enviados: </small><?php echo $total_puntajes_enviadas ?> <span class="pull-right"><small>Objetivo: </small><?php echo $objetivo; ?></span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                <div class="col-xs-6 col-md-3 border-right">
+                  <p class="text-center text-olive">CERRADOS<br>
+                  <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios_cerrados; ?></span></p>
+                </div>
+                <div class="col-xs-6 col-md-3 border-right">
+                  <p class="text-center text-aqua">ENVIADOS<br>
+                  <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios_enviadas; ?></span></p>
+                </div>
+                <div class="col-xs-6 col-md-3 border-right">
+                  <p class="text-center text-blue">TOTAL<br>
+                  <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios; ?></span></p>
+                </div>
+                <div class="col-xs-6 col-md-3">
+                  <p <?php echo $clase_efectividad; ?>>EFECTIVIDAD<br>
+                  <span style="font-weight: bold;font-size: 20px"><?php echo $total_efectividad; ?>%</span></p>
+                </div>
+                
+              </div>
+            </div>
         </div>
-      </div>                
+      <?php }  ?>
+                
     </div>
 
   </section>
@@ -201,41 +228,4 @@
   $(document).ready(function(){                
     $("#mnu_puntajes").addClass("active");
   });
-
-  $(document).ready(function() {
-    $("#slt_gestor").select2({
-        placeholder: "Seleccionar un Gestor",                  
-    }); 
-  });   
-
-  $('#sandbox-container .input-daterange').datepicker({
-      format: "dd/mm/yyyy",
-      clearBtn: false,
-      language: "es",
-      keyboardNavigation: false,
-      forceParse: false,
-      autoclose: true,
-      todayHighlight: true,                                                                        
-      multidate: false,
-      todayBtn: "linked",  
-  });
-
-  crearHref();  
-  function crearHref()
-  {
-      aStart = $("#start").val().split('/');
-      aEnd = $("#end").val().split('/');
-
-      f_inicio = aStart[2] +"-"+ aStart[1] +"-"+ aStart[0];
-      f_fin = aEnd[2] +"-"+ aEnd[1] +"-"+ aEnd[0];                          
-      f_gestor = $("#slt_gestor").val();     
-      
-      url_filtro_reporte="index.php?view=puntajes_general&fdesde="+f_inicio+"&fhasta="+f_fin
-
-      if(f_gestor!=undefined)
-        if(f_gestor>0)
-          url_filtro_reporte= url_filtro_reporte + "&fgestor="+f_gestor   
-
-      $("#filtro_reporte").attr("href", url_filtro_reporte);
-  }     
 </script>
