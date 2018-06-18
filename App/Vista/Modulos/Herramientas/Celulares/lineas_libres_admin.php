@@ -11,16 +11,17 @@
     <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-nueva-linea'>
         <i class="fa fa-phone"></i> Nueva
     </a>
-    <div class="col-xs-12 col-md-6 pull-right"><input type="text" id="search-linea" class="form-control" placeholder="Escribe para buscar..." /></div>
+    
   </div>
 
   <div class="box-body table-responsive"> 
-    
+    <div class="col-xs-12 col-md-6 pull-right"><input type="text" id="search-linea" class="form-control" placeholder="Escribe para buscar..." /></div>
     <table class="table table-striped table-condensed" id="tabla-lineas" cellspacing="0" width="100%" style="text-align:center;">
       <thead>
         <tr>
-          <th class='text-center' width="100" colspan="2">Nro Línea</th>
-          
+          <th class='text-center' width="100">Nro Línea</th>
+          <th class='text-center' width="100">Plan</th>
+          <th></th>
         </tr>
       </thead>
 
@@ -31,6 +32,7 @@
             
             echo "<tr>";
               echo "<td>".$nroLinea->getNroLinea()."</td>";
+              echo "<td>".$nroLinea->getNombrePlan()."</td>";
               echo "<td style='font-size: 20px;' width='30'><a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."'><i class='ion-eye text-blue'></i></td>";
              echo "</tr>";
           }
@@ -71,30 +73,29 @@
                     <label>Número de Línea</label>
                     <input type="text" name="txtNroLinea" class="form-control">
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6" style="display: none;">
                     <label>Empresa</label>
-                    <input type="text" name="txtEmpresa" class="form-control">                    
+                    <input type="text" name="txtEmpresa" class="form-control" value="Claro">                    
                   </div>
                   <div class="col-md-6">
                     <label>Plan</label>
                     <input type="text" name="txtPlan" class="form-control">
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6" style="display: none;">
                     <label>Costo</label>
-                    <input type="number" name="txtCosto" id="txtCosto" class="form-control" >
+                    <input type="number" name="txtCosto" id="txtCosto" class="form-control" value="0" >
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6" style="display: none;">
                     <label>Consumo</label>
-                    <input type="number" name="txtConsumo" id="txtConsumo" class="form-control">
+                    <input type="number" name="txtConsumo" id="txtConsumo" class="form-control" value="0">
                   </div>
-                  <div class="col-md-12">
+                  <div class="col-md-12" style="display: none;">
                     <label>Observaciones</label>
                     <textarea name="txtObs" id="txtObs" class="form-control" rows="5"></textarea>
                   </div>
               </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
             <button type="submit" class="btn btn-primary">Guardar</button>
           </div>
         </form>

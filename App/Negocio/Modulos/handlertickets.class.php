@@ -8,6 +8,7 @@
 	include_once PATH_DATOS.'BaseDatos/conexionapp.class.php';
 	include_once PATH_DATOS.'Entidades/tickets.class.php';
 	include_once PATH_DATOS.'Entidades/ticketsconceptos.class.php';
+	include_once PATH_DATOS.'Entidades/tablaTicketsCp.class.php';
 	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
 	include_once PATH_NEGOCIO."Funciones/Archivo/archivo.class.php"; 
 	
@@ -294,6 +295,24 @@
 				throw new Exception($e->getMessage());					
 			}
 		}	
+
+		public function selecionarReintegros(){
+			try {
+				$handler = new Reintegro;								
+				$data = $handler->select();
+				
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
 
 	}
 

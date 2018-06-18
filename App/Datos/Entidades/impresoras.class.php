@@ -43,6 +43,22 @@
 		public function getObs(){ return $this->_obs; }
 		public function setObs($obs){ $this->_obs =$obs; }
 
+		private $_userCarga;
+		public function getUserCarga(){ return $this->_userCarga; }
+		public function setUserCarga($userCarga){ $this->_userCarga =$userCarga; }
+
+		private $_userAprobacion;
+		public function getUserAprobacion(){ return $this->_userAprobacion; }
+		public function setUserAprobacion($userAprobacion){ $this->_userAprobacion =$userAprobacion; }
+
+		private $_aprobado;
+		public function getAprobado(){ return var_export($this->_aprobado,true); }
+		public function setAprobado($aprobado){ $this->_aprobado =$aprobado; }
+		
+		private $_fechaHoraAprobacion;
+		public function getFechaHoraAprobacion(){ return $this->_fechaHoraAprobacion; }
+		public function setFechaHoraAprobacion($fechaHoraAprobacion){ $this->_fechaHoraAprobacion =$fechaHoraAprobacion; }
+
 
 		/*#############*/
 		/* CONSTRUCTOR */
@@ -56,7 +72,10 @@
 			$this->setPrecioCompra(0);
 			$this->setFechaBaja('');
 			$this->setObs('');
-			
+			$this->setUserCarga(0);
+			$this->setUserAprobacion(0);
+			$this->setAprobado(false);
+			$this->setFechaHoraAprobacion('');
 		}
 
 		/*###################*/
@@ -73,6 +92,8 @@
 		        						modelo,
 		        						fechaCompra,
 		        						precioCompra,
+		        						userCarga,
+		        						aprobado,
 		        						obs
 	        			) VALUES (
 	        							'".$this->getSerialNro()."',   	
@@ -80,6 +101,8 @@
 	        							'".$this->getModelo()."',
 	        							'".$this->getFechaCompra()."',
 	        							".$this->getPrecioCompra().",
+	        							".$this->getUserCarga().",
+	        							'".$this->getAprobado()."',
 	        							'".$this->getObs()."'
 	        			)";        
 		
@@ -110,6 +133,33 @@
 								fechaBaja='".$this->getFechaBaja()."',
 								obs='".$this->getObs()."'
 							WHERE serialNro=".$this->getSerialNro();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+		public function editarImpresora($conexion)
+		{
+			try {
+
+				# Validaciones 			
+				if(empty($this->getSerialNro()))
+					throw new Exception("Impresora no identificada");
+
+				
+				# Query 			
+				$query="UPDATE impresoras SET
+								fechaCompra='".$this->getFechaCompra()."',
+								precioCompra=".$this->getPrecioCompra().",
+								userAprobacion=".$this->getUserAprobacion().",
+								aprobado='".$this->getAprobado()."',
+								fechaHoraAprobacion='".$this->getFechaHoraAprobacion()."'
+							WHERE serialNro='".$this->getSerialNro()."'";
+							
 
 				# Ejecucion 					
 				return SQL::update($conexion,$query);	
@@ -267,6 +317,10 @@
 				$this->setPrecioCompra(trim($filas['precioCompra']));			
 				$this->setFechaBaja($filas['fechaBaja']);			
 				$this->setObs($filas['obs']);
+				$this->setUserCarga($filas['userCarga']);
+				$this->setUserAprobacion($filas['userAprobacion']);
+				$this->setAprobado($filas['aprobado']);
+				$this->setFechaHoraAprobacion($filas['fechaHoraAprobacion']);
 			}
 		}
 
@@ -279,6 +333,10 @@
 			$this->setPrecioCompra(0);
 			$this->setFechaBaja('');
 			$this->setObs('');
+			$this->setUserCarga(0);
+			$this->setUserAprobacion(0);
+			$this->setAprobado(false);
+			$this->setFechaHoraAprobacion('');
 		}
 
 		private function createTable()

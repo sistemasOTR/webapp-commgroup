@@ -120,7 +120,19 @@
                           echo "<option value='".$usuario->getId()."'>".$usuario->getNombre()." ".$usuario->getApellido()."</option>";
                           }
                         }
-                      } 
+                      }
+                      if ($fplaza == 'ROSARIO' || $fplaza == '') {
+                      	if ($fgestorId == 19) {
+                      		echo "<option value='19' selected>Romin Lesquiuta</option>";
+                      	} else {
+                      		echo "<option value='19'>Romin Lesquiuta</option>";
+                       	} 
+                      	if ($fgestorId == 10104) {
+                      		echo "<option value='10104' selected>Maricel Mattalia</option>";
+                      	} else {
+                      		echo "<option value='10104'>Maricel Mattalia</option>";
+                       	} 
+                      }
                     }
                   ?>
                 </select>
@@ -168,6 +180,7 @@
               </thead>
               <tbody>
                 <?php 
+                if (!empty($arrDatos)) {
                   foreach ($arrDatos as $asignaciones) {
                     //Armado de los datos
                     $plaza = $asignaciones->getPlaza();
@@ -198,7 +211,7 @@
                     <td>".$fechaDev."</td>
                     <td class='text-left'>".$obs."</td>
                     </tr>";
-                  }
+                  }}
                  ?>
 
               </tbody>

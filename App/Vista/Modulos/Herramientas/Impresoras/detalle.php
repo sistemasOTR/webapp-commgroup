@@ -22,10 +22,12 @@
 
   $user = $usuarioActivoSesion;
   $fserialNro=(isset($_GET["fserialNro"])?$_GET["fserialNro"]:'');
-  $url_action_guardar = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_guardar.php';
+  $url_action_guardar = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_editar.php';
+  $url_ver_consumo = 'index.php?view=consumo_impresora&fserialNro=';
   $arrUsuarios = $handlerUs->selectGestores();
   $impresora = $handlerimpresoras->getDatosConSerial($fserialNro);
   $arrDatos = $handlerimpresoras->getAsignaciones($impresora['_serialNro']);
+  $fecha = new Fechas;
 
 ?>
 
@@ -52,14 +54,22 @@
           <div class="box-header with-border">
             <i class="ion-clipboard" style="font-size: 20px; margin-right: 5px;"></i>
             <h3 class="box-title"> Detalle de la impresora</h3>
+            <?php if(!$impresora["_aprobado"]){ ?>
+              <a href='#' data-toggle='modal' id="<?php echo $fserialNro ?>" data-target='#modal-editar' data-serialNro="<?php echo $fserialNro ?>" class="pull-right btn btn-primary"><i class="ion-edit" > Editar</i></a>
+            <?php } ?>
+            
           </div>
           <div class="box-body">
             <h4>Fecha de compra: <?php if(is_null($impresora["_fechaCompra"])){ echo "";} else {echo $impresora["_fechaCompra"]->format('d-m-Y');} ?></h4>
-            <h4>Precio de compra: <?php echo $impresora["_precioCompra"] ?></h4>
+            <h4>Precio de compra: <?php echo $impresora['_precioCompra'] ?></h4>
             <h4>Fecha de baja: <?php if(is_null($impresora["_fechaBaja"])){ echo "";} else {echo $impresora["_fechaBaja"]->format('d-m-Y');}  ?></h4>
             <h4>Observaciones: <?php echo $impresora["_obs"] ?></h4>
             <br>
-            <a href="javascript:history.go(-1)" class="pull-left btn btn-default"><i class="ion-chevron-left"></i> Volver</a>
+            <?php if ($impresora["_marca"] == 'RICOH' ||$impresora["_marca"] == 'LEXMARK' ||$impresora["_marca"] == 'SAMSUNG') { ?>
+              <a href="<?php echo $url_ver_consumo.$fserialNro ?>" class="pull-right btn btn-warning"><i class="fa fa-bar-chart"></i> Ver Consumos</a>
+            <?php } ?>
+            
+            <a href="index.php?view=impresorasxplaza" class="pull-left btn btn-default"><i class="ion-chevron-left"></i> Volver</a>
           </div>
         </div>
       </div>
@@ -72,7 +82,7 @@
             <i class="ion-clipboard" style="font-size: 20px; margin-right: 5px;"></i>
             <h3 class="box-title"> Asignaciones</h3>
           </div>
-          <div class="box-body">
+          <div class="box-body table-responsive">
             <table class="table table-striped table-condensed" id="tabla-plaza" cellspacing="0" width="100%" style="text-align:center;">
               <thead>
                 <tr>
@@ -85,6 +95,7 @@
               </thead>
               <tbody>
                 <?php 
+                if(!empty($arrDatos)){
                   foreach ($arrDatos as $asignaciones) {
                     //Armado de los datos
                     $plaza = $asignaciones->getPlaza();
@@ -115,7 +126,7 @@
                     <td>".$fechaDev."</td>
                     <td class='text-left'>".$obs."</td>
                     </tr>";
-                  }
+                  }}
                  ?>
 
               </tbody>
@@ -127,43 +138,43 @@
 
     </div>
   </section>
-
-
 </div>
+<div class="modal fade in" id="modal-editar">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form id="asig-form" action="<?php echo $url_action_guardar; ?>" method="post">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Editar datos contables de la Impresora</h4>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <label>Fecha</label>
+                  <input type="date" name="fechaCompra" class="form-control">
+                </div>
+                <div class="col-md-6">
+                  <label>Precio</label>
+                  <input type="number" name="precioCompra" class="form-control">
+                </div> 
+                    <input type="text" style="display: none;" id="serialNro" name="serialNro" value='<?php echo $fserialNro; ?>'>
+                    <input type="text" style="display: none;" id="userAprobacion" name="userAprobacion" value="<?php echo $user->getId() ?>">
+                    <input type="text" style="display: none;" id="fechaActual" name="fechaActual" value="<?php echo $fecha->FechaHoraActual()?>">
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
 
 <script type="text/javascript">        
   $(document).ready(function(){                
     $("#mnu_herramientas").addClass("active");
   });
-
-  $(document).ready(function() {
-    $("#slt_plaza").select2({
-        placeholder: "Seleccionar",                  
-    }).on('change', function (e) { 
-      filtrarReporte(); 
-    });
-  });
-
-  crearHref();
-  function crearHref()
-  {
-    f_plaza = $("#slt_plaza").val();   
-    
-    url_filtro_reporte="index.php?view=impresorasxplaza";
-
-    if(f_plaza!=undefined)
-      if(f_plaza!='')
-        url_filtro_reporte= url_filtro_reporte + "&fplaza="+f_plaza;
-
-    $("#filtro_reporte").attr("href", url_filtro_reporte);
-
-    document.cookie = "url-tmp-back="+url_filtro_reporte;
-  } 
-
-  function filtrarReporte()
-  {
-    crearHref();
-    window.location = $("#filtro_reporte").attr("href");
-  }
-
 </script>

@@ -11,11 +11,11 @@
     <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-nuevo-equipo'>
         <i class="fa fa-mobile"></i> Nuevo
     </a>
-    <div class="col-xs-12 col-md-6 pull-right"><input type="text" id="search-equipos" class="form-control" placeholder="Escribe para buscar..." /></div>
+    
   </div>
 
   <div class="box-body table-responsive"> 
-    
+    <div class="col-xs-12 col-md-6 pull-right"><input type="text" id="search-equipos" class="form-control" placeholder="Escribe para buscar..." /></div>
     <table class="table table-striped table-condensed" id="tabla-equipos" cellspacing="0" width="100%" style="text-align:center;">
       <thead>
         <tr>
@@ -77,12 +77,10 @@
           </div>
           <div class="modal-body">
               <div class="row">
-              	<div class="col-xs-12 no-padding">
                   <div class="col-md-6">
                     <label>Fecha de Compra</label>
                     <input type="date" name="txtFechaCompra" class="form-control">
                   </div>
-              	</div>
                   <div class="col-md-6">
                     <label>Número de IMEI</label>
                     <input type="text" name="txtIMEI" class="form-control">
@@ -93,11 +91,11 @@
                   </div>
                   <div class="col-md-6">
                     <label>Modelo</label>
-                    <input type="text" name="txtModelo" class="form-control">
+                    <input type="text" name="txtModelo" class="form-control" >
                   </div>
-                  <div class="col-md-6">
+                  <div class="col-md-6" style="display: none;">
                     <label>Precio de Compra</label>
-                    <input type="number" name="txtPrecioCompra" id="txtCosto" class="form-control" >
+                    <input type="number" name="txtPrecioCompra" id="txtCosto" class="form-control" value="0">
                   </div>
               </div>
           </div>

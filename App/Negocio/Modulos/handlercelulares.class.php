@@ -175,7 +175,7 @@
 			}
 		}
 		
-		public function entregar($fechaEntrega,$nroLinea,$equipo,$usuarioId,$obs){
+		public function entregar($fechaEntregaLinea,$fechaEntregaEquipo,$nroLinea,$equipo,$usuarioId,$obs){
 			try {
 				$handlerEntrega = new LineaUsuario;
 				$handlerLinea = new Lineas;
@@ -183,17 +183,24 @@
 
 				$handlerEntrega->setNroLinea($nroLinea);
 				$handlerEntrega->setIMEI($equipo);
-				$handlerEntrega->setFechaEntrega($fechaEntrega);
-				$handlerEntrega->setUsId($usuarioId);
+				$handlerEntrega->setFechaEntregaLinea($fechaEntregaLinea);
+				
+				$handlerEntrega->setUsId(intval($usuarioId));
 				$handlerEntrega->setObsEntrega($obs);
 
+				
 				$handlerLinea->setNroLinea($nroLinea);
 				$handlerLinea->entregada(false);
 				if ($equipo!='') {
 					$handlerEquipo->setIMEI($equipo);
 					$handlerEquipo->entregado(false);
+					$handlerEntrega->setFechaEntregaEquipo($fechaEntregaEquipo);
+				} else {
+					$handlerEntrega->setFechaEntregaEquipo('');				
 				}
 				
+
+
 				$handlerEntrega->insert(false);
 
 

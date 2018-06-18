@@ -209,7 +209,7 @@
 			try {
 				
 				# Query
-				$query = "SELECT * FROM empresa_puntaje WHERE id_empresa_sistema=".$empresa_id." AND estado='true' AND fechaHasta >'".$fechaOperacion."'";
+				$query = "SELECT * FROM empresa_puntaje WHERE id_empresa_sistema=".$empresa_id." AND estado='true' AND fechaHasta >'".$fechaOperacion."' AND fechaDesde <'".$fechaOperacion."'";
 				
 				# Ejecucion 				
 				$result = SQL::selectObject($query, new EmpresaPuntaje);

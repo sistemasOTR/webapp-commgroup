@@ -139,8 +139,12 @@
                         <td><?php echo $IMEI; ?></td>
                       </tr>
                       <tr>
-                        <td width="150px">Fecha de Entrega:</td>
-                        <td><?php echo $datosEntrega->getFechaEntrega()->format('d-m-Y'); ?></td>
+                        <td width="150px">Entrega de Línea:</td>
+                        <td><?php echo $datosEntrega->getFechaEntregaLinea()->format('d-m-Y'); ?></td>
+                      </tr>
+                      <tr>
+                        <td width="150px">Entrega de Equipo:</td>
+                        <td><?php if(!empty($datosEntrega->getFechaEntregaEquipo())){echo $datosEntrega->getFechaEntregaEquipo()->format('d-m-Y');}  ?></td>
                       </tr>
                       <tr>
                         <td width="150px">Observaciones:</td>
@@ -241,7 +245,7 @@
 	                      echo "<tr>";
 	                        echo "<td>".$usuarioHist->getNombre()." ".$usuarioHist->getApellido()."</td>";
 	                        echo "<td>".$telefono." - IMEI: ".$IMEI."</td>";
-	                        echo "<td>".$entrega->getFechaEntrega()->format('d-m-Y')."</td>";
+	                        echo "<td>".$entrega->getFechaEntregaLinea()->format('d-m-Y')."</td>";
 	                        echo "<td>".$entrega->getObsEntrega()."</td>";
 	                        echo "<td>".$entrega->getFechaDev()->format('d-m-Y')."</td>";
 	                        echo "<td>".$entrega->getObsDev()."</td>";

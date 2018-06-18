@@ -8,7 +8,7 @@
   $dFecha = new Fechas;
 
   $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
-  $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());    
+  $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());     
   $fusuario= (isset($_GET["fusuario"])?$_GET["fusuario"]:'');
 
   $handler = new HandlerTickets;  

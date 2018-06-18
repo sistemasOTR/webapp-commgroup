@@ -20,7 +20,8 @@
   $handlerUs = new HandlerUsuarios;
 
   $IMEI = (isset($_GET["fIMEI"])?$_GET["fIMEI"]:'');
-  $datosEquipo = $handlerCel->getDatosByIMEI($IMEI);
+  $datosEquipo = $handlerCel->getEquipoLinea($IMEI);
+  
   if(!is_null($datosEquipo->getFechaBaja())){
     $estado = 'Roto';
     $class_estado = 'text-red';
@@ -180,7 +181,7 @@
                         echo "<tr>";
                           echo "<td>".$usuario->getNombre()." ".$usuario->getApellido()."</td>";
                           echo "<td>".$nroLinea."</td>";
-                          echo "<td>".$entrega->getFechaEntrega()->format('d-m-Y')."</td>";
+                          echo "<td>".$entrega->getFechaEntregaEquipo()->format('d-m-Y')."</td>";
                           echo "<td>".$entrega->getObsEntrega()."</td>";
                           echo "<td>".$entrega->getFechaDev()->format('d-m-Y')."</td>";
                           echo "<td>".$entrega->getObsDev()."</td>";

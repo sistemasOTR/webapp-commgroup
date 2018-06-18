@@ -55,7 +55,7 @@
 
             } else {
             	$fecha = '-';
-      				$plaza = '-';
+      				$plaza = 'STOCK';
       				$nombre = '-';
       				$asig= "<a href='".$url_asignacion."&fserialNro=".$value->getSerialNro()."'><i class='ion-location text-green'></i></a>";
               $baja = "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-baja' data-serialnro='".$value->getSerialNro()."' data-obsimp='".$value->getObs()."' onclick='bajaImp(".$i.")'><i class='ion-close text-red'></i></a>";
@@ -130,6 +130,7 @@
                   <div class="col-md-4 col-md-offset-8">
                     <label>Precio</label>
                     <input type="number" name="precioCompra" class="form-control">
+                    <input style="display: none" type="number" name="userCarga" class="form-control" value='<?php echo $user->getId(); ?>'>
                   </div> 
               </div>
           </div>

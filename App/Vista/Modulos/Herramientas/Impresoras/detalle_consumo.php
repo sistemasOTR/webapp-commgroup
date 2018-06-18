@@ -21,28 +21,18 @@
   $handlerUs = new HandlerUsuarios;
 
   $user = $usuarioActivoSesion;
-  $fplaza=(isset($_GET["fplaza"])?$_GET["fplaza"]:'');
-  $fgestor=(isset($_GET["fgestor"])?$_GET["fgestor"]:'');
-  $fgestorId=(isset($_GET["fgestorId"])?$_GET["fgestorId"]:0);
-  $arrCoordinador = $handler->selectAllPlazasArray();
-  $arrUsuarios = $handlerUs->selectGestores();
-
-  $url_detalle = "index.php?view=impresora_detalle";
-  $url_asignacion = "index.php?view=asignar_imp";
-  $url_impresion = PATH_VISTA.'Modulos/Herramientas/Impresoras/imprimir_comodato.php?';
-
+  $fserialNro=(isset($_GET["fserialNro"])?$_GET["fserialNro"]:'');
   $url_action_guardar = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_guardar.php';
-  $url_action_devolver = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_devolver.php';
-  $url_action_baja = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_baja.php';
-  
+  $arrUsuarios = $handlerUs->selectGestores();
+  $impresora = $handlerimpresoras->getDatosConSerial($fserialNro);
+  $arrDatos = $handlerimpresoras->getAsignaciones($impresora['_serialNro']);
 
 ?>
 
 <div class="content-wrapper">  
   <section class="content-header">
     <h1>
-      Herramientas
-      <small>ABM de herramientas </small>
+      Consumos Impresora <?php echo $impresora["_marca"]." ".$impresora["_modelo"];?> <a href="javascript:history.go(-1)" class="btn btn-default"><i class="ion-chevron-left"></i> Volver</a>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -56,24 +46,40 @@
     <?php include_once PATH_VISTA."error.php"; ?>
     <?php include_once PATH_VISTA."info.php"; ?>
 
-    <div class="row">
+
+      <!-- Tabla de asignaciones -->
+
       <div class="col-md-12">
-        <?php 
-          switch ($user->getUsuarioPerfil()->getNombre()) {
-            case 'COORDINADOR':
-
-             include_once "vista_coordinador.php";
-                
-             break;
-
-            case 'GERENCIA' || 'BACK OFFICE':
-              include_once "vista_admin.php";
-              break;                   
-          }
-        ?>
+        <div class="box box-solid">
+          <div class="box-header with-border">
+            <i class="ion-clipboard" style="font-size: 20px; margin-right: 5px;"></i>
+            <h3 class="box-title"> Consumos</h3>
+          </div>
+          <div class="box-body table-responsive">
+            <?php switch ($impresora["_marca"]) {
+              case 'RICOH':
+                include_once 'RICOH.php';
+                break;
+              case 'SAMSUNG':
+                include_once 'SAMSUNG.php';
+                break;
+              case 'LEXMARK':
+                include_once 'LEXMARK.php';
+                break;
+              
+              default:
+                # code...
+                break;
+            } ?>
+          </div>
+        </div>
       </div>
+
+
     </div>
   </section>
+
+
 </div>
 
 <script type="text/javascript">        

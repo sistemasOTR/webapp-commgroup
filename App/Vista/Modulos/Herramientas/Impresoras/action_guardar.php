@@ -12,13 +12,14 @@
 	$marca = (isset($_POST["marca"])?$_POST["marca"]:'');
 	$modelo = (isset($_POST["modelo"])?$_POST["modelo"]:'');
 	$precioCompra = (isset($_POST["precioCompra"])?$_POST["precioCompra"]:'');
+	$userCarga = (isset($_POST["userCarga"])?$_POST["userCarga"]:'');
 	
 	$err = "../../../../../index.php?view=impresorasxplaza&err=";     		
 	$info = "../../../../../index.php?view=impresorasxplaza&info=";     		
 
 	try {
 
-		$hanlder->guardarImpresora($serialNro,$fechaCompra,$marca,$modelo,$precioCompra,$estado);
+		$hanlder->guardarImpresora($serialNro,$fechaCompra,$marca,$modelo,$precioCompra,$estado,$userCarga);
 		
 		switch ($estado) {
 			case 'NUEVO':

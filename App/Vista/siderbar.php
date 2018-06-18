@@ -29,6 +29,7 @@
         $url_tickets_aprobar = "index.php?view=tickets_aprobar";
         $url_tickets_conceptos = "index.php?view=tickets_conceptos";
         $url_tickets_fechas = "index.php?view=tickets_fechas_inhabilitadas";
+        $url_tickets_reintegro = "index.php?view=tickets_reintegros";
         
         $url_licencias_carga = "index.php?view=licencias_carga";
         $url_licencias_control = "index.php?view=licencias_control";
@@ -139,6 +140,11 @@
                     <li class="treeview" id="mnu_tickets_aprobar">
                       <a href=<?php echo $url_tickets_aprobar; ?>> 
                         <i class="fa fa-check"></i> <span>Aprobar</span> </i>
+                      </a>              
+                    </li>                
+                    <li class="treeview" id="mnu_tickets_aprobar">
+                      <a href=<?php echo $url_tickets_reintegro; ?>> 
+                        <i class="fa fa-check"></i> <span>Tabla Reintegros</span> </i>
                       </a>              
                     </li>                      
                   <?php } ?>    

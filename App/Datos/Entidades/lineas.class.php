@@ -135,7 +135,7 @@
 				# Query 			
 				$query="UPDATE lineas SET
 								ocupada='true'
-							WHERE nroLinea=".$this->getNroLinea();
+							WHERE nroLinea='".$this->getNroLinea()."'";
 
 				# Ejecucion 					
 				return SQL::update($conexion,$query);	

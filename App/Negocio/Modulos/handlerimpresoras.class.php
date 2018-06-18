@@ -8,6 +8,7 @@
 	include_once PATH_DATOS.'BaseDatos/conexionapp.class.php';
 	include_once PATH_DATOS.'Entidades/impresoras_plaza.class.php';
 	include_once PATH_DATOS.'Entidades/impresoras.class.php';
+	include_once PATH_DATOS.'Entidades/consumos_impresoras.class.php';
 	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
 	
 	class HandlerImpresoras{
@@ -74,7 +75,7 @@
 		}
 		
 
-		public function guardarImpresora($serialNro,$fechaCompra,$marca,$modelo,$precioCompra,$estado){
+		public function guardarImpresora($serialNro,$fechaCompra,$marca,$modelo,$precioCompra,$estado,$userCarga){
 			try {
 				if($estado=="NUEVO"){
 					$handler = new Impresoras;
@@ -88,13 +89,31 @@
 					if($precioCompra != ''){
 						$handler->setPrecioCompra($precioCompra);
 					}
-					
+					$handler->setUserCarga(intval($userCarga));
+					$handler->setAprobado(false);
 					
 					$handler->insert(false);
 				}
 
 
 
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
+		public function editarImpresora($serialNro,$fechaCompra,$precioCompra,$userAprobacion,$fechaActual){
+			try {
+				$handler = new Impresoras;
+
+				$handler->setSerialNro($serialNro);
+				$handler->setFechaCompra($fechaCompra);
+				$handler->setPrecioCompra($precioCompra);
+				$handler->setUserAprobacion(intval($userAprobacion));
+				$handler->setAprobado(true);
+				$handler->setFechaHoraAprobacion($fechaActual);
+				
+				$handler->editarImpresora(false);
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
 			}
@@ -190,6 +209,81 @@
 					$handler->bajaImpresora(false);
 				
 
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function guardarConsumo($serialNro,$fechaConsumo,$plaza,$contador,$cambioTonner,$KitA,$cambioKitA,$KitB,$cambioKitB,$consSamsung,$cambioConsSamsung,$UI,$cambioUI,$kitM,$cambioKitM,$consObs,$userId){
+			try {
+				
+					$handler = new ConsumoImpresora;
+
+					$handler->setSerialNro($serialNro);
+					$handler->setPlaza($plaza);
+					$handler->setContador(intval($contador));
+					$handler->setFechaConsumo($fechaConsumo);
+					if ($cambioTonner == 1) {
+						$handler->setCambioTonner(true);
+					} else {
+						$handler->setCambioTonner(false);
+					}
+					$handler->setKitA($KitA);
+					if ($cambioKitA == 1) {
+						$handler->setCambioKitA(true);
+					} else {
+						$handler->setCambioKitA(false);
+					}
+					$handler->setKitB($KitB);
+					if ($cambioKitB == 1) {
+						$handler->setCambioKitB(true);
+					} else {
+						$handler->setCambioKitB(false);
+					}
+					$handler->setConsSamsung($consSamsung);
+					if ($cambioConsSamsung == 1) {
+						$handler->setCambioConsSamsung(true);
+					} else {
+						$handler->setCambioConsSamsung(false);
+					}
+					$handler->setUI($UI);
+					if ($cambioUI == 1) {
+						$handler->setCambioUI(true);
+					} else {
+						$handler->setCambioUI(false);
+					}
+					$handler->setKitM($kitM);
+					if ($cambioKitM == 1) {
+						$handler->setCambioKitM(true);
+					} else {
+						$handler->setCambioKitM(false);
+					}
+					$handler->setConsObs($consObs);
+					$handler->setUserId(intval($userId));
+
+					
+					$handler->insert(false);
+				
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function getConsumos($serialNro){
+			try {
+				$handlerImp = new ConsumoImpresora;								
+				$data = $handlerImp->getConsumos($serialNro);
+				
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}	
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				

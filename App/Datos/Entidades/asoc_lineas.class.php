@@ -31,9 +31,13 @@
 		public function getUsId(){ return $this->_usId; }
 		public function setUsId($usId){ $this->_usId =$usId; }
 		
-		private $_fechaEntrega;
-		public function getFechaEntrega(){ return $this->_fechaEntrega; }
-		public function setFechaEntrega($fechaEntrega){ $this->_fechaEntrega =$fechaEntrega; }
+		private $_fechaEntregaLinea;
+		public function getFechaEntregaLinea(){ return $this->_fechaEntregaLinea; }
+		public function setFechaEntregaLinea($fechaEntregaLinea){ $this->_fechaEntregaLinea =$fechaEntregaLinea; }
+		
+		private $_fechaEntregaEquipo;
+		public function getFechaEntregaEquipo(){ return $this->_fechaEntregaEquipo; }
+		public function setFechaEntregaEquipo($fechaEntregaEquipo){ $this->_fechaEntregaEquipo =$fechaEntregaEquipo; }
 
 		private $_fechaDev;
 		public function getFechaDev(){ return $this->_fechaDev; }
@@ -57,7 +61,8 @@
 			$this->setNroLinea('');
 			$this->setIMEI('');
 			$this->setUsId(0);
-			$this->setFechaEntrega('');
+			$this->setFechaEntregaLinea('');
+			$this->setFechaEntregaEquipo('');
 			$this->setFechaDev('');
 			$this->setObsEntrega('');
 			$this->setObsDev('');
@@ -76,16 +81,18 @@
 										nroLinea,	
 										IMEI,	
 		        						usId,
-		        						fechaEntrega,
+		        						fechaEntregaLinea,
+		        						fechaEntregaEquipo,
 		        						obsEntrega
 	        			) VALUES (
 	        							'".$this->getNroLinea()."',     	
 	        							'".$this->getIMEI()."',     	
 	        							".$this->getUsId().",
-	        							'".$this->getFechaEntrega()."',
+	        							'".$this->getFechaEntregaLinea()."',
+	        							'".$this->getFechaEntregaEquipo()."',
 	        							'".$this->getObsEntrega()."'
-	        			)";        
-		
+	        			)";
+
 				# Ejecucion 					
 				return SQL::insert($conexion,$query);
 			
@@ -108,7 +115,7 @@
 								nroLinea='".$this->getNroLinea()."',
 								IMEI='".$this->getIMEI()."',
 								usId=".$this->getUsId().",
-								fechaEntrega='".$this->getFechaEntrega()."',
+								fechaEntregaLinea='".$this->getFechaEntregaLinea()."',
 								fechaDev='".$this->getFechaDev()."',
 								obsEntrega='".$this->getObsEntrega()."',
 								obsDev='".$this->getObsDev()."'
@@ -145,7 +152,7 @@
 		{			
 			try {
 											
-				$query = "SELECT * FROM asoc_lu order by fechaEntrega";
+				$query = "SELECT * FROM asoc_lu order by fechaEntregaLinea";
 				
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new LineaUsuario);
@@ -213,7 +220,7 @@
 		{			
 			try {
 											
-				$query = "SELECT * FROM asoc_lu where fechaDev is not null AND nroLinea=".$nroLinea." order by fechaEntrega desc";
+				$query = "SELECT * FROM asoc_lu where fechaDev is not null AND nroLinea=".$nroLinea." order by fechaEntregaLinea desc";
 				
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new LineaUsuario);
@@ -230,7 +237,7 @@
 		{			
 			try {
 											
-				$query = "SELECT * FROM asoc_lu where fechaDev is not null AND IMEI='".$IMEI."' order by fechaEntrega desc";
+				$query = "SELECT * FROM asoc_lu where fechaDev is not null AND IMEI='".$IMEI."' order by fechaEntregaLinea desc";
 				
 
 				# Ejecucion 					
@@ -272,7 +279,8 @@
 				$this->setNroLinea(trim($filas['nroLinea']));			
 				$this->setIMEI(trim($filas['IMEI']));			
 				$this->setUsId(trim($filas['usId']));			
-				$this->setFechaEntrega($filas['fechaEntrega']);			
+				$this->setFechaEntregaLinea($filas['fechaEntregaLinea']);			
+				$this->setFechaEntregaEquipo($filas['fechaEntregaEquipo']);			
 				$this->setFechaDev($filas['fechaDev']);			
 				$this->setObsEntrega($filas['obsEntrega']);
 				$this->setObsDev($filas['obsDev']);
@@ -285,7 +293,8 @@
 			$this->setNroLinea('');
 			$this->setIMEI('');
 			$this->setUsId(0);
-			$this->setFechaEntrega('');
+			$this->setFechaEntregaLinea('');
+			$this->setFechaEntregaEquipo('');
 			$this->setFechaDev('');
 			$this->setObsEntrega('');
 			$this->setObsDev('');

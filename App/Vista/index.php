@@ -438,6 +438,11 @@
 			if($permiso->getModuloTicketsBoolean() && ($esGerencia || $esBO || $esCoordinador || $esSupervisor))
 				$include = 'Modulos/Ticket/conceptos_abm.php';
 			break;	
+		
+		case 'tickets_reintegros':			
+			if($permiso->getModuloTicketsBoolean() && ($esBO))
+				$include = 'Modulos/Ticket/operacion_reintegro.php';
+			break;	
 
 		case 'tickets_fechas_inhabilitadas':			
 			if($permiso->getModuloTicketsBoolean() && ($esGerencia || $esBO || $esCoordinador || $esSupervisor))
@@ -524,6 +529,11 @@
 		case 'impresora_detalle':			
 			if($permiso->getModuloHerramientasBoolean())
 				$include = 'Modulos/Herramientas/Impresoras/detalle.php';		
+			break;
+		
+		case 'consumo_impresora':			
+			if($permiso->getModuloHerramientasBoolean())
+				$include = 'Modulos/Herramientas/Impresoras/detalle_consumo.php';		
 			break;
 		
 		case 'asignar_imp':			
