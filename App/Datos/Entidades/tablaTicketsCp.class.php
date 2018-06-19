@@ -39,6 +39,10 @@
 		public function getFechaFin(){ return $this->_fechaFin; }
 		public function setFechaFin($fechaFin){ $this->_fechaFin=$fechaFin; }
 
+		private $_plaza;
+		public function getPlaza(){ return $this->_plaza; }
+		public function setPlaza($plaza){ $this->_plaza=$plaza; }
+
 		/*#############*/
 		/* CONSTRUCTOR */
 		/*#############*/
@@ -49,7 +53,8 @@
 			$this->setDescripcion('');
 			$this->setReintegro(0);
 			$this->setFechaIni('');
-			$this->setFechaFin('');				
+			$this->setFechaFin('');	
+			$this->setPlaza('');			
 		}
 
 		/*###################*/
@@ -67,13 +72,16 @@
 		        						cp,
 		        						descripcion,
 		        						reintegro,
-		        						fecha_ini
+		        						fecha_ini,
+		        						plaza
 	        			) VALUES (
 	        							
 	        							".$this->getCp().",
 	        							'".$this->getDescripcion()."',
 	        							".$this->getReintegro().",
-	        							'".$this->getFechaIni()."'
+	        							'".$this->getFechaIni()."',
+	        							'".$this->getPlaza()."'
+
 	        			)";        
 				
 				# Ejecucion 	
@@ -108,12 +116,11 @@
 		{
 			try {
 			
-				# Validaciones			
-				if(empty($this->getId()))
-					throw new Exception("Puntaje no identificado");
-
+				
 				# Query 			
-				$query="UPDATE operacion_reintegro SET							     fecha_fin='".$this->getFechaFin()."'
+				$query="UPDATE operacion_reintegro SET	
+
+				      fecha_fin='".$this->getFechaFin()."'
 								
 							WHERE id=".$this->getId();
 		
@@ -163,6 +170,7 @@
 				$this->setReintegro($filas['reintegro']);
 				$this->setFechaIni($filas['fecha_ini']);
 				$this->setFechaFin($filas['fecha_fin']);
+				$this->setPlaza($filas['plaza']);
 			}
 		}
 
@@ -173,7 +181,8 @@
 			$this->setDescripcion('');
 			$this->setReintegro(0);
 			$this->setFechaIni('');
-			$this->setFechaFin('');	
+			$this->setFechaFin('');
+			$this->setPlaza('');		
 		}
 
 		private function createTable()

@@ -314,6 +314,60 @@
 			}
 		}
 
+
+	public function guardarReintegro($id,$estado,$fechaini,$codigopostal,$descripcion,$reintegro,$plaza){
+    try {
+		if ($estado=='nuevo') {
+			$handler= new Reintegro;
+
+			$handler->setCp($codigopostal);
+			$handler->setDescripcion($descripcion);	
+			$handler->setReintegro($reintegro);
+			$handler->setFechaini($fechaini);
+			$handler->setPlaza($plaza);
+
+			$handler->insert(false);
+
+			}
+		  if ($estado=='editar') {
+			$handler1= new Reintegro;
+			$handler2= new Reintegro;
+
+           $handler1->setFechafin($fechaini);
+           $handler1->setId($id);
+           $handler1->update(false);
+            $handler2->setCp($codigopostal);
+			$handler2->setDescripcion($descripcion);	
+			$handler2->setReintegro($reintegro);
+			$handler2->setFechaini($fechaini);
+			$handler2->setPlaza($plaza);
+
+			$handler2->insert(false);
+
+     		}
+
+	} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+      }
+
+      public function eliminarReintegro($id,$fechafin){
+			try {
+
+				if(empty($id))
+					throw new Exception("No se encontro el Reintegro");
+					
+				$t = new Reintegro;
+				$t->setId($id);
+				$t->setFechafin($fechafin);
+
+				$t->delete(false);
+					
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+
 	}
 
 ?>
