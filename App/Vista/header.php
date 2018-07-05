@@ -73,6 +73,9 @@
               <!-- PEDIDOS -->
               <?php include_once PATH_VISTA.'Notificaciones/pedidos.php'; ?>
               <!-- FIN PEDIDOS -->
+              <!-- STOCK -->
+              <?php include_once PATH_VISTA.'Notificaciones/stock.php'; ?>
+              <!-- FIN STOCK -->
 
               <li class="dropdown user user-menu">
                 </a>

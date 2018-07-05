@@ -71,6 +71,17 @@
 			}
 		}	
 
+		public function selecionarApedir(){
+			try {
+				$handler = new ExpedicionesItem;								
+
+				return $handler->selectApedir();
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}	
+
 		public function selecionarTipo(){
 			try {
 				$handler = new ExpedicionesTipo;								

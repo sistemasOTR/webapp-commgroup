@@ -269,6 +269,23 @@
 			}
 
 		}
+         public function selectApedir()
+		{			
+			try {
+											
+				# Query
+				$query="SELECT * FROM expediciones_items inner join expediciones_tipo2 on expediciones_items.num_grupo=expediciones_tipo2.tipo_id WHERE expediciones_items.estado='true' AND a_pedir='true'";
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new ExpedicionesItem);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
 
 		public function updateStock($iditem,$actualizarstock)
 		{
