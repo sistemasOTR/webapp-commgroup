@@ -17,7 +17,7 @@
   $arrTipo = $handler->selecionarTipo();
   $user = $usuarioActivoSesion;
   $consulta = $handler->seleccionarSinPedir($user->getId());
-  $fapedir= (isset($_GET["apedir"])?$_GET["apedir"]:'');
+  $fapedir= (isset($_GET["apedir"])?$_GET["apedir"]:0);
 
   if ($fapedir == 1) {
     $arrItem = $arrItemApedir;

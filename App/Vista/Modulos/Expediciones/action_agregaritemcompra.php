@@ -15,9 +15,15 @@
     $apedir = (isset($_POST["apedir"])?$_POST["apedir"]:'');
 	$fecha = $f_fecha->FechaActual();
 
+	if ($apedir == 1) {
+		$redir = '&apedir=1';
+	} else {
+		$redir = '';
+	}
+
 	
-	$err = "../../../../index.php?view=exp_item_abm&err=";     		
-	$info = "../../../../index.php?view=exp_item_abm&info=";     		
+	$err = "../../../../index.php?view=exp_item_abm".$redir."&err=";     		
+	$info = "../../../../index.php?view=exp_item_abm".$redir."&info=";     		
 
 	try {
 		$handler->agregarCompra($id,$usuario,$cantidad,$fecha);
