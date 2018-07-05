@@ -4,9 +4,9 @@
 	include_once PATH_NEGOCIO."Modulos/handlertickets.class.php"; 
 	
 	$handler = new HandlerTickets();
-		
-	$usuario = (isset($_POST["usuario"])?$_POST["usuario"]:'');
-	$fecha_hora = (isset($_POST["fecha_hora"])?$_POST["fecha_hora"]:'');	
+	
+
+	$id = (isset($_POST["idTicket"])?$_POST["idTicket"]:'');	
 	$tipo = (isset($_POST["tipo"])?$_POST["tipo"]:'');	
 	$punto_venta = (isset($_POST["punto_venta"])?$_POST["punto_venta"]:'');	
 	$numero = (isset($_POST["numero"])?$_POST["numero"]:'');	
@@ -19,18 +19,25 @@
 	$adjunto = (isset($_FILES["adjunto"])?$_FILES["adjunto"]:'');	
 	$concepto = (isset($_POST["concepto"])?$_POST["concepto"]:'');	
 	$tipo_usuario = (isset($_POST["tipo_usuario"])?$_POST["tipo_usuario"]:'');	
+	$adjActual = (isset($_POST["adjActual"])?$_POST["adjActual"]:'');	
 	
 	try {
+
 		
-		$err = "../../../../index.php?view=tickets_carga&err=";     		
-		$info = "../../../../index.php?view=tickets_carga&info=";
+   		$handler->updateTickets($id,$tipo,$punto_venta,$numero,$razon_social,$cuit,$iibb,$domicilio,$condicion_fiscal,$importe,$adjunto,$concepto,$adjActual);
 
-		if ($tipo_usuario == 'GESTOR') {
-   			$handler->guardarTickets($usuario,$fecha_hora,$tipo,$punto_venta,$numero,$razon_social,$cuit,$iibb,$domicilio,$condicion_fiscal,$importe,$adjunto,$concepto);
+   		if ($tipo_usuario == 'COORDINADOR') {
+   			$err = "../../../../index.php?view=tickets_control&err=";     		
+			$info = "../../../../index.php?view=tickets_control&info=";
+   		} elseif ($tipo_usuario == 'BACK OFFICE') {
+   			
+   			$err = "../../../../index.php?view=tickets_aprobar&err=";
+			$info = "../../../../index.php?view=tickets_aprobar&info=";
    		} else {
-   			$handler->guardarTicketsEnviados($usuario,$fecha_hora,$tipo,$punto_venta,$numero,$razon_social,$cuit,$iibb,$domicilio,$condicion_fiscal,$importe,$adjunto,$concepto);
-   		}  		
-
+   			$err = "../../../../index.php?view=tickets_carga&err=";
+			$info = "../../../../index.php?view=tickets_carga&info=";
+   		}
+   		
 		
 		
 		$msj="Tickets Guardado";

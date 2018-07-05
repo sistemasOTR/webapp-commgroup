@@ -3,8 +3,8 @@
 
 	include_once PATH_NEGOCIO."Modulos/handlertickets.class.php"; 
 	
-	$err = "../../../../index.php?view=tickets_control&err=";     		
-	$info = "../../../../index.php?view=tickets_control&info=";    
+	$err = "../../../../index.php?".$_GET["url_redirect"]."&fdesde=".$_GET["fdesde"]."&fhasta=".$_GET["fhasta"]."&fusuario=".$_GET["fusuario"]."&err=";     		
+	$info = "../../../../index.php?".$_GET["url_redirect"]."&fdesde=".$_GET["fdesde"]."&fhasta=".$_GET["fhasta"]."&fusuario=".$_GET["fusuario"]."&info=";
 
 	$handler = new HandlerTickets();
 

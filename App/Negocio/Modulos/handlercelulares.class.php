@@ -318,6 +318,8 @@
 				if ($tipoBaja == 'roto') {
 					$handlerEquipo->setFechaBaja($fechaBaja);
 					$handlerEquipo->setObsBaja($obs);
+					#var_dump($handlerEquipo);
+					#exit();
 					$handlerEquipo->rotura(false);
 				} elseif ($tipoBaja == 'robo') {
 					$handlerEquipo->setFechaRobo($fechaBaja);

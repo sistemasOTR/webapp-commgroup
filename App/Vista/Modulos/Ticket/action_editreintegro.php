@@ -15,13 +15,14 @@ include_once "../../../Config/config.ini.php";
 	$descripcion = (isset($_POST["descripcion"])?$_POST["descripcion"]:'');	
 	$reintegro = (isset($_POST["reintegro"])?$_POST["reintegro"]:'');	
 	$plaza = (isset($_POST["plaza"])?$_POST["plaza"]:'');
+	$aled = (isset($_POST["aled"])?$_POST["aled"]:0);
 
 	try {
 		
 		$err = "../../../../index.php?view=tickets_reintegros&err=";     		
-		$info = "../../../../index.php?view=tickets_reintegros&info=";     		
+		$info = "../../../../index.php?view=tickets_reintegros&info=";   		
 
-		$handler->guardarReintegro($id,$estado,$fechaini,$codigopostal,$descripcion,$reintegro,$plaza);
+		$handler->guardarReintegro($id,$estado,$fechaini,$codigopostal,$descripcion,$reintegro,$plaza,$aled);
 		
 		$msj="Reintegro Guardado";
 		header("Location: ".$info.$msj);																						

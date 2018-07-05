@@ -18,7 +18,15 @@
 
   $url_action_guardar = PATH_VISTA.'Modulos/Ticket/action_guardar.php';
   $url_action_eliminar = PATH_VISTA.'Modulos/Ticket/action_eliminar.php?id=';
+  $url_detalle = 'index.php?view=tickets_detalle&fticket=';
 ?>
+<style>
+  .input-group {position: relative;display: block;border-collapse: separate;}
+  .input-group-addon {background: #d2d6de !important;}
+  @media (min-width: 768px){
+    .input-group {position: relative;display: table;border-collapse: separate;}
+  }
+</style>
 
 <div class="content-wrapper">  
   <section class="content-header">
@@ -49,13 +57,14 @@
             </div>
             <div class="box-body">
               <div class='row'>  
-                <div class="col-md-3" id='sandbox-container'>
-                    <label>Fecha Desde - Hasta </label>                
-                    <div class="input-daterange input-group" id="datepicker">
-                      <input type="text" class="input-sm form-control" onchange="crearHref()" id="start" name="start" value="<?php echo $dFecha->FormatearFechas($fdesde,'Y-m-d','d/m/Y'); ?>"/>
-                      <span class="input-group-addon">a</span>
-                      <input type="text" class="input-sm form-control" onchange="crearHref()" id="end" name="end" value="<?php echo $dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y'); ?>"/>
+                <div class="col-md-3">
+                    <label>Fecha Desde - Hasta</label>
+                    <div class="input-group">
+                      <input type="date" class="input-sm form-control" onchange="crearHref()" id="start" name="start" value="<?php echo $fdesde; ?>"/>
+                      <span class="input-group-addon" >a</span>
+                      <input type="date" class="input-sm form-control" onchange="crearHref()" id="end" name="end" value="<?php echo $fhasta; ?>"/>
                     </div>
+                    
                 </div>
 
                 <div class='col-md-3 col-md-offset-6'>                
@@ -87,10 +96,9 @@
                       <th>COND.FISCAL</th>
                       <th>CONCEPTO</th>
                       <th>IMPORTE</th>                      
-                      <th>ENVIADO</th>
-                      <th>APROBADO</th>
-                      <th>ADJUNTO</th>                  
-                      <th style="width: 3%;" class='text-center'></th>
+                      <th>ESTADO</th>
+                      <th width="30">ADJ</th>
+                      <th width='100' class="text-center">ACCION</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -99,15 +107,22 @@
                       {
                         foreach ($consulta as $key => $value) {
 
-                          if($value->getEnviado())
-                            $class_estilos_enviado = "<span class='label label-success'>ENVIADO</span>";
-                          else
-                            $class_estilos_enviado = "<span class='label label-danger'>NO ENVIADO</span>";
-
-                          if($value->getAprobado())
+                          
+                          if ($value->getRechazado()) {
+                            $class_estilos_aprobado = "<span class='label label-danger' data-toggle='tooltip' data-placement='bottom' title='' data-original-title='".trim(strip_tags($value->getObsRechazo()))."'> <i class='fa fa-search'></i> RECHAZADO</span>";
+                            $editar = "<a href='".$url_detalle.$value->getId()."' class='text-black text-center' >
+                                          <i class='fa fa-edit' data-toggle='tooltip' data-original-title='Editar Ticket'></i></a>";
+                          } elseif (!$value->getEnviado()) {
+                            $class_estilos_aprobado = "<span class='label label-primary'>SIN ENVIAR</span>";
+                            $editar = "<a href='".$url_detalle.$value->getId()."' class='text-black text-center' >
+                                          <i class='fa fa-edit' data-toggle='tooltip' data-original-title='Editar Ticket'></i></a>";
+                          } elseif ($value->getEnviado() && !$value->getAprobado()) {
+                            $class_estilos_aprobado = "<span class='label label-warning'>EN ESPERA</span>";
+                            $editar = "";
+                          } elseif ($value->getAprobado()) {
                             $class_estilos_aprobado = "<span class='label label-success'>APROBADO</span>";
-                          else
-                            $class_estilos_aprobado = "<span class='label label-danger'>NO APROBADO</span>";
+                            $editar = "";
+                          } 
 
                           echo "<tr>";                            
                             echo "<td>".$value->getFechaHora()->format('d/m/Y H:i')."</td>";
@@ -118,14 +133,12 @@
                             echo "<td>".$value->getCondFiscal()."</td>";
                             echo "<td>".$value->getConcepto()."</td>";                          
                             echo "<td>$ ".round($value->getImporte(),2)."</td>";                          
-                            echo "<td>".$class_estilos_enviado."</td>";
                             echo "<td>".$class_estilos_aprobado."</td>";
                             echo "<td><a href='".$value->getAdjunto()."' target='_blank'>VER</a></td>";
-                            echo "<td class='text-center'>
-                                    <a href='".$url_action_eliminar.$value->getId()."' class='btn btn-danger btn-xs'>
-                                      <i class='fa fa-trash' data-toggle='tooltip' data-original-title='Eliminar registro'></i>
-                                      Eliminar
-                                    </a>
+                            
+                                  echo "<td class='text-center'>".$editar." 
+                                    <a href='".$url_action_eliminar.$value->getId()."' class='text-red text-center'>
+                                      <i class='fa fa-trash' data-toggle='tooltip' data-original-title='Eliminar registro'></i></a>
                                   </td>";
                           echo "</tr>";
                         }          
@@ -176,6 +189,7 @@
               <div class="col-md-6">
                 <label>Razon Social</label>
                 <input type="text" name="razon_social" class="form-control"  required="">
+                <input type="text" name="tipo_usuario" class="form-control" style="display: none;" required="" value='<?php echo $usuarioActivoSesion->getUsuarioPerfil()->getNombre(); ?>'>
               </div>
               <div class="col-md-6">
                 <label>CUIT</label>
@@ -249,15 +263,16 @@
   crearHref();
   function crearHref()
   {
-      aStart = $("#start").val().split('/');
-      aEnd = $("#end").val().split('/');
+      aStart = $("#start").val();
+      aEnd = $("#end").val();
+      
 
       f_inicio = aStart[2] +"-"+ aStart[1] +"-"+ aStart[0];
       f_fin = aEnd[2] +"-"+ aEnd[1] +"-"+ aEnd[0];                                 
 
       //f_usuario = $("#slt_usuario").val();     
       
-      url_filtro_reporte="index.php?view=tickets_carga&fdesde="+f_inicio+"&fhasta="+f_fin  
+      url_filtro_reporte="index.php?view=tickets_carga&fdesde="+aStart+"&fhasta="+aEnd;  
 
       /*if(f_usuario!=undefined)
         if(f_usuario>0)

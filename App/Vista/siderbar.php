@@ -4,6 +4,7 @@
         $url_panelcontrol = "index.php?view=panelcontrol";
 
         $url_servicio = "index.php?view=servicio";
+        $url_servicio_resumen = "index.php?view=servicio_resumen";
         $url_inbox = "index.php?view=inbox";
         $url_usuariosABM = "index.php?view=usuarioABM";  
         $url_cambiarUsuario = "index.php?view=cambiarUsuario";  
@@ -45,6 +46,7 @@
         $url_puntajes_gestor = "index.php?view=puntajes_gestor";
         $url_puntajes_coordinador = "index.php?view=puntajes_coordinador";
         $url_puntajes_general = "index.php?view=puntajes_general";
+        $url_puntajes_supervisor = "index.php?view=puntajes_supervisor";
 
         $url_stock = "index.php?view=stock";
         $url_enviadas = "index.php?view=enviadas";
@@ -61,11 +63,20 @@
         $url_guias_control_empresa = "index.php?view=guias_control_empresa";
         $url_guias_envios = "index.php?view=guias_envios";
         $url_guias_seguimiento = "index.php?view=guias_seguimiento";
+        $url_agenda = "index.php?view=agenda";
+        $url_agenda_rubros = "index.php?view=agenda_rubros";
       
         $perfil =$usuarioActivoSesion->getUsuarioPerfil()->getId();
 
 
       ?>
+      <style type="text/css">
+        .skin-black .sidebar-menu>li>.treeview-menu {
+            margin: -1px 1px;
+            background: #2c3b41;
+            border-top: 1px solid #aaa;
+        }
+      </style>
       
       <aside class="main-sidebar">        
         <section class="sidebar">          
@@ -253,12 +264,36 @@
 
 
             <?php
-              if($permiso->getModuloServiciosBoolean()){
+              }
+              if($permiso->getModuloServiciosBoolean() && !$esBO){
             ?>
               <li class="treeview" id="mnu_servicio">
                 <a href=<?php echo $url_servicio; ?>>
                   <i class="fa fa-truck"></i> <span>Servicios</span> </i>
                 </a>
+              </li>
+            <?php 
+              }
+            ?>
+
+            <?php
+              if($permiso->getModuloServiciosBoolean() && $esBO){
+            ?>
+
+              <li class="treeview" id="mnu_servicio">
+                <a href="#"><i class="fa fa-truck"></i> <span>Servicios</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li class="treeview" id="mnu_servicio">
+                    <a href=<?php echo $url_servicio; ?>>
+                      <i class="fa fa-truck"></i> <span>Servicios</span> </i>
+                    </a>
+                  </li>
+                  <li class="treeview" id="mnu_servicio">
+                    <a href=<?php echo $url_servicio_resumen; ?>>
+                      <i class="fa fa-list"></i> <span>Resumen</span> </i>
+                    </a>
+                  </li>
+                </ul>
               </li>
             <?php 
               }
@@ -591,6 +626,23 @@
                 <a href=<?php echo $url_imprimir_credencial."userId=".$usuarioActivoSesion->getId(); ?> target="_blank"> 
                   <i class="fa fa-print"></i> <span>Credencial</span> </i>
                 </a>              
+              </li>   
+            <?php } ?>
+            <?php if($esGerencia){ ?>
+              <li class="treeview" id="mnu_agenda">
+                <a href="#"><i class="fa fa-book "></i> <span>Agenda</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li id="mnu_agenda_inicio">
+                    <a href=<?php echo $url_agenda ?>> 
+                      <i class="fa fa-book"></i> <span>Agenda</span> </i>
+                    </a>
+                  </li>
+                  <li id="mnu_agenda_rubros">
+                    <a href=<?php echo $url_agenda_rubros ?>> 
+                      <i class="fa fa-list"></i> <span>Rubros</span> </i>
+                    </a>
+                  </li>
+                </ul>              
               </li>   
             <?php } ?>
           </ul>

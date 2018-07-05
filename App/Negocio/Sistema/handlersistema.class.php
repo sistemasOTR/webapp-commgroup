@@ -47,10 +47,13 @@
 				}
 
 				$filtro_estado="";
-				if(!empty($estado) && $estado != 50)								
-					$filtro_estado = "SERTT91_ESTADO = ".$estado." AND ";
-				if($estado == '50')								
-					$filtro_estado = "SERTT91_AUDITADO = 'R' AND ";
+				if(!empty($estado)){
+					
+					if($estado == '50') 
+						$filtro_estado = "SERTT91_AUDITADO = 'R' AND ";								
+					else
+						$filtro_estado = "SERTT91_ESTADO = ".$estado." AND ";
+				}
 				
 				$filtro_empresa="";
 				if(!empty($empresa))								
@@ -558,6 +561,14 @@
 					$arrEstados[14][2]="label label-danger";
 					$arrEstados[14][3]="text-red";
 					$arrEstados[14][4]="background:#dc3d00;";
+
+					/*
+					$arrEstados[14][0]=50;
+					$arrEstados[14][1]="Recibidos";
+					$arrEstados[14][2]="label label-success";
+					$arrEstados[14][3]="text-green";
+					$arrEstados[14][4]="background:#c2f9ad;";					
+					*/
 
 					return $arrEstados;
 
@@ -1776,7 +1787,6 @@
 			}
 		}
 
-
 		public function contarRecibidos($fecha, $empresa, $plaza){
 			try {
 
@@ -1794,11 +1804,40 @@
 				
 				$query = "SELECT COUNT(SERTT11_FECSER) as CANTIDAD  
 					FROM SERVTT
-					WHERE  				 
+					WHERE
 						".$filtro_fecha." 
 						".$filtro_estado." 
 						".$filtro_empresa." 
 						".$filtro_plaza;
+				
+				//echo $query;				
+				//exit;
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+
+		public function cpAtendidos($fecha, $idGestor){
+			try {
+
+				$f = new Fechas;
+				$tmp = $f->FormatearFechas($fecha,"Y-m-d","Y-m-d");
+				$filtro_fecha = "SERTT11_FECSER = '".$tmp."' AND ";
+				if(!empty($idGestor))								
+					$filtro_gestor = "SERTT91_CODGESTOR = '".$idGestor."'";
+				
+				$query = "SELECT PER91_CODPOSTAL AS CP, COUNT(PER91_CODPOSTAL) AS CANT FROM SERVTT INNER JOIN PERSONAS 
+						ON SERTT31_PERNUMDOC = PER12_NUMDOC 
+						WHERE
+						".$filtro_fecha." 
+						".$filtro_gestor."
+						GROUP BY PER91_CODPOSTAL
+						ORDER BY PER91_CODPOSTAL";
 				
 				//echo $query;				
 				//exit;

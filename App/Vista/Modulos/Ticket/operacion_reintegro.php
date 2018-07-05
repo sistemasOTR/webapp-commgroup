@@ -34,13 +34,13 @@
 
       <div class='col-md-12'>
         <div class="box box-solid">
-            <div class="box-header with-border">
-              <i class="fa fa-filter"></i>
-              <h3 class="box-title">Tabla Reintegros</h3>
-              <a href="#" class="btn btn-success pull-right" id="btn-nuevo" data-toggle='modal' data-target='#modal-nuevo' data-estado='nuevo' onclick="cargarNuevo()">
-                  Nuevo
-              </a>
-            </div>
+          <div class="box-header with-border">
+            <i class="fa fa-dollar"></i>
+            <h3 class="box-title">Tabla Reintegros</h3>
+            <a href="#" class="btn btn-success pull-right" id="btn-nuevo" data-toggle='modal' data-target='#modal-nuevo' data-estado='nuevo' onclick="cargarNuevo()">
+                Nuevo
+            </a>
+          </div>
 
 
           <div class="box-body table-responsive">
@@ -48,28 +48,36 @@
                   <thead>
                     <tr>
                       <th>CODIGO POSTAL</th>
-                      <th>DESCRIPCION</th>
-                      <th>REINTEGRO</th>  
+                      <th>DESCRIPCION</th> 
                       <th>PLAZA</th>
-                      <th colspan="2">ACCIÓN</th>
-
-                      <th style="width: 3%;" class='text-center'></th>
+                      <th style="text-align: center;">ALEDAÑO</th>
+                      <th width="100" class="text-center">REINTEGRO</th> 
+                      <th colspan="2" style="text-align: center;">ACCIONES</th>
                     </tr>
                   </thead>
                   <tbody>
                    
                     <?php 
-                    foreach ($reintegra as $key => $value){ ?>  
+                    foreach ($reintegra as $key => $value){ ?>
+                      <?php if ($value->getAled()) {
+                        $aled= 1;
+                        $txtAled = '<span class= "label label-success">SI</span>';
+                      } else {
+                        $aled= 0;
+                        $txtAled = '<span class= "label label-danger">NO</span>';
+                      }
+                       ?>
                        <tr>
-                    
-                     <td> <?php echo $value->getCp();?> </td>
-                     <td> <?php echo $value->getDescripcion();?> </td>
-                     <td> <?php echo $value->getReintegro();?> </td>
-                     <td> <?php echo $value->getPlaza();?> </td>
-                     <td> <a href="#" id='<?php echo $value->getId() ?>' data-id='<?php echo $value->getId() ?>' data-cp='<?php echo $value->getCp() ?>' data-estado='editar'data-descripcion='<?php echo $value->getDescripcion() ?>' data-reintegro='<?php echo $value->getReintegro() ?>'data-plaza='<?php echo $value->getPlaza() ?>' class="btn btn-warning btn-xs" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId() ?>)'>Editar</a></td>
-                     <td> <a href="#" class='btn btn-danger btn-xs' id='<?php echo $value->getId() ?>_elim' onclick='eliminarDatos(<?php echo $value->getId() ?>)' data-id='<?php echo $value->getId() ?>' data-fechafin='<?php echo $f->FechaActual()?>' data-toggle='modal' data-target='#modal-eliminar'>Eliminar</a></td>
+                        
+                         <td> <?php echo $value->getCp();?> </td>
+                         <td> <?php echo $value->getDescripcion();?> </td>
+                         <td> <?php echo $value->getPlaza();?> </td>
+                         <td style="text-align: center;"> <?php echo $txtAled;?> </td>
+                         <td class="text-center">$ <?php echo number_format($value->getReintegro(),2);?> </td>
+                         <td width="70" style="text-align: center;"> <a href="#" id='<?php echo $value->getId() ?>' data-id='<?php echo $value->getId() ?>' data-cp='<?php echo $value->getCp() ?>' data-estado='editar'data-descripcion='<?php echo $value->getDescripcion() ?>' data-reintegro='<?php echo $value->getReintegro() ?>' data-aled='<?php echo $aled ?>'data-plaza='<?php echo $value->getPlaza() ?>' class="btn btn-warning btn-xs" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId() ?>)'>Editar</a></td>
+                         <td width="70" style="text-align: center;"> <a href="#" class='btn btn-danger btn-xs' id='<?php echo $value->getId() ?>_elim' onclick='eliminarDatos(<?php echo $value->getId() ?>)' data-id='<?php echo $value->getId() ?>' data-fechafin='<?php echo $f->FechaActual()?>' data-toggle='modal' data-target='#modal-eliminar'>Eliminar</a></td>
 
-                     </tr>
+                       </tr>
                     <?php 
 
                       }
@@ -96,7 +104,7 @@
         </div>
         <div class="modal-body">
             <div class="row">
-              <div class="col-md-5">
+              <div class="col-md-6">
                 <label>Fecha Vigencia</label>
                 <input type="date" name="fechaini" class="form-control" required="">
               </div>                                             
@@ -107,8 +115,7 @@
               
               <div class="col-md-6">
                 <label>Descripcion</label>
-                <input type="text" name="descripcion" class="form-control" id="descripcion" required="">
-                <input type="text" name="estado" id="estado" style="display: none;" class="form-control" >
+                <input type="text" name="descripcion" class="form-control" id="descripcion" required=""><input type="text" name="estado" id="estado" style="display: none;" class="form-control" >
                 <input type="text" name="reintegro_id" id="reintegro_id" style="display: none;" class="form-control" >
               </div>         
               <div class="col-md-6">
@@ -128,6 +135,14 @@
                     }
                     
                   ?>
+                </select>
+                
+              </div>
+              <div class="col-md-6">
+                <label>Aledaño</label>
+                <select id="aled" class="form-control" style="width: 100%" name="aled" required="" >                              
+                  <option value="0">NO</option>
+                  <option value="1">SI</option>
                 </select>
                 
               </div>   
@@ -184,6 +199,12 @@
   
        
 <script>
+  $(document).ready(function(){                
+    $("#mnu_tickets_reintegro").addClass("active");
+  });
+  $(document).ready(function(){                
+    $("#mnu_tickets").addClass("active");
+  });
   
   function cargarDatos(id){
     
@@ -193,7 +214,9 @@
     plaza = document.getElementById(id).getAttribute('data-plaza');
     estado = document.getElementById(id).getAttribute('data-estado');
     reintegro_id = document.getElementById(id).getAttribute('data-id');
+    aled = document.getElementById(id).getAttribute('data-aled');
    
+    document.getElementById("aled").value = aled;
     document.getElementById("estado").value = estado;
     document.getElementById("codigopostal").value = cp;
     document.getElementById("descripcion").value = descripcion;
@@ -211,6 +234,7 @@
     document.getElementById("descripcion").value = '';
     document.getElementById("reintegro").value = '';
     document.getElementById("plaza").value = '';
+    document.getElementById("aled").value = 0;
     
     
   }
@@ -221,11 +245,6 @@
 
     document.getElementById("id_eliminar").value = id_eliminar;
     document.getElementById("fechafin").value = fechafin;
-
-
-
-
-
   }
  
   

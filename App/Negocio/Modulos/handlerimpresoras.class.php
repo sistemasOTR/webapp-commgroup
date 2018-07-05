@@ -149,7 +149,7 @@
 
 					$handler->setAsigId($asigId);
 					$handler->setFechaDev($fechaDev);
-					$handler->setObs($obs);
+					$handler->setObsDev($obs);
 
 
 					$handler->devolver(false);
@@ -197,13 +197,14 @@
 			}
 		}
 		
-		public function bajaImpresora($serialNro,$fechaBaja,$obs){
+		public function bajaImpresora($serialNro,$fechaBaja,$tipoBaja,$obs){
 			try {
 				
 					$handler = new Impresoras;
 
 					$handler->setSerialNro($serialNro);
 					$handler->setFechaBaja($fechaBaja);
+					$handler->setTipoBaja($tipoBaja);
 					$handler->setObs($obs);
 
 					$handler->bajaImpresora(false);

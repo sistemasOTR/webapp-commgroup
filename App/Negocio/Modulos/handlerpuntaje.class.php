@@ -17,14 +17,18 @@
 	
 	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
 	include_once PATH_NEGOCIO."Sistema/HandlerSupervisor.class.php";
-	
-	class HandlerPuntaje{
+
+	class HandlerPuntaje{		
+
+		//#############
+		// EMPRESA
+		//#############
 		public function buscarPuntaje($empresa_id){
 			try {
 
 				$handler = new EmpresaPuntaje;				
 				$handler->setIdEmpresaSistema($empresa_id);
-				$objPuntaje = $handler->select();
+				$objPuntaje = $handler->select();																
 
 				if(!empty($objPuntaje))				
 					return $objPuntaje->getPuntaje();
@@ -90,7 +94,7 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
 			}
-		}		
+		}
 		public function existeConfiguracionPuntaje($empresa_id,$puntaje){
 			try {
 				
@@ -111,7 +115,9 @@
 			}
 		}		
 
-
+		//#############
+		// GESTOR
+		//#############
 		public function buscarObjetivo($gestor_id){
 			try {
 
@@ -399,5 +405,5 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
 			}
-		}
+		}									
 	}

@@ -55,6 +55,8 @@
         $esIngresante = false;
         $esDesarrollo = false;
         $esSupervisor = false;
+        $esRRHH = false;
+        $esContabilidad = false;
 
         $handler = new HandlerUsuarios;
         $permiso = $handler->selectPerfil($usuarioActivoSesion->getId());                        
@@ -69,6 +71,14 @@
             break;
           
           case "BACK OFFICE":
+            $esBO = true;
+            break;
+          
+          case "RRHH":
+            $esBO = true;
+            break;
+          
+          case "CONTABILIDAD":
             $esBO = true;
             break;
 
@@ -159,10 +169,7 @@
 
 		case 'metrica-servicio':			
 			$include = 'Modulos/PanelControl/_revisar/metrica_servicios.php';						
-			break;						
-
-
-
+			break;	
 
 		  /*###########*/
 		 /* SERVICIOS */
@@ -170,6 +177,11 @@
 		case 'servicio':				
 			if($permiso->getModuloServiciosBoolean())
 				$include = 'Modulos/Servicio/index.php';			
+			break;
+
+		case 'servicio_resumen':				
+			if($permiso->getModuloServiciosBoolean())
+				$include = 'Modulos/Servicio/resumen.php';			
 			break;
 
 		case 'detalle_servicio':				
@@ -588,6 +600,23 @@
 			if($permiso->getModuloUploadBoolean())
 				$include = 'Modulos/UploadFile/uploadfile.php';		
 			break;
+
+
+	      /*########*/
+		 /* AGENDA */
+		/*########*/
+		case 'agenda':			
+			$include = 'Modulos/Agenda/index.php';		
+			break;
+
+		case 'agenda_detalle':			
+			$include = 'Modulos/Agenda/detalle.php';		
+			break;
+
+		case 'agenda_rubros':			
+			$include = 'Modulos/Agenda/rubros.php';		
+			break;
+
 
 	      /*#######*/
 		 /* STOCK */

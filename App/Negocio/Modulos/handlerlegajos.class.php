@@ -97,7 +97,10 @@
 				$handler->setNacimiento($handler->getNacimiento()->format('m-d-Y'));
 				$handler->setLicenciaVto($handler->getLicenciaVto()->format('m-d-Y'));
 				$handler->setVtvVto($handler->getVtvVto()->format('m-d-Y'));
-
+				$handler->setHidraulicaVto($handler->getHidraulicaVto()->format('m-d-Y'));
+				$handler->setGncVto($handler->getGncVto()->format('m-d-Y'));
+				$handler->setSeguroVto($handler->getSeguroVto()->format('m-d-Y'));
+				
 				$handler->setNombre($nombre);
 				$handler->setCuit($cuit);
 				$handler->setNacimiento($nacimiento);
@@ -114,7 +117,7 @@
 			}
 		}		
 
-		public function guardarLegajosEtapa2($id, $usuario, $dni_adjunto, $cuit_adjunto, $cv_adjunto, $cbu_adjunto){
+		public function guardarLegajosEtapa2($id, $usuario, $dni_adjunto, $cuit_adjunto, $cv_adjunto, $cbu_adjunto, $dni_dorso_adjunto){
 			try {
 
 				$handler = new Legajos;		
@@ -125,9 +128,12 @@
 				$handler->setNacimiento($handler->getNacimiento()->format('m-d-Y'));
 				$handler->setLicenciaVto($handler->getLicenciaVto()->format('m-d-Y'));
 				$handler->setVtvVto($handler->getVtvVto()->format('m-d-Y'));
+				$handler->setHidraulicaVto($handler->getHidraulicaVto()->format('m-d-Y'));
+				$handler->setGncVto($handler->getGncVto()->format('m-d-Y'));
+				$handler->setSeguroVto($handler->getSeguroVto()->format('m-d-Y'));
 
 				if(!empty($dni_adjunto["size"]))
-					$handler->setDniAdjunto($this->cargarArchivos($usuario,"DNI",$dni_adjunto));
+					$handler->setDniAdjunto($this->cargarArchivos($usuario,"DNI_FRENTE",$dni_adjunto));
 
 				if(!empty($cuit_adjunto["size"]))
 					$handler->setCuitAdjunto($this->cargarArchivos($usuario,"CUIT",$cuit_adjunto));
@@ -137,6 +143,9 @@
 
 				if(!empty($cbu_adjunto["size"]))
 					$handler->setCbuAdjunto($this->cargarArchivos($usuario,"CBU",$cbu_adjunto));
+
+				if(!empty($dni_dorso_adjunto["size"]))
+					$handler->setDniDorsoAdjunto($this->cargarArchivos($usuario,"DNI_DORSO",$dni_dorso_adjunto));				
 								
 				$handler->update(false);
 	
@@ -145,7 +154,7 @@
 			}
 		}	
 
-		public function guardarLegajosEtapa3($id, $usuario, $licencia_adjunto, $licencia_adjunto_dorso, $titulo_adjunto, $titulo_adjunto_dorso, $mantenimiento_adjunto, $seguro_adjunto, $kmreal_adjunto, $gnc_adjunto, $hidraulica_adjunto){
+		public function guardarLegajosEtapa3($id, $usuario, $licencia_adjunto, $licencia_adjunto_dorso, $titulo_adjunto, $titulo_adjunto_dorso, $mantenimiento_adjunto, $seguro_adjunto, $kmreal_adjunto, $gnc_adjunto, $hidraulica_adjunto, $modelo_vehiculo, $marca_vehiculo, $anio_vehiculo, $km_recorridos_vehiculo){
 			try {
 
 				$handler = new Legajos;		
@@ -156,6 +165,9 @@
 				$handler->setNacimiento($handler->getNacimiento()->format('m-d-Y'));
 				$handler->setLicenciaVto($handler->getLicenciaVto()->format('m-d-Y'));
 				$handler->setVtvVto($handler->getVtvVto()->format('m-d-Y'));
+				$handler->setHidraulicaVto($handler->getHidraulicaVto()->format('m-d-Y'));
+				$handler->setGncVto($handler->getGncVto()->format('m-d-Y'));
+				$handler->setSeguroVto($handler->getSeguroVto()->format('m-d-Y'));
 
 				if(!empty($licencia_adjunto["size"]))
 					$handler->setLicenciaAdjunto($this->cargarArchivos($usuario,"LICENCIA",$licencia_adjunto));
@@ -184,6 +196,11 @@
 				if(!empty($hidraulica_adjunto["size"]))
 					$handler->setHidraulicaAdjunto($this->cargarArchivos($usuario,"HIDRAULICA",$hidraulica_adjunto));								
 
+				$handler->setModeloVehiculo($modelo_vehiculo);
+				$handler->setMarcaVehiculo($marca_vehiculo);
+				$handler->setAnioVehiculo($anio_vehiculo);
+				$handler->setKmRecorridoVehiculo($km_recorridos_vehiculo);
+
 				$handler->update(false);				
 				
 			} catch (Exception $e) {
@@ -202,6 +219,9 @@
 				$handler->setNacimiento($handler->getNacimiento()->format('m-d-Y'));
 				$handler->setLicenciaVto($handler->getLicenciaVto()->format('m-d-Y'));
 				$handler->setVtvVto($handler->getVtvVto()->format('m-d-Y'));
+				$handler->setHidraulicaVto($handler->getHidraulicaVto()->format('m-d-Y'));
+				$handler->setGncVto($handler->getGncVto()->format('m-d-Y'));
+				$handler->setSeguroVto($handler->getSeguroVto()->format('m-d-Y'));
 
 				if(!empty($patente_adjunto["size"]))
 					$handler->setPatenteAdjunto($this->cargarArchivos($usuario,"PATENTE",$patente_adjunto));
@@ -216,7 +236,7 @@
 			}
 		}	
 
-		public function guardarLegajosEtapa5($id, $usuario, $licencia_vto, $vtv_vto){
+		public function guardarLegajosEtapa5($id, $usuario, $licencia_vto, $vtv_vto, $hidraulica_vto, $gnc_vto, $seguro_vto){
 			try {
 
 				$handler = new Legajos;		
@@ -227,9 +247,16 @@
 				$handler->setNacimiento($handler->getNacimiento()->format('m-d-Y'));
 				$handler->setLicenciaVto($handler->getLicenciaVto()->format('m-d-Y'));
 				$handler->setVtvVto($handler->getVtvVto()->format('m-d-Y'));
+				$handler->setHidraulicaVto($handler->getHidraulicaVto()->format('m-d-Y'));
+				$handler->setGncVto($handler->getGncVto()->format('m-d-Y'));
+				$handler->setSeguroVto($handler->getSeguroVto()->format('m-d-Y'));
+
 
 				$handler->setLicenciaVto($licencia_vto);
 				$handler->setVtvVto($vtv_vto);
+				$handler->setHidraulicaVto($hidraulica_vto);
+				$handler->setGncVto($gnc_vto);
+				$handler->setSeguroVto($seguro_vto);
 
 				$handler->update(false);				
 				
@@ -238,7 +265,7 @@
 			}
 		}
 
-		public function guardarLegajosEtapa6($id, $usuario, $horas, $oficina, $categoria, $nro_legajo){
+		public function guardarLegajosEtapa6($id, $usuario, $horas, $oficina, $categoria, $nro_legajo, $cbu_adjunto_ingresante){
 			try {
 
 				$handler = new Legajos;		
@@ -249,11 +276,17 @@
 				$handler->setNacimiento($handler->getNacimiento()->format('m-d-Y'));
 				$handler->setLicenciaVto($handler->getLicenciaVto()->format('m-d-Y'));
 				$handler->setVtvVto($handler->getVtvVto()->format('m-d-Y'));
+				$handler->setHidraulicaVto($handler->getHidraulicaVto()->format('m-d-Y'));
+				$handler->setGncVto($handler->getGncVto()->format('m-d-Y'));
+				$handler->setSeguroVto($handler->getSeguroVto()->format('m-d-Y'));
 
 				$handler->setHoras($horas);
 				$handler->setOficina($oficina);
 				$handler->setCategoria($categoria);
 				$handler->setNumeroLegajo($nro_legajo);
+
+				if(!empty($cbu_adjunto_ingresante["size"]))
+					$handler->setCbuAdjunto($this->cargarArchivos($usuario,"CBU",$cbu_adjunto_ingresante));				
 
 				$handler->update(false);				
 				

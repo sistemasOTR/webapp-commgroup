@@ -3,8 +3,8 @@
 
 	include_once PATH_NEGOCIO."Modulos/handlertickets.class.php"; 
 	
-	$err = "../../../../index.php?view=tickets_aprobar&err=";     		
-	$info = "../../../../index.php?view=tickets_aprobar&info=";    
+	$err = "../../../../index.php?".$_POST["url_redirect"]."&err=";     		
+	$info = "../../../../index.php?".$_POST["url_redirect"]."&info=";    
 
 	$handler = new HandlerTickets();
 

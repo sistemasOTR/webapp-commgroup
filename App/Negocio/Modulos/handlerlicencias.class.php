@@ -100,11 +100,10 @@
 		}
 
 		public function seleccionarLicencias($usuario){
-			try {
-					
+			try {					
 				$handler = new licencias;
-				$handler->setUsuarioId($usuario);
-				$data = $handler->select();
+				$data = $handler->selectMiLicencias($usuario);
+				
 				
 				if(count($data)==1){
 					$data = array('0' => $data );                   
@@ -364,7 +363,22 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
 			}
-		}		
+		}	
+
+		public function huboLicencias($usuario,$fecha){
+			try {
+				$handler = new Licencias;
+				$datos = $handler->huboLicencias($usuario,$fecha);
+
+				if(count($datos)>0)
+					return true;
+				else
+					return false;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
 	}
 
 ?>
