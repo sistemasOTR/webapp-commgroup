@@ -75,7 +75,14 @@
 			try {
 				$handler = new ExpedicionesItem;								
 
-				return $handler->selectApedir();
+				$data = $handler->selectApedir();
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				

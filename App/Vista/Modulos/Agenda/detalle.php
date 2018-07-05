@@ -123,6 +123,7 @@
               <table class="table table-striped table-condensed" id="tabla-entregas" cellspacing="0" width="100%" style="text-align:center;">
                 <thead>
                   <tr>
+                  	<th></th>
                     <th class='text-center' width="100">FECHA</th>
                     <th class='text-center' width="60">HORA</th>
                     <th class='text-center' width="200">CONTACTO</th>
@@ -136,7 +137,15 @@
                   if(!empty($arrDatos)){
                     foreach ($arrDatos as $key => $value) {
                       $user = $handlerUs->selectById($value->getUsuarioId());
+                      if ($value->getTipoId()=='Llamada') {
+                      	$identificador = '<i class="fa fa-phone text-green"></i>';
+                      } elseif ($value->getTipoId()=='Reunion') {
+                      	$identificador = '<i class="fa fa-coffee text-red"></i>';
+                      } elseif ($value->getTipoId()=='Correo') {
+                      	$identificador = '<i class="fa fa-envelope text-yellow"></i>';
+                      }
                       echo "<tr>";
+                      echo "<td>".$identificador."</td>";
                       echo "<td>".$value->getFechaHora()->format('d-m-Y')."</td>";
                       echo "<td>".$value->getFechaHora()->format('H:i')."</td>";
                       echo "<td>".$value->getContacto()."</td>";
