@@ -18,7 +18,7 @@
     
   ?>
 
-  <?php if($esBO ){ ?>
+  <?php if($esBO && ($countapedir)>0 ){ ?>
     <li class="dropdown notifications-menu">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
         <i class="fa fa-cart-arrow-down"></i> 
