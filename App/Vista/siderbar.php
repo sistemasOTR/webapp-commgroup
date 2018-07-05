@@ -155,15 +155,15 @@
                         <i class="fa fa-check"></i> <span>Aprobar</span> </i>
                       </a>              
                     </li>                
-                    <li class="treeview" id="mnu_tickets_aprobar">
+                    <li class="treeview" id="mnu_tickets_reintegro">
                       <a href=<?php echo $url_tickets_reintegro; ?>> 
-                        <i class="fa fa-check"></i> <span>Tabla Reintegros</span> </i>
+                        <i class="fa fa-list"></i> <span>Tabla Reintegros</span> </i>
                       </a>              
                     </li>                      
                   <?php } ?>    
 
                   
-                  <?php if($esGerencia || $esBO || $esCoordinador || $esSupervisor){ ?>   
+                  <?php if($esGerencia || $esBO ){ ?>   
                     <li class="treeview" id="mnu_tickets_concepto">
                       <a href=<?php echo $url_tickets_conceptos; ?>> 
                         <i class="fa fa-edit"></i> <span>Conceptos</span> </i>
@@ -171,8 +171,8 @@
                     </li>                      
                   <?php } ?>         
 
-                  <?php if($esGerencia || $esBO || $esCoordinador || $esSupervisor){ ?>   
-                    <li class="treeview" id="mnu_tickets_concepto">
+                  <?php if($esGerencia || $esBO ){ ?>   
+                    <li class="treeview" id="mnu_tickets_fechas">
                       <a href=<?php echo $url_tickets_fechas; ?>> 
                         <i class="fa fa-edit"></i> <span>Fechas Inhabilitadas</span> </i>
                       </a>              
@@ -182,7 +182,7 @@
               </li>                               
             <?php 
               }
-            ?>  
+            ?>
 
             <?php
               if($permiso->getModuloLicenciasBoolean()){    
@@ -264,7 +264,7 @@
 
 
             <?php
-              }
+              
               if($permiso->getModuloServiciosBoolean() && !$esBO){
             ?>
               <li class="treeview" id="mnu_servicio">

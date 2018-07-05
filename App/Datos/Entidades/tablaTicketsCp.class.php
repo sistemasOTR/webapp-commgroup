@@ -43,6 +43,10 @@
 		public function getPlaza(){ return $this->_plaza; }
 		public function setPlaza($plaza){ $this->_plaza=$plaza; }
 
+		private $_aled;
+		public function getAled(){ return var_export($this->_aled,true); }
+		public function setAled($aled){ $this->_aled=$aled; }
+
 		/*#############*/
 		/* CONSTRUCTOR */
 		/*#############*/
@@ -55,6 +59,7 @@
 			$this->setFechaIni('');
 			$this->setFechaFin('');	
 			$this->setPlaza('');			
+			$this->setAled(false);			
 		}
 
 		/*###################*/
@@ -73,16 +78,18 @@
 		        						descripcion,
 		        						reintegro,
 		        						fecha_ini,
-		        						plaza
+		        						plaza,
+		        						aled
 	        			) VALUES (
 	        							
 	        							".$this->getCp().",
 	        							'".$this->getDescripcion()."',
 	        							".$this->getReintegro().",
 	        							'".$this->getFechaIni()."',
-	        							'".$this->getPlaza()."'
+	        							'".$this->getPlaza()."',
+	        							'".$this->getAled()."'
 
-	        			)";        
+	        			)";
 				
 				# Ejecucion 	
 				return SQL::insert($conexion,$query);
@@ -99,8 +106,10 @@
 				
 				# Query 			
 				$query="UPDATE operacion_reintegro SET
-								fecha_fin='".$this->getFechaFin()."'						
+								fecha_fin='".$this->getFechaFin()."',
+								aled='".$this->getAled()."'		
 							WHERE id=".$this->getId();
+
 
 				# Ejecucion
 				return SQL::update($conexion,$query);	
@@ -116,11 +125,13 @@
 		{
 			try {
 			
-				
-				# Query 			
-				$query="UPDATE operacion_reintegro SET	
+				# Validaciones			
+				if(empty($this->getId()))
+					throw new Exception("Puntaje no identificado");
 
-				      fecha_fin='".$this->getFechaFin()."'
+				# Query 			
+				$query="UPDATE operacion_reintegro SET
+							     fecha_fin='".$this->getFechaFin()."'
 								
 							WHERE id=".$this->getId();
 		
@@ -135,13 +146,8 @@
 		public function select()
 		{			
 			try {
+				$query = "SELECT * FROM operacion_reintegro WHERE fecha_fin is NULL";
 				
-				
-
-					$query = "SELECT * FROM operacion_reintegro WHERE fecha_fin is NULL";
-				
-				
-
 				# Ejecucion 				
 				$result = SQL::selectObject($query, new Reintegro);
 						
@@ -154,9 +160,6 @@
 
 		}
 
-	
-
-	
 
 		public function setPropiedadesBySelect($filas)
 		{	
@@ -171,6 +174,7 @@
 				$this->setFechaIni($filas['fecha_ini']);
 				$this->setFechaFin($filas['fecha_fin']);
 				$this->setPlaza($filas['plaza']);
+				$this->setAled($filas['aled']);
 			}
 		}
 
@@ -183,18 +187,64 @@
 			$this->setFechaIni('');
 			$this->setFechaFin('');
 			$this->setPlaza('');		
+			$this->setAled(false);		
 		}
 
 		private function createTable()
 		{
 			return 'CREATE TABLE IF NOT EXISTS';
+
+			/*
+			USE [AppWeb]
+			GO
+
+			SET ANSI_NULLS ON
+			GO
+			SET QUOTED_IDENTIFIER ON
+			GO
+			SET ANSI_PADDING ON
+			GO
+			CREATE TABLE [dbo].[operacion_reintegro](
+				[id] [int] IDENTITY(1,1) NOT NULL,
+				[cp] [int] NOT NULL,
+				[descripcion] [varchar](50) NOT NULL,
+				[reintegro] [float] NOT NULL,
+				[fecha_ini] [date] NOT NULL,
+				[fecha_fin] [date] NULL,
+				[plaza] [varchar](50) NOT NULL,
+				[aled] [bit] NULL,
+			 CONSTRAINT [PK_operacion_reintegro] PRIMARY KEY CLUSTERED 
+			(
+				[id] ASC
+			)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+			) ON [PRIMARY]
+
+			GO
+			SET ANSI_PADDING OFF
+			GO
+			*/
 		}
 
 		/*########################*/
 		/* METODOS PERSONALIZADOS */
-		/*########################*/	
+		/*########################*/
 
-			
 
+		public function selectByDate($fecha)
+		{			
+			try {
+				$query = "SELECT * FROM operacion_reintegro WHERE '".$fecha."' >= fecha_ini order by reintegro";
+
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new Reintegro);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
 	}
 ?>

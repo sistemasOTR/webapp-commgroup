@@ -96,6 +96,18 @@
 		public function getConcepto(){ return $this->_concepto; }
 		public function setConcepto($concepto){ $this->_concepto=$concepto; }		
 
+		private $_aledNombre;
+		public function getAledNombre(){ return $this->_aledNombre; }
+		public function setAledNombre($aledNombre){ $this->_aledNombre=$aledNombre; }
+
+		private $_rechazado;
+		public function getRechazado(){ return var_export($this->_rechazado,true); }
+		public function setRechazado($rechazado){ $this->_rechazado=$rechazado; }					
+
+		private $_obsRechazo;
+		public function getObsRechazo(){ return $this->_obsRechazo; }
+		public function setObsRechazo($obsRechazo){ $this->_obsRechazo=$obsRechazo; }
+
 		/*#############*/
 		/* CONSTRUCTOR */
 		/*#############*/
@@ -124,6 +136,10 @@
 			$this->setAledanio(false);			
 			$this->setCantOperaciones(0);
 			$this->setConcepto('');
+			$this->setAledNombre('');
+			$this->setRechazado(false);			
+			$this->setObsRechazo('');
+			
 		}
 
 		/*###################*/
@@ -156,9 +172,12 @@
 		        						aledanio,
 		        						cant_operaciones,
 		        						concepto,        						
+		        						aled_nombre,        						
 		        						aprobado,
 		        						enviado,
-		        						estado
+		        						estado,
+		        						rechazado,
+		        						obsRechazo
 	        			) VALUES (
 	        							".$this->getUsuarioId().",   	
 	        							'".$this->getFechaHora()."',   
@@ -172,13 +191,16 @@
 	        							'".$this->getCondFiscal()."',   	
 	        							".$this->getImporte().",   	
 	        							'".$this->getAdjunto()."',   
-	        							".$this->getImporteReintegro().",   					
+	        							".$this->getImporteReintegro().",
 	        							'".$this->getAledanio()."',   
 	        							".$this->getCantOperaciones().",   					
 	        							'".$this->getConcepto()."',
+	        							'".$this->getAledNombre()."',
 	        							'".$this->getAprobado()."',   
 	        							'".$this->getEnviado()."',   
-	        							'".$this->getEstado()."'
+	        							'".$this->getEstado()."',
+	        							'".$this->getRechazado()."',   
+	        							'".$this->getObsRechazo()."'
 	        			)";        
 			
 	        	//echo $query;
@@ -221,6 +243,7 @@
 								aledanio='".$this->getAledanio()."',
 								cant_operaciones=".$this->getCantOperaciones().",
 								concepto='".$this->getConcepto()."',						
+								aled_nombre='".$this->getAledNombre()."',						
 								aprobado='".$this->getAprobado()."',
 								enviado='".$this->getEnviado()."',
 								estado='".$this->getEstado()."'
@@ -317,9 +340,12 @@
 				$this->setAledanio($filas['aledanio']);	
 				$this->setCantOperaciones($filas['cant_operaciones']);	
 				$this->setConcepto($filas['concepto']);	
+				$this->setAledNombre($filas['aled_nombre']);	
 				$this->setAprobado($filas['aprobado']);
 				$this->setEnviado($filas['enviado']);
 				$this->setEstado($filas['estado']);
+				$this->setRechazado($filas['rechazado']);
+				$this->setObsRechazo($filas['obsRechazo']);
 			}
 		}
 
@@ -347,12 +373,54 @@
 			$this->setImporteReintegro(0);	
 			$this->setAledanio(false);			
 			$this->setCantOperaciones(0);
-			$this->setConcepto('');			
+			$this->setConcepto('');
+			$this->setAledNombre('');
+			$this->setRechazado(false);			
+			$this->setObsRechazo('');			
 		}
 
 		private function createTable()
 		{
 			return 'CREATE TABLE IF NOT EXISTS';
+
+			/*
+			USE [AppWeb]
+			GO
+			SET ANSI_NULLS ON
+			GO
+			SET QUOTED_IDENTIFIER ON
+			GO
+			CREATE TABLE [dbo].[tickets](
+				[id] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+				[tipo] [nchar](100) NULL,
+				[punto_vta] [nchar](100) NULL,
+				[numero] [nchar](100) NULL,
+				[razon_social] [nchar](100) NULL,
+				[cuit] [nchar](100) NULL,
+				[iibb] [nchar](100) NULL,
+				[domicilio] [nchar](100) NULL,
+				[condicion_fiscal] [nchar](100) NULL,
+				[importe] [numeric](18, 2) NULL,
+				[adjunto] [nchar](100) NULL,
+				[estado] [bit] NULL,
+				[enviado] [bit] NULL,
+				[aprobado] [bit] NULL,
+				[fecha_hora] [datetime] NULL,
+				[id_usuario] [numeric](18, 0) NULL,
+				[importe_reintegro] [numeric](18, 2) NULL,
+				[aledanio] [bit] NULL,
+				[cant_operaciones] [numeric](18, 2) NULL,
+				[concepto] [nchar](100) NULL,
+				[rechazado] [bit] NULL,
+				[obsRechazo] [text] NULL,
+			 CONSTRAINT [PK_tickets] PRIMARY KEY CLUSTERED 
+			(
+				[id] ASC
+			)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+			) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+			GO
+			*/
 		}
 
 		/*########################*/
@@ -379,7 +447,7 @@
 
 		}
 
-		public function enviarTickets($id,$reintegro,$aledanio,$operaciones){
+		public function enviarTickets($id,$reintegro,$aledanio,$operaciones,$aledNombre){
 			try {
 
 				# Validaciones 			
@@ -389,13 +457,13 @@
 				# Query 			
 				$query="UPDATE tickets SET								
 								enviado=1,
+								rechazado=0,
 								importe_reintegro=".$reintegro.",
 								aledanio='".$aledanio."',
+								aled_nombre='".$aledNombre."',
 								cant_operaciones=".$operaciones."
 							WHERE id=".$id;
 
-	        	//echo $query;
-	        	//exit();
 
 				# Ejecucion 					
 				return SQL::update($conexion,$query);					
@@ -475,7 +543,34 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
 			}
-		}		
+		}
+
+		public function rechazarTicketsAprob($id,$obsRechazo){
+			try {
+
+				# Validaciones 			
+				if(empty($id))
+					throw new Exception("Ticket no identificado");
+
+				# Query 			
+				$query="UPDATE tickets SET								
+								enviado=0,
+								rechazado = 'true',
+								obsRechazo='".$obsRechazo."'
+							WHERE id=".$id;
+
+	        	//echo $query;
+	        	//exit();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);					
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
+
 		public function seleccionarByFiltros($fdesde,$fhasta,$usuario,$enviada){
 			try {
 				
@@ -536,6 +631,47 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());						
 			}			
+		}
+
+		public function updateTicket($conexion)
+		{
+			try {
+
+				# Validaciones 			
+				if(empty($this->getId()))
+					throw new Exception("Ticket no identificado");
+
+				if(empty($this->getUsuarioId()))
+					throw new Exception("Usuario Vacio");			
+
+				# Query 			
+				$query="UPDATE tickets SET
+								tipo='".$this->getTipo()."',
+								punto_vta='".$this->getPuntoVenta()."',
+								numero='".$this->getNumero()."',
+								razon_social='".$this->getRazonSocial()."',
+								cuit='".$this->getCuit()."',
+								iibb='".$this->getIibb()."',
+								domicilio='".$this->getDomicilio()."',
+								condicion_fiscal='".$this->getCondFiscal()."',
+								importe=".$this->getImporte().",
+								adjunto='".$this->getAdjunto()."',		
+								importe_reintegro=".$this->getImporteReintegro().",
+								aledanio='".$this->getAledanio()."',
+								aled_nombre='".$this->getAledNombre()."',
+								cant_operaciones=".$this->getCantOperaciones().",
+								concepto='".$this->getConcepto()."'
+							WHERE id=".$this->getId();
+
+	        	//echo $query;
+	        	//exit();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
 		}
 
 	}

@@ -13,6 +13,29 @@
 			return date("Y-m-d", $time);
 		}
 
+		function RestarDiasFechaActual($dias)
+		{
+			$time=time();
+			return date('Y-m-d', strtotime('-'.$dias.' day', $time));			 
+		}
+
+		function SumarDiasFechaActual($dias)
+		{
+			$time=time();
+			return date('Y-m-d', strtotime('+'.$dias.' day', $time));			 
+		}
+
+		function RestarMinutosFechaActual($minutos)
+		{
+			$time=time();
+			return date('Y-m-d h:i', strtotime('-'.$minutos.' minute', $time));			 
+		}
+
+		function SumarMinutosFechaActual($minutos)
+		{
+			$time=time();
+			return date('Y-m-d h:i', strtotime('+'.$minutos.' minute', $time));			 
+		}
 
 		function DiasDiferenciaFechas($inicial,$final,$formato)
 		{
