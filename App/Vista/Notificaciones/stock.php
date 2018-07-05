@@ -37,7 +37,7 @@
               <?php if (($countapedir)>0): ?>
                 <li>
                   <a href="<?php echo $url_pendientes; ?>">
-                    <b>Pendientes</b><span class="badge bg-red pull-right">
+                    <b>Bajo Stock</b><span class="badge bg-red pull-right">
                       <?php echo $countapedir; ?>
                     </span>
                   </a>
