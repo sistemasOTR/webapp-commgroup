@@ -678,12 +678,12 @@
 				throw new Exception($e->getMessage());				
 			}
 		}
-		public function modificarStock($iditem,$actualizarstock){
+		public function modificarStock($iditem,$actualizarstock,$apedir){
 			try {			
 
 				$handler = new ExpedicionesItem;
 
-				$handler->updateStock($iditem,$actualizarstock);
+				$handler->updateStock($iditem,$actualizarstock,$apedir);
 
 
 		} catch (Exception $e) {

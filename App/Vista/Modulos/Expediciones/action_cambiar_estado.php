@@ -20,11 +20,16 @@
 	$cantidad_parcial=(isset($_POST["entregada"])?$_POST["entregada"]:0);
 	$cantidad_origin=(isset($_POST["cantidadoriginal"])?$_POST["cantidadoriginal"]:0);
 	$cantidad_stock=(isset($_POST["stock"])?$_POST["stock"]:0);
+	$ppedido=(isset($_POST["ppedido"])?$_POST["ppedido"]:0);
 
 	$cantidadtotalenviada=$cantidad_parcial+$cantidad_env;
 	$nuevo_stock = $cantidad_stock - $cantidad_env;
 	$user=intval($usuario);
-
+	if ($nuevo_stock <= $ppedido) {
+		$apedir = true;
+	} else {
+		$apedir = false;
+	}
 
 
      if ($cantidadtotalenviada-$cantidad_origin==0) {
@@ -42,7 +47,7 @@
          
         $handler2->cargarEnvios($i,$fecha,$cantidad_env,$user);
 
-        $handler3->modificarStock(intval($iditem),intval($nuevo_stock));
+        $handler3->modificarStock(intval($iditem),intval($nuevo_stock),$apedir);
 
 
       
@@ -66,7 +71,7 @@
 
 		$hanlder->modificarEstadoExpedicion($i,$estado,$observaciones,$cantidadtotalenviada);
 		$handler2->cargarEnvios($i,$fecha,$cantidad_env,$user);
-		$handler3->modificarStock(intval($iditem),intval($nuevo_stock));
+		$handler3->modificarStock(intval($iditem),intval($nuevo_stock),$apedir);
 
         $err = "../../../../".$_POST['url_redireccion']."&err=";     		
 		$info = "../../../../".$_POST['url_redireccion']."&info="; 

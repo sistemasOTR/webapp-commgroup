@@ -228,6 +228,7 @@
                                         id='".$value->getId()."' 
                                         data-resto='".$cantidadtotal."'
                                         data-stock='".$item->getStock()."'
+                                        data-ppedido='".$item->getPtopedido()."'
                                         data-iditem='".$item->getId()."'
                                         data-entregada='".$value->getEntregada()."'
                                         type='button' 
@@ -340,6 +341,7 @@
        var entregada=document.getElementById(id).getAttribute('data-entregada');  
        var stock=document.getElementById(id).getAttribute('data-stock');
        var iditem=document.getElementById(id).getAttribute('data-iditem');
+       var ppedido=document.getElementById(id).getAttribute('data-ppedido');
        
        document.getElementById("cantidadenviada").value = resto;
        
@@ -351,6 +353,7 @@
        
        document.getElementById("entregada").value = entregada;
        document.getElementById("cantidadoriginal").value =cantidad; 
+       document.getElementById("ppedido").value =ppedido; 
        document.getElementById("id").value = elemento_id; 
        document.getElementById("stock").value = stock; 
        document.getElementById("iditem").value = iditem; 
@@ -383,6 +386,7 @@
                     <input type="hidden" name="cantidadoriginal" id="cantidadoriginal">
                     <input type="hidden"  class="form-control" name="stock" id="stock">
                     <input type="hidden"  class="form-control" name="iditem" id="iditem">
+                    <input type="hidden"  class="form-control" name="ppedido" id="ppedido">
                             
                 </div>           
                 <div class="col-md-8">  

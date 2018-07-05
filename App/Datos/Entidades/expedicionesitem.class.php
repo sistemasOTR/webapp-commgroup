@@ -287,7 +287,7 @@
 
 		}
 
-		public function updateStock($iditem,$actualizarstock)
+		public function updateStock($iditem,$actualizarstock,$apedir)
 		{
 			try {    
 				    $conexion=false;
@@ -296,9 +296,8 @@
 				# Query 			
 				$query="UPDATE expediciones_items SET								
 								
-								stock=".$actualizarstock."
-								
-																	
+								stock=".$actualizarstock.",
+								a_pedir = '".$apedir."'			
 							WHERE item_id=".$iditem;
 
 			// var_dump($query);

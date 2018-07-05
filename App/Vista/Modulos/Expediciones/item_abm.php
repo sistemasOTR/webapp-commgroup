@@ -38,9 +38,9 @@
     <?php include_once PATH_VISTA."error.php"; ?>
     <?php include_once PATH_VISTA."info.php"; ?>
 
-     <aside>
-      <div class='col-md-12'>
-        <div class="box">
+    <div class="row">
+      <div class='col-md-4 pull-right'>
+        <div class="box box-solid">
           <div class="box-header">
             <h3 class="box-title"> Detalle Compra</h3>   
             <a href="<?php echo $url_action_publicar; ?>" class="btn btn-success pull-right">Enviar Items</a>
@@ -91,19 +91,7 @@
         </div>
       </div> 
 
-  </aside>
-  <style type="text/css">
-    aside{
-        display:block;
-        float:right;
-        width: 500px;
-       
-    }
-
-  </style>
-
-
-    <div class="row">
+    
 
       <div class='col-md-8 '>
         <div class="box box-solid">
@@ -131,27 +119,21 @@
                   </thead>
                   <tbody>
                     <?php
-                    if (!empty($arrItem)) { 
+                      if (!empty($arrItem)) { 
 
-                      foreach ($arrItem as $key => $value) { 
-                  
-                        ?>
-                         <tr>
-
-
-                    
-                     <td> <?php echo $value->getNombre();?> </td>
-                     <td> <?php echo $value->getDescripcion();?> </td>
-                     <td> <?php echo $value->getGrupo();?> </td>
-                     <td> <?php echo $value->getStock();?> </td>
-                     <td> <?php echo $value->getPtopedido();?> </td>
-                     <td width="50"> <a href="#" id='<?php echo $value->getId() ?>'data-id='<?php echo $value->getId()?>'data-nombre='<?php echo $value->getNombre() ?>'data-stock='<?php echo $value->getStock() ?>'data-ptopedido='<?php echo $value->getPtopedido() ?>'data-numgrupo='<?php echo $value->getGruponum() ?>' data-descripcion='<?php echo $value->getDescripcion() ?>' data-grupo='<?php echo $value->getGrupo() ?>'data-accion='editar'class="btn btn-warning btn-xs" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId() ?>)'>Editar</a></td>
-                     <td width="50"> <a href="#" class='btn btn-danger btn-xs' id='<?php echo $value->getId() ?>_elim' data-action="eliminar" onclick='eliminarDatos(<?php echo $value->getId() ?>)' data-id='<?php echo $value->getId() ?>' data-toggle='modal' data-target='#modal-eliminar'>Eliminar</a></td>
-                     <td width="50"><a href="#" data-toggle='modal' data-target='#modal-agregar'data-nombre='<?php echo $value->getNombre() ?>'data-id='<?php echo $value->getId()?>'class="btn btn-success btn-xs" onclick='agregarPedido(<?php echo $value->getId() ?>)'>Agregar</a></td>
-
-                     </tr>
+                        foreach ($arrItem as $key => $value) { ?>
+                          <tr>
+                            <td> <?php echo $value->getNombre();?> </td>
+                           <td> <?php echo $value->getDescripcion();?> </td>
+                           <td> <?php echo $value->getGrupo();?> </td>
+                           <td> <?php echo $value->getStock();?> </td>
+                           <td> <?php echo $value->getPtopedido();?> </td>
+                           <td width="50"> <a href="#" id='<?php echo $value->getId() ?>'data-id='<?php echo $value->getId()?>'data-nombre='<?php echo $value->getNombre() ?>'data-stock='<?php echo $value->getStock() ?>'data-ptopedido='<?php echo $value->getPtopedido() ?>'data-numgrupo='<?php echo $value->getGruponum() ?>' data-descripcion='<?php echo $value->getDescripcion() ?>' data-grupo='<?php echo $value->getGrupo() ?>'data-accion='editar'class="btn btn-warning btn-xs" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId() ?>)'>Editar</a></td>
+                           <td width="50"> <a href="#" class='btn btn-danger btn-xs' id='<?php echo $value->getId() ?>_elim' data-action="eliminar" onclick='eliminarDatos(<?php echo $value->getId() ?>)' data-id='<?php echo $value->getId() ?>' data-toggle='modal' data-target='#modal-eliminar'>Eliminar</a></td>
+                           <td width="50"><a href="#" data-toggle='modal' data-target='#modal-agregar'data-nombre='<?php echo $value->getNombre() ?>'data-id='<?php echo $value->getId()?>'class="btn btn-success btn-xs" onclick='agregarPedido(<?php echo $value->getId() ?>)'>Agregar</a></td>
+                          </tr>
                     <?php 
-                    } 
+                        } 
                       }
                     ?>
                   </tbody>
