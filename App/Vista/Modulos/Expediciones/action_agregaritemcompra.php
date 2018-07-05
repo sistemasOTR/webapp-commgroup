@@ -12,6 +12,7 @@
     $id=(isset($_POST["id_agregar"])?$_POST["id_agregar"]:'');
     $usuario = (isset($_POST["usuario"])?$_POST["usuario"]:'');
     $cantidad = (isset($_POST["cantidad"])?$_POST["cantidad"]:'');
+    $apedir = (isset($_POST["apedir"])?$_POST["apedir"]:'');
 	$fecha = $f_fecha->FechaActual();
 
 	

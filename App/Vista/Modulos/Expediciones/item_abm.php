@@ -12,17 +12,23 @@
   $url_action_publicar = PATH_VISTA.'Modulos/Expediciones/action_publicarcompra.php?id_usuario='.$usuarioActivoSesion->getId();
 
   $handler = new HandlerExpediciones;
-  $arrItem = $handler->selecionarItem();
+  $arrItemTotal = $handler->selecionarItem();
+  $arrItemApedir = $handler->selecionarApedir();
   $arrTipo = $handler->selecionarTipo();
   $user = $usuarioActivoSesion;
   $consulta = $handler->seleccionarSinPedir($user->getId());
+  $fapedir= (isset($_GET["apedir"])?$_GET["apedir"]:'');
+
+  if ($fapedir == 1) {
+    $arrItem = $arrItemApedir;
+  } else {
+    $arrItem = $arrItemTotal;
+  }
 
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.2.1/jquery.quicksearch.js"></script>
 <div class="content-wrapper">  
   <section class="content-header "> 
-   
- 
     <h1>
       Items
       <small>Agregar, modificar y eliminar los Items de expediciones</small>
@@ -254,6 +260,7 @@
                 <label>Nombre</label> 
                 <input name="nombreitem" id="nombreitem" class="form-control" value="">
                 <input type="hidden" name="id_agregar" id="id_agregar" class="form-control">  
+                <input type="hidden" name="apedir" id="apedir" class="form-control" value='<?php echo $fapedir ?>'>  
               </div>         
               <div class="col-md-12">
                 <label>Cantidad</label> 
