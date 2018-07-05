@@ -6,7 +6,7 @@
     $handlerNotificacionExp = new HandlerExpediciones;
     $userPlaza = $usuarioActivoSesion->getAliasUserSistema();
     $dFechas = new Fechas;
-
+    $SinStock=$handlerNotificacionExp->selecionarItem();
     $apedir=$handlerNotificacionExp->selecionarApedir();
 
     $pendientes= $handlerNotificacionExp->pendientes();
@@ -14,6 +14,7 @@
     $rec_parciales= $handlerNotificacionExp->recParciales();
     $ent_parciales= $handlerNotificacionExp->entParciales($userPlaza);
     $countapedir=count($apedir);
+    $url_pendientes='index.php?view=exp_item_abm&apedir=1';
 
       // var_dump($countapedir);
       // exit();
