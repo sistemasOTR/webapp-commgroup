@@ -13,6 +13,8 @@
 	$stock=(isset($_GET["stock"])?$_GET["stock"]:'');
 	$fdesde=(isset($_GET["fdesde"])?$_GET["fdesde"]:'');
 	$fhasta=(isset($_GET["fhasta"])?$_GET["fhasta"]:'');
+	$ftipo=(isset($_GET["tipo"])?$_GET["tipo"]:'');
+	$festados=(isset($_GET["estado"])?$_GET["estado"]:'');
 
 
 	$actualizarstock=($stock+$cantidad);
@@ -35,8 +37,8 @@
     $handler= new handlerexpediciones;
     $handler2= new handlerexpediciones;
 
-    $err = "../../../../index.php?view=exp_compra&err=";     		
-	$info = "../../../../index.php?view=exp_compra&info";   
+    $err = "../../../../index.php?view=exp_compra&fdesde=".$fdesde."&fhasta=".$fhasta."&festados=".$festados."&ftipo=".$ftipo."&err=";     		
+	$info = "../../../../index.php?view=exp_compra&fdesde=".$fdesde."&fhasta=".$fhasta."&festados=".$festados."&ftipo=".$ftipo."&info";   
 
 	
 		try {

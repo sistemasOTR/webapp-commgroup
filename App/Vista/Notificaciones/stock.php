@@ -15,30 +15,6 @@
     $ent_parciales= $handlerNotificacionExp->entParciales($userPlaza);
     $countapedir=count($apedir);
     $url_pendientes='index.php?view=exp_item_abm&apedir=1';
-
-      // var_dump($countapedir);
-      // exit();
-
-    // if (!empty($items)) {
-    //   $countitem = count($items->getApedir());
-
-    //   for ($i=0; $i<$countitem  ; $i++) { 
-    //     if ($items[$i]->getStock()=<$items[$i]->getPtoPedido()) {
-    //       $stockpendiente+=1;
-    //     }
-    //    else {
-    //     $stockpendiente=0;
-    //    } 
-
-    //   } 
-      
-    //   $url_pendientes = 'index.php?view=exp_compra';
-    // } else {
-    //   $countPendiente = 0;
-    // }
-    
-    // var_dump($fechaActual);
-    // exit();
     
   ?>
 
