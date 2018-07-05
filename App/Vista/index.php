@@ -203,16 +203,30 @@
 			if($permiso->getModuloInventariosBoolean() && $esBO)
 				$include = 'Modulos/Expediciones/tipo_abm.php';			
 			break;
+		case 'exp_item_abm':				
+			if($permiso->getModuloInventariosBoolean() && $esBO)
+				$include = 'Modulos/Expediciones/item_abm.php';			
+			break;	
 
 		case 'exp_solicitud':				
 			if($permiso->getModuloInventariosBoolean() && $esCoordinador)
-				$include = 'Modulos/Expediciones/solicitud.php';			
+				$include = 'Modulos/Expediciones/solicitud.php';
+			break;
+
+		case 'exp_detalle':				
+			if($permiso->getModuloInventariosBoolean() && ($esCoordinador || $esBO))
+				$include = 'Modulos/Expediciones/detalle_pedido.php';			
 			break;
 
 		case 'exp_seguimiento':				
 			if($permiso->getModuloInventariosBoolean() && $esCoordinador)
 				$include = 'Modulos/Expediciones/seguimiento.php';			
-			break;			
+			break;		
+
+			case 'exp_compra':				
+			if($permiso->getModuloInventariosBoolean() && ($esCoordinador || $esBO))
+				$include = 'Modulos/Expediciones/compra.php';			
+			break;		
 
 		  /*#######*/
 		 /* GUIAS */

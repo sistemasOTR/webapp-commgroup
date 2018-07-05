@@ -68,33 +68,13 @@
             <ul class="nav navbar-nav">
 
               <!-- IMPORTACIONES -->
-              <?php //include_once PATH_VISTA.'Notificaciones/importaciones.php'; ?>
+              <?php include_once PATH_VISTA.'Notificaciones/importaciones.php'; ?>
               <!-- FIN IMPORTACIONES -->
+              <!-- PEDIDOS -->
+              <?php include_once PATH_VISTA.'Notificaciones/pedidos.php'; ?>
+              <!-- FIN PEDIDOS -->
 
-              <li class="dropdown notifications-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                  <i class="fa fa-bullhorn"></i>                     
-                  <?php 
-                      
-                    if($usuarioActivoSesion->getUsuarioPerfil()->getId()==1 || $usuarioActivoSesion->getUsuarioPerfil()->getId()==3){
-                      echo "<span id='contador_noti_admin' class='label' style='font-size:12px;'></span>";
-                    }
-
-                    if($usuarioActivoSesion->getUsuarioPerfil()->getId()==2){                         
-                      echo "<span id='contador_noti_user' class='label' style='font-size:12px;'></span>";
-                    }
-
-                    if(!is_null($usuarioActivoSesion->getTipoUsuario())){
-                        
-                      if(count($usuarioActivoSesion->getTipoUsuario())==1){
-
-                        if($usuarioActivoSesion->getTipoUsuario()->getId()==1){                                        
-                          echo "<span id='contador_noti_empresa' class='label' style='font-size:12px;'></span>";
-                        }                  
-                      }
-                    }
-                  ?>
-
+              <li class="dropdown user user-menu">
                 </a>
                 <ul class="dropdown-menu">                
                   <li>                      
@@ -245,7 +225,6 @@
                   else                  
                     $foto_perfil = PATH_CLIENTE.$usuarioActivoSesion->getFotoPerfil();                                      
               ?>
-
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <img src=<?php echo $foto_perfil; ?> class="user-image" alt="User Image"/>

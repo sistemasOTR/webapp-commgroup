@@ -9,11 +9,11 @@
 	$id_usuario = (isset($_GET["id_usuario"])?$_GET["id_usuario"]:'');
 
 	
-	$err = "../../../../index.php?view=exp_solicitud&err=";     		
-	$info = "../../../../index.php?view=exp_solicitud&info=";     		
+	$err = "../../../../index.php?view=exp_item_abm&err=";     		
+	$info = "../../../../index.php?view=exp_item_abm&info=";     		
 
 	try {
-		$hanlder->publicacionItems($id_usuario);
+		$hanlder->publicarItemCompra($id_usuario);
 
 		$msj="Items Enviados";
 		header("Location: ".$info.$msj);

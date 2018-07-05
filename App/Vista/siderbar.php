@@ -52,8 +52,10 @@
 
         $url_exp_control = "index.php?view=exp_control";
         $url_exp_tipo_abm = "index.php?view=exp_tipo_abm";
+        $url_exp_item_abm = "index.php?view=exp_item_abm";
         $url_exp_solicitud = "index.php?view=exp_solicitud";
         $url_exp_seguimiento = "index.php?view=exp_seguimiento";
+        $url_exp_compra = "index.php?view=exp_compra";
 
         $url_guias_control = "index.php?view=guias_control";
         $url_guias_control_empresa = "index.php?view=guias_control_empresa";
@@ -320,7 +322,16 @@
                 <a href="#"><i class="fa fa-check-square-o"></i> <span>Expediciones</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
 
+                  <?php if($esBO || $esGerencia){ ?>
+                    <li id="mnu_expediciones_compra">
+                      <a href=<?php echo $url_exp_compra; ?>>
+                        <i class="fa fa-shopping-cart"></i> <span>Compras</span>
+                      </a>
+                    </li>
+
+                     <?php } ?>
                   <?php if($esBO){ ?>
+
                     <li id="mnu_expediciones_control">
                       <a href=<?php echo $url_exp_control; ?>>
                         <i class="fa fa-tasks"></i> <span>Control</span>
@@ -330,15 +341,20 @@
                       <a href=<?php echo $url_exp_tipo_abm; ?>>
                         <i class="fa fa-edit"></i> <span>Tipos</span>
                       </a>
-                    </li>                    
-                  <?php } ?>
-
-                  <?php if($esCoordinador){ ?>
+                    </li> 
+                    <li id="mnu_expediciones_item_abm">
+                      <a href=<?php echo $url_exp_item_abm; ?>>
+                        <i class="fa fa-check"></i> <span>Items</span>
+                      </a>
+                    </li> 
+                    <?php } ?> 
+                    
+                    <?php if($esCoordinador){ ?>
                     <li id="meu_expediciones_solicitud" >
                       <a href=<?php echo $url_exp_solicitud; ?>>
-                        <i class="fa fa-plus"></i> <span>Soliitud</span>
+                        <i class="fa fa-plus"></i> <span>Solicitud</span>
                       </a>
-                    </li>
+                    </li>                    
                     <li id="mnu_expediciones_seguimiento">
                       <a href=<?php echo $url_exp_seguimiento; ?>>
                         <i class="fa fa-check"></i> <span>Seguimiento</span>

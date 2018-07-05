@@ -6,16 +6,16 @@
 
 	$hanlder = new HandlerExpediciones();
 
-	$id_usuario = (isset($_GET["id_usuario"])?$_GET["id_usuario"]:'');
+	$id = (isset($_POST["id"])?$_POST["id"]:'');
 
 	
-	$err = "../../../../index.php?view=exp_solicitud&err=";     		
-	$info = "../../../../index.php?view=exp_solicitud&info=";     		
+	$err = "../../../../index.php?view=exp_item_abm&err=";     		
+	$info = "../../../../index.php?view=exp_item_abm&info=";     		
 
 	try {
-		$hanlder->publicacionItems($id_usuario);
+		$hanlder->eliminarItemCompra($id);
 
-		$msj="Items Enviados";
+		$msj="Item Borrado";
 		header("Location: ".$info.$msj);
 
 	} catch (Exception $e) {

@@ -107,7 +107,8 @@
               
               <div class="col-md-6">
                 <label>Descripcion</label>
-                <input type="text" name="descripcion" class="form-control" id="descripcion" required=""><input type="text" name="estado" id="estado" style="display: none;" class="form-control" >
+                <input type="text" name="descripcion" class="form-control" id="descripcion" required="">
+                <input type="text" name="estado" id="estado" style="display: none;" class="form-control" >
                 <input type="text" name="reintegro_id" id="reintegro_id" style="display: none;" class="form-control" >
               </div>         
               <div class="col-md-6">
@@ -226,8 +227,10 @@
 
 
   }
-
+ 
   
 </script>
+
+
 
 

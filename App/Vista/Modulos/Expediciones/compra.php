@@ -5,7 +5,7 @@
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
  
   $url_action_cambiar = PATH_VISTA.'Modulos/Expediciones/action_cambiar_estado.php';
-  $url_action_recibido = PATH_VISTA.'Modulos/Expediciones/action_recibido.php';
+ 
 
   $dFecha = new Fechas;
 
@@ -19,15 +19,18 @@
   $handler = new HandlerExpediciones;
   $arrTipo = $handler->selecionarTipo();
   $arrEstados = $handler->selecionarEstados();
-  $consulta = $handler->seleccionarByFiltros($fdesde,$fhasta,$ftipo,$festados,$fplaza);
+  $consulta = $handler->seleccionarComprasByFiltros($fdesde,$fhasta,$ftipo,$festados);
+  $user = $usuarioActivoSesion;
+  //var_dump($consulta);
+  //exit();
  
 ?>
 
 <div class="content-wrapper">  
   <section class="content-header">
     <h1 >
-      Seguimiento de mis solicitudes
-      <small>Controlar todas las solicitudes realizadas</small>
+      Seguimiento de mis Compras
+      <small>Controlar todas las compras realizadas</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -59,7 +62,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
+               <div class="col-md-3">
                   <label>Tipo </label>                
                   <select id="slt_tipo" class="form-control" style="width: 100%" name="slt_tipo" onchange="crearHref()">
                     <option value=''></option>
@@ -80,30 +83,28 @@
                       }  
                     ?>
                   </select>
-                </div> 
+                </div>
 
-                <div class="col-md-3">
+               <div class="col-md-3">
                   <label>Estados </label>                
                   <select id="slt_estados" class="form-control" style="width: 100%" name="slt_estados" onchange="crearHref()">
                     <option value=''></option>
                     <option value='0'>TODOS</option>
-                    <?php
-                      if(!empty($arrEstados))
-                      {                     
-                                        
-                        foreach ($arrEstados as $key => $value) {                      
-
-                          if($festados == $value->getId())
-                            echo "<option value='".$value->getId()."' selected>".$value->getNombre()."</option>";
-                          else
-                            echo "<option value='".$value->getId()."'>".$value->getNombre()."</option>";                  
-                            
-                        }
-                        
-                      }       
-                    ?>
+                    <?php if ($festados == 1 ): ?>
+                      <option value='1' selected="">Pendientes</option>
+                      <?php else: ?>
+                        <option value='1'>Pendientes</option>
+                    <?php endif ?>
+                    <?php if ($festados == 2 ): ?>
+                      <option value='2' selected="">Recibidos</option>
+                      <?php else: ?>
+                        <option value='2'>Recibidos</option>
+                    <?php endif ?>
+                    
+                    
+                    
                   </select>
-                </div>                 
+                </div>
 
                 <div class='col-md-3'>                
                   <label></label>                
@@ -117,84 +118,59 @@
       <div class='col-md-12'>
         <div class="box">
           <div class="box-header">
-            <h3 class="box-title"> Seguimiento de mis solicitudes - <?php echo "desde <b>".$dFecha->FormatearFechas($fdesde,'Y-m-d','d/m/Y')."</b> hasta <b>".$dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y')."</b>"; ?></h3>   
+            <h3 class="box-title"> Seguimiento de mis compras - <?php echo "desde <b>".$dFecha->FormatearFechas($fdesde,'Y-m-d','d/m/Y')."</b> hasta <b>".$dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y')."</b>"; ?></h3>   
           </div>
 
           <div class="box-body table-responsive">
               <table class="table table-striped " id='tabla'>
                 <thead>
                   <tr>
-                    <th>FECHA</th>
-                    <th>ULT ENVIO</th>
-                    <th>ITEM</th>             
-                    <th>CANT PEDIDA</th>             
-                    <th>CANT RECIBIDA</th>             
-                    <th>DETALLE</th>
-                    <th width="150">ESTADO</th>             
-                    <th>OBSERVACIONES</th>                             
-                    <th width="30">REC</th>
-                    <th width="50">PED</th>                              
+                    <th width="50">FECHA PEDIDA</th>
+                    <th width="50">FECHA RECIBIDA</th>
+                    <th width="100">ITEM</th>             
+                    <th width="50">CANTIDAD</th>                                                
+                    <th width="30">RECIBIDO</th>                                                  
                   </tr>
                 </thead>
                 <tbody>
                     <?php
                       if(!empty($consulta))
                       {               
-                        foreach ($consulta as $key => $value) {  
-                       $envioss=$handler->selecionarEnvios($value->getId());
-                       if(!empty($envioss)) {
-                         foreach ($envioss as $env) {
-                           $fechaEnvio=$env->getFecha()->format('d-m-Y');
-                           break;
-                         }   
+                        foreach ($consulta as $key => $value) { 
+                          $item = $handler->selectById($value->getItemExpediciones());
+                          $url_action_recibido = PATH_VISTA.'Modulos/Expediciones/action_comprarecibida.php?idpedido='.$value->getId().'&iditem='.$value->getItemExpediciones().'&usuario='.$user->getId().'&cantidad='.$value->getCantidad().'&stock='.$item->getStock().'&fdesde='.$fdesde.'&fhasta='.$fhasta;
+                          $fecharecibido=$value->getFechaRecibido()->format('d/m/Y');
+                          $fechanula='01/01/1900';
+                         // var_dump($fecharecibido,$fechanula);
+                         // exit();
+                          
+                           if ($fecharecibido>$fechanula) {
+                                $fechaok=$value->getFechaRecibido()->format('d/m/Y');                         
+                           }
+                           else {
+                            $fechaok='';
+                           }
 
-                       } else {
-                        $fechaEnvio='';
-                       }
 
+                          if ($value->getRecibido()==0) {
+                            $recibido='<a href="'.$url_action_recibido.'"class="fa fa-play"></a>';
+                          }
+                          elseif ($value->getRecibido()==1)  {
+                            $recibido='<i class="fa fa-check text-green"></i>';
+                          }
                        
-                      
-                          $url_detalle_pedido = 'index.php?view=exp_detalle&idpedido='.$value->getId().'&plaza='.$value->getPlaza().'&item='.$value->getItemExpediciones().'&user='.$value->getUsuarioId().'&fechaped='.$value->getFecha()->format('d/m/Y').'&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados='.$festados.'&cantped='.$value->getCantidad().'&ftipo='.$ftipo.'&vista=seguimiento';
-                           $item = $handler->selectById($value->getItemExpediciones());
-                          $estado = $handler->selectEstado($value->getEstadosExpediciones());    
-                          $url_recibido= PATH_VISTA.'Modulos/Expediciones/action_recibido.php?id='.$value->getId().'&estado='.$estado->getId().'&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados='.$festados.'&ftipo='.$ftipo; 
-
-                           if ($estado->getId()==1 || $estado->getId()==3) {
-                                        $envios='<i class="fa fa-eye text-red"></i>';
-                                       }
-                              else{
-                                $envios = "<a href='".$url_detalle_pedido."'  
-                                        type='button' 
-                                        class='fa fa-eye'></a>";
-                              }         
-
-                          if ($estado->getId()==2 || $estado->getId()==6 ) {
-                                    $recibir = "<a href='".$url_recibido."'type='button' class='fa fa-play '></a>";
-                                  }  elseif ($estado->getId()==4 || $estado->getId()==7) {
-                                    $recibir = '<i class="fa fa-check text-green"></i>';
-                                     }
-                                     elseif ($estado->getId()==3|| $estado->getId()==8) {
-                                    $recibir = '<i class="fa fa-close text-red"></i>';
-                                     }
-                                     else {
-                                    $recibir = '<i class="fa fa-pause text-blue"></i>';
-                                  }      
+            
+                         
+                           
+                         
                           echo "
                             <tr>
                               <td>".$value->getFecha()->format('d/m/Y')."</td>
-                              <td>".$fechaEnvio."</td>
+                              <td>".$fechaok."</td>
                               <td>".$item->getNombre()."</td>                      
                                 <td>".$value->getCantidad()."</td>
-                                <td>".$value->getEntregada()."</td>
-                                <td>".$value->getDetalle()."</td>                        
-                                <td>
-                                  <span class='label label-".$estado->getColor()."' style='font-size:12px;'>"
-                                    .$estado->getNombre().
-                                  "</span>
-                                </td>
-                                <td>".$value->getObservaciones()."</td>
-                                <td>".$recibir."</td>
-                                <td>".$envios."</td>
+                                <td>".$recibido."</td>
+                                
                                
                                </tr>";
                         } 
@@ -275,7 +251,7 @@
 <script type="text/javascript"> 
 
   $(document).ready(function(){                
-    $("#mnu_expediciones_seguimiento").addClass("active");
+    $("#mnu_expediciones_compra").addClass("active");
   });
 
   $(document).ready(function() {
@@ -346,7 +322,7 @@
       f_estados = $("#slt_estados").val();     
       f_tipo = $("#slt_tipo").val();     
       
-      url_filtro_reporte="index.php?view=exp_seguimiento&fdesde="+f_inicio+"&fhasta="+f_fin  
+      url_filtro_reporte="index.php?view=exp_compra&fdesde="+f_inicio+"&fhasta="+f_fin  
 
       if(f_estados!=undefined)
         if(f_estados>0)

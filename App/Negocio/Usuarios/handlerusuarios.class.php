@@ -25,8 +25,8 @@
 		public function selectById($id){
 			try{		
 
-				if(empty($id))
-					throw new Exception("No se cargo el id del usuario");					
+			 if(empty($id))
+					throw new Exception("No se cargo el id del usuario");				
 
 				$u = new Usuario;
 				$u->setId($id);

@@ -1,18 +1,14 @@
 <?php
-  include_once PATH_NEGOCIO."Expediciones/handlerexpediciones.class.php";
-
+  include_once PATH_NEGOCIO."Expediciones/handlerexpediciones.class.php";     
 
   $url_action_guardar = PATH_VISTA.'Modulos/Expediciones/action_guardar.php';
   $url_action_eliminar = PATH_VISTA.'Modulos/Expediciones/action_eliminar.php';
   $url_action_publicar = PATH_VISTA.'Modulos/Expediciones/action_publicar.php?id_usuario='.$usuarioActivoSesion->getId();
-  $url_ajax= PATH_VISTA.'Modulos/Expediciones/selectitemtipo.php';
 
   $handler = new HandlerExpediciones;
-  $arrTipo = $handler->selecionarTipo();
-  $arritem = $handler->selecionarItem();
+  $arrTipo = $handler->selecionarTipos();
 
   $user = $usuarioActivoSesion;
-
 
   $consulta = $handler->seleccionarSinPublicar($user->getId());
 ?>
@@ -22,7 +18,6 @@
     <h1>
       Solicitud
       <small>Realizar un pedido</small>
-
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -48,35 +43,26 @@
                 <input type="hidden" value="<?php echo $user->getId(); ?>" name="usuario">
 
                 <div class="row">
-                  <div class="col-md-3">
+                  <div class="col-md-4">
                     <div class="form-group">
                       <label>Tipo</label>            
-                      <select  id="slt_tipo" class="form-control" style="width: 100%" name="slt_tipo">
-                        <option value="">Seleccionar un tipo...</option>
+                      <select id="slt_tipo" class="form-control" style="width: 100%" name="slt_tipo">
+                        <option></option>
+                        <option id="0">TODOS</option>
                         <?php 
                           if(!empty($arrTipo)){
                             foreach ($arrTipo as $key => $value) {
-                              echo "<option value=".$value->getId().">".$value->getGrupo()."</option>";
+                              echo "<option value=".$value->getId().">".$value->getGrupo()." - ".$value->getNombre()."</option>";
                             }
                           }
                         ?>
                       </select>                
                     </div>
-                  </div> 
-                  <div class="col-md-3">
-                    <div class="form-group">
-                      <label>Item</label>            
-                      <select id="slt_item" class="form-control" style="width: 100%" name="slt_item">
-                        <option value="">Escoga un tipo primero</option>
-                      </select>                
-                    </div>
-                  </div>         
-                  <div class="col-md-3">
+                  </div>      
+                  <div class="col-md-5">
                     <div class="form-group">
                       <label>Detalle</label>            
                       <input type="tex" name="detalle" placeholder="Detalle del pedido" class="form-control">
-                      <input type="tex" name="plaza"  value="<?php echo $user->getAliasUserSistema(); ?>" class="form-control" style="display: none;">
-                       
                     </div>
                   </div>              
                   <div class="col-md-1">
@@ -110,7 +96,7 @@
                 <thead>
                   <tr>
                     <th>FECHA</th>
-                    <th>ITEM</th>             
+                    <th>TIPO</th>             
                     <th>CANTIDAD</th>             
                     <th>DETALLE</th>
                     <th>ESTADO</th>             
@@ -129,19 +115,16 @@
                         else
                           $consulta_tmp=$consulta;
 
-                        foreach ($consulta_tmp as $key => $value) {
-                          $item = $handler->selectById($value->getItemExpediciones());
-                          $estado = $handler->selectEstado($value->getEstadosExpediciones());
-
+                        foreach ($consulta_tmp as $key => $value) {   
                           echo "
                             <tr>
                               <td>".$value->getFecha()->format('d/m/Y')."</td>
-                              <td>".$item->getNombre()."</td>
+                              <td>".$value->getTipoExpediciones()->getNombre()."</td>                      
                                 <td>".$value->getCantidad()."</td>
                                 <td>".$value->getDetalle()."</td>                        
                                 <td>
-                                  <span class='label label-".$estado->getColor()."' style='font-size:12px;'>"
-                                    .$estado->getNombre().
+                                  <span class='label label-".$value->getEstadosExpediciones()->getColor()."' style='font-size:12px;'>"
+                                    .$value->getEstadosExpediciones()->getNombre().
                                   "</span>
                                 </td>
                                 <td>".$value->getObservaciones()."</td>                                                               
@@ -171,13 +154,9 @@
     $("#mnu_expediciones_solicitud").addClass("active");
   });  
 
-   $(document).ready(function(){                
-    $("#slt_tipo").change(function(){
-    var id_tipo= $(this).val();
-    $.post("<?php echo $url_ajax; ?>",{ id_tipo: id_tipo }, function(data){
-              $("#slt_item").html(data);
-            });
-
+  $(document).ready(function() {
+    $("#slt_tipo").select2({
+        placeholder: "Seleccionar un Tipo de Expedición",                  
     });
-  });
+  }); 
 </script>

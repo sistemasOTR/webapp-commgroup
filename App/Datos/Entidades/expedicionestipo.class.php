@@ -18,13 +18,11 @@
 		public function getId(){ return $this->_id; }
 		public function setId($id){ $this->_id =$id; }
 
-		private $_nombre;
-		public function getNombre(){ return $this->_nombre; }
-		public function setNombre($nombre){ $this->_nombre=$nombre; }
 
-		private $_grupo;
-		public function getGrupo(){ return $this->_grupo; }
-		public function setGrupo($grupo){ $this->_grupo=$grupo; }
+		private $_nombre;
+		public function getGrupo(){ return $this->_nombre; }
+		public function setGrupo($nombre){ $this->_nombre=$nombre; }
+       
 
 		private $_estado;
 		public function getEstado(){ return var_export($this->_estado,true); }
@@ -36,8 +34,7 @@
 
 		function __construct(){
 			$this->setId(0);			
-			$this->setNombre('');
-			$this->setGrupo('');			
+			$this->setGrupo('');					
 			$this->setEstado(true);
 		}
 
@@ -53,17 +50,15 @@
 				if(empty($this->getGrupo()))
 					throw new Exception("Grupo Vacio");
 
-				if(empty($this->getNombre()))
-					throw new Exception("Nombre Vacio");
 				
 				# Query 			
-				$query="INSERT INTO expediciones_tipo (		        						
-		        						nombre,		        						
-		        						grupo,		        						
+				$query="INSERT INTO expediciones_tipo2 (		        						
+		        						nombre_grupo,		        			
 		        						estado
 	        			) VALUES (	        							
-	        							'".$this->getNombre()."',   	
+	        							  	
 	        							'".$this->getGrupo()."',   		        							
+	        					 		        							
 	        							'".$this->getEstado()."'
 	        			)";        
 			
@@ -89,16 +84,13 @@
 				if(empty($this->getGrupo()))
 					throw new Exception("Grupo Vacio");				
 
-				if(empty($this->getNombre()))
-					throw new Exception("Nombre Vacio");
 								
 				# Query 			
-				$query="UPDATE expediciones_tipo SET								
-								nombre='".$this->getNombre()."',
-								grupo='".$this->getGrupo()."',								
-								estado='".$this->getEstado()."'
-							WHERE id=".$this->getId();
-
+				$query="UPDATE expediciones_tipo2 SET								
+								nombre_grupo='".$this->getGrupo()."',
+								estado = '".$this->getEstado()."'	
+																	
+							WHERE tipo_id=".$this->getId();
 				# Ejecucion 					
 				return SQL::update($conexion,$query);	
 
@@ -116,9 +108,9 @@
 					throw new Exception("Tipo de expedición no identificado");
 			
 				# Query 			
-				$query="UPDATE expediciones_tipo SET							
+				$query="UPDATE expediciones_tipo2 SET							
 								estado='false'
-							WHERE id=".$this->getId();
+							WHERE tipo_id=".$this->getId();
 
 				# Ejecucion 	
 				return SQL::delete($conexion,$query);
@@ -133,18 +125,8 @@
 			try {
 											
 				# Query
-				if(empty($this->getId()))
-				{
-					$query = "SELECT * FROM expediciones_tipo WHERE estado='true' ORDER BY grupo, nombre";
-				}
-				else
-				{
-					if(empty($this->getId()))
-						throw new Exception("No se selecciono el Id del tipo de expedición");		
+				$query="SELECT * FROM expediciones_tipo2 WHERE estado = 'true'";
 
-					$query="SELECT * FROM expediciones_tipo WHERE id=".$this->getId();
-				}
-				
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new ExpedicionesTipo);
 						
@@ -162,9 +144,8 @@
 				$this->cleanClass();
 			}
 			else{
-				$this->setId($filas['id']);
-				$this->setNombre(trim($filas['nombre']));
-				$this->setGrupo(trim($filas['grupo']));				
+				$this->setId($filas['tipo_id']);
+				$this->setGrupo(trim($filas['nombre_grupo']));				
 				$this->setEstado($filas['estado']);
 			}
 		}
@@ -172,14 +153,43 @@
 		private function cleanClass()
 		{
 			$this->setId(0);			
-			$this->setNombre('');
-			$this->setGrupo('');			
+			$this->setNombre('');			
 			$this->setEstado(true);
 		}
 
 		private function createTable()
 		{
 			return 'CREATE TABLE IF NOT EXISTS';
+
+			// USE [Prueba_AppWeb]
+			// GO
+
+			// /****** Object:  Table [dbo].[expediciones_tipo2]    Script Date: 03.07.18 12:01:50 ******/
+			// SET ANSI_NULLS ON
+			// GO
+
+			// SET QUOTED_IDENTIFIER ON
+			// GO
+
+			// SET ANSI_PADDING ON
+			// GO
+
+			// CREATE TABLE [dbo].[expediciones_tipo2](
+			// 	[tipo_id] [int] IDENTITY(1,1) NOT NULL,
+			// 	[nombre_grupo] [varchar](50) NOT NULL,
+			// 	[estado] [bit] NULL,
+			//  CONSTRAINT [PK_expediciones_tipo2] PRIMARY KEY CLUSTERED 
+			// (
+			// 	[tipo_id] ASC
+			// )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+			// ) ON [PRIMARY]
+
+			// GO
+
+			// SET ANSI_PADDING OFF
+			// GO
+
+
 		}
 
 		/*########################*/

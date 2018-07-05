@@ -11,6 +11,7 @@
 
 	include_once PATH_DATOS.'Entidades/loginlog.class.php';
 	include_once PATH_DATOS.'Entidades/expediciones.class.php';
+	include_once PATH_DATOS.'Entidades/expedicionescompras.class.php';
 	include_once PATH_DATOS.'Entidades/guias.class.php';
 
 	include_once PATH_NEGOCIO.'Funciones/Fechas/fechas.class.php';	
@@ -81,7 +82,7 @@
 			}
 		}
 
-		public function seleccionarExpedicionesByFiltros($fdesde, $fhasta, $tipo_expe, $estados_expe, $usuario){
+		public function seleccionarExpedicionesByFiltros($fdesde, $fhasta, $tipo_expe, $estados_expe, $plaza){
 			try {
 				
 				$f = new Fechas;
@@ -117,32 +118,34 @@
 
 				$filtro_tipo_expe="";
 				if(!empty($tipo_expe))								
-					$filtro_tipo_expe = "tipo_expediciones_id = ".$tipo_expe." AND ";
+					$filtro_tipo_expe = "tipo_id = ".$tipo_expe." AND ";
 
 				$filtro_estados_expe="";
 				if(!empty($estados_expe))								
 					$filtro_estados_expe = "estados_expediciones_id = ".$estados_expe." AND ";				
 											
-				$filtro_usuario="";
-				if(!empty($usuario))								
-					$filtro_usuario = "usuario_id = ".$usuario." AND ";
+				$filtro_plaza="";
+				if(!empty($plaza))								
+					$filtro_plaza = "plaza = '".$plaza."' AND ";
 				
 				$filtro_sin_publicar = "sin_publicar = 'false' AND ";
-				$filtro_estado = "estado = 'true'";				
+				$filtro_estado = "expediciones.estado = 'true'";				
 
 				$query = "SELECT *
-							FROM expediciones
+							FROM expediciones inner join expediciones_items
+							on expediciones.item_expediciones_id = expediciones_items.item_id 
+							inner join expediciones_tipo2
+							on expediciones_items.num_grupo = expediciones_tipo2.tipo_id
 								WHERE 									 
 									".$filtro_fdesde." 
 									".$filtro_fhasta." 										
-									".$filtro_usuario."
+									".$filtro_plaza."
 									".$filtro_estados_expe."
 									".$filtro_tipo_expe."									
 									".$filtro_sin_publicar."
 									".$filtro_estado." 
-								ORDER BY id DESC";
-					//echo $query;
-					//exit;
+								ORDER BY fecha ASC";
+
 
 				$result = SQL::selectObject($query, new Expediciones);	
 
@@ -157,7 +160,83 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
+        public function seleccionarComprasByFiltros($fdesde, $fhasta,$tipo_expe,$estados_expe){
+			try {
+				
+				$f = new Fechas;
 
+				if($fdesde==$fhasta)
+				{
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "fecha = '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "fecha =  '".$tmp."' AND ";
+					}
+				}
+				else
+				{					
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "fecha >= '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "fecha <=  '".$tmp."' AND ";
+					}
+				}
+
+				$filtro_tipo_expe="";
+				if(!empty($tipo_expe))								
+					$filtro_tipo_expe = "tipo_id = ".$tipo_expe." AND ";
+
+				$filtro_estados_expe="";
+				if(!empty($estados_expe))								
+					if ($estados_expe == 1) {
+						$filtro_estados_expe = "recibido = 'false' AND ";
+					} elseif ($estados_expe == 2) {
+						$filtro_estados_expe = "recibido = 'true' AND ";
+					}
+					
+				$filtro_sin_publicar = "sin_pedir = 'false' AND ";
+				$filtro_estado = "expediciones_compras.estado = 'true'";
+				
+				$query = "SELECT *
+							FROM expediciones_compras inner join expediciones_items
+							on expediciones_compras.id_item = expediciones_items.item_id 
+							inner join expediciones_tipo2
+							on expediciones_items.num_grupo = expediciones_tipo2.tipo_id
+								WHERE 									 
+									".$filtro_fdesde." 
+									".$filtro_fhasta."
+									".$filtro_tipo_expe."			
+									".$filtro_estados_expe."				
+									".$filtro_sin_publicar."
+									".$filtro_estado." 
+								ORDER BY fecha ASC";
+
+
+				$result = SQL::selectObject($query, new ExpedicionesCompras);	
+
+				if(count($result)==1)
+					$resultFinal[0] = $result;		
+				else
+					$resultFinal = $result;									
+
+				return $resultFinal;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
 		public function seleccionarGuiasByFiltros($fdesde, $fhasta, $usuario, $empresa){
 			try {
 				
@@ -192,9 +271,9 @@
 					}
 				}
 											
-				$filtro_usuario="";
-				if(!empty($usuario))								
-					$filtro_usuario = "usuario_id = ".$usuario." AND ";
+				$filtro_plaza="";
+				if(!empty($fplaza))								
+					$filtro_plpaza = "plaza = ".$usuario." AND ";
 
 				$filtro_cliente="";
 				if($empresa>-1){												
@@ -211,7 +290,7 @@
 								WHERE 									 
 									".$filtro_fdesde." 
 									".$filtro_fhasta." 										
-									".$filtro_usuario."
+									".$filtro_plaza."
 									".$filtro_cliente."
 									".$filtro_estado;
 					//echo $query;

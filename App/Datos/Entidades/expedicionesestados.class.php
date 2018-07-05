@@ -175,6 +175,31 @@
 		private function createTable()
 		{
 			return 'CREATE TABLE IF NOT EXISTS';
+
+			// USE [Prueba_AppWeb]
+			// GO
+
+			// /****** Object:  Table [dbo].[expediciones_estados]    Script Date: 03.07.18 12:00:48 ******/
+			// SET ANSI_NULLS ON
+			// GO
+
+			// SET QUOTED_IDENTIFIER ON
+			// GO
+
+			// CREATE TABLE [dbo].[expediciones_estados](
+			// 	[id] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+			// 	[nombre] [nchar](250) NULL,
+			// 	[color] [nchar](250) NULL,
+			// 	[estado] [bit] NULL,
+			//  CONSTRAINT [PK_estados_expediciones] PRIMARY KEY CLUSTERED 
+			// (
+			// 	[id] ASC
+			// )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+			// ) ON [PRIMARY]
+
+			// GO
+
+
 		}
 
 		/*########################*/
