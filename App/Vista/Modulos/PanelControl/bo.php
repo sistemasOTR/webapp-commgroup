@@ -2,6 +2,7 @@
     include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";  
     include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
     include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
+    include_once PATH_NEGOCIO."Expediciones/handlerexpediciones.class.php";
 ?>
     
 
@@ -10,7 +11,7 @@
   <section class="content-header">
     <h1>
       Panel de Control
-      <small>Resumen general de toda la actividad</small>
+      <small>Resumen general de todas las compras</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -28,14 +29,14 @@
 
       <div class="row">     
         <div class='col-md-4'>
-          <?php include_once "Widget/ServiciosGestionados/gerencia.php"; ?>
-          <?php include_once "Widget/Efectividad/gerencia.php"; ?>
-          <?php include_once "Widget/Estados/gerencia.php"; ?>
+         <!-- INCLUDES TABLAS ITEM , COMPRAS -->
+         <?php include_once "Widget/Compras/item.php"; ?>
+         <?php include_once "Widget/Compras/compras.php"; ?>
         </div>
-        <div class='col-md-8 '>
-          <?php include_once "Widget/GestionMensual/gerencia.php"; ?>
-          <?php include_once "Widget/ServiciosMensual/gerencia.php"; ?>
-          <?php include_once "Widget/UltimasVisitas/gerencia.php"; ?>
+        <div class='col-md-8'>
+           <!-- INCLUDE TABLA SOLICITUD -->
+           <?php include_once "Widget/Compras/solicitud.php"; ?>
+         
         </div>                
       </div>
       

@@ -121,8 +121,13 @@
 					$filtro_tipo_expe = "tipo_id = ".$tipo_expe." AND ";
 
 				$filtro_estados_expe="";
-				if(!empty($estados_expe))								
-					$filtro_estados_expe = "estados_expediciones_id = ".$estados_expe." AND ";				
+				if(!empty($estados_expe))
+					if ($estados_expe == 1000) {
+						$filtro_estados_expe = "(estados_expediciones_id = 1 OR estados_expediciones_id = 6 OR estados_expediciones_id = 7) AND ";
+					} else {
+						$filtro_estados_expe = "estados_expediciones_id = ".$estados_expe." AND ";				
+					}
+					
 											
 				$filtro_plaza="";
 				if(!empty($plaza))								

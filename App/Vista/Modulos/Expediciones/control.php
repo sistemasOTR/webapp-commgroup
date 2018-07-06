@@ -139,6 +139,10 @@
                             echo "<option value='".$value->getId()."'>".$value->getNombre()."</option>";                  
                             
                         }
+                        if($festados == 1000)
+                            echo "<option value='1000' selected>Adeudado</option>";
+                          else
+                            echo "<option value='1000'>Adeudado</option>";
                         
                       }       
                     ?>
@@ -195,6 +199,12 @@
                           }
                           $usuario_sol = $handlerUsuarios->selectById($value->getUsuarioId());
                           $estado = $handler->selectEstado($value->getEstadosExpediciones()); 
+
+
+                          // $control='asda';
+                          // if (condition) {
+                          //   # code...
+                          // }
 
                                                                              
                           if ($estado->getId()==1 || $estado->getId()==3) {
@@ -285,7 +295,7 @@
                                <td>".$envios."</td>
 
                           </tr>";
-                        }
+                        } 
                       }
                     ?>
                   </tbody>

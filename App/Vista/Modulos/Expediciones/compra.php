@@ -13,6 +13,7 @@
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());  
   $ftipo= (isset($_GET["ftipo"])?$_GET["ftipo"]:'');
   $festados= (isset($_GET["festados"])?$_GET["festados"]:'');
+  $control= (isset($_GET["control"])?$_GET["control"]:'');
   $fusuario= $usuarioActivoSesion->getId();
   $fplaza= $usuarioActivoSesion->getAliasUserSistema();
 
@@ -156,18 +157,14 @@
                            else {
                             $fechaok='';
                            }
-
-
+                             
+        
                           if ($value->getRecibido()==0) {
                             $recibido='<a href="'.$url_action_recibido.'"class="fa fa-play"></a>';
                           }
                           elseif ($value->getRecibido()==1)  {
                             $recibido='<i class="fa fa-check text-green"></i>';
-                          }
-                       
-            
-                         
-                           
+                          }  
                          
                           echo "
                             <tr>

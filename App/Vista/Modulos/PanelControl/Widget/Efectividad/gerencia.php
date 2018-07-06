@@ -1,6 +1,7 @@
 <?php
   	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
-  	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";  
+  	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
+      
 
   	$dFecha = new Fechas;    
   	$handler = new HandlerSistema;

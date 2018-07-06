@@ -15,6 +15,7 @@
 	$fhasta=(isset($_GET["fhasta"])?$_GET["fhasta"]:'');
 	$ftipo=(isset($_GET["tipo"])?$_GET["tipo"]:'');
 	$festados=(isset($_GET["estado"])?$_GET["estado"]:'');
+	$redireccion=(isset($_GET["redireccion"])?$_GET["redireccion"]:'');
 
 
 	$actualizarstock=($stock+$cantidad);
@@ -37,8 +38,9 @@
     $handler= new handlerexpediciones;
     $handler2= new handlerexpediciones;
 
-    $err = "../../../../index.php?view=exp_compra&fdesde=".$fdesde."&fhasta=".$fhasta."&festados=".$festados."&ftipo=".$ftipo."&err=";     		
-	$info = "../../../../index.php?view=exp_compra&fdesde=".$fdesde."&fhasta=".$fhasta."&festados=".$festados."&ftipo=".$ftipo."&info";   
+
+
+      
 
 	
 		try {
@@ -46,6 +48,15 @@
 		$recibido=1;		
 	    $handler->modificarCompraRecibida(intval($id),$recibido,intval($usuario),$fecha);
 	    $handler2->modificarStock(intval($iditem),intval($actualizarstock));
+	    if (!empty($redireccion)) 
+	    {
+	    	$err = "../../../../index.php?view=panelcontrol&err=";
+	    	$info = "../../../../index.php?view=panelcontrol&info";
+
+	    	}else{
+	   		$err = "../../../../index.php?view=exp_compra&fdesde=".$fdesde."&fhasta=".$fhasta."&festados=".$festados."&ftipo=".$ftipo."&err=";     		
+	  		 $info = "../../../../index.php?view=exp_compra&fdesde=".$fdesde."&fhasta=".$fhasta."&festados=".$festados."&ftipo=".$ftipo."&info"; 
+	    }
 
         $msj="El estado fue cambiado con con éxito.";
 		header("Location: ".$info.$msj);
