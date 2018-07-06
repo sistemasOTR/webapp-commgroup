@@ -117,8 +117,6 @@
                       <th>STOCK</th>                             
                       <th>PTO PEDIDO</th>                             
                       <th colspan="3" style="text-align: center;">ACCIÓN</th>
-
-                      <th style="width: 3%;" class='text-center'></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -142,7 +140,15 @@
                     ?>
                   </tbody>
               </table>
+            </div><?php 
+                if ($fapedir == 1) { ?>
+
+            <div class="box-footer">
+              
+                  <a href="index.php?view=exp_item_abm" class="btn btn-success pull-right">Ver Todos</a>
+                
             </div>
+            <?php } ?>
           </div>
           </div>
         </div>
