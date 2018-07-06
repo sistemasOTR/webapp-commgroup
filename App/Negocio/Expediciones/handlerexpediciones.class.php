@@ -64,7 +64,14 @@
 			try {
 				$handler = new ExpedicionesItem;								
 
-				return $handler->select();
+				$data = $handler->select();
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
@@ -93,7 +100,15 @@
 			try {
 				$handler = new ExpedicionesTipo;								
 
-				return $handler->select();
+				$data = $handler->select();
+
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
@@ -104,7 +119,15 @@
 			try {
 				$handler = new ExpedicionesEstados;								
 
-				return $handler->select();
+				$data = $handler->select();
+
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
@@ -117,9 +140,15 @@
 					
 				$handler = new HandlerConsultasControl;
 
-				$result = $handler->seleccionarExpedicionesByFiltros($fdesde, $fhasta, $tipo_expe, $estados_expe, $fplaza);
+				$data = $handler->seleccionarExpedicionesByFiltros($fdesde, $fhasta, $tipo_expe, $estados_expe, $fplaza);
 
-				return $result;
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
@@ -133,9 +162,15 @@
 			try {
 				$handler = new HandlerConsultasControl;
 
-				$result = $handler->seleccionarComprasByFiltros($fdesde, $fhasta,$tipo_expe,$estados_expe);
+				$data = $handler->seleccionarComprasByFiltros($fdesde, $fhasta,$tipo_expe,$estados_expe);
 
-				return $result;
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
 			
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
@@ -593,9 +628,15 @@
 					
 				$handler = new Expediciones;
 
-				$result = $handler->seleccionarSinPublicar($usuario);
+				$data = $handler->seleccionarSinPublicar($usuario);
 
-				return $result;
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
@@ -607,9 +648,15 @@
 					
 				$handler = new ExpedicionesCompras;
 
-				$result = $handler->seleccionarSinPedir($usuario);
+				$data = $handler->seleccionarSinPedir($usuario);
 
-				return $result;
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				

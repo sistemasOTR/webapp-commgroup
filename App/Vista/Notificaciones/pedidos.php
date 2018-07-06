@@ -57,7 +57,12 @@
       } else {
         $fechaEParcial = $ent_parciales[""]->getFecha()->format('Y-m-d');
       }
-      $url_ent_parciales = 'index.php?view=exp_seguimiento&fdesde='.$fechaEParcial.'&fhasta='.$fechaActual.'&fplaza=&festados=6';
+      if ($userPlaza != '') {
+       $url_ent_parciales = 'index.php?view=exp_seguimiento&fdesde='.$fechaEParcial.'&fhasta='.$fechaActual.'&fplaza=&festados=6';
+      } else {
+        $url_ent_parciales = 'index.php?view=exp_control&fdesde='.$fechaEParcial.'&fhasta='.$fechaActual.'&fplaza=&festados=6';
+      }
+      
     } else {
       $countEParcial = 0;
     }
@@ -67,13 +72,13 @@
     
   ?>
 
-  <?php if($esBO || $esGerencia){ ?>
+  <?php if($esBO || $esGerencia && (($countPendiente)>0 || ($countRParcial)>0 || ($countEParcial)>0) ){ ?>
     <li class="dropdown notifications-menu">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
         <i class="fa fa-cubes"></i> 
         <span id="contador_noti_user" class="label" style="font-size:12px;"></span>
 
-        <?php if(($countPendiente)>0 || ($countRParcial)>0){ ?>
+        <?php if(($countPendiente)>0 || ($countRParcial)>0  || ($countEParcial)>0){ ?>
           <span id="contador_noti_empresa" class="label label-danger" style="font-size:12px;">
             <?php echo ($countPendiente+$countRParcial); ?>
           </span>
@@ -101,6 +106,15 @@
                   </a>
                 </li>
               <?php endif ?>
+              <?php if (($countEParcial)>0): ?>
+                <li>
+                  <a href="<?php echo $url_ent_parciales; ?>">
+                    <b>Entregado Parcial</b><span class="badge bg-red pull-right">
+                      <?php echo $countEParcial; ?>
+                    </span>
+                  </a>
+                </li>
+              <?php endif ?>
               
             </ul>
           </div>
@@ -108,7 +122,7 @@
       </ul>
     </li>
   <?php } ?>
-  <?php if($esCoordinador){ ?>
+  <?php if($esCoordinador && (($countEntregado)>0 || ($countEParcial)>0)){ ?>
     <li class="dropdown notifications-menu">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
         <i class="fa fa-cubes"></i> 

@@ -473,10 +473,18 @@
 
 		public function entParciales($userPlaza)
 		{			
-			try {						
-					$query="SELECT * FROM expediciones 
-							WHERE estados_expediciones_id=6 AND sin_publicar = 'false' AND plaza = '".$userPlaza."'
-							order by fecha ASC";
+			try {	
+
+					if ($userPlaza != '') {
+						$query="SELECT * FROM expediciones 
+								WHERE estados_expediciones_id=6 AND sin_publicar = 'false' AND plaza = '".$userPlaza."'
+								order by fecha ASC";
+					} else {
+						$query="SELECT * FROM expediciones 
+								WHERE estados_expediciones_id=6 AND sin_publicar = 'false' 
+								order by fecha ASC";
+					}			
+					
 						
 				# Ejecucion 					
 				return SQL::selectObject($query, new Expediciones);
