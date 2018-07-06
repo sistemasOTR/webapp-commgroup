@@ -213,6 +213,7 @@
                                         data-iditem='".$item->getId()."'
                                         data-resto='".$cantidadtotal."'
                                         data-entregada='".$value->getEntregada()."'
+                                        data-ppedido='".$item->getPtopedido()."'
                                         data-stock='".$item->getStock()."'
                                         type='button' 
                                         class='fa fa-truck' 
