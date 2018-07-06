@@ -135,9 +135,15 @@
                 <tbody>
                     <?php
                       if(!empty($consulta))
-                      {               
+                      {
+                        if (count($consulta)==1) {
+                          $consulta = $consulta[""];
+                        }
                         foreach ($consulta as $key => $value) { 
                           $item = $handler->selectById($value->getItemExpediciones());
+                          if (count($item)==1) {
+                            $item = $item[""];
+                          }
                           $url_action_recibido = PATH_VISTA.'Modulos/Expediciones/action_comprarecibida.php?idpedido='.$value->getId().'&iditem='.$value->getItemExpediciones().'&usuario='.$user->getId().'&cantidad='.$value->getCantidad().'&stock='.$item->getStock().'&fdesde='.$fdesde.'&fhasta='.$fhasta.'&tipo='.$ftipo.'&estado='.$festados;
                           $fecharecibido=$value->getFechaRecibido()->format('d/m/Y');
                           $fechanula='01/01/1900';

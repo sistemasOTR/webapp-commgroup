@@ -134,8 +134,8 @@
 	        							".$this->getEntregada().",
 	        							'".$this->getPlaza()."'
 	        			)";
-	        		//var_dump($query);
-	        		//exit();
+	        		// var_dump($query);
+	        		// exit();
 
 				# Ejecucion 					
 				return SQL::insert($conexion,$query);

@@ -80,7 +80,7 @@
 
         <?php if(($countPendiente)>0 || ($countRParcial)>0  || ($countEParcial)>0){ ?>
           <span id="contador_noti_empresa" class="label label-danger" style="font-size:12px;">
-            <?php echo ($countPendiente+$countRParcial); ?>
+            <?php echo ($countPendiente+$countRParcial+$countEParcial); ?>
           </span>
         <?php } ?>
       </a>
@@ -97,10 +97,10 @@
                   </a>
                 </li>
               <?php endif ?>
-              <?php if (($countRParcial)>0): ?>
+              <?php if (($countRParcial)>0 ): ?>
                 <li>
                   <a href="<?php echo $url_rec_parciales; ?>">
-                    <b>Entregado Parcial</b><span class="badge bg-red pull-right">
+                    <b>Recibido Parcial</b><span class="badge bg-red pull-right">
                       <?php echo $countRParcial; ?>
                     </span>
                   </a>

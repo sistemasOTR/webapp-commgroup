@@ -139,7 +139,10 @@
                 <tbody>
                     <?php
                       if(!empty($consulta))
-                      {               
+                      {
+                          if (count($consulta)==1) {
+                            $consulta = $consulta[""];
+                          }
                         foreach ($consulta as $key => $value) {  
                        $envioss=$handler->selecionarEnvios($value->getId());
                        if(!empty($envioss)) {
@@ -156,6 +159,9 @@
                       
                           $url_detalle_pedido = 'index.php?view=exp_detalle&idpedido='.$value->getId().'&plaza='.$value->getPlaza().'&item='.$value->getItemExpediciones().'&user='.$value->getUsuarioId().'&fechaped='.$value->getFecha()->format('d/m/Y').'&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados='.$festados.'&cantped='.$value->getCantidad().'&ftipo='.$ftipo.'&vista=seguimiento';
                            $item = $handler->selectById($value->getItemExpediciones());
+                          if (count($item)==1) {
+                            $item = $item[""];
+                          }
                           $estado = $handler->selectEstado($value->getEstadosExpediciones());    
                           $url_recibido= PATH_VISTA.'Modulos/Expediciones/action_recibido.php?id='.$value->getId().'&estado='.$estado->getId().'&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados='.$festados.'&ftipo='.$ftipo; 
 

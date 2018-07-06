@@ -197,7 +197,7 @@
 				$handler->setPlaza($plaza);
 				$handler->setSinPublicar(true);
 				$handler->setEstado(true);
-                
+
 				$handler->insert(false);
 				
 			} catch (Exception $e) {
@@ -314,16 +314,7 @@
 				$datos = $this->seleccionarSinPublicar($id_usuario);
 
 				if(!empty($datos)){
-
-					if(count($datos)<=1)
-	                  $consulta_tmp[0]=$datos;
-	                else
-	                  $consulta_tmp=$datos;
-
-
-                 
-
-					foreach ($consulta_tmp as $key => $value) {
+					foreach ($datos as $key => $value) {
 						$id_sol = $value->getId();
                             $handler= new Expediciones;
                             $handler->updateNuevo($id_sol);
@@ -360,18 +351,10 @@
 		{
 			try {			
 				$datos = $this->seleccionarSinPedir($id_usuario);
+				
 
 				if(!empty($datos)){
-
-					if(count($datos)<=1)
-	                  $consulta_tmp[0]=$datos;
-	                else
-	                  $consulta_tmp=$datos;
-
-
-                 
-
-					foreach ($consulta_tmp as $key => $value) {
+					foreach ($datos as $key => $value) {
 						$id_sol = $value->getId();
                             $handler= new ExpedicionesCompras;
                             $handler->updateCompra($id_sol);
@@ -563,7 +546,7 @@
 			}
 		}
 
-        public function guardarItemABM($nombre,$descripcion,$id,$grupo,$estado){
+        public function guardarItemABM($nombre,$descripcion,$id,$grupo,$estado,$stock,$ptopedido){
 			try {
 
 				if($estado=="editar"){
@@ -573,6 +556,8 @@
 				    $handler->setNombre($nombre);							
 				    $handler->setDescripcion($descripcion);							
 				    $handler->setGruponum($grupo);		
+				    $handler->setStock($stock);		
+				    $handler->setPtopedido($grupo);		
 
 					$handler->update(false);
 
@@ -584,7 +569,9 @@
 
 					$handler->setNombre($nombre);
 					$handler->setDescripcion($descripcion);	
-					$handler->setGruponum($grupo);	
+					$handler->setGruponum($grupo);		
+				    $handler->setStock($stock);		
+				    $handler->setPtopedido($grupo);		
 
 					$handler->insert(false);
 				}
@@ -670,9 +657,14 @@
 					
 				$handler = new ExpedicionesItem;
 
-				$result = $handler->selectById($item);
-
-				return $result;
+				$data = $handler->selectById($item);
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				

@@ -122,16 +122,13 @@
                     <?php
 
                       if(!empty($consulta))
-                      {               
-
-                        if(count($consulta)<=1)
-                          $consulta_tmp[0]=$consulta;
-                        else
-                          $consulta_tmp=$consulta;
-
-                        foreach ($consulta_tmp as $key => $value) {
+                      { 
+                        foreach ($consulta as $key => $value) {
                           $item = $handler->selectById($value->getItemExpediciones());
                           $estado = $handler->selectEstado($value->getEstadosExpediciones());
+                          if (count($item)==1) {
+                            $item = $item[""];
+                          }
 
                           echo "
                             <tr>

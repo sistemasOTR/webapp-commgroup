@@ -64,15 +64,13 @@
                 </thead>
                 <tbody>
                     <?php if(!empty($consulta))
-                      {               
+                      {  
 
-                        if(count($consulta)<=1)
-                          $consulta_tmp[0]=$consulta;
-                        else
-                          $consulta_tmp=$consulta;
-
-                        foreach ($consulta_tmp as $key => $value) {
+                        foreach ($consulta as $key => $value) {
                           $item = $handler->selectById($value->getItemExpediciones());
+                          if (count($item)==1) {
+                            $item = $item[""];
+                          }
                           echo "
                             <tr>
                             <td>".$value->getFecha()->format('d/m/Y')."</td>
@@ -205,7 +203,6 @@
               </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
           <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
       </form>

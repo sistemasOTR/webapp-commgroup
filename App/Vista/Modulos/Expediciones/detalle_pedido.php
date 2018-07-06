@@ -20,6 +20,9 @@
  $envios=$handler->selecionarEnvios($idpedido);
  
  $item = $handler->selectById(intval($itemenvio));
+  if (count($item)==1) {
+    $item = $item[""];
+  }
  $usuario_sol = $handlerUsuarios->selectById($usuario);
  //$userr = $usuarioActivoSesion;
 

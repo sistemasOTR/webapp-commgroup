@@ -55,16 +55,16 @@
                   </thead>
                   <tbody>
                     <?php 
+                      if (!empty($arrTipos)) {
+                        
                       foreach ($arrTipos as $key => $value) { ?>
-                         <tr>
-                  
-                     <td> <?php echo $value->getGrupo();?> </td>
-                     <td width="150"> <a href="#" id='<?php echo $value->getId() ?>' data-id='<?php echo $value->getId() ?>' data-grupo='<?php echo $value->getGrupo() ?>'  data-accion='editar'class="btn btn-warning btn-xs" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId() ?>)'>Editar</a></td>
-                     <td width="50"> <a href="#" class='btn btn-danger btn-xs' id='<?php echo $value->getId() ?>_elim' data-action="eliminar" onclick='eliminarDatos(<?php echo $value->getId() ?>)' data-id='<?php echo $value->getId() ?>' data-toggle='modal' data-target='#modal-eliminar'>Eliminar</a></td>
-
-                     </tr>
-                    <?php 
-
+                        <tr>
+                          <td> <?php echo $value->getGrupo();?> </td>
+                          <td width="150"> <a href="#" id='<?php echo $value->getId() ?>' data-id='<?php echo $value->getId() ?>' data-grupo='<?php echo $value->getGrupo() ?>'  data-accion='editar'class="btn btn-warning btn-xs" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId() ?>)'>Editar</a></td>
+                          <td width="50"> <a href="#" class='btn btn-danger btn-xs' id='<?php echo $value->getId() ?>_elim' data-action="eliminar" onclick='eliminarDatos(<?php echo $value->getId() ?>)' data-id='<?php echo $value->getId() ?>' data-toggle='modal' data-target='#modal-eliminar'>Eliminar</a></td>
+                        </tr>
+                        <?php 
+                        }
                       }
                     ?>
                   </tbody>

@@ -181,12 +181,18 @@
                     <?php
 
                       if(!empty($consulta))
-                      {               
+                      {
+                          if (count($consulta)==1) {
+                            $consulta = $consulta[""];
+                          }
                         foreach ($consulta as $key => $value) {
 
                           $url_detalle_pedido = 'index.php?view=exp_detalle&idpedido='.$value->getId().'&plaza='.$value->getPlaza().'&item='.$value->getItemExpediciones().'&cantped='.$value->getCantidad().'&user='.$value->getUsuarioId().'&fechaped='.$value->getFecha()->format('d/m/Y').'&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados='.$festados.'&ftipo='.$ftipo.'&vista=control';
                           $cantidadtotal=($value->getCantidad()-$value->getEntregada());                          
                           $item = $handler->selectById($value->getItemExpediciones());
+                          if (count($item)==1) {
+                            $item = $item[""];
+                          }
                           $usuario_sol = $handlerUsuarios->selectById($value->getUsuarioId());
                           $estado = $handler->selectEstado($value->getEstadosExpediciones()); 
 
