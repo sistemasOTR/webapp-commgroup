@@ -557,7 +557,7 @@
 				    $handler->setDescripcion($descripcion);							
 				    $handler->setGruponum($grupo);		
 				    $handler->setStock($stock);		
-				    $handler->setPtopedido($grupo);		
+				    $handler->setPtopedido($ptopedido);		
 
 					$handler->update(false);
 
@@ -571,7 +571,7 @@
 					$handler->setDescripcion($descripcion);	
 					$handler->setGruponum($grupo);		
 				    $handler->setStock($stock);		
-				    $handler->setPtopedido($grupo);		
+				    $handler->setPtopedido($ptopedido);		
 
 					$handler->insert(false);
 				}
