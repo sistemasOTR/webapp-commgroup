@@ -45,55 +45,7 @@
     <?php include_once PATH_VISTA."info.php"; ?>
 
     <div class="row">
-      <div class='col-md-4 pull-right'>
-        <div class="box box-solid">
-          <div class="box-header">
-            <h3 class="box-title"> Detalle Compra</h3>   
-            <a href="<?php echo $url_action_publicar; ?>" class="btn btn-success pull-right">Enviar Items</a>
-          </div>
-
-          <div class="box-body table-responsive">
-            
-              <table class="table table-striped" id='tabla'>
-                <thead>
-                  <tr>
-                    <th>FECHA</th>
-                    <th>ITEM</th>
-                    <th>CANTIDAD</th>             
-                  </tr>
-                </thead>
-                <tbody>
-                    <?php if(!empty($consulta))
-                      {  
-
-                        foreach ($consulta as $key => $value) {
-                          $item = $handler->selectById($value->getItemExpediciones());
-                          if (count($item)==1) {
-                            $item = $item[""];
-                          }
-                          echo "
-                            <tr>
-                            <td>".$value->getFecha()->format('d/m/Y')."</td>
-                            <td>".$item->getNombre()."</td>
-                            <td>".$value->getCantidad()."</td>
-                            <td>
-                                  <form action='".$url_action_eliminar_pedido."' method='post'>
-                                    <input type='hidden' name='id' value='".$value->getId()."'>
-                                    <button type='submit' class='btn btn-danger'>Quitar</button>
-                                  </form>
-                                </td>
-                            </tr>     
-                          ";
-                        }
-                      }
-                    ?>
-
-            
-                  </tbody>
-              </table>
-          </div>
-        </div>
-      </div> 
+       
 
     
 
@@ -157,6 +109,55 @@
             <?php } ?>
           </div>
           </div>
+          <div class='col-md-4'>
+        <div class="box box-solid">
+          <div class="box-header">
+            <h3 class="box-title"> Detalle Compra</h3>   
+            <a href="<?php echo $url_action_publicar; ?>" class="btn btn-success pull-right">Enviar Items</a>
+          </div>
+
+          <div class="box-body table-responsive">
+            
+              <table class="table table-striped" id='tabla'>
+                <thead>
+                  <tr>
+                    <th>FECHA</th>
+                    <th>ITEM</th>
+                    <th>CANTIDAD</th>             
+                  </tr>
+                </thead>
+                <tbody>
+                    <?php if(!empty($consulta))
+                      {  
+
+                        foreach ($consulta as $key => $value) {
+                          $item = $handler->selectById($value->getItemExpediciones());
+                          if (count($item)==1) {
+                            $item = $item[""];
+                          }
+                          echo "
+                            <tr>
+                            <td>".$value->getFecha()->format('d/m/Y')."</td>
+                            <td>".$item->getNombre()."</td>
+                            <td>".$value->getCantidad()."</td>
+                            <td>
+                                  <form action='".$url_action_eliminar_pedido."' method='post'>
+                                    <input type='hidden' name='id' value='".$value->getId()."'>
+                                    <button type='submit' class='btn btn-danger'>Quitar</button>
+                                  </form>
+                                </td>
+                            </tr>     
+                          ";
+                        }
+                      }
+                    ?>
+
+            
+                  </tbody>
+              </table>
+          </div>
+        </div>
+      </div>
         </div>
 
     <div class="modal fade in" id="modal-nuevo">
