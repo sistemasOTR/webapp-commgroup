@@ -49,7 +49,7 @@
 		public function setEstado($estado){ $this->_estado=$estado; }	
 
 		private $_apedir;
-		public function getApedir(){ return var_export($this->_apedir,false); }
+		public function getApedir(){ return var_export($this->_apedir,true); }
 		public function setApedir($apedir){ $this->_apedir=$apedir; }		
 
 		/*#############*/
@@ -165,7 +165,7 @@
 			try {
 											
 				# Query
-				$query="SELECT item_id,stock,pto_pedido,a_pedir,nombre_items,num_grupo,descripcion,expediciones_tipo2.nombre_grupo,expediciones_items.estado FROM expediciones_items  inner join expediciones_tipo2 on expediciones_items.num_grupo=expediciones_tipo2.tipo_id WHERE expediciones_items.estado='true'" ;
+				$query="SELECT item_id,stock,pto_pedido,a_pedir,nombre_items,num_grupo,descripcion,expediciones_tipo2.nombre_grupo,expediciones_items.estado FROM expediciones_items  inner join expediciones_tipo2 on expediciones_items.num_grupo=expediciones_tipo2.tipo_id WHERE expediciones_items.estado='true' order by expediciones_tipo2.nombre_grupo" ;
 				
 				
 				# Ejecucion 					
@@ -274,7 +274,7 @@
 			try {
 											
 				# Query
-				$query="SELECT * FROM expediciones_items inner join expediciones_tipo2 on expediciones_items.num_grupo=expediciones_tipo2.tipo_id WHERE expediciones_items.estado='true' AND a_pedir='true'";
+				$query="SELECT * FROM expediciones_items inner join expediciones_tipo2 on expediciones_items.num_grupo=expediciones_tipo2.tipo_id WHERE expediciones_items.estado='true' AND a_pedir='true' order by expediciones_tipo2.nombre_grupo";
 				
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new ExpedicionesItem);

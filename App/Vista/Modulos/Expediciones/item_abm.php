@@ -123,16 +123,22 @@
                     <?php
                       if (!empty($arrItem)) { 
 
-                        foreach ($arrItem as $key => $value) { ?>
+                        foreach ($arrItem as $key => $value) { 
+                          if ($value->getApedir()) {
+                            $classApedir = "class='bg-red'";
+                          } else {
+                            $classApedir = "class=''";
+                          }
+                          ?>
                           <tr>
-                            <td> <?php echo $value->getNombre();?> </td>
-                           <td> <?php echo $value->getDescripcion();?> </td>
-                           <td> <?php echo $value->getGrupo();?> </td>
-                           <td> <?php echo $value->getStock();?> </td>
-                           <td> <?php echo $value->getPtopedido();?> </td>
-                           <td width="50"> <a href="#" id='<?php echo $value->getId() ?>'data-id='<?php echo $value->getId()?>'data-nombre='<?php echo $value->getNombre() ?>'data-stock='<?php echo $value->getStock() ?>'data-ptopedido='<?php echo $value->getPtopedido() ?>'data-numgrupo='<?php echo $value->getGruponum() ?>' data-descripcion='<?php echo $value->getDescripcion() ?>' data-grupo='<?php echo $value->getGrupo() ?>'data-accion='editar'class="btn btn-warning btn-xs" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId() ?>)'>Editar</a></td>
-                           <td width="50"> <a href="#" class='btn btn-danger btn-xs' id='<?php echo $value->getId() ?>_elim' data-action="eliminar" onclick='eliminarDatos(<?php echo $value->getId() ?>)' data-id='<?php echo $value->getId() ?>' data-toggle='modal' data-target='#modal-eliminar'>Eliminar</a></td>
-                           <td width="50"><a href="#" data-toggle='modal' data-target='#modal-agregar'data-nombre='<?php echo $value->getNombre() ?>'data-id='<?php echo $value->getId()?>'class="btn btn-success btn-xs" onclick='agregarPedido(<?php echo $value->getId() ?>)'>Agregar</a></td>
+                            <td <?php echo $classApedir ?>> <?php echo $value->getNombre();?> </td>
+                             <td <?php echo $classApedir ?>> <?php echo $value->getDescripcion();?> </td>
+                             <td <?php echo $classApedir ?>> <?php echo $value->getGrupo();?> </td>
+                             <td <?php echo $classApedir ?>> <?php echo $value->getStock();?> </td>
+                             <td <?php echo $classApedir ?>> <?php echo $value->getPtopedido();?> </td>
+                             <td width="50"> <a href="#" id='<?php echo $value->getId() ?>'data-id='<?php echo $value->getId()?>'data-nombre='<?php echo $value->getNombre() ?>'data-stock='<?php echo $value->getStock() ?>'data-ptopedido='<?php echo $value->getPtopedido() ?>'data-numgrupo='<?php echo $value->getGruponum() ?>' data-descripcion='<?php echo $value->getDescripcion() ?>' data-grupo='<?php echo $value->getGrupo() ?>'data-accion='editar'class="btn btn-warning btn-xs" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId() ?>)'>Editar</a></td>
+                             <td width="50"> <a href="#" class='btn btn-danger btn-xs' id='<?php echo $value->getId() ?>_elim' data-action="eliminar" onclick='eliminarDatos(<?php echo $value->getId() ?>)' data-id='<?php echo $value->getId() ?>' data-toggle='modal' data-target='#modal-eliminar'>Eliminar</a></td>
+                             <td width="50"><a href="#" data-toggle='modal' data-target='#modal-agregar'data-nombre='<?php echo $value->getNombre() ?>'data-id='<?php echo $value->getId()?>'class="btn btn-success btn-xs" onclick='agregarPedido(<?php echo $value->getId() ?>)'>Agregar</a></td>
                           </tr>
                     <?php 
                         } 
