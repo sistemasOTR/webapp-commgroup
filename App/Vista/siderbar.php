@@ -105,7 +105,7 @@
                 <a href="#"><i class="fa fa-archive"></i> <span>Legajos</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
 
-                  <?php if($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante || $esSupervisor){ ?>
+                  <?php if($esGestor || $esGerencia || ($esBO || $esContabilidad || $esRRHH) || $esCoordinador || $esIngresante || $esSupervisor){ ?>
                     <li class="treeview" id="mnu_legajos_carga">
                       <a href=<?php echo $url_legajos_carga; ?>> 
                         <i class="fa fa-plus-square"></i> <span>Cargar</span> </i>
@@ -113,7 +113,7 @@
                     </li>   
                   <?php } ?>
 
-                  <?php if($esBO || $esCoordinador){ ?>  
+                  <?php if(($esBO || $esContabilidad || $esRRHH) || $esCoordinador){ ?>  
                     <li class="treeview" id="mnu_legajos_control">
                       <a href=<?php echo $url_legajos_control; ?>> 
                         <i class="fa fa-tasks"></i> <span>Control</span> </i>
@@ -133,7 +133,7 @@
                 <a href="#"><i class="fa fa-ticket"></i> <span>Tickets</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
 
-                  <?php if($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante || $esSupervisor){ ?>           
+                  <?php if($esGestor || $esGerencia || ($esBO || $esContabilidad || $esRRHH) || $esCoordinador || $esIngresante || $esSupervisor){ ?>           
                     <li class="treeview" id="mnu_tickets_carga">
                       <a href=<?php echo $url_tickets_carga; ?>> 
                         <i class="fa fa-plus-square"></i> <span>Cargar</span> </i>
@@ -149,7 +149,7 @@
                     </li>                      
                   <?php } ?>   
 
-                  <?php if($esBO){ ?>   
+                  <?php if(($esBO || $esContabilidad || $esRRHH)){ ?>   
                     <li class="treeview" id="mnu_tickets_aprobar">
                       <a href=<?php echo $url_tickets_aprobar; ?>> 
                         <i class="fa fa-check"></i> <span>Aprobar</span> </i>
@@ -163,7 +163,7 @@
                   <?php } ?>    
 
                   
-                  <?php if($esGerencia || $esBO ){ ?>   
+                  <?php if($esGerencia || ($esBO || $esContabilidad || $esRRHH) ){ ?>   
                     <li class="treeview" id="mnu_tickets_concepto">
                       <a href=<?php echo $url_tickets_conceptos; ?>> 
                         <i class="fa fa-edit"></i> <span>Conceptos</span> </i>
@@ -171,7 +171,7 @@
                     </li>                      
                   <?php } ?>         
 
-                  <?php if($esGerencia || $esBO ){ ?>   
+                  <?php if($esGerencia || ($esBO || $esContabilidad || $esRRHH) ){ ?>   
                     <li class="treeview" id="mnu_tickets_fechas">
                       <a href=<?php echo $url_tickets_fechas; ?>> 
                         <i class="fa fa-edit"></i> <span>Fechas Inhabilitadas</span> </i>
@@ -191,7 +191,7 @@
                 <a href="#"><i class="fa fa-certificate"></i> <span>Licencias</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
 
-                  <?php if($esGestor || $esGerencia || $esBO || $esCoordinador || $esIngresante || $esSupervisor){ ?>
+                  <?php if($esGestor || $esGerencia || ($esBO || $esContabilidad || $esRRHH) || $esCoordinador || $esIngresante || $esSupervisor){ ?>
                     <li id="mnu_licencias_carga">
                       <a href=<?php echo $url_licencias_carga; ?>>
                         <i class="fa fa-plus-square"></i> <span>Generar</span>
@@ -199,7 +199,7 @@
                     </li>                  
                   <?php } ?>
 
-                  <?php if($esBO || $esCoordinador){ ?>
+                  <?php if(($esBO || $esContabilidad || $esRRHH) || $esCoordinador){ ?>
                     <li id="mnu_licencias_control">
                       <a href=<?php echo $url_licencias_control; ?>>
                         <i class="fa fa-tasks"></i> <span>Control</span>
@@ -265,7 +265,7 @@
 
             <?php
               
-              if($permiso->getModuloServiciosBoolean() && !$esBO){
+              if($permiso->getModuloServiciosBoolean() && !($esBO || $esContabilidad || $esRRHH)){
             ?>
               <li class="treeview" id="mnu_servicio">
                 <a href=<?php echo $url_servicio; ?>>
@@ -277,7 +277,7 @@
             ?>
 
             <?php
-              if($permiso->getModuloServiciosBoolean() && $esBO){
+              if($permiso->getModuloServiciosBoolean() && ($esBO || $esContabilidad || $esRRHH)){
             ?>
 
               <li class="treeview" id="mnu_servicio">
@@ -330,7 +330,7 @@
                     </li>
                   <?php } ?>
 
-                  <?php if($esGerencia || $esBO || $esCoordinador || $esSupervisor){ ?>            
+                  <?php if($esGerencia || ($esBO || $esContabilidad || $esRRHH) || $esCoordinador || $esSupervisor){ ?>            
                     <li class="treeview" id="mnu_importacion">
                       <a href=<?php echo $url_importacion_sin_plaza; ?>>
                         <i class="fa fa-plus-circle"></i> <span>Sin Plaza</span> </i>
@@ -338,7 +338,7 @@
                     </li>
                   <?php } ?>
 
-                  <?php if($esGerencia || $esBO || $esCoordinador || $esSupervisor){ ?>            
+                  <?php if($esGerencia || ($esBO || $esContabilidad || $esRRHH) || $esCoordinador || $esSupervisor){ ?>            
                     <li class="treeview" id="mnu_importacion">
                       <a href=<?php echo $url_importacion_sin_importar; ?>>
                         <i class="fa fa-plus-circle"></i> <span>Pendientes</span> </i>
@@ -357,7 +357,7 @@
                 <a href="#"><i class="fa fa-check-square-o"></i> <span>Expediciones</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
 
-                  <?php if($esBO || $esGerencia){ ?>
+                  <?php if(($esBO || $esContabilidad || $esRRHH) || $esGerencia){ ?>
                     <li id="mnu_expediciones_compra">
                       <a href=<?php echo $url_exp_compra; ?>>
                         <i class="fa fa-shopping-cart"></i> <span>Compras</span>
@@ -365,7 +365,7 @@
                     </li>
 
                      <?php } ?>
-                  <?php if($esBO){ ?>
+                  <?php if(($esBO || $esContabilidad || $esRRHH)){ ?>
 
                     <li id="mnu_expediciones_control">
                       <a href=<?php echo $url_exp_control; ?>>
@@ -407,7 +407,7 @@
                 <a href="#"><i class="fa fa-bell "></i> <span>Guias y Remitos</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
 
-                  <?php if($esBO){ ?>
+                  <?php if(($esBO || $esContabilidad || $esRRHH)){ ?>
                     <li id="mnu_guias_control">
                       <a href=<?php echo $url_guias_control; ?>>
                         <i class="fa fa-tasks"></i> <span>Control</span>
@@ -466,7 +466,7 @@
                         <i class="fa fa-print"></i> <span>Impresoras</span>
                       </a>
                     </li>
-                    <?php if($esGerencia || $esBO){ ?>
+                    <?php if($esGerencia || ($esBO || $esContabilidad || $esRRHH)){ ?>
                     <li id="mnu_celulares">
                       <a href=<?php echo $url_celulares; ?>>
                         <i class="fa fa-mobile"></i> <span>Celulares</span>
@@ -621,7 +621,7 @@
               }
             ?>
 
-            <?php if($esGestor || $esCoordinador || $esIngresante || $esSupervisor || $esBO || $esGerencia){ ?>
+            <?php if($esGestor || $esCoordinador || $esIngresante || $esSupervisor || ($esBO || $esContabilidad || $esRRHH) || $esGerencia){ ?>
               <li class="treeview" id="mnu_legajos_credencial">
                 <a href=<?php echo $url_imprimir_credencial."userId=".$usuarioActivoSesion->getId(); ?> target="_blank"> 
                   <i class="fa fa-print"></i> <span>Credencial</span> </i>
