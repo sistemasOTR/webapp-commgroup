@@ -12,7 +12,7 @@
 	  <div class="box-header with-border">
 	  	<a href="index.php?view=exp_item_abm&apedir=1" class="fa fa-search pull-right" id="btn-nuevo"></a>
 	    <i class=" fa fa-battery-1"></i>
-	    <h3 class="box-title">Tabla Item. 
+	    <h3 class="box-title">Tabla Item 
 	    	<span class='text-red'><b>Stock Bajo</b></span>
 	    	
 	    </h3>

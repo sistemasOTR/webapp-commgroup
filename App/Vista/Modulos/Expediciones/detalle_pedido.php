@@ -117,7 +117,7 @@
               </div>
             </div>
              <div> <?php if ($vista=='control') { ?>  
-              <a href="<?php echo $url_redireccion;?>"class="btn btn-primary">Regresar</a>
+              <a href="javascript:history.back(-1);" class="btn btn-primary" title="Ir la página anterior">Regresar</a>
             <?php } 
             elseif ($vista=='seguimiento') { ?>
              <a href="<?php echo $url_seguimiento;?>"class="btn btn-primary">Regresar</a>

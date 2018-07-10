@@ -21,7 +21,7 @@
 	  <div class="box-header with-border">
 	  	<a href='<?php echo "index.php?view=exp_compra&fdesde=".$fechaInicial."&fhasta=".$fechaActual."&festados=1" ?>' class="fa fa-search pull-right" id="btn-nuevo"></a>
 	    <i class=" fa fa-shopping-cart"></i>
-	    <h3 class="box-title">Tabla Compras. 
+	    <h3 class="box-title">Tabla Compras 
 	    	<span class='text-green'><b>Recibir</b></span>
 	    	
 	    </h3>
@@ -30,10 +30,10 @@
 	  	<table class="table table-striped table-condensed" id="tabla-items" cellspacing="0" width="100%">
 	  		<thead>
                   <tr>
-                    <th width="150">FECHA PEDIDA</th>
+                    <th style="text-align: center">FECHA PEDIDA</th>
                     <th>ITEM</th>             
-                    <th width="100">CANTIDAD</th>                                                
-                    <th width="30">RECIBIDO</th>                                                  
+                    <th style="text-align: center">CANTIDAD</th>                                                
+                    <th style="text-align: center">RECIBIDO</th>                                                  
                   </tr>
                 </thead>
                 <tbody>

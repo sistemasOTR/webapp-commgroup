@@ -24,7 +24,7 @@
 	  <div class="box-header with-border">
 	  	<a href='<?php echo "index.php?view=exp_control&fdesde=".$fechaInicial."&fhasta=".$fechaActual."&festados=1000" ?>' class="fa fa-search pull-right" id="btn-nuevo"></a>
 	    <i class=" fa fa-bookmark"></i>
-	    <h3 class="box-title">Tabla Solicitudes. 
+	    <h3 class="box-title">Tabla Solicitudes 
 	    	<span class='text-yellow'><b>Pendientes</b></span>
 	    	
 	    </h3>
@@ -33,10 +33,10 @@
 	  	<table class="table table-striped table-condensed " id="tabla-items" cellspacing="0" width="100%">
 	  		<thead>
                   <tr>
-                    <th>FECHA</th>
-                    <th>ITEM</th>             
-                    <th>CANT PEDIDA</th> 
-                    <th width="150">ESTADO</th>             
+                    <th style="text-align: center">FECHA</th>
+                    <th style="text-align: center">ITEM</th>             
+                    <th style="text-align: center">CANT PEDIDA</th> 
+                    <th style="text-align: center">ESTADO</th>             
                                    
                   </tr>
                 </thead>
