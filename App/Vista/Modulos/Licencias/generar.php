@@ -58,7 +58,9 @@
                       <th>OBSERVACIONES</th>
                       <th>ADJUNTO 1</th>
                       <th>ADJUNTO 2</th>
-                      <th>APROBADO</th>
+                      <th>ESTADO</th>
+                      <th>FECHA RECHAZO</th>
+                      <th>OBS RECHAZO</th>
                       <th style="width: 3%;" class='text-center'></th>
                     </tr>
                   </thead>
@@ -68,10 +70,18 @@
                       {
                         foreach ($arrLicencias as $key => $value) {
                           
-                          if($value->getAprobado()==0)
-                            $estado = "<span class='label label-danger'>NO APROBADO</span>";
-                          else
+                          if(!$value->getAprobado() && !$value->getRechazado()){
+                            $estado = "<span class='label label-warning'>PENDIENTE</span>";
+                            $frech = '';
+                          }
+                          elseif($value->getAprobado()) {
                             $estado = "<span class='label label-success'>APROBADO</span>";
+                            $frech = '';
+                          } elseif ($value->getRechazado()) {
+                            $estado = "<span class='label label-danger'>RECHAZADO</span>";
+                            $frech = $value->getFechaRechazo()->format('d-m-Y');
+                          }
+
 
                           echo "<tr>";
                             echo "<td>".$value->getFecha()->format('d/m/Y')."</td>";
@@ -115,6 +125,8 @@
                                     </td>"; 
 
                             echo "<td>".$estado."</td>";
+                            echo "<td>".$frech."</td>";
+                            echo "<td>".$value->getObsRechazo()."</td>";
                             if(!$value->getAprobado()){                              
                               echo "<td class='text-center'>
                                     <a href='".$url_action_eliminar.$value->getId()."' class='btn btn-danger btn-xs'>
@@ -122,6 +134,8 @@
                                       Eliminar
                                     </a>
                                   </td>";
+                            } else {
+                              echo "<td></td>";
                             }
                           echo "</tr>";
                         }          

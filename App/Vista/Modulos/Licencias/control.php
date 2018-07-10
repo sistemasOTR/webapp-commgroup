@@ -15,11 +15,15 @@
   $arrLicencias = $handler->seleccionarByFiltros($fdesde,$fhasta,$fusuario);
 
   $handlerUsuarios = new HandlerUsuarios;
-  $arrUsuarios = $handlerUsuarios->selectByPerfil("GESTOR");
+  $arrUsuarios = $handlerUsuarios->selectTodos();
 
   $url_action_aprobar = PATH_VISTA.'Modulos/Licencias/action_aprobar.php?id=';  
   $url_action_desaprobar = PATH_VISTA.'Modulos/Licencias/action_desaprobar.php?id=';  
+  $url_action_rechazar = PATH_VISTA.'Modulos/Licencias/action_rechazar.php';  
   $url_action_imprimir = 'index.php?view=licencias_imprimir&id=';
+
+  $url_redireccion ='&fdesde='.$fdesde.'&fhasta='.$fhasta.'&fusuario='.$fusuario;
+
 ?>
 
 <div class="content-wrapper">  
@@ -59,7 +63,15 @@
                       <input type="text" class="input-sm form-control" onchange="crearHref()" id="end" name="end" value="<?php echo $dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y'); ?>"/>
                     </div>
                 </div>
-                
+                <?php
+                // if(!empty($arrUsuarios))
+                //       {                     
+                                        
+                //         foreach ($arrUsuarios as $key => $value) {
+                //           var_dump($value->getTipoUsuario()->getId());
+                //         }
+                //       }
+                //       ?>
                 <div class="col-md-3">
                   <label>Usuarios </label>                
                   <select id="slt_usuario" class="form-control" style="width: 100%" name="slt_usuario" onchange="crearHref()">
@@ -69,12 +81,23 @@
                       if(!empty($arrUsuarios))
                       {                     
                                         
-                        foreach ($arrUsuarios as $key => $value) {                      
+                        foreach ($arrUsuarios as $key => $value) {
 
-                          if($fusuario == $value->getId())
-                            echo "<option value='".$value->getId()."' selected>".$value->getNombre()."</option>";
-                          else
-                            echo "<option value='".$value->getId()."'>".$value->getNombre()."</option>";                  
+                          if (!is_array($value->getTipoUsuario())) {
+                            if ($value->getTipoUsuario()->getId() != '1') {
+                              $notHidden = true;
+                            } else {
+                              $notHidden = false;
+                            }
+                          } else {
+                            $notHidden = true;
+                          }
+                          if($fusuario == $value->getId() && $notHidden){
+                            echo "<option value='".$value->getId()."' selected>".$value->getNombre()." ".$value->getApellido()."</option>";
+                          }
+                          elseif($notHidden){
+                            echo "<option value='".$value->getId()."'>".$value->getNombre()." ".$value->getApellido()."</option>";                  
+                          }
                             
                         }
                         
@@ -110,7 +133,9 @@
                       <th>OBSERVACIONES</th>
                       <th>ADJUNTO 1</th>
                       <th>ADJUNTO 2</th>
-                      <th>APROBADO</th>
+                      <th>ESTADO</th>
+                      <th>FECHA RECHAZO</th>
+                      <th>OBS RECHAZO</th>
                       <th style="width: 3%;" class='text-center'></th>
                       <th style="width: 3%;" class='text-center'></th>
                     </tr>
@@ -121,10 +146,17 @@
                       {
                         foreach ($arrLicencias as $key => $value) {
                           
-                          if($value->getAprobado()==0)
-                            $estado = "<span class='label label-danger'>NO APROBADO</span>";
-                          else
+                          if(!$value->getAprobado() && !$value->getRechazado()){
+                            $estado = "<span class='label label-warning'>PENDIENTE</span>";
+                            $frech = '';
+                          }
+                          elseif($value->getAprobado()) {
                             $estado = "<span class='label label-success'>APROBADO</span>";
+                            $frech = '';
+                          } elseif ($value->getRechazado()) {
+                            $estado = "<span class='label label-danger'>RECHAZADO</span>";
+                            $frech = $value->getFechaRechazo()->format('d-m-Y');
+                          }
 
                           echo "<tr>";
                             echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
@@ -145,16 +177,27 @@
                               echo "<td></td>";
 
                             echo "<td>".$estado."</td>";
+                            echo "<td>".$frech."</td>";
+                            echo "<td>".$value->getObsRechazo()."</td>";
 
-                            if(!$value->getAprobado()){
-                              echo "<td class='text-center'>
-                                      <a href='".$url_action_aprobar.$value->getId()."' class='btn btn-default btn-xs'>
-                                        <i class='fa fa-send' data-toggle='tooltip' data-original-title='Aprobar Licencia'></i>
-                                        Aprobar Licencia
+                            if(!$value->getAprobado() && !$value->getRechazado()){
+                              echo "<td class='text-center' width='100'>
+                                      <a href='".$url_action_aprobar.$value->getId()."' class='btn btn-success btn-xs pull-left'>
+                                        <i class='fa fa-thumbs-up' data-toggle='tooltip' data-original-title='Aprobar Licencia'></i>
+                                        
+                                      </a> 
+                                      <a href='#' id='".$value->getId()."' data-toggle='modal' data-target='#modal-rechazar' class='btn btn-danger btn-xs pull-left' style='margin-left:10px;' data-id='".$value->getId()."' onclick='rechazar(".$value->getId().")'>
+                                        <i class='fa fa-thumbs-down' data-toggle='tooltip' data-original-title='Rechazar Licencia'></i>
+                                        
                                       </a>
                                     </td>";
                             }
-                            else
+                            elseif($value->getRechazado()){
+                              echo "<td class='text-center' width='60'>
+                                      
+                                    </td>";
+
+                            } else
                             {
                               echo "<td class='text-center'>
                                     <a href='".$url_action_desaprobar.$value->getId()."' class='btn btn-danger btn-xs'>
@@ -171,7 +214,9 @@
                                         Imprimir
                                       </a>
                                     </td>";
-                            }                            
+                            } else {
+                              echo "<td></td>";
+                            }                           
                           echo "</tr>";
                         }          
                       }            
@@ -185,107 +230,33 @@
   </section>
 </div>
 
-<div class="modal fade in" id="modal-nuevo">
-  <div class="modal-dialog">
-    <div class="modal-content">
+<div class="modal modal-danger fade" id="modal-rechazar">
+     <div class="modal-dialog ">
+    <div class="modal-content ">
 
-      <form action="<?php echo $url_action_guardar_licencias; ?>" method="post">
-        <div class="modal-header">
+      
+      <form  method="post" enctype="multipart/form-data" action=<?php echo $url_action_rechazar;?>>
+
+        <div class="modal-header ">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">Nuevo</h4>
+          <h3 class="modal-title" style="" >Rechazar licencia</h3>
         </div>
-        <div class="modal-body">
-            <div class="row">             
-              <div class="col-md-6">
-                <label>Tipo Licencia</label>
-                <select name="" class="form-control"></select>
-              </div>              
-              <div class="col-md-6">
-                <label>Fecha Inicio</label>
-                <input type="date" name="" class="form-control">
-              </div>                               
-              <div class="col-md-12">
-                <label>Adjunto</label>
-                <textarea class="form-control"></textarea>
-              </div>  
-            </div>
+        <div class="modal-body ">
+            <div class="row">
+              <div class="col-md-10 col-md-offset-1">  
+                  <label>Observación </label>  
+                  <input type="text" name="observaciones" class="form-control" placeholder="Ingrese una observación">
+                </div>                                                      
+                <input type="number" name="id" id="idRechazar" class="form-control"  required="" style="display:none;">
+                <input type="date" name="fechaElim" id="fechaElim" class="form-control"  required="" style="display:none;" value='<?php echo $dFecha->FechaActual(); ?>'>
+                <input type="hidden" name="url_redireccion" class="form-control" value='<?php echo $url_redireccion; ?>'> 
+              
+               
+              </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-primary">Guardar</button>
-        </div>
-      </form>
-
-    </div>
-  </div>
-</div>
-
-<div class="modal fade in" id="modal-editar">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-      <form action="<?php echo $url_action_editar_tipo; ?>" method="post">
-        <input type="hidden" name="id" id="id_tipo_edicion">
-        <input type="hidden" name="estado" value="EDITAR">
-
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span></button>
-          <h4 class="modal-title">Editar</h4>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-md-6">
-              <label>Fecha Hora</label>
-              <input type="date" name="" class="form-control">
-            </div>              
-            <div class="col-md-2">
-              <label>P. Venta</label>
-              <input type="text" name="" class="form-control">
-            </div>              
-            <div class="col-md-4">
-              <label>Numero</label>
-              <input type="text" name="" class="form-control">
-            </div>               
-            <div class="col-md-6">
-              <label>Razon Social</label>
-              <input type="text" name="" class="form-control">
-            </div>
-            <div class="col-md-6">
-              <label>CUIT</label>
-              <input type="text" name="" class="form-control">
-            </div>  
-            <div class="col-md-6">
-              <label>IIBB</label>
-              <input type="text" name="" class="form-control">
-            </div>       
-            <div class="col-md-6">
-              <label>Domicilio</label>
-              <input type="text" name="" class="form-control">
-            </div>  
-            <div class="col-md-6">
-              <label>Condición Fiscal</label>
-              <select class="form-control">
-                <option>RESPONSABLE INSCRIPTO</option>
-                <option>MONOTRIBUTISTA</option>
-                <option>EXCENTO</option>
-                <option>CONSUMIDOR FINAL</option>
-              </select>
-            </div>                                                                   
-            <div class="col-md-6">
-              <label>Importe</label>
-              <input type="text" name="" class="form-control">
-            </div>   
-            <div class="col-md-12">
-              <label>Adjunto</label>
-              <input type="file" name="" class="form-control">
-            </div>  
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-primary">Guardar</button>
+        <div class="modal-footer ">
+          <input type="submit" name="submit" value="Rechazar" class="btn btn-danger">
         </div>
       </form>
 
@@ -307,6 +278,13 @@
   });
 </script>
 <script type="text/javascript">
+
+  function rechazar(id){
+    document.getElementById('idRechazar').value = id;
+  }
+
+
+
   crearHref();
   function crearHref()
   {

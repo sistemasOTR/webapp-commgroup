@@ -148,6 +148,20 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
 			}
+		}			
+
+		public function rechazarLicencias($id,$fechaRechazo,$obsRechazo){
+			try {
+
+				if(empty($id))
+					throw new Exception("No se encontro la licencia");
+				
+				$handler = new Licencias;
+				$handler->rechazarLicencias($id,$fechaRechazo,$obsRechazo);				
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
 		}	
 		public function desaprobarLicencias($id){
 			try {

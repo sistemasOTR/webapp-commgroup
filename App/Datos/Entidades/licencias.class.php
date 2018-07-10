@@ -59,7 +59,19 @@
 
 		private $_aprobado;
 		public function getAprobado(){ return var_export($this->_aprobado,true); }
-		public function setAprobado($aprobado){ $this->_aprobado=$aprobado; }					
+		public function setAprobado($aprobado){ $this->_aprobado=$aprobado; }			
+
+		private $_rechazado;
+		public function getRechazado(){ return var_export($this->_rechazado,true); }
+		public function setRechazado($rechazado){ $this->_rechazado=$rechazado; }
+
+		private $_fechaRechazo;
+		public function getFechaRechazo(){ return $this->_fechaRechazo; }
+		public function setFechaRechazo($fechaRechazo){ $this->_fechaRechazo=$fechaRechazo; }		
+
+		private $_obsRechazo;
+		public function getObsRechazo(){ return $this->_obsRechazo; }
+		public function setObsRechazo($obsRechazo){ $this->_obsRechazo=$obsRechazo; }					
 
 		/*#############*/
 		/* CONSTRUCTOR */
@@ -68,15 +80,18 @@
 		function __construct(){
 			$this->setId(0);
 			$this->setFecha('');
+			$this->setFechaRechazo('');
 			$this->setFechaInicio('');
 			$this->setFechaFin('');
 			$this->setUsuarioId(new Usuario);						
 			$this->setTipoLicenciasId(new TipoLicencias);
 			$this->setObservaciones('');	
+			$this->setObsRechazo('');	
 			$this->setAdjunto1('');
 			$this->setAdjunto2('');
 			$this->setEstado(true);
 			$this->setAprobado(false);
+			$this->setRechazado(false);
 		}
 
 		/*###################*/
@@ -105,7 +120,10 @@
 		        						adjunto1,
 		        						adjunto2,
 		        						aprobado,
-		        						estado
+		        						estado,
+		        						rechazado,
+		        						fecha_rechazo,
+		        						obs_rechazo
 	        			) VALUES (
 	        							'".$this->getFecha()."',   	
 	        							".$this->getUsuarioId().",   	
@@ -116,7 +134,10 @@
 	        							'".$this->getAdjunto1()."',
 	        							'".$this->getAdjunto2()."',
 	        							'".$this->getAprobado()."',   
-	        							'".$this->getEstado()."'
+	        							'".$this->getEstado()."',
+	        							'".$this->getRechazado()."',
+	        							'".$this->getFechaRechazo()."',
+	        							'".$this->getObsRechazo()."'
 	        			)";        
 			
 	        	//echo $query;
@@ -155,7 +176,10 @@
 								adjunto1='".$this->getAdjunto1()."',
 								adjunto2='".$this->getAdjunto2()."',
 								aprobado='".$this->getAprobado()."',
-								estado='".$this->getEstado()."'
+								estado='".$this->getEstado()."',
+								rechazado='".$this->getRechazado()."',
+								fecha_rechazo='".$this->getFechaRechazo()."',
+								obs_rechazo='".$this->getObsRechazo()."'
 							WHERE id=".$this->getId();
 
 				//echo $query;
@@ -243,6 +267,9 @@
 				$this->setAdjunto1(trim($filas['adjunto1']));		
 				$this->setAdjunto2(trim($filas['adjunto2']));		
 				$this->setAprobado($filas['aprobado']);
+				$this->setRechazado($filas['rechazado']);
+				$this->setFechaRechazo($filas['fecha_rechazo']);
+				$this->setObsRechazo($filas['obs_rechazo']);
 				$this->setEstado($filas['estado']);
 			}
 		}
@@ -251,13 +278,16 @@
 		{
 			$this->setId(0);
 			$this->setFecha('');
+			$this->setFechaRechazo('');
 			$this->setUsuarioId(new Usuario);						
 			$this->setTipoLicenciasId(new TipoLicencias);
 			$this->setObservaciones('');			
+			$this->setObsRechazo('');			
 			$this->setAdjunto1('');
 			$this->setAdjunto2('');
 			$this->setEstado(true);
 			$this->setAprobado(false);
+			$this->setRechazado(false);
 		}
 
 		private function createTable()
@@ -279,6 +309,31 @@
 				# Query 			
 				$query="UPDATE licencias SET								
 								aprobado=1
+							WHERE id=".$id;
+
+	        	//echo $query;
+	        	//exit();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);					
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
+		public function rechazarLicencias($id,$fRechazo,$obs){
+			try {
+
+				# Validaciones 			
+				if(empty($id))
+					throw new Exception("Licencias no identificada");
+
+				# Query 			
+				$query="UPDATE licencias SET								
+								rechazado=1,
+								fecha_rechazo='".$fRechazo."',
+								obs_rechazo='".$obs."'
 							WHERE id=".$id;
 
 	        	//echo $query;
