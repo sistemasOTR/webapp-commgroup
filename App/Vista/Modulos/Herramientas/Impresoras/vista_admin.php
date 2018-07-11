@@ -51,6 +51,7 @@
 	              	$nombre = '-';
                   $baja= ""; 
 	              }
+                $estado = '<span class = "label label-success" style="font-size: 13px; font-weight: normal;">Entregada</span>';
 
 
             } else {
@@ -59,6 +60,7 @@
       				$nombre = '-';
       				$asig= "<a href='".$url_asignacion."&fserialNro=".$value->getSerialNro()."'><i class='ion-location text-green'></i></a>";
               $baja = "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-baja' data-serialnro='".$value->getSerialNro()."' data-obsimp='".$value->getObs()."' onclick='bajaImp(".$i.")'><i class='ion-close text-red'></i></a>";
+              $estado = '<span class = "label label-warning" style="font-size: 13px; font-weight: normal;">Disponible</span>';
             }
 
 
@@ -69,9 +71,7 @@
               $asig= "<i class='ion-location text-gray'></i>";
             } elseif($plaza=='MANTENIMIENTO') {
               $estado = '<span class = "label label-warning" style="font-size: 13px; font-weight: normal;">Averiada</span>';
-            } else {
-              $estado = '<span class = "label label-success" style="font-size: 13px; font-weight: normal;">Activa</span>';
-            }
+            } 
 
 
             echo 

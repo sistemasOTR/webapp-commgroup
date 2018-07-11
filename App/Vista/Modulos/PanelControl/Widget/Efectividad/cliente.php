@@ -22,8 +22,7 @@
     /*-------------------------*/
 
     //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
-    if(!PRODUCCION)
-      $fHOY = "2018-07-02";
+    
 
     $cerrados_efec =  $handler->selectCountServicios($fHOY,$fHOY, 6, $user->getUserSistema(), null, null, null, null);
     $despachados_efec = $handler->selectCountServicios($fHOY,$fHOY, 400, $user->getUserSistema(), null, null, null, null);
@@ -83,11 +82,18 @@
         <ul class="nav nav-stacked">
           <?php 
             if( !empty($arrEstados)) {
+              $total = 0;
+              foreach ($arrEstados as $key => $value) {
+                if ($value->ESTADOS_DESCCI != 'Cancelado' && $value->ESTADOS_DESCCI != 'Despachado' ) {
+                  $total += $value->DESPACHADO;
+                }
+                
+              }
 
               foreach ($arrEstados as $key => $value) {
     
                 if($value->DESPACHADO>0){        
-                  $efec_gestor = 100 * $value->CERRADO / $value->DESPACHADO;
+                  $efec_gestor = 100 * $value->DESPACHADO / $total;
                 }
                 else{
                   $efec_gestor = 0;

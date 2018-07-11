@@ -1156,6 +1156,9 @@
 						case 300:
 							$filtro_estado = "(SERTT91_ESTADO = 3 OR SERTT91_ESTADO = 4 OR SERTT91_ESTADO = 5 OR SERTT91_ESTADO = 6 OR SERTT91_ESTADO = 7) AND ";
 							break;
+						case 400:
+							$filtro_estado = "SERTT91_ESTADO > 2 AND SERTT91_ESTADO != 12 AND ";
+							break;
 						default:
 							$filtro_estado = "SERTT91_ESTADO = ".$estado." AND ";
 							break;
