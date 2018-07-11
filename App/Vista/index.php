@@ -127,13 +127,13 @@
 		/*###############*/		
 		case 'panelcontrol':			
 			if($permiso->getModuloPanelBoolean() && $esCliente)
-				$include = 'Modulos/PanelControl/cliente.php';			
+				$include = 'Modulos/PanelControl/v2/cliente.php';			
 			elseif ($permiso->getModuloPanelBoolean() && $esGestor)
-				$include = 'Modulos/PanelControl/gestor.php';		
+				$include = 'Modulos/PanelControl/v2/gestor.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esCoordinador)	
 				$include = 'Modulos/PanelControl/v2/coordinador.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esGerencia)
-				$include = 'Modulos/PanelControl/gerencia.php';		
+				$include = 'Modulos/PanelControl/v2/gerencia.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esBO)
 				$include = 'Modulos/PanelControl/bo.php';				
 			elseif ($permiso->getModuloPanelBoolean() && $esRRHH)
@@ -145,7 +145,7 @@
 			elseif ($permiso->getModuloPanelBoolean() && $esDesarrollo)
 				$include = 'Modulos/PanelControl/desarrollo.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esSupervisor)
-				$include = 'Modulos/PanelControl/supervisor.php';				
+				$include = 'Modulos/PanelControl/v2/supervisor.php';				
 			break;		
 
 		// *****************************
@@ -653,13 +653,13 @@
 
 		default:
 			if($permiso->getModuloPanelBoolean() && $esCliente)	
-				$include = 'Modulos/PanelControl/cliente.php';			
+				$include = 'Modulos/PanelControl/v2/cliente.php';			
 			elseif ($permiso->getModuloPanelBoolean() && $esGestor)
-				$include = 'Modulos/PanelControl/gestor.php';		
+				$include = 'Modulos/PanelControl/v2/gestor.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esCoordinador)	
 				$include = 'Modulos/PanelControl/v2/coordinador.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esGerencia)
-				$include = 'Modulos/PanelControl/gerencia.php';		
+				$include = 'Modulos/PanelControl/v2/gerencia.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esBO)
 				$include = 'Modulos/PanelControl/bo.php';				
 			elseif ($permiso->getModuloPanelBoolean() && $esRRHH)

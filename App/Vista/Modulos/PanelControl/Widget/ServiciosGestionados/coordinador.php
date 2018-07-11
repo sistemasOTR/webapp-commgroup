@@ -21,6 +21,10 @@
   $anioMES = $f->format('Y'); 
   /*-------------------------*/
 
+  //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
+  if(!PRODUCCION)
+    $fHOY = "2016-08-12";
+
   $countServiciosHoy = $handler->selectCountServicios($fHOY,$fHOY,null,null,null,null,$user->getAliasUserSistema(),null); 
 
   //ESTADO = 100 --> EN EL METODO ESTA PARA QUE FILTRE COMO GESTIONADO (MAYOR QUE DOS **2**)

@@ -23,11 +23,6 @@
   $anioMES = $f->format('Y'); 
   /*-------------------------*/
 
-  //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
-  if(!PRODUCCION)
-    $fHOY = "2018-06-14";
-
-
   $total_servicios = 0;
   $total_servicios_cerrados = 0;
   $total_efectividad = 0;
@@ -40,14 +35,14 @@
 
 
   $handler =  new HandlerConsultas;
-  $consulta = $handler->consultaPuntajesCoordinador($fMES,$fHOY, $user->getAliasUserSistema());
+  $consulta = $handler->consultaPuntajes($fMES,$fHOY, $user->getUserSistema());
 
   if(!empty($consulta))
   {
     foreach ($consulta as $key => $value) { 
 
       $handlerP = new HandlerPuntaje;
-      $objetivo = $handlerP->buscarObjetivoCoordinador($value->ALIAS_COORDINADOR);                        
+      $objetivo = $handlerP->buscarObjetivo($user->getUserSistema());                        
       $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
       if ($value->FECHA->format('d-m-Y')>= $fechaPuntajeActual->format('d-m-Y')) {
         $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
@@ -116,10 +111,9 @@
   
 ?>
 
-  <div class="box box-solid">
+  <div class="box box-solid">    
     <div class="box-header with-border">
-      <h3 class="box-title" style="text-transform: uppercase;"><?php echo $nombreMES ?> <?php echo $anioMES ?></h3>
-      <a class="text-navy pull-right" href="<?php echo $view_detalle."&fdesde=".$fdesde."&fhasta=".$fhasta; ?>"><i class="fa fa-search"></i></a>
+        <h3 class="box-title"><i class="ion-calculator"></i> PUNTAJE. <span class="text-yellow"><b><?php echo strtoupper($nombreMES) ?> <?php echo $anioMES ?></b></span></h3>
     </div>    
     <div class="box-body">
 

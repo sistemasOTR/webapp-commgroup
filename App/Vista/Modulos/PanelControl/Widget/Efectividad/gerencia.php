@@ -1,7 +1,6 @@
 <?php
   	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
-  	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
-      
+  	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";  
 
   	$dFecha = new Fechas;    
   	$handler = new HandlerSistema;
@@ -29,7 +28,7 @@
 
 
   	$cerrados_efec =  $handler->selectCountServicios($fHOY,$fHOY, 6, null, null, null, null, null);
-  	$despachados_efec = $handler->selectCountServicios($fHOY,$fHOY, 100, null, null, null, null, null);
+  	$despachados_efec = $handler->selectCountServicios($fHOY,$fHOY, 400, null, null, null, null, null);
   	//$total_efec = $handler->selectCountServicios($fHOY,$fHOY, null, null, null, null, null, null);    
 
   	if($despachados_efec[0]->CANTIDAD_SERVICIOS>0){        
@@ -38,6 +37,16 @@
   	else{
     	$efectividad_dia = 0;
   	}
+
+    $class_semaforo = "bg-red";
+    if($efectividad_dia>=0 && $efectividad_dia<60)
+      $class_semaforo = "bg-red";
+
+    if($efectividad_dia>=60 && $efectividad_dia<70)
+      $class_semaforo = "bg-yellow";
+
+    if($efectividad_dia>=70 && $efectividad_dia<=100)
+      $class_semaforo = "bg-green";       
 ?>
 
 <div class="col-md-12 nopadding">

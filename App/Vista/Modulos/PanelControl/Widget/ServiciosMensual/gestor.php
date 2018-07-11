@@ -35,7 +35,7 @@
     $countServiciosCerradosMesCurso = $handler->selectCountServicios($fMES,$fHOY,200,null,$user->getUserSistema(),null,null,null);        
 
     if(!empty($countServiciosMesCurso[0]->CANTIDAD_SERVICIOS))
-      $efectividadMesCurso = round(($countServiciosCerradosMesCurso[0]->CANTIDAD_SERVICIOS) / intval(intval($countServiciosMesCursoG[0]->CANTIDAD_SERVICIOS))*100,0);
+      $efectividadMesCurso = round(($countServiciosCerradosMesCurso[0]->CANTIDAD_SERVICIOS) / intval(intval($countServiciosMesCurso[0]->CANTIDAD_SERVICIOS))*100,0);
     else
       $efectividadMesCurso = round(0,2); 
 ?>

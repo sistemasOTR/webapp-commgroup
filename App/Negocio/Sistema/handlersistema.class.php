@@ -1701,6 +1701,134 @@
 			}
 		}
 
+		public function selectServiciosByEstados($fdesde, $fhasta, $estado, $empresa, $gestor, $gerente, $coordinador, $operador){
+			try {
+
+				$f = new Fechas;
+
+				if($fdesde==$fhasta)
+				{
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "SERTT11_FECSER = '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "SERTT11_FECSER =  '".$tmp."' AND ";
+					}
+				}
+				else
+				{					
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "SERTT11_FECSER >= '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "SERTT11_FECSER <=  '".$tmp."' AND ";
+					}
+				}
+
+				$filtro_estado="";				
+				if(!empty($estado)){
+					switch ($estado) {
+						case 100:
+							$filtro_estado = "SERTT91_ESTADO > 2 AND ";
+							break;
+						case 200:
+							$filtro_estado = "(SERTT91_ESTADO = 6 OR SERTT91_ESTADO = 9 OR SERTT91_ESTADO = 10) AND ";
+							break;
+						case 300:
+							$filtro_estado = "(SERTT91_ESTADO = 3 OR SERTT91_ESTADO = 4 OR SERTT91_ESTADO = 5 OR SERTT91_ESTADO = 6 OR SERTT91_ESTADO = 7) AND ";
+							break;
+						default:
+							$filtro_estado = "SERTT91_ESTADO = ".$estado." AND ";
+							break;
+					}						
+				}					
+				
+				$filtro_empresa="";
+				if(!empty($empresa))								
+					$filtro_empresa = "SERTT91_CODEMPRE = ".$empresa." AND ";
+
+				$filtro_gestor="";
+				if(!empty($gestor))								
+					$filtro_gestor = "SERTT91_CODGESTOR = ".$gestor." AND ";
+
+				$filtro_coordinador="";
+				if(!empty($coordinador))								
+					$filtro_coordinador = "SERTT91_COOALIAS = '".$coordinador."' AND ";
+				
+				$filtro_gerente="";
+				if(!empty($gerente))								
+					$filtro_gerente = "SERTT91_GTEALIAS = '".$gerente."' AND ";
+
+				$filtro_operador="";
+				if(!empty($operador))								
+					$filtro_operador = "SERTT91_OPERAD = '".$operador."' AND ";
+
+
+				$query = "SELECT 
+					CASE SERTT91_ESTADO
+					  WHEN 1 THEN 'Pendiente' 
+					  WHEN 2 THEN 'Despachado'  
+					  WHEN 3 THEN 'Cerrado Parcial' 
+					  WHEN 4 THEN 'Re Pactado' 
+					  WHEN 5 THEN 'Re Llamar' 
+					  WHEN 6 THEN 'Cerrado' 
+					  WHEN 7 THEN 'Negativo' 
+					  WHEN 8 THEN 'Cerrado en Problemas' 
+					  WHEN 9 THEN 'Enviado' 
+					  WHEN 10 THEN 'A Liquidar' 
+					  WHEN 11 THEN 'Negativo B.O.' 
+					  WHEN 12 THEN 'Cancelado' 
+					  WHEN 13 THEN 'Problemas B.O.'
+					  WHEN 14 THEN 'Liquidar C. Parcial' 
+					  WHEN 15 THEN 'No Efectivas'					  					  
+					END as ESTADOS_DESCCI,
+					SUM(CASE WHEN SERTT91_ESTADO > 2  THEN 1 ELSE 0 END) AS DESPACHADO,
+					SUM(CASE WHEN SERTT91_ESTADO = 6  THEN 1 ELSE 0 END) AS CERRADO,
+					SERTT91_ESTADO								
+				FROM SERVTT
+				INNER JOIN EMPRESASTT ON
+					SERVTT.SERTT91_CODEMPRE = EMPRESASTT.EMPTT11_CODIGO 
+				INNER JOIN GESTORESTT ON
+					SERVTT.SERTT91_CODGESTOR = GESTORESTT.GESTOR11_CODIGO 	
+				LEFT JOIN SERTELPER ON
+					SERVTT.SERTT91_IDOPORT=SERTELPER.TEPE11_NROGEST
+				WHERE  				
+					".$filtro_fdesde." 
+					".$filtro_fhasta." 
+					".$filtro_estado." 
+					".$filtro_empresa." 
+					".$filtro_gestor." 
+					".$filtro_coordinador." 
+					".$filtro_gerente." 
+					".$filtro_operador." 
+					SERTT91_CODEMPRE = EMPTT11_CODIGO AND 
+					SERTT91_CODGESTOR = GESTOR11_CODIGO 		
+				GROUP BY 
+					SERTT91_ESTADO";
+
+				
+					//echo $query;				
+					//exit;
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+
 
 		public function selectServiciosPorVencerByGestor($estado, $empresa, $gestor, $gerente, $coordinador, $operador, $tipo_servicios){
 			try {

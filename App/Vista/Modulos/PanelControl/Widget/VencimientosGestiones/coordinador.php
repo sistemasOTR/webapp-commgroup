@@ -24,7 +24,7 @@
 
     //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
     if(!PRODUCCION)
-      $fHOY = "2016-08-12";
+      $fHOY = "2018-07-04";
 
     $arrVencido = $handler->selectServiciosPorVencerByGestor(2,null,null,null,$user->getAliasUserSistema(),null,'VENCIDOS');     
     $arrPorVencer = $handler->selectServiciosPorVencerByGestor(2,null,null,null,$user->getAliasUserSistema(),null,'A TIEMPO');     
@@ -54,7 +54,7 @@
           if(!empty($arrPorVencer)) {
             foreach ($arrPorVencer as $key => $value) {
 
-              $url_por_vencer = "?view=servicio&fdesde=".$fHOY."&fhasta=".$fHOY."&festado=2&fgestor=".$value->CODGESTOR;
+              $url_por_vencer = "?view=servicio&fdesde=".$fHOY."&fhasta=".$fHOY."&festado=2&fgestor=".$value->CODGESTOR."&ftipo_servicio=A%20TIEMPO";
 
               echo "<li><a href='".$url_por_vencer."'>".$value->NOMGESTOR."<span class='pull-right'>".$value->CANTIDAD." op</span></a></li>";
 
@@ -80,7 +80,7 @@
           $sum_vencido=0;
           if(!empty($arrVencido)) {            
             foreach ($arrVencido as $key => $value) {
-              $url_vencido = "?view=servicio&fdesde=".$fHOY."&fhasta=".$fHOY."&festado=2&fgestor=".$value->CODGESTOR;
+              $url_vencido = "?view=servicio&fdesde=".$fHOY."&fhasta=".$fHOY."&festado=2&fgestor=".$value->CODGESTOR."&ftipo_servicio=VENCIDOS";
 
               echo "<li><a href='".$url_vencido."'>".$value->NOMGESTOR."<span class='pull-right'>".$value->CANTIDAD." op</span></a></li>";
 
