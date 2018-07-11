@@ -23,19 +23,43 @@
     /*-------------------------*/
 
     //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
-    if(!PRODUCCION)
-      $fHOY = "2016-08-12";
+    
 
-  	$arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,null,null,null,null,null);        
-	$allEstados = $handler->selectAllEstados();
+  	
+	$sum_total_estados=0; 
+  	$sum_estados_gestionados=0;
+  	$porc_estados_gestionados=0;
+  	
+  	$arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,null,null,null,null,null); 
+  	$allEstados = $handler->selectAllEstados();
+
+  	if(!empty($arrEstados))
+  	{                   
+    	foreach ($arrEstados as $key => $value) {
+
+        	$f_array = new FuncionesArray;
+        	$class_estado = $f_array->buscarValor($allEstados,"1",$value->ESTADOS_DESCCI,"2");
+
+      		// totales
+      		$sum_total_estados = $sum_total_estados + $value->CANTIDAD_SERVICIOS;
+
+      		if($value->SERTT91_ESTADO>2)
+      			$sum_estados_gestionados = $sum_estados_gestionados + $value->CANTIDAD_SERVICIOS;
+    	}
+  	}          
+
+if(empty($sum_total_estados))
+	$porc_estados_gestionados = 0;
+else	
+	$porc_estados_gestionados = round(($sum_estados_gestionados / $sum_total_estados) *100,2);
+	
 ?>
 
 <div class="col-md-12 nopadding">
 	<div class="box box-solid">
 	  	<div class="box-header with-border">
-	    	<i class="ion-arrow-graph-up-right"></i>
-	    	<h3 class="box-title">Gestiones. <span class='text-yellow'><b><?php echo $dFecha->FormatearFechas($fHOY,'Y-m-d','d/m/Y - h:i'); ?></b></span></h3>
-	  	</div>
+	      <h3 class="box-title"><i class="ion-ios-paperplane"></i> Visor de Servicios Gestionados.</h3>
+	    </div>
 	  	<div class="box-body no-padding">
 
   	       	<div class="info-box bg-aqua">
@@ -43,64 +67,18 @@
 
                 <div class="info-box-content">
                   	<span class="info-box-text">GESTIONES</span>
-                  	<span class="info-box-number" id="widget-estado-total-gestiones"></span>
+                  	<span class="info-box-number"><?php echo $porc_estados_gestionados."%"; ?></span>
 
                   	<div class="progress">
-                    	<div class="progress-bar" id="widget-estado-progreso"></div>
+                    	<div class="progress-bar" style="width: <?php echo $porc_estados_gestionados."%"; ?>"></div>
                   	</div>
-                  	<span class="progress-description">
-                    	<span class="pull-right" id="widget-estado-porcentaje-gestionados"></span>
-                  	</span>
+		            <span class="progress-description">
+		              <?php echo $sum_total_estados; ?> <small>Total</small> 
+		              <span class="pull-right"><?php echo $sum_estados_gestionados; ?> <small>Gestionadas</small></span>
+		            </span>
 
                 </div>
             </div>
-          	<div class="col-xs-12 no-padding">
-                <ul class="nav nav-stacked">
-			        <?php
-
-			        	$sum_total_estados=0; 
-			          	$sum_estados_gestionados=0;
-			          	$porc_estados_gestionados=0;
-			          	
-			          	if(!empty($arrEstados))
-			          	{                   
-			            	foreach ($arrEstados as $key => $value) {
-			              		$url_estados = "?view=servicio&fdesde=".$fHOY."&fhasta=".$fHOY."&festado=".$value->SERTT91_ESTADO;
-
-				            	$f_array = new FuncionesArray;
-				            	$class_estado = $f_array->buscarValor($allEstados,"1",$value->ESTADOS_DESCCI,"2");
-
-			              		if(!($value->ESTADOS_DESCCI=="Liquidar C. Parcial") || !($value->ESTADOS_DESCCI=="No Efectivas"))
-			              		{
-			                		echo "                	
-				                		<li><a href='".$url_estados."'>".$value->ESTADOS_DESCCI." <span class='pull-right badge ".$class_estado."'>
-				                		".round($value->CANTIDAD_SERVICIOS,2)."
-				                		</span></a></li>";
-			              		}
-
-			              		// totales
-			              		$sum_total_estados = $sum_total_estados + $value->CANTIDAD_SERVICIOS;
-			              		if($value->SERTT91_ESTADO>2)
-			              			$sum_estados_gestionados=$sum_estados_gestionados+$value->CANTIDAD_SERVICIOS;
-			            	}
-
-			            	if(empty($sum_total_estados))
-			            		$porc_estados_gestionados = 0;
-			            	else	
-			            		$porc_estados_gestionados = ($sum_estados_gestionados / $sum_total_estados) *100;
-			          	}                  
-			        ?>
-                </ul>
-          	</div>
-
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-	$("#widget-estado-total-gestiones").text("<?php echo $sum_total_estados; ?>");
-	$("#widget-estado-porcentaje-gestionados").append("<?php echo round($porc_estados_gestionados,2); ?> % <small>Gestionadas</small>");
-	$("#widget-estado-progreso").css( "width", "<?php echo round($porc_estados_gestionados,2); ?>%" )
-</script>
-
-	        

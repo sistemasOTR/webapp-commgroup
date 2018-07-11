@@ -23,9 +23,7 @@
 
 
     //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
-    if(!PRODUCCION)
-      $fHOY = "2016-08-12";
-
+   
 
   	$cerrados_efec =  $handler->selectCountServicios($fHOY,$fHOY, 6, null, null, null, null, null);
   	$despachados_efec = $handler->selectCountServicios($fHOY,$fHOY, 400, null, null, null, null, null);
@@ -50,15 +48,32 @@
 ?>
 
 <div class="col-md-12 nopadding">
-	<div class="box box-solid">
-	  <div class="box-header with-border">
-	    <i class="ion ion-ios-speedometer"></i>
-	    <h3 class="box-title">Efectividad de cierre. 
-	    	<span class='text-yellow'><b><?php echo $dFecha->FormatearFechas($fHOY,'Y-m-d','d/m/Y'); ?></b></span>
-	    </h3>
-	  </div>
-	  <div class="box-body" style='text-align: center;'>
-	  	<b style='font-size: 50px;'><?php echo round($efectividad_dia,2); ?> % </b>	  
-	  </div>
-	</div>
+  <div class="box box-solid">
+    
+    <div class="box-header with-border">
+      <h3 class="box-title"><i class="ion-arrow-graph-up-right"> </i> Efectividad de cierre.</h3>
+    </div>
+
+    <div class="box-body no-padding">
+
+      <div class="info-box <?php echo $class_semaforo; ?>">
+        <span class="info-box-icon"><i class="ion-arrow-graph-up-right"></i></span>
+
+        <div class="info-box-content">
+          <span class="info-box-text">Efectividad</span>
+          <span class="info-box-number"><?php echo round($efectividad_dia,2); ?>%</span>
+
+          <div class="progress">
+            <div class="progress-bar" style="width: <?php echo round($efectividad_dia,2); ?>%"></div>
+          </div>
+          <span class="progress-description">
+
+          </span>
+
+        </div>
+
+      </div>      
+    </div>
+   
+  </div>
 </div>

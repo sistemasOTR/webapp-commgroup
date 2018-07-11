@@ -107,10 +107,11 @@
                 $class_semaforo_gestor = "bg-yellow";
 
               if($efec_gestor>=70 && $efec_gestor<=100)
-                $class_semaforo_gestor = "bg-green";                    
-
+                $class_semaforo_gestor = "bg-green";
+              if ($value->ESTADOS_DESCCI != 'Cancelado' && $value->ESTADOS_DESCCI != 'Despachado' ) {
                 echo "<li><a href='#'>".$value->ESTADOS_DESCCI." <span class='pull-right badge ".$class_semaforo_gestor."'>".round($efec_gestor,2)."%</span></a></li>";
-              }                    
+              }
+            }
 
             }
           ?>

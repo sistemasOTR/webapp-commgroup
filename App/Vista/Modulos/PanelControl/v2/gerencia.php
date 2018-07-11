@@ -40,6 +40,17 @@
                   
     <div class="content-fluid">
       <div class="row">
+        <div class="col-md-12 col-lg-12">
+          <div class="col-md-6">
+            <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/Estados/gerencia.php"; ?>
+          </div>
+
+          <div class="col-md-6">
+            <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/Efectividad/gerencia.php"; ?>
+          </div>
+        </div>
+      </div>
+      <div class="row">
           <?php
             if(!empty($allPlazas))
             {                   
