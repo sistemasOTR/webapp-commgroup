@@ -199,8 +199,19 @@
                     <input type="text" style="display: none" id="EnroEIMEI" name="EnroEIMEI">
                     <input type="text" style="display: none" id="fechaACambiar" name="fechaACambiar">
                     <input type="text" style="display: none" id="EnroEuserId" name="EnroEuserId">
-                  </div>          
-                  <div class="col-md-6" id="EquiposEnroque" style="display: none">
+                  </div>
+                            
+                  <div class="col-md-12" id="EquiposEnroque" style="display: none">
+                    <label>Forma de devolución</label>
+                    <select name="txtTipoBaja" id="txtTipoBaja" class="form-control" style="width: 100%">
+                      <option value="linea">Seleccionar...</option>
+                      <option value="condi">En condiciones</option>
+                      <option value="roto01">Equipo roto a cargo de la empresa</option>
+                      <option value="roto02">Equipo roto a cargo del usuario</option>
+                      <option value="robo">Equipo robado</option>
+                      <option value="perd">Equipo perdido</option>
+                    </select>
+                    
                     <label>Equipos libres</label>
                     <select name="EnroEquipo" id="EnroEquipo" class="form-control" style="width: 100%">
                       <option value="">Seleccionar</option>
@@ -216,7 +227,7 @@
                       ?>
                     </select>
                   </div>
-                  <div class="col-md-6" id="LineasEnroque" style="display: none">
+                  <div class="col-md-12" id="LineasEnroque" style="display: none">
                     <label>Líneas libres</label>
                     <select name="EnroLinea" id="EnroLinea" class="form-control" style="width: 100%">
                       <option value="">Seleccionar</option>
@@ -232,7 +243,7 @@
                   </div>
                   <div class="col-md-12">
                     <label>Observaciones</label>
-                    <textarea name="txtObs" id="txtObs" class="form-control" rows="5"></textarea>
+                    <textarea name="txtObs" id="txtObsEnro" class="form-control" rows="5"></textarea>
                   </div>
               </div>
           </div>
@@ -260,6 +271,15 @@
                 <div class="col-md-10 col-md-offset-1">
                     <label>Fecha de devolución</label>
                     <input type="date" name="fechaDev" id="fechaDev" class="form-control">
+                    <label>Forma de devolución</label>
+                    <select name="txtTipoBaja" id="txtTipoBajaDev" class="form-control" style="width: 100%">
+                      <option value="linea">Seleccionar...</option>
+                      <option value="condi">En condiciones</option>
+                      <option value="roto01">Equipo roto a cargo de la empresa</option>
+                      <option value="roto02">Equipo roto a cargo del usuario</option>
+                      <option value="robo">Equipo robado</option>
+                      <option value="perd">Equipo perdido</option>
+                    </select>
                     <input type="text" style="display: none" id="entId" name="entId">
                     <input type="text" style="display: none" id="devNroLinea" name="devNroLinea">
                     <input type="text" style="display: none" id="devIMEI" name="devIMEI">
@@ -318,6 +338,16 @@
       controlFecha();
     });
   });
+    $(document).ready(function() {
+    $("#txtTipoBaja").on('change', function (e) { 
+      cambioObs();
+    });
+  });
+    $(document).ready(function() {
+    $("#txtTipoBajaDev").on('change', function (e) { 
+      cambioObsDev();
+    });
+  });
 
     function devolverLinea(id){
 		nroLinea = document.getElementById(id).getAttribute('data-nroLinea');
@@ -372,4 +402,29 @@
     } 
 
   }
+
+  function cambioObsDev() {
+    tipoBaja = document.getElementById("txtTipoBajaDev").value;
+    console.log(tipoBaja);
+
+    if (tipoBaja == 'roto01') {
+      document.getElementById("txtObsDev").value = "con dictamen por parte del Servicio Técnico Oficial, [COMPLETAR CON DETALLE TECNICO] estado que hace imposible la reparación y/o uso para el comodante. En consecuencia, solo a modo excepcional, asume los costos de sustitución/reparación del equipo el comodante. No existiendo nada que reclamarse las partes por el vínculo contractual habido.";
+    }
+    if (tipoBaja == 'roto02') {
+      document.getElementById("txtObsDev").value = "con dictamen por parte del Servicio Técnico Oficial, [COMPLETAR CON DETALLE TECNICO] estado que hace imposible la reparación y/o uso para el comodante. En consecuencia, será a cargo del comodatario la suma de Pesos [COMPLETAR CON MONTO FORMATO TEXTO] ($0000,00.-) en concepto de sustitución por el nuevo equipo.";
+    }
+  }
+
+  function cambioObs() {
+    tipoBaja = document.getElementById("txtTipoBaja").value;
+    console.log(tipoBaja);
+
+    if (tipoBaja == 'roto01') {
+      document.getElementById("txtObsEnro").value = "con dictamen por parte del Servicio Técnico Oficial, [COMPLETAR CON DETALLE TECNICO] estado que hace imposible la reparación y/o uso para el comodante. En consecuencia, solo a modo excepcional, asume los costos de sustitución/reparación del equipo el comodante. No existiendo nada que reclamarse las partes por el vínculo contractual habido.";
+    }
+    if (tipoBaja == 'roto02') {
+      document.getElementById("txtObsEnro").value = "con dictamen por parte del Servicio Técnico Oficial, [COMPLETAR CON DETALLE TECNICO] estado que hace imposible la reparación y/o uso para el comodante. En consecuencia, será a cargo del comodatario la suma de Pesos [COMPLETAR CON MONTO FORMATO TEXTO] ($0000,00.-) en concepto de sustitución por el nuevo equipo.";
+    }
+  }
+
   </script>

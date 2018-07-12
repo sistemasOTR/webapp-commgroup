@@ -115,19 +115,16 @@
                       <td><?php echo $datosEquipo->getFechaBaja()->format('d-m-Y')?></td>
                     </tr>
                     <tr>
-                      <td width="40%">Observaciones:</td>
-                      <td><?php echo $datosEquipo->getObsBaja()?></td>
+                      <td colspan="2"><strong>Observaciones:</strong> <?php echo $datosEquipo->getObsBaja()?></td>
                     </tr>
                 <?php } ?>
                 <?php 
                   if ($estado == 'Perdido') { ?>
                     <tr>
-                      <td width="40%">Fecha de Pérdida:</td>
-                      <td><?php echo $datosEquipo->getFechaPerd()->format('d-m-Y')?></td>
+                      <td width="40%">Fecha de Pérdida: <?php echo $datosEquipo->getFechaPerd()->format('d-m-Y')?></td>
                     </tr>
                     <tr>
-                      <td width="40%">Observaciones:</td>
-                      <td><?php echo $datosEquipo->getObsPerd()?></td>
+                      <td colspan="2"><strong>Observaciones:</strong> <?php echo $datosEquipo->getObsPerd()?></td>
                     </tr>
                 <?php } ?>
                 <?php 
@@ -137,8 +134,7 @@
                       <td><?php echo $datosEquipo->getFechaRobo()->format('d-m-Y')?></td>
                     </tr>
                     <tr>
-                      <td width="40%">Observaciones:</td>
-                      <td><?php echo $datosEquipo->getObsRobo()?></td>
+                      <td colspan="2"><strong>Observaciones:</strong> <?php echo $datosEquipo->getObsRobo()?></td>
                     </tr>
                 <?php } ?>
 

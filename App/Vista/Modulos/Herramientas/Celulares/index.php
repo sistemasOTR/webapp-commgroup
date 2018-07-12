@@ -1,3 +1,17 @@
+<head>
+<script type="text/javascript">
+<?php
+
+if( isset($_GET['pop'])){
+  $entregaId = intval($_GET['fID']) ;
+
+  $fTipo = $_GET['fTipo'];
+
+echo "window.open('".PATH_VISTA."Modulos/Herramientas/Celulares/imprimir_baja_comodato.php?fID=".$entregaId."&fTipo=".$fTipo."')";
+
+}
+
+?></script></head>
 <?php
     if(realpath("App/Config/config.ini.php"))
     include_once "App/Config/config.ini.php";

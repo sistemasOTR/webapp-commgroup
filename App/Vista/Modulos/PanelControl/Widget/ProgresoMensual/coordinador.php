@@ -46,9 +46,13 @@
 	$fhasta = $dFecha->FormatearFechas($fhasta,"Y-m-d","Y-m-d");
  
     // Construccion de array para graficos //
+    $cerrados = 0;
+    $totales = 0;
     for ($i=$fdesde; $i <= $fhasta; $i++) { 
     	list($año, $mes, $dia) = split('[/.-]', $i);
     	$servCerrados = $handler->selectCountServiciosGestion($i,$i,200,null,null,null,$user->getUserSistema(),null);
+    	$cerrados += $servCerrados[0]->CANTIDAD_SERVICIOS;
+    	$totales += $servTotales[0]->CANTIDAD_SERVICIOS;
     	$servTotales = $handler->selectCountServiciosGestion($i,$i,null,null,null,null,$user->getUserSistema(),null);
     	if ($servTotales[0]->CANTIDAD_SERVICIOS != 0 && $servCerrados[0]->CANTIDAD_SERVICIOS != 0) {
     		$datos[] = array('dia' => $dia.'-'.$mes,
@@ -96,11 +100,11 @@
 		<canvas id="budget_month_chart" class="col-xs-12 chart"></canvas>
 		<div class="col-xs-6 border-right">
 			<h5>Cerradas</h5>
-			<h3 class="text-light-blue"><?php echo $countServiciosCerradosMesCursoGestion[0]->CANTIDAD_SERVICIOS; ?></h3>
+			<h3 class="text-light-blue"><?php echo $cerrados; ?></h3>
 		</div>
 		<div class="col-xs-6">
 			<h5>Total</h5>
-			<h3 class="text-blue"><?php echo $countServiciosMesCursoGestion[0]->CANTIDAD_SERVICIOS; ?></h3>
+			<h3 class="text-blue"><?php echo $totales; ?></h3>
 		</div>
 	</div>
 </div>
