@@ -492,6 +492,11 @@
 				$include = 'Modulos/Licencias/control.php';
 			break;	
 
+		case 'licencias_controlcoord':			
+			if($permiso->getModuloLicenciasBoolean() && (($esCoordinador)))
+				$include = 'Modulos/Licencias/control_cord.php';
+			break;
+
 		case 'licencias_imprimir':			
 			if($permiso->getModuloLicenciasBoolean() && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))
 				$include = 'Modulos/Licencias/imprimir.php';

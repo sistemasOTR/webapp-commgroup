@@ -15,7 +15,7 @@
   $arrGestor = $handlerSist->selectAllGestor($user->getAliasUserSistema());
 
   $handler = new HandlerTickets;  
-  $consulta = $handler->seleccionarByFiltros($fdesde,$fhasta,$fusuario);
+  $consulta = $handler->seleccionarByFiltros($fdesde,$fhasta,$fusuario,null);
 
   $handlerUsuarios = new HandlerUsuarios;
   $arrUsuarios = $handlerUsuarios->selectTodos();

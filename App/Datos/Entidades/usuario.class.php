@@ -216,6 +216,28 @@
 
 		}
 
+		// public function selectByTipo($tipo,$localidad)
+		// {			
+		// 	try {
+				
+		// 			$query="SELECT usuario.* FROM usuario 
+		// 				INNER JOIN usuario_perfil ON
+		// 					usuario_perfil.id=usuario.id_usuario_perfil
+		// 				WHERE usuario_perfil.id='".$tipo."' AND usuario.estado='true'";
+		// 		}
+
+		// 		# Ejecucion 				
+		// 		$result = SQL::selectObject($query, new Usuario);
+						
+		// 		return $result;
+				
+		// 	} catch (Exception $e) {
+		// 		throw new Exception($e->getMessage());
+						
+		// 	}
+
+		// }
+
 		public function setPropiedadesBySelect($filas)
 		{	
 			if(empty($filas)){

@@ -40,6 +40,24 @@
 			}
 		}	
 
+		// public function selectByTipo($tipo,$localidad){
+		// 	try{		
+
+		// 	 if(empty($tipo))
+		// 			throw new Exception("No se cargo el tipo de usuario");				
+
+		// 		$u = new Usuario;
+		// 		// $u->setId($id);
+		// 		$user = $u->selectByTipo($tipo,$localidad);				
+
+		// 		return $user;
+		// 	}
+		// 	catch(Exception $e)
+		// 	{
+		// 		throw new Exception($e->getMessage());	
+		// 	}
+		// }
+
 		public function selectByPerfil($perfil){
 			try{		
 

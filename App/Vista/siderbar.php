@@ -33,7 +33,8 @@
         $url_tickets_reintegro = "index.php?view=tickets_reintegros";
         
         $url_licencias_carga = "index.php?view=licencias_carga";
-        $url_licencias_control = "index.php?view=licencias_control";
+        $url_licencias_control = "index.php?view=licencias_control";       
+        $url_licencias_controlcoordinador= "index.php?view=licencias_controlcoord";
         $url_tipo_licencias_abm = "index.php?view=tipo_licencias";
         
         $url_capacitaciones = "index.php?view=capacitaciones";
@@ -199,7 +200,7 @@
                     </li>                  
                   <?php } ?>
 
-                  <?php if(($esBO || $esContabilidad || $esRRHH) || $esCoordinador){ ?>
+                  <?php if(($esBO || $esContabilidad || $esRRHH) ){ ?>
                     <li id="mnu_licencias_control">
                       <a href=<?php echo $url_licencias_control; ?>>
                         <i class="fa fa-tasks"></i> <span>Control</span>
@@ -211,6 +212,18 @@
                       </a>
                     </li>                                      
                   <?php } ?>
+                  <?php if(($esCoordinador) ){ ?>
+                    <li id="mnu_licencias_controlcoord">
+                      <a href=<?php echo $url_licencias_controlcoordinador; ?>>
+                        <i class="fa fa-tasks"></i> <span>Control Coord</span>
+                      </a>
+                    </li>
+                    <li id="mnu_tipo_licencias_abm">
+                      <a href=<?php echo $url_tipo_licencias_abm; ?>>
+                        <i class="fa fa-edit"></i> <span>Tipo Licencias</span>
+                      </a>
+                    </li>   
+                     <?php } ?>
 
                 </ul>
               </li>

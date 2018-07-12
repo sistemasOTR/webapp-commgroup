@@ -76,6 +76,9 @@
               <!-- STOCK -->
               <?php include_once PATH_VISTA.'Notificaciones/stock.php'; ?>
               <!-- FIN STOCK -->
+              <!-- LICENCIAS -->
+              <?php include_once PATH_VISTA.'Notificaciones/licencias.php'; ?>
+              <!-- FIN LICENCIAS -->
 
               <li class="dropdown user user-menu">
                 </a>

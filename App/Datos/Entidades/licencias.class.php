@@ -370,7 +370,7 @@
 			}
 		}		
 
-		public function seleccionarByFiltros($fdesde,$fhasta,$usuario){
+		public function seleccionarByFiltros($fdesde,$fhasta,$usuario,$estados){
 			try {
 				
 				$f = new Fechas;
@@ -380,13 +380,13 @@
 					$filtro_fdesde="";
 					if(!empty($fdesde)){					
 						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
-						$filtro_fdesde = "CAST (licencias.fecha AS DATE) = '".$tmp."' AND ";
+						$filtro_fdesde = "CAST (licencias.fecha_fin AS DATE) = '".$tmp."' AND ";
 					}
 
 					$filtro_fhasta="";
 					if(!empty($fhasta)){					
 						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
-						$filtro_fhasta = "CAST (licencias.fecha AS DATE) =  '".$tmp."' AND ";
+						$filtro_fhasta = "CAST (licencias.fecha_fin AS DATE) =  '".$tmp."' AND ";
 					}
 				}
 				else
@@ -394,19 +394,34 @@
 					$filtro_fdesde="";
 					if(!empty($fdesde)){					
 						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
-						$filtro_fdesde = "CAST (licencias.fecha AS DATE) >= '".$tmp."' AND ";
+						$filtro_fdesde = "CAST (licencias.fecha_fin AS DATE) >= '".$tmp."' AND ";
 					}
 
 					$filtro_fhasta="";
 					if(!empty($fhasta)){					
 						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
-						$filtro_fhasta = "CAST (licencias.fecha AS DATE) <=  '".$tmp."' AND ";
+						$filtro_fhasta = "CAST (licencias.fecha_fin AS DATE) <=  '".$tmp."' AND ";
 					}
 				}
 											
 				$filtro_usuario="";
 				if(!empty($usuario))								
 					$filtro_usuario = "licencias.id_usuario = ".$usuario." AND ";
+
+				$filtro_estados="";
+				if(!empty($estados))
+				   switch ($estados) {
+				   		case '1':
+				   	      $filtro_estados = "licencias.aprobado = 'false' AND licencias.rechazado ='false' AND ";							
+				   			break;
+				   		case '2':
+				   	      $filtro_estados = "licencias.aprobado = 'true' AND ";
+				   	        break;							
+				   		case '3':
+				   	      $filtro_estados = "licencias.rechazado = 'true' AND ";	
+				   			break;						
+				   					};								
+					
 				
 				$filtro_estado = "licencias.estado = 'true'";
 
@@ -416,6 +431,7 @@
 									".$filtro_fdesde." 
 									".$filtro_fhasta." 										
 									".$filtro_usuario."
+									".$filtro_estados."			
 									".$filtro_estado;
 
 				//echo $query;
