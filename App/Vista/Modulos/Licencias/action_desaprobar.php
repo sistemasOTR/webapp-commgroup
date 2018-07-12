@@ -2,9 +2,23 @@
 	include_once "../../../Config/config.ini.php";	
 
 	include_once PATH_NEGOCIO."Modulos/handlerlicencias.class.php"; 
+
+	$fdesde=(isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
+  	$fhasta=(isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());    
+  	$fusuario=(isset($_GET["fusuario"])?$_GET["fusuario"]:'');
+  	$festados=(isset($_GET["festados"])?$_GET["festados"]:'');
+  	$cord=(isset($_GET["cord"])?$_GET["cord"]:'');
+
+
+  	if ($cord) {
+  		$err = "../../../../index.php?view=licencias_controlcoord&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&err=";     		
+	    $info = "../../../../index.php?view=licencias_controlcoord&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&info=";   	
+  	}
+    else {
+	$err = "../../../../index.php?view=licencias_control&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&err=";     		
+	$info = "../../../../index.php?view=licencias_control&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&info="; 
 	
-	$err = "../../../../index.php?view=licencias_control&err=";     		
-	$info = "../../../../index.php?view=licencias_control&info=";    
+	   }
 
 	$handler = new HandlerLicencias();
 

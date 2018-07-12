@@ -11,9 +11,10 @@
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());    
   $fusuario= (isset($_GET["fusuario"])?$_GET["fusuario"]:'');
   $fplaza= (isset($_GET["fplaza"])?$_GET["fplaza"]:'');
+  $festados= (isset($_GET["festados"])?$_GET["festados"]:'');
 
   $handler = new HandlerTickets;  
-  $consulta = $handler->seleccionarByFiltrosAprobacion($fdesde,$fhasta,$fusuario);
+  $consulta = $handler->seleccionarByFiltrosAprobacion($fdesde,$fhasta,$fusuario,$festados);
 
   $handlerSist = new HandlerSistema;
   $arrGestor = $handlerSist->selectAllGestor($fplaza);
@@ -27,7 +28,7 @@
   $url_action_rechazar = PATH_VISTA.'Modulos/Ticket/action_rechazar.php';  
   $url_detalle = 'index.php?view=tickets_detalle&fticket=';   
 
-  $url_retorno = "view=tickets_aprobar&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario;
+  $url_retorno = "view=tickets_aprobar&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados;
 ?>
 <style>
   .input-group {position: relative;display: block;border-collapse: separate;}
@@ -75,7 +76,7 @@
                     </div>
                     
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                 <label>Plazas</label>
                 <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" onchange="crearHref()">                              
                   <option value="">Seleccionar...</option>
@@ -93,9 +94,10 @@
                   ?>
                 </select>
               </div>
+              
                 
-                <div class="col-md-3">
-                  <label>Usuarios </label>               
+                <div class="col-md-2">
+                  <label>Usuarios </label>  
                   <select id="slt_usuario" class="form-control" style="width: 100%" name="slt_usuario" onchange="crearHref()">
                     <option value=''></option>
                     <option value='0'>TODOS</option>
@@ -115,9 +117,9 @@
                             }
                         } else {
                           foreach ($arrUsuarios as $user) {
-                            if($fusuario == $user->getId() && $user->getTipoUsuario() != 1)
+                            if($fusuario == $user->getId())
                                 echo "<option value='".$user->getId()."' selected>".$user->getNombre()." ".$user->getApellido()."</option>";
-                              elseif($user->getTipoUsuario() != 1)
+                              else
                                 echo "<option value='".$user->getId()."'>".$user->getNombre()." ".$user->getApellido()."</option>";                  
                                 
                             }
@@ -127,6 +129,16 @@
                     ?>
                   </select>
                 </div>    
+                <div class="col-md-2">
+                <label>Estados</label>
+                <select id="slt_estados" class="form-control" style="width: 100%" name="slt_estados" onchange="crearHref()">                              
+                  <option value="">Seleccionar...</option>
+                  <option value='0' <?php if ($festados == 0) { echo "selected";} ?>>TODAS</option>
+                  <option value='1'<?php if ($festados == 1) { echo "selected";} ?>>APROBADOS</option>
+                  <option value='2'<?php if ($festados == 2) { echo "selected";} ?>>NO APROBADOS</option>
+                  
+                </select>
+              </div>
                 
 
                 <div class='col-md-3'>                
@@ -277,7 +289,7 @@
                                 else
                                 {
                                   echo "<td class='text-center'>
-                                        <a href='".$url_action_desaprobar.$value->getId()."' class='btn btn-danger btn-xs'>
+                                        <a href='".$url_action_desaprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."' class='btn btn-danger btn-xs'>
                                           <i class='fa fa-times' data-toggle='tooltip' data-original-title='Desaprobar ticket'></i>
                                           Desaprobar Ticket
                                         </a>
@@ -414,6 +426,7 @@
       f_usuario = $("#slt_usuario").val();   
 
       f_plaza = $("#slt_plaza").val();
+      f_estados = $("#slt_estados").val();
 
       url_filtro_reporte="index.php?view=tickets_aprobar&fdesde="+aStart+"&fhasta="+aEnd;
 
@@ -424,7 +437,11 @@
 
       if(f_usuario!=undefined)
         if(f_usuario>0)
-          url_filtro_reporte= url_filtro_reporte + "&fusuario="+f_usuario;
+          url_filtro_reporte= url_filtro_reporte + "&fusuario="+f_usuario; 
+
+        if(f_estados!=undefined)
+        if(f_estados>0)
+          url_filtro_reporte= url_filtro_reporte + "&festados="+f_estados;
       
       
       $("#filtro_reporte").attr("href", url_filtro_reporte);

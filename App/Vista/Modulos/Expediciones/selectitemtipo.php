@@ -18,7 +18,7 @@
        	echo "<option value=''>Seleccione un ítem...</option>";
 
          foreach ($result as $key => $value) {
-           echo "<option value=".$value->getId().">".$value->getNombre()."</option>";
+           echo "<option value=".$value->getId().">".$value->getNombre()." ".$value->getDescripcion()."</option>";
              }
               } else {
               	echo "<option value=''>No se encontró ningún ítem...</option>";

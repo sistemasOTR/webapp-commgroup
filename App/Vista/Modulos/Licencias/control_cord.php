@@ -22,7 +22,7 @@
  
   
   $arrUsuarios = $handlerUsuarios->selectTodos();
-  //$arrGestor = $handlerSistema->selectAllGestor($user->getAliasUserSistema());
+  $arrGestor = $handlerSistema->selectAllGestor($user->getAliasUserSistema());
   // var_dump($arrGestor);
   // exit();
   // $usuarr=$handlerUsuarios->selectByTipo(3,$user->getAliasUserSistema());
@@ -32,7 +32,7 @@
 
   $url_action_aprobar = PATH_VISTA.'Modulos/Licencias/action_aprobar.php?id=';  
   $url_action_desaprobar = PATH_VISTA.'Modulos/Licencias/action_desaprobar.php?id=';  
-  $url_action_rechazar = PATH_VISTA.'Modulos/Licencias/action_rechazar.php?fdesde='.$fdesde.'&fhasta='.$fhasta.'&fusuario='.$fusuario.'&festados='.$festados;  
+  $url_action_rechazar = PATH_VISTA.'Modulos/Licencias/action_rechazar.php?fdesde='.$fdesde.'&fhasta='.$fhasta.'&fusuario='.$fusuario.'&festados='.$festados.'&cord=si';  
   $url_action_imprimir = 'index.php?view=licencias_imprimir&id=';
 
   $url_redireccion ='&fdesde='.$fdesde.'&fhasta='.$fhasta.'&fusuario='.$fusuario.'&festados='.$festados;
@@ -79,44 +79,44 @@
                       <input type="text" class="input-sm form-control" onchange="crearHref()" id="end" name="end" value="<?php echo $dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y'); ?>"/>
                     </div>
                 </div>
-                <?php
-                // if(!empty($arrUsuarios))
-                //       {                     
-                                        
-                //         foreach ($arrUsuarios as $key => $value) {
-                //           var_dump($value->getTipoUsuario()->getId());
-                //         }
-                //       }
-                //       ?>
                 <div class="col-md-3">
                   <label>Usuarios </label>                
                   <select id="slt_usuario" class="form-control" style="width: 100%" name="slt_usuario" onchange="crearHref()">
                     <option value=''></option>
                     <option value='0'>TODOS</option>
                     <?php
+    
                       if(!empty($arrUsuarios))
-                      {                     
-                                        
-                        foreach ($arrUsuarios as $key => $value) {
-
-                          if (!is_array($value->getTipoUsuario())) {
-                            if ($value->getTipoUsuario()->getId() != '1') {
-                              $notHidden = true;
-                            } else {
-                              $notHidden = false;
-                            }
-                          } else {
-                            $notHidden = true;
-                          }
-                          if($fusuario == $value->getId() && $notHidden){
-                            echo "<option value='".$value->getId()."' selected>".$value->getNombre()." ".$value->getApellido()."</option>";
-                          }
-                          elseif($notHidden){
-                            echo "<option value='".$value->getId()."'>".$value->getNombre()." ".$value->getApellido()."</option>";                  
-                          }
-                            
-                        }
+                      {              
+                           
+                                      
+                        foreach ($arrUsuarios as $key => $usuario) {
+                         foreach ($arrGestor as $gestor) {
                         
+                         // if ($value->getTipoUsuario()->getId()=='1') {
+                         //   echo $value->getNombre();
+
+                         // }
+
+                          // if (!is_array($value->getTipoUsuario())) {
+                          //   if ($value->getTipoUsuario()->getId() != '1') {
+                              
+                            
+                          //     $notHidden = true;
+                          //   } else {
+                          //     $notHidden = false;
+                          //   }
+                          // } else {
+                          //   $notHidden = true;
+                          // }
+                          if($fusuario == $usuario->getId() && $usuario->getUserSistema() == $gestor->GESTOR11_CODIGO){
+                            echo "<option value='".$usuario->getId()."'selected>".$usuario->getNombre()." ".$usuario->getApellido()."</option>";
+                          }
+                           elseif($usuario->getUserSistema() == $gestor->GESTOR11_CODIGO){
+                            echo "<option value='".$usuario->getId()."'>".$usuario->getNombre()." ".$usuario->getApellido()."</option>"; 
+                          }                 
+                          }   
+                        }                  
                       }           
                     ?>
                   </select>
@@ -167,8 +167,17 @@
                   <tbody>
                     <?php 
                       if(!empty($arrLicencias))
-                      {
-                        foreach ($arrLicencias as $key => $value) {
+                      { 
+
+                          foreach ($arrLicencias as $key => $value) {
+                           
+
+                              foreach ($arrGestor as $gestor) {
+                                // var_dump($arrGestor);
+                                //   exit();
+
+                            if($value->getUsuarioId()->getUserSistema()==$gestor->GESTOR11_CODIGO){
+                               
                           
                           if(!$value->getAprobado() && !$value->getRechazado()){
                             $estado = "<span class='label label-warning'>PENDIENTE</span>";
@@ -206,7 +215,7 @@
 
                             if(!$value->getAprobado() && !$value->getRechazado()){
                               echo "<td class='text-center' width='100'>
-                                      <a href='".$url_action_aprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."' class='btn btn-success btn-xs pull-left'>
+                                      <a href='".$url_action_aprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&cord=si' class='btn btn-success btn-xs pull-left'>
                                         <i class='fa fa-thumbs-up' data-toggle='tooltip' data-original-title='Aprobar Licencia'></i>
                                         
                                       </a> 
@@ -224,7 +233,7 @@
                             } else
                             {
                               echo "<td class='text-center'>
-                                    <a href='".$url_action_desaprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."' class='btn btn-danger btn-xs'>
+                                    <a href='".$url_action_desaprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&cord=si' class='btn btn-danger btn-xs'>
                                       <i class='fa fa-times' data-toggle='tooltip' data-original-title='Desaprobar Licencia'></i>
                                       Desaprobar Licencia
                                     </a>
@@ -242,6 +251,8 @@
                               echo "<td></td>";
                             }                           
                           echo "</tr>";
+                        }// if licencia=gestor
+                        } // foreach2
                         }          
                       }            
                     ?>
@@ -302,9 +313,8 @@
   });
 </script>
 <script type="text/javascript">
-
   $(document).ready(function(){                
-    $("#mnu_licencias_control").addClass("active");
+    $("#mnu_licencias_controlcoord").addClass("active");
   });
 
   function rechazar(id){
@@ -325,7 +335,7 @@
       f_usuario = $("#slt_usuario").val();  
       f_estados = $("#slt_estados").val();   
       
-      url_filtro_reporte="index.php?view=licencias_control&fdesde="+f_inicio+"&fhasta="+f_fin  
+      url_filtro_reporte="index.php?view=licencias_controlcoord&fdesde="+f_inicio+"&fhasta="+f_fin  
 
       if(f_usuario!=undefined)
         if(f_usuario>0)

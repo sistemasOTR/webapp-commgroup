@@ -29,15 +29,26 @@
 
       <div class="row">     
         <div class='col-md-4'>
-         <!-- INCLUDES TABLAS ITEM , COMPRAS -->
+         <!-- INCLUDES TABLAS ITEM , COMPRAS, SOLICITUD-->
          <?php include_once "Widget/Compras/item.php"; ?>
          <?php include_once "Widget/Compras/compras.php"; ?>
+          <?php include_once "Widget/Compras/solicitud.php"; ?>
         </div>
-        <div class='col-md-8'>
-           <!-- INCLUDE TABLA SOLICITUD -->
-           <?php include_once "Widget/Compras/solicitud.php"; ?>
+        <div class='col-md-4'>
+          <!-- INCLUDE TABLA LICENCIAS PEND-->
+          <?php include_once "Widget/Rrhh/pendlicencias.php"; ?>
          
-        </div>                
+        </div>
+        <div class='col-md-4'>
+           <!-- INCLUDE TABLA LICENCIAS PROX-->
+          <?php include_once "Widget/Rrhh/proxlicencias.php"; ?>
+         
+        </div> 
+        <div class='col-md-8'>
+           <!-- INCLUDE TABLA TICKETS-->
+          <?php include_once "Widget/Rrhh/tickets.php"; ?>
+         
+        </div>                     
       </div>
       
     </div>  

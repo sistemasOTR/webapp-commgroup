@@ -52,7 +52,7 @@
 					
 				$handler = new Tickets;
 
-				$data = $handler->seleccionarByFiltros($fdesde,$fhasta,$usuario,null);
+				$data = $handler->seleccionarByFiltros($fdesde,$fhasta,$usuario,null,null);
 
 				if(count($data)==1){
 					$data = array('' => $data );                   
@@ -66,12 +66,12 @@
 				throw new Exception($e->getMessage());				
 			}
 		}
-		public function seleccionarByFiltrosAprobacion($fdesde,$fhasta,$usuario){
+		public function seleccionarByFiltrosAprobacion($fdesde,$fhasta,$usuario,$festados){
 			try {
 					
 				$handler = new Tickets;
 
-				$data = $handler->seleccionarByFiltros($fdesde,$fhasta,$usuario,true);
+				$data = $handler->seleccionarByFiltros($fdesde,$fhasta,$usuario,$festados,true);
 
 				if(count($data)==1){
 					$data = array('' => $data );                   

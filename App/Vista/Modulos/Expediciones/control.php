@@ -329,10 +329,16 @@
 
   
 
-      if (enviar>pend || enviar<=0) {
+      if (enviar>pend || enviar<=0 ) {
         alert("cantidad erronea");
         document.getElementById("cantidadenviada").value = pend;
       }
+     
+      if (enviar>stock) {
+        alert("No hay stock");
+        document.getElementById("cantidadenviada").value = stock;
+      }
+
 
       
     }

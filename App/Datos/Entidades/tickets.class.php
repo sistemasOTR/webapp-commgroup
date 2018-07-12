@@ -571,7 +571,7 @@
 		}
 
 
-		public function seleccionarByFiltros($fdesde,$fhasta,$usuario,$enviada){
+		public function seleccionarByFiltros($fdesde,$fhasta,$usuario,$festados,$enviada){
 			try {
 				
 				$f = new Fechas;
@@ -612,6 +612,19 @@
 				$filtro_enviada="";
 				if(!empty($enviada))								
 					$filtro_enviada = "tickets.enviado = ".$enviada." AND ";
+
+				$filtro_estados="";
+				if(!empty($festados))
+				   switch ($festados) {
+				   		case '1':
+				   	      $filtro_estados = "tickets.aprobado = 'true' AND ";							
+				   			break;
+				   		case '2':
+				   	      $filtro_estados = "tickets.aprobado = 'false' AND ";
+				   	        break;							
+				   						
+				   					};								
+					
 													
 				$filtro_estado = "tickets.estado = 'true'";
 
@@ -622,6 +635,7 @@
 									".$filtro_fhasta." 										
 									".$filtro_usuario."
 									".$filtro_enviada."
+									".$filtro_estados."
 									".$filtro_estado;
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new Tickets);

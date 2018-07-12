@@ -79,12 +79,12 @@
 			}
 		}	
 
-		public function seleccionarByFiltros($fdesde,$fhasta,$usuario){
+		public function seleccionarByFiltros($fdesde,$fhasta,$usuario,$festados){
 			try {
 					
 				$handler = new Licencias;
 
-				$data = $handler->seleccionarByFiltros($fdesde,$fhasta,$usuario);
+				$data = $handler->seleccionarByFiltros($fdesde,$fhasta,$usuario,$festados);
 
 				if(count($data)==1){
 					$data = array('' => $data );                   
