@@ -21,6 +21,8 @@
     $nombreMES = strftime("%B",mktime(0, 0, 0, $f->format('m'), 1, 2000));      
     $anioMES = $f->format('Y'); 
     /*-------------------------*/
+  	if(!PRODUCCION)
+  	$fHOY = '2018-07-11';
 
   	$arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,$user->getUserSistema(),null,null,null,null);
   	$allEstados = $handler->selectAllEstados();

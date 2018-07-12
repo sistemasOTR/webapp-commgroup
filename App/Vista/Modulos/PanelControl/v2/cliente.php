@@ -17,6 +17,8 @@
     $anioMES = $f->format('Y'); 
 
     $mes = $dFecha->Mes($f->format('m'));
+    if(!PRODUCCION)
+    $fHOY = '2018-07-11';
 ?>
 
 <div class="content-wrapper">  
@@ -48,20 +50,20 @@
     </div>
   </section>
 
-  <section class="content-header col-lg-offset-2">
+  <section class="content-header">
     <h1>Resumen Mensual - (<span class="text-yellow"><?php echo($mes.' '.$anioMES); ?></span>)</h1>
   </section>
 
   <section class="content">
     <div class="content-fluid">
       <div class="row">
-        <div class="col-md-6 col-lg-4 col-lg-offset-2">
+        <div class="col-md-6">
             <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/GestionMensualEfectividad/cliente.php"; ?>
             <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/ServiciosMensualEfectividad/cliente.php"; ?>
         </div>
-        <!--<div class="col-md-6 col-lg-4">
+        <div class="col-md-6">
           <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/ProgresoMensual/cliente.php"; ?>
-        </div>-->
+        </div>
       </div>
     </div>
   </section>

@@ -23,6 +23,9 @@
   
   $allPlazas = $handler->selectAllPlazas(null);
 
+  if(!PRODUCCION)
+  	$fHOY = '2018-07-11';
+
 ?>
 
 <div class="content-wrapper">  

@@ -22,6 +22,8 @@
     /*-------------------------*/
 
     //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
+    if(!PRODUCCION)
+    $fHOY = '2018-07-11';
     
 
     $cerrados_efec =  $handler->selectCountServicios($fHOY,$fHOY, 6, $user->getUserSistema(), null, null, null, null);

@@ -1,15 +1,16 @@
 <?php
     include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";  
     include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
-    include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
+    include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php";
+    $user = $usuarioActivoSesion; 
 ?>
     
 <div class="content-wrapper">  
 
   <section class="content-header">
     <h1>
-      Resumen Diario / Mensual
-      <small>Resumen diario y mensual de toda la actividad</small>
+      Resumen Diario
+      <small>Resumen diario en plaza <?php echo $user->getAliasUserSistema() ?></small>
     </h1>
     <ol class="breadcrumb">
       <li class="active"><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>      
@@ -44,20 +45,35 @@
           </div>
         </div>
         
-      </div>  
-
+      </div> 
+    </div>
+  </section>
+    <section class="content-header">
+      <h1>
+        Resumen Mensual
+        <small>Resumen mensual en plaza <?php echo $user->getAliasUserSistema() ?></small>
+      </h1>
+      <ol class="breadcrumb">
+        <li class="active"><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>      
+      </ol>
+    </section>
+    <section class="content">
+      <div class="container-fluid">
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
+          <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/ProgresoMensual/coordinador.php"; ?>
+        </div>
+        <div class="col-md-6">
           <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/GestionMensualEfectividad/coordinador.php"; ?>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
           <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/ServiciosMensualEfectividad/coordinador.php"; ?>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
           <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/Puntaje/coordinador.php"; ?>
-        </div> 
+        </div>  
       </div>   
     </div>
   </section>

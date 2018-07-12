@@ -21,6 +21,8 @@
     $nombreMES = strftime("%B",mktime(0, 0, 0, $f->format('m'), 1, 2000));      
     $anioMES = $f->format('Y'); 
     /*-------------------------*/
+    if(!PRODUCCION)
+    $fHOY = '2018-07-11';
 
     //ESTADO = 300 --> Cerrado Parcial, Re pactado, Re llamar, Cerrado, Negativo (los 5 estados que se toman como operacion en la calle)
     $countServiciosMesCurso = $handler->selectCountServicios($fMES,$fHOY,null,$user->getUserSistema(),null,null,null,null);  

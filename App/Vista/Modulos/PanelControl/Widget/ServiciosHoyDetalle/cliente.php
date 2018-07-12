@@ -21,9 +21,12 @@
     $nombreMES = strftime("%B",mktime(0, 0, 0, $f->format('m'), 1, 2000));      
     $anioMES = $f->format('Y'); 
     /*-------------------------*/
+    if(!PRODUCCION)
+    $fHOY = '2018-07-11';
 
     $arrServicios = $handler->selectServicios($fHOY,$fHOY,null,$user->getUserSistema(),null,null,null,null,null);                        
     $allEstados = $handler->selectAllEstados();
+   
 ?>
 
 <div class="col-md-12 nopadding">
@@ -145,7 +148,7 @@
         $('#tabla').DataTable({
           "dom": 'Bfrtip',
           "buttons": ['copy', 'csv', 'excel', 'print'],
-          "iDisplayLength":20,
+          "iDisplayLength":10,
           "language": {
               "sProcessing":    "Procesando...",
               "sLengthMenu":    "Mostrar _MENU_ registros",
