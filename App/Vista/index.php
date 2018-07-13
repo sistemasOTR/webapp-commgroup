@@ -211,16 +211,16 @@
 		 /* INVENTARIO */
 		/*############*/
 		case 'exp_control':				
-			if($permiso->getModuloInventariosBoolean() && ($esBO || $esContabilidad || $esRRHH))
+			if($permiso->getModuloInventariosBoolean() && ($esBO || $esContabilidad))
 				$include = 'Modulos/Expediciones/control.php';			
 			break;
 
 		case 'exp_tipo_abm':				
-			if($permiso->getModuloInventariosBoolean() && ($esBO || $esContabilidad || $esRRHH))
+			if($permiso->getModuloInventariosBoolean() && ($esBO || $esContabilidad))
 				$include = 'Modulos/Expediciones/tipo_abm.php';			
 			break;
 		case 'exp_item_abm':				
-			if($permiso->getModuloInventariosBoolean() && ($esBO || $esContabilidad || $esRRHH))
+			if($permiso->getModuloInventariosBoolean() && ($esBO || $esContabilidad))
 				$include = 'Modulos/Expediciones/item_abm.php';			
 			break;	
 
@@ -240,7 +240,7 @@
 			break;		
 
 			case 'exp_compra':				
-			if($permiso->getModuloInventariosBoolean() && ($esCoordinador || ($esBO || $esContabilidad || $esRRHH)))
+			if($permiso->getModuloInventariosBoolean() && (($esBO || $esContabilidad)))
 				$include = 'Modulos/Expediciones/compra.php';			
 			break;		
 
@@ -452,6 +452,11 @@
 		case 'tickets_carga':			
 			if($permiso->getModuloTicketsBoolean() && ($esGestor || $esGerencia || ($esBO || $esContabilidad || $esRRHH) || $esCoordinador || $esIngresante || $esSupervisor))
 				$include = 'Modulos/Ticket/index.php';
+			break;		
+
+		case 'tickets_detalle':			
+			if($permiso->getModuloTicketsBoolean() && ($esGestor || $esGerencia || ($esBO||$esRRHH||$esContabilidad) || $esCoordinador || $esIngresante || $esSupervisor))
+				$include = 'Modulos/Ticket/ticket_detalle.php';
 			break;	
 
 		case 'tickets_control':			
@@ -488,7 +493,7 @@
 			break;	
 
 		case 'licencias_control':			
-			if($permiso->getModuloLicenciasBoolean() && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))
+			if($permiso->getModuloLicenciasBoolean() && (($esBO || $esRRHH) || $esCoordinador))
 				$include = 'Modulos/Licencias/control.php';
 			break;	
 
@@ -498,12 +503,12 @@
 			break;
 
 		case 'licencias_imprimir':			
-			if($permiso->getModuloLicenciasBoolean() && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))
+			if($permiso->getModuloLicenciasBoolean() && (($esBO || $esRRHH) || $esCoordinador))
 				$include = 'Modulos/Licencias/imprimir.php';
 			break;	
 
 		case 'tipo_licencias':				
-			if($permiso->getModuloLicenciasBoolean()  && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))
+			if($permiso->getModuloLicenciasBoolean()  && (($esBO || $esRRHH) || $esCoordinador))
 				$include = 'Modulos/Licencias/tipo_licencias.php';			
 			break;
 

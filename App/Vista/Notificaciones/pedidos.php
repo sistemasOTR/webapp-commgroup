@@ -72,7 +72,7 @@
     
   ?>
 
-  <?php if(($esBO || $esContabilidad || $esRRHH || $esGerencia) && (($countPendiente)>0 || ($countRParcial)>0 || ($countEParcial)>0) ){ ?>
+  <?php if(($esBO||$esContabilidad) && (($countPendiente)>0 || ($countRParcial)>0 || ($countEParcial)>0) ){ ?>
     <li class="dropdown notifications-menu">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
         <i class="fa fa-cubes"></i> 

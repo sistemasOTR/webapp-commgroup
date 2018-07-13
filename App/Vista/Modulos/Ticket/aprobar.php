@@ -135,7 +135,7 @@
                   <option value="">Seleccionar...</option>
                   <option value='0' <?php if ($festados == 0) { echo "selected";} ?>>TODAS</option>
                   <option value='1'<?php if ($festados == 1) { echo "selected";} ?>>APROBADOS</option>
-                  <option value='2'<?php if ($festados == 2) { echo "selected";} ?>>NO APROBADOS</option>
+                  <option value='2'<?php if ($festados == 2) { echo "selected";} ?>>PENDIENTES</option>
                   
                 </select>
               </div>
@@ -185,7 +185,7 @@
                           if($value->getAprobado())
                             $class_estilos_aprobado = "<span class='label label-success'>APROBADO</span>";
                           else
-                            $class_estilos_aprobado = "<span class='label label-danger'>NO APROBADO</span>";
+                            $class_estilos_aprobado = "<span class='label label-warning'>PENDIENTE</span>";
 
                           if($value->getAledanio())
                             $class_estilos_aledanio = "<span class='label label-success'>SI</span>";

@@ -26,7 +26,7 @@
   $fgestorId=(isset($_GET["fgestorId"])?$_GET["fgestorId"]:0);
   $arrCoordinador = $handler->selectAllPlazasArray();
   $arrGestor = $handler->selectAllGestor($fplaza); 
-  $arrUsuarios = $handlerUs->selectGestores();
+  $arrUsuarios = $handlerUs->selectTodos();
 
   $url_detalle = "index.php?view=impresora_detalle";
   $url_asignacion = "index.php?view=asignar_imp";
@@ -113,27 +113,24 @@
                   <?php 
                     if(!empty($arrUsuarios)){
                     foreach ($arrUsuarios as $usuario) {
-                      foreach ($arrGestor as $gestor) {
-                        if($fgestorId == $usuario->getId() && $usuario->getUserSistema() == $gestor->GESTOR11_CODIGO)
+                      if ($fplaza != '' || $fplaza !=0) {
+                        foreach ($arrGestor as $gestor) {
+                          if($fgestorId == $usuario->getId() && $usuario->getUserSistema() == $gestor->GESTOR11_CODIGO)
+                            echo "<option value='".$usuario->getId()."' selected>".$usuario->getNombre()." ".$usuario->getApellido()."</option>";
+                          elseif ($usuario->getUserSistema() == $gestor->GESTOR11_CODIGO) {
+                            echo "<option value='".$usuario->getId()."'>".$usuario->getNombre()." ".$usuario->getApellido()."</option>";
+                            }
+                        }
+                      } else {
+                        if($fgestorId == $usuario->getId())
                           echo "<option value='".$usuario->getId()."' selected>".$usuario->getNombre()." ".$usuario->getApellido()."</option>";
-                        elseif ($usuario->getUserSistema() == $gestor->GESTOR11_CODIGO) {
+                        else {
                           echo "<option value='".$usuario->getId()."'>".$usuario->getNombre()." ".$usuario->getApellido()."</option>";
                           }
-                        }
-                      }
-                      if ($fplaza == 'ROSARIO' || $fplaza == '') {
-                      	if ($fgestorId == 19) {
-                      		echo "<option value='19' selected>Romin Lesquiuta</option>";
-                      	} else {
-                      		echo "<option value='19'>Romin Lesquiuta</option>";
-                       	} 
-                      	if ($fgestorId == 10104) {
-                      		echo "<option value='10104' selected>Maricel Mattalia</option>";
-                      	} else {
-                      		echo "<option value='10104'>Maricel Mattalia</option>";
-                       	} 
+
                       }
                     }
+                  }
                   ?>
                 </select>
               </div>
@@ -256,11 +253,11 @@
     url_filtro_reporte="index.php?view=asignar_imp&fserialNro="+f_serialNro;
 
     if(f_plaza!=undefined)
-      if(f_plaza!='')
+      if(f_plaza>0)
         url_filtro_reporte= url_filtro_reporte +"&fplaza="+f_plaza;
 
     if(f_gestorId!=undefined)
-      if(f_gestorId!='')
+      if(f_gestorId>0)
         url_filtro_reporte= url_filtro_reporte +"&fgestorId="+f_gestorId;
     
     $("#filtro_reporte").attr("href", url_filtro_reporte);

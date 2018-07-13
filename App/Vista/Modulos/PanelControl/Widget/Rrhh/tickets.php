@@ -61,7 +61,7 @@
                         foreach ($consulta as $key => $value) {
 
                           if (!$value->getAprobado()) {
-                           $class_estilos_aprobado = "<span class='label label-danger'>NO APROBADO</span>";
+                           $class_estilos_aprobado = "<span class='label label-warning'>PENDIENTE</span>";
                           } else {
                             $class_estilos_aprobado = "<span class='label label-success'> APROBADO</span>";
 
