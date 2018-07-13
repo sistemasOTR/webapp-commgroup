@@ -23,8 +23,8 @@
     /*-------------------------*/
 
     //ESTADO = 300 --> Cerrado Parcial, Re pactado, Re llamar, Cerrado, Negativo (los 5 estados que se toman como operacion en la calle)
-    $countServiciosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,null,null,null,null,$user->getUserSistema(),null);  
-    $countDiasMesCurso = $handler->selectCountFechasServicios($fMES,$fHOY,null,null,null,null,$user->getUserSistema(),null);
+    $countServiciosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,null,null,null,null,$user->getAliasUserSistema(),null);  
+    $countDiasMesCurso = $handler->selectCountFechasServicios($fMES,$fHOY,null,null,null,null,$user->getAliasUserSistema(),null);
    
 
     if(!empty($countDiasMesCurso[0]->CANTIDAD_DIAS))
@@ -33,7 +33,7 @@
       $countServiciosTotalGestion = round(0,2);    
 
     //ESTADO = 200 --> Cerrado, Enviado y Liquidar (los 3 estados que se toman como operacion cerrada)
-    $countServiciosCerradosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,200,null,null,null,$user->getUserSistema(),null);        
+    $countServiciosCerradosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,200,null,null,null,$user->getAliasUserSistema(),null);        
 
     if(!empty($countServiciosMesCursoGestion[0]->CANTIDAD_SERVICIOS))
       $efectividadMesCursoGestion = round(($countServiciosCerradosMesCursoGestion[0]->CANTIDAD_SERVICIOS) / intval(intval($countServiciosMesCursoGestion[0]->CANTIDAD_SERVICIOS))*100,0);
@@ -50,10 +50,10 @@
     $totales = 0;
     for ($i=$fdesde; $i <= $fhasta; $i++) { 
     	list($año, $mes, $dia) = split('[/.-]', $i);
-    	$servCerrados = $handler->selectCountServiciosGestion($i,$i,200,null,null,null,$user->getUserSistema(),null);
+    	$servCerrados = $handler->selectCountServiciosGestion($i,$i,200,null,null,null,$user->getAliasUserSistema(),null);
     	$cerrados += $servCerrados[0]->CANTIDAD_SERVICIOS;
+    	$servTotales = $handler->selectCountServiciosGestion($i,$i,null,null,null,null,$user->getAliasUserSistema(),null);
     	$totales += $servTotales[0]->CANTIDAD_SERVICIOS;
-    	$servTotales = $handler->selectCountServiciosGestion($i,$i,null,null,null,null,$user->getUserSistema(),null);
     	if ($servTotales[0]->CANTIDAD_SERVICIOS != 0 && $servCerrados[0]->CANTIDAD_SERVICIOS != 0) {
     		$datos[] = array('dia' => $dia.'-'.$mes,
     						'EFICIENCIA' => number_format($servCerrados[0]->CANTIDAD_SERVICIOS*100/$servTotales[0]->CANTIDAD_SERVICIOS,2) );
@@ -148,7 +148,7 @@
 				yAxes:[{
 					ticks: {
 						min: 30,
-						max: 90,
+						max: 100,
 						stepSize: 10
 					}
 				}]
