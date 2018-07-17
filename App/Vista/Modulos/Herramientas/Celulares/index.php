@@ -33,6 +33,8 @@ echo "window.open('".PATH_VISTA."Modulos/Herramientas/Celulares/imprimir_baja_co
   $handler = new HandlerSistema;
   $handlerCel = new HandlerCelulares;
   $handlerUs = new HandlerUsuarios;
+  $dFecha = new Fechas;
+  $fHoy = $dFecha->FechaActual()  ;
 
   $user = $usuarioActivoSesion;
   $fgestor=(isset($_GET["fgestor"])?$_GET["fgestor"]:'');

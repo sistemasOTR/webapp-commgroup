@@ -2,8 +2,6 @@
   $arrDatos = $handlerimpresoras->AllImpresoras($fplaza,$fgestorId);
 
 ?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.2.1/jquery.quicksearch.js"></script>
-
 <div class="box box-solid">
   <div class="box-header with-border">
     <i class="fa fa-list"></i>
@@ -16,7 +14,7 @@
 
   <div class="box-body table-responsive"> 
     
-    <table class="table table-striped table-condensed" id="tabla-plaza" cellspacing="0" width="100%" style="text-align:center;">
+    <table class="table table-striped table-condensed" id="tabla" cellspacing="0" width="100%" style="text-align: center;">
       <thead>
         <tr>
           <th class='text-center'>Serial</th>
@@ -25,8 +23,9 @@
           <th class='text-center'>Estado</th>
           <th class='text-center' width="200">Plaza</th>
           <th class='text-center' width="200">Gestor</th>
+          <th class='text-center' width="150" style="display: none">Asignación</th>
           <th class='text-center' width="150">Asignación</th>
-          <th class='text-center' colspan="3">Acciones</th>
+          <th class='text-center' width="100"></th>
         </tr>
       </thead>
 
@@ -39,6 +38,7 @@
             $impresoraEnPlaza = $handlerimpresoras->PlazaImpresoras($value->getSerialNro());
             if(is_null($impresoraEnPlaza["_fechaDev"]) && !is_null($impresoraEnPlaza)){
               $fecha = $impresoraEnPlaza["_fechaAsig"]->format('d-m-Y');
+              $fechaOrd = $impresoraEnPlaza["_fechaAsig"]->format('Y-m-d');
 				      $fechaDev = $impresoraEnPlaza["_fechaAsig"]->format('Y-m-d');
             	$asig = "<a href='#' data-toggle='modal' id='".$impresoraEnPlaza['_asigId']."' data-target='#modal-devolver' data-asigId='".$impresoraEnPlaza['_asigId']."' data-fechaEnt='".$fechaDev."' onclick='cargarDatos(".$impresoraEnPlaza["_asigId"].")'><i class='ion-arrow-return-left text-maroon'></i></a>";
             	$plaza = $impresoraEnPlaza["_plaza"];
@@ -51,11 +51,12 @@
 	              	$nombre = '-';
                   $baja= ""; 
 	              }
-                $estado = '<span class = "label label-success" style="font-size: 13px; font-weight: normal;">Entregada</span>';
+                $estado = '<span class = "label label-success" style="font-size: 13px; font-weight: normal;">Asignada</span>';
 
 
             } else {
-            	$fecha = '-';
+              $fecha = '-';
+            	$fechaOrd = '-';
       				$plaza = 'STOCK';
       				$nombre = '-';
       				$asig= "<a href='".$url_asignacion."&fserialNro=".$value->getSerialNro()."'><i class='ion-location text-green'></i></a>";
@@ -82,13 +83,10 @@
                 <td>".$estado."</td>
                 <td>".$plaza."</td>
                 <td>".$nombre."</td>
-                <td>".$fecha."</td>";
-                echo "<td style='font-size: 20px;' width='40'> <a href='".$url_detalle."&fserialNro=".$value->getSerialNro()."'><i class='ion-eye text-blue'></i></a></td>";
-                echo "<td style='font-size: 20px;' width='40'> ".$asig."</td>";
-                echo "<td style='font-size: 20px;' width='40'> ".$baja."</td>";
-
-
-            echo "</tr>";
+                <td style='display: none;'>".$fechaOrd."</td>
+                <td>".$fecha."</td>
+                <td style='font-size: 20px; letter-spacing:7px;' width='100'> <a href='".$url_detalle."&fserialNro=".$value->getSerialNro()."'><i class='ion-eye text-blue'></i></a> ".$asig." ".$baja."</td>
+            </tr>";
           }
         }
 
@@ -97,6 +95,41 @@
     </table> 
   </div>             
 </div>
+<script>
+  
+    $(document).ready(function() {
+        $('#tabla').DataTable({
+          "dom": 'Bfrtip',
+          "buttons": ['copy', 'csv', 'excel', 'print'],
+          "iDisplayLength":100,
+          "order": [[ 6, "desc" ]],
+          "language": {
+              "sProcessing":    "Procesando...",
+              "sLengthMenu":    "Mostrar _MENU_ registros",
+              "sZeroRecords":   "No se encontraron resultados",
+              "sEmptyTable":    "Ningún dato disponible en esta tabla",
+              "sInfo":          "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+              "sInfoEmpty":     "Mostrando registros del 0 al 0 de un total de 0 registros",
+              "sInfoFiltered":  "(filtrado de un total de _MAX_ registros)",
+              "sInfoPostFix":   "",
+              "sSearch":        "Buscar:",
+              "sUrl":           "",
+              "sInfoThousands":  ",",
+              "sLoadingRecords": "Cargando...",
+              "oPaginate": {
+                  "sFirst":    "Primero",
+                  "sLast":    "Último",
+                  "sNext":    "Siguiente",
+                  "sPrevious": "Anterior"
+              },
+              "oAria": {
+                  "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                  "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+              }
+          }
+        });
+    });
+</script>
 <div class="modal fade in" id="modal-nuevo">
     <div class="modal-dialog">
       <div class="modal-content">

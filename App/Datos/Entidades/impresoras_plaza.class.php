@@ -42,6 +42,10 @@
 		private $_obs;
 		public function getObs(){ return $this->_obs; }
 		public function setObs($obs){ $this->_obs =$obs; }
+		
+		private $_obsDev;
+		public function getObsDev(){ return $this->_obsDev; }
+		public function setObsDev($obsDev){ $this->_obsDev =$obsDev; }
 
 
 		/*#############*/
@@ -56,6 +60,7 @@
 			$this->setFechaAsig('');
 			$this->setFechaDev('');
 			$this->setObs('');
+			$this->setObsDev('');
 			
 		}
 
@@ -124,8 +129,9 @@
 				# Query 			
 				$query="UPDATE impresora_plaza SET
 								fechaDev='".$this->getFechaDev()."',
-								obs='".$this->getObs()."'
+								obsDev='".$this->getObsDev()."'
 							WHERE asigId=".$this->getAsigId();
+
 
 				# Ejecucion 					
 				return SQL::update($conexion,$query);	
@@ -253,6 +259,7 @@
 				$this->setFechaAsig($filas['fechaAsig']);			
 				$this->setFechaDev($filas['fechaDev']);			
 				$this->setObs(trim($filas['obs']));
+				$this->setObsDev(trim($filas['obsDev']));
 			}
 		}
 
@@ -265,6 +272,7 @@
 			$this->setFechaAsig('');
 			$this->setFechaDev('');
 			$this->setObs('');
+			$this->setObsDev('');
 		}
 
 		private function createTable()

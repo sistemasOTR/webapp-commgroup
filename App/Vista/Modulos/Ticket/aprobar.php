@@ -28,7 +28,7 @@
   $url_action_rechazar = PATH_VISTA.'Modulos/Ticket/action_rechazar.php';  
   $url_detalle = 'index.php?view=tickets_detalle&fticket=';   
 
-  $url_retorno = "view=tickets_aprobar&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados;
+  $url_retorno = "view=tickets_aprobar&fdesde=".$fdesde."&fhasta=".$fhasta."&fplaza=".$fplaza."&fusuario=".$fusuario."&festados=".$festados;
 ?>
 <style>
   .input-group {position: relative;display: block;border-collapse: separate;}
@@ -262,6 +262,7 @@
                                             class='text-green' 
                                             data-toggle='modal' 
                                             data-target='#modal-aprobar' 
+                                            data-importe='".number_format($value->getImporte(),2)."' 
                                             data-reintegro='".number_format($value->getImporteReintegro(),2)."' 
                                             data-aledanio='".$value->getAledanio()."' 
                                             data-cant_operaciones='".$cantServ[0]->CANTIDAD_SERVICIOS."'                     
@@ -324,12 +325,16 @@
         </div>
         <div class="modal-body">
             <div class="row">
-              <div class="col-md-6">
-                <label>Importe Reintegro</label>
+              <div class="col-md-4">
+                <label>Importe</label>
+                <input type="number" name="importe" class="form-control" step="0.01"  required="" readonly="">
+              </div>
+              <div class="col-md-4">
+                <label>Reintegro</label>
                 <input type="number" name="reintegro" class="form-control" step="0.01"  required="">
               </div>
-              <div class="col-md-6">
-                <label>Cantidad Operaciones</label>
+              <div class="col-md-4">
+                <label>Operaciones</label>
                 <input id="input_cant_operaciones" type="number" name="operaciones" class="form-control" step="0.01"  required="" readonly="">
               </div>              
               <div class="col-md-12">
@@ -462,10 +467,12 @@
         var elemento = document.querySelector('#boton_aprobar_'+id);        
         formAprobar.id.value = id;   
 
+        var importe= elemento.getAttribute('data-importe');     
         var reintegro= elemento.getAttribute('data-reintegro');     
         var aledanio = elemento.getAttribute('data-aledanio');     
         var cant_operaciones = elemento.getAttribute('data-cant_operaciones');     
         
+        formAprobar.importe.value = importe;
         formAprobar.reintegro.value = reintegro;
 
         if(aledanio==true)

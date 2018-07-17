@@ -14,10 +14,10 @@
 <div class="box box-solid">
   <div class="box-header with-border">
     <i class="fa fa-list"></i>
-    <h3 class="box-title">Líneas entregadas</h3>
+    <h3 class="box-title">Líneas y Equipos asignados</h3>
 
     
-    <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-entrega-linea'>
+    <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-entrega-linea' onclick="entregaLinea('<?php echo $fHoy; ?>')">
         <i class="fa fa-share"></i> Entregar
     </a>
     
@@ -114,7 +114,7 @@
                 <div class="col-xs-12 no-padding">
                   <div class="col-md-4">
                     <label>Fecha</label>
-                    <input type="date" name="fechaEntrega" class="form-control">
+                    <input type="date" name="fechaEntrega" id="fechaEntrega" class="form-control">
                   </div>          
                 </div>
                   <div class="col-md-6">
@@ -175,6 +175,16 @@
       </div>
     </div>
   </div>
+
+  <script>
+    function entregaLinea(fecha) {
+      document.getElementById('fechaEntrega').value = fecha;
+      document.getElementById('slt_nroLinea').selectedIndex = 0;
+      document.getElementById('slt_equipo').value = '0';
+      document.getElementById('slt_usuario').value = '0';
+      document.getElementById('txtObs').value = '';
+    }
+  </script>
 
 <div class="modal fade in" id="modal-enroque-equipo">
     <div class="modal-dialog">

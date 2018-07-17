@@ -8,7 +8,7 @@
   <div class="box-header with-border">
     <i class="fa fa-list"></i>
     <h3 class="box-title">Equipos libres</h3>
-    <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-nuevo-equipo'>
+    <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-nuevo-equipo' onclick="nuevoEquipo('<?php echo $fHoy; ?>')">
         <i class="fa fa-mobile"></i> Nuevo
     </a>
     
@@ -79,19 +79,19 @@
               <div class="row">
                   <div class="col-md-6">
                     <label>Fecha de Compra</label>
-                    <input type="date" name="txtFechaCompra" class="form-control">
+                    <input type="date" name="txtFechaCompra" id="txtFechaCompra" class="form-control">
                   </div>
                   <div class="col-md-6">
                     <label>Número de IMEI</label>
-                    <input type="text" name="txtIMEI" class="form-control">
+                    <input type="text" name="txtIMEI" id="txtIMEI" class="form-control">
                   </div>
                   <div class="col-md-6">
                     <label>Marca</label>
-                    <input type="text" name="txtMarca" class="form-control">                    
+                    <input type="text" name="txtMarca" id="txtMarca" class="form-control">                    
                   </div>
                   <div class="col-md-6">
                     <label>Modelo</label>
-                    <input type="text" name="txtModelo" class="form-control" >
+                    <input type="text" name="txtModelo" id="txtModelo" class="form-control" >
                   </div>
                   <div class="col-md-6" style="display: none;">
                     <label>Precio de Compra</label>
@@ -107,3 +107,11 @@
       </div>
     </div>
   </div>
+  <script>
+    function nuevoEquipo(fecha) {
+      document.getElementById('txtFechaCompra').value = fecha;
+      document.getElementById('txtIMEI').value = '';
+      document.getElementById('txtMarca').value = '';
+      document.getElementById('txtModelo').value = '';
+    }
+  </script>

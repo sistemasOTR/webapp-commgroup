@@ -8,7 +8,7 @@
   <div class="box-header with-border">
     <i class="fa fa-list"></i>
     <h3 class="box-title">Líneas libres</h3>
-    <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-nueva-linea'>
+    <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-nueva-linea' onclick="nuevaLinea('<?php echo $fHoy; ?>')">
         <i class="fa fa-phone"></i> Nueva
     </a>
     
@@ -67,11 +67,11 @@
               <div class="row">
                   <div class="col-md-6">
                     <label>Fecha</label>
-                    <input type="date" name="txtFechaAlta" class="form-control">
+                    <input type="date" name="txtFechaAlta" id="txtFechaAlta" class="form-control">
                   </div>          
                   <div class="col-md-6">
                     <label>Número de Línea</label>
-                    <input type="text" name="txtNroLinea" class="form-control">
+                    <input type="text" name="txtNroLinea" id="txtNroLinea" class="form-control">
                   </div>
                   <div class="col-md-6" style="display: none;">
                     <label>Empresa</label>
@@ -79,7 +79,7 @@
                   </div>
                   <div class="col-md-6">
                     <label>Plan</label>
-                    <input type="text" name="txtPlan" class="form-control">
+                    <input type="text" name="txtPlan" id="txtPlan" class="form-control">
                   </div>
                   <div class="col-md-6" style="display: none;">
                     <label>Costo</label>
@@ -103,3 +103,10 @@
       </div>
     </div>
   </div>
+  <script>
+    function nuevaLinea(fecha) {
+      document.getElementById('txtFechaAlta').value = fecha;
+      document.getElementById('txtNroLinea').value = '';
+      document.getElementById('txtPlan').value = '';
+    }
+  </script>
