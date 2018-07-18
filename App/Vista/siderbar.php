@@ -34,7 +34,7 @@
         
         $url_licencias_carga = "index.php?view=licencias_carga";
         $url_licencias_control = "index.php?view=licencias_control";       
-        $url_licencias_controlcoordinador= "index.php?view=licencias_controlcoord";
+        $url_licencias_controlcoordinador = "index.php?view=licencias_controlcoord";       
         $url_tipo_licencias_abm = "index.php?view=tipo_licencias";
         
         $url_capacitaciones = "index.php?view=capacitaciones";
@@ -54,6 +54,7 @@
         $url_roles = "index.php?view=roles";        
 
         $url_exp_control = "index.php?view=exp_control";
+        $url_exp_controlcoordinador = "index.php?view=exp_control_coordinador";
         $url_exp_tipo_abm = "index.php?view=exp_tipo_abm";
         $url_exp_item_abm = "index.php?view=exp_item_abm";
         $url_exp_solicitud = "index.php?view=exp_solicitud";
@@ -370,7 +371,7 @@
                 <a href="#"><i class="fa fa-check-square-o"></i> <span>Expediciones</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
 
-                  <?php if(($esBO || $esContabilidad || $esRRHH) || $esGerencia){ ?>
+                  <?php if(($esBO || $esContabilidad ) || $esGerencia){ ?>
                     <li id="mnu_expediciones_compra">
                       <a href=<?php echo $url_exp_compra; ?>>
                         <i class="fa fa-shopping-cart"></i> <span>Compras</span>
@@ -378,7 +379,7 @@
                     </li>
 
                      <?php } ?>
-                  <?php if(($esBO || $esContabilidad || $esRRHH)){ ?>
+                  <?php if(($esBO || $esContabilidad )){ ?>
 
                     <li id="mnu_expediciones_control">
                       <a href=<?php echo $url_exp_control; ?>>
@@ -397,12 +398,14 @@
                     </li> 
                     <?php } ?> 
                     
-                    <?php if($esCoordinador){ ?>
+                    <?php if($esBO || $esCoordinador|| $esContabilidad || $esRRHH){ ?>
                     <li id="meu_expediciones_solicitud" >
                       <a href=<?php echo $url_exp_solicitud; ?>>
                         <i class="fa fa-plus"></i> <span>Solicitud</span>
                       </a>
-                    </li>                    
+                    </li> 
+                     <?php } ?> 
+                      <?php if($esCoordinador || $esBO || $esContabilidad || $esRRHH){ ?>              
                     <li id="mnu_expediciones_seguimiento">
                       <a href=<?php echo $url_exp_seguimiento; ?>>
                         <i class="fa fa-check"></i> <span>Seguimiento</span>
@@ -658,6 +661,20 @@
                 </ul>              
               </li>   
             <?php } ?>
+
+             <?php
+              if($usuarioActivoSesion->getId()==10164){    
+            ?>
+              <li class="treeview" id="mnu_control_coordinador">
+                <a href="#"><i class="fa fa-tasks"></i> <span>Control General</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li id="mnu_control_coord">
+                      <a href=<?php echo $url_exp_controlcoordinador; ?>>
+                        <i class="fa fa-tasks"></i> <span>Control</span>
+                      </a>
+                    </li>                  
+                  <?php } ?>
+
           </ul>
 
         </section>        

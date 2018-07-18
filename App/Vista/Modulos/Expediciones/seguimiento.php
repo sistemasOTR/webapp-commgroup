@@ -14,8 +14,13 @@
   $ftipo= (isset($_GET["ftipo"])?$_GET["ftipo"]:'');
   $festados= (isset($_GET["festados"])?$_GET["festados"]:'');
   $fusuario= $usuarioActivoSesion->getId();
-  $fplaza= $usuarioActivoSesion->getAliasUserSistema();
-
+  if ($usuarioActivoSesion->getUsuarioPerfil()->getNombre() == 'CORDINADOR') {
+    $fplaza= $usuarioActivoSesion->getAliasUserSistema();
+  } else {
+    $fplaza= $usuarioActivoSesion->getUsuarioPerfil()->getNombre();
+  }
+  
+  
   $handler = new HandlerExpediciones;
   $arrTipo = $handler->selecionarTipo();
   $arrEstados = $handler->selecionarEstados();
@@ -126,7 +131,7 @@
                   <tr>
                     <th>FECHA</th>
                     <th>ULT ENVIO</th>
-                    <th>ITEM</th>             
+                    <th>ITEM-DESCRIPCIÓN</th>             
                     <th>CANT PEDIDA</th>             
                     <th>CANT RECIBIDA</th>             
                     <th>DETALLE</th>
@@ -165,7 +170,7 @@
                           $estado = $handler->selectEstado($value->getEstadosExpediciones());    
                           $url_recibido= PATH_VISTA.'Modulos/Expediciones/action_recibido.php?id='.$value->getId().'&estado='.$estado->getId().'&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados='.$festados.'&ftipo='.$ftipo; 
 
-                           if ($estado->getId()==1 || $estado->getId()==3) {
+                           if ($estado->getId()==1 || $estado->getId()==3 || $estado->getId()==9) {
                                         $envios='<i class="fa fa-eye text-red"></i>';
                                        }
                               else{
@@ -189,7 +194,7 @@
                             <tr>
                               <td>".$value->getFecha()->format('d/m/Y')."</td>
                               <td>".$fechaEnvio."</td>
-                              <td>".$item->getNombre()."</td>                      
+                              <td>".$item->getNombre()."-".$item->getDescripcion()."</td>                      
                                 <td>".$value->getCantidad()."</td>
                                 <td>".$value->getEntregada()."</td>
                                 <td>".$value->getDetalle()."</td>                        

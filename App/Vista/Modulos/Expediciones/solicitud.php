@@ -76,6 +76,8 @@
                       <label>Detalle</label>            
                       <input type="tex" name="detalle" placeholder="Detalle del pedido" class="form-control">
                       <input type="tex" name="plaza"  value="<?php echo $user->getAliasUserSistema(); ?>" class="form-control" style="display: none;">
+
+                      <input type="tex" name="tipoUsuario"  value="<?php echo $user->getUsuarioPerfil()->getNombre(); ?>" class="form-control" style="display: none;">
                        
                     </div>
                   </div>              
@@ -110,7 +112,7 @@
                 <thead>
                   <tr>
                     <th>FECHA</th>
-                    <th>ITEM</th>             
+                    <th>ITEM-DESCRIPCIÓN</th>             
                     <th>CANTIDAD</th>             
                     <th>DETALLE</th>
                     <th>ESTADO</th>             
@@ -133,7 +135,7 @@
                           echo "
                             <tr>
                               <td>".$value->getFecha()->format('d/m/Y')."</td>
-                              <td>".$item->getNombre()."</td>
+                              <td>".$item->getNombre()."-".$item->getDescripcion()."</td>
                                 <td>".$value->getCantidad()."</td>
                                 <td>".$value->getDetalle()."</td>                        
                                 <td>

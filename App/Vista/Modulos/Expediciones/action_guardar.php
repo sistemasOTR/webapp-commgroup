@@ -16,10 +16,13 @@
 	$observaciones = "";
 	$item = (isset($_POST["slt_item"])?$_POST["slt_item"]:'');
 	$cant = (isset($_POST["cantidad"])?$_POST["cantidad"]:'');
+	$tipo = (isset($_POST["tipoUsuario"])?$_POST["tipoUsuario"]:'');
 	$estados = false;
 	$entregada=0;
 
-
+	if ($tipo != 'CORDINADOR') {
+		$plaza = $tipo;
+	}
 	
 	$err = "../../../../index.php?view=exp_solicitud&err=";     		
 	$info = "../../../../index.php?view=exp_solicitud&info=";     		

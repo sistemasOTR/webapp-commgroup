@@ -32,12 +32,12 @@
 	}
 
 
-     if ($cantidadtotalenviada-$cantidad_origin==0) {
+     // if ($cantidadtotalenviada-$cantidad_origin==0) {
 
      	try {
 
 
-     	$estado=2;	
+     	$estado=9;	
 		$hanlder = new HandlerExpediciones();
 		$handler2 = new HandlerExpediciones();
 		$handler3 = new HandlerExpediciones();
@@ -60,28 +60,28 @@
 	} catch (Exception $e) {
 		header("Location: ".$err.$e->getMessage());
 	}
-     }
+     // }
 
-     else{
-     	try {
-     	$estado=6;	
-		$hanlder = new HandlerExpediciones();
-		$handler2 = new HandlerExpediciones();
-		$handler3 = new HandlerExpediciones();
+ //     else{
+ //     	try {
+ //     	$estado=6;	
+	// 	$hanlder = new HandlerExpediciones();
+	// 	$handler2 = new HandlerExpediciones();
+	// 	$handler3 = new HandlerExpediciones();
 
-		$hanlder->modificarEstadoExpedicion($i,$estado,$observaciones,$cantidadtotalenviada);
-		$handler2->cargarEnvios($i,$fecha,$cantidad_env,$user);
-		$handler3->modificarStock(intval($iditem),intval($nuevo_stock),$apedir);
+	// 	$hanlder->modificarEstadoExpedicion($i,$estado,$observaciones,$cantidadtotalenviada);
+	// 	$handler2->cargarEnvios($i,$fecha,$cantidad_env,$user);
+	// 	$handler3->modificarStock(intval($iditem),intval($nuevo_stock),$apedir);
 
-        $err = "../../../../".$_POST['url_redireccion']."&err=";     		
-		$info = "../../../../".$_POST['url_redireccion']."&info="; 
-		$msj="El estado fue cambiado con con éxito.";
-		header("Location: ".$info.$msj);
+ //        $err = "../../../../".$_POST['url_redireccion']."&err=";     		
+	// 	$info = "../../../../".$_POST['url_redireccion']."&info="; 
+	// 	$msj="El estado fue cambiado con con éxito.";
+	// 	header("Location: ".$info.$msj);
 
-	} catch (Exception $e) {
-		header("Location: ".$err.$e->getMessage());
-	}
-     }
+	// } catch (Exception $e) {
+	// 	header("Location: ".$err.$e->getMessage());
+	// }
+ //     }
 
    
 
