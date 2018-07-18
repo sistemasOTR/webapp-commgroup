@@ -47,6 +47,10 @@
 		public function getUserCarga(){ return $this->_userCarga; }
 		public function setUserCarga($userCarga){ $this->_userCarga =$userCarga; }
 
+		private $_estado;
+		public function getEstado(){ return $this->_estado; }
+		public function setEstado($estado){ $this->_estado =$estado; }
+
 		private $_userAprobacion;
 		public function getUserAprobacion(){ return $this->_userAprobacion; }
 		public function setUserAprobacion($userAprobacion){ $this->_userAprobacion =$userAprobacion; }
@@ -73,6 +77,7 @@
 			$this->setFechaBaja('');
 			$this->setObs('');
 			$this->setUserCarga(0);
+			$this->setEstado(0);
 			$this->setUserAprobacion(0);
 			$this->setAprobado(false);
 			$this->setFechaHoraAprobacion('');
@@ -93,6 +98,7 @@
 		        						fechaCompra,
 		        						precioCompra,
 		        						userCarga,
+		        						estado,
 		        						aprobado,
 		        						obs
 	        			) VALUES (
@@ -102,6 +108,7 @@
 	        							'".$this->getFechaCompra()."',
 	        							".$this->getPrecioCompra().",
 	        							".$this->getUserCarga().",
+	        							1,
 	        							'".$this->getAprobado()."',
 	        							'".$this->getObs()."'
 	        			)";        
@@ -141,34 +148,6 @@
 				throw new Exception($e->getMessage());
 			}		
 		}
-
-		public function editarImpresora($conexion)
-		{
-			try {
-
-				# Validaciones 			
-				if(empty($this->getSerialNro()))
-					throw new Exception("Impresora no identificada");
-
-				
-				# Query 			
-				$query="UPDATE impresoras SET
-								fechaCompra='".$this->getFechaCompra()."',
-								precioCompra=".$this->getPrecioCompra().",
-								userAprobacion=".$this->getUserAprobacion().",
-								aprobado='".$this->getAprobado()."',
-								fechaHoraAprobacion='".$this->getFechaHoraAprobacion()."'
-							WHERE serialNro='".$this->getSerialNro()."'";
-							
-
-				# Ejecucion 					
-				return SQL::update($conexion,$query);	
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());
-			}		
-		}
-
 		public function delete($conexion)
 		{
 			try {
@@ -207,6 +186,66 @@
 
 		}
 
+		public function setPropiedadesBySelect($filas)
+		{	
+			if(empty($filas)){
+				$this->cleanClass();
+			}
+			else{
+				$this->setSerialNro($filas['serialNro']);
+				$this->setMarca(trim($filas['marca']));			
+				$this->setModelo(trim($filas['modelo']));			
+				$this->setFechaCompra($filas['fechaCompra']);			
+				$this->setPrecioCompra(trim($filas['precioCompra']));			
+				$this->setFechaBaja($filas['fechaBaja']);			
+				$this->setObs($filas['obs']);
+				$this->setUserCarga($filas['userCarga']);
+				$this->setEstado($filas['estado']);
+				$this->setUserAprobacion($filas['userAprobacion']);
+				$this->setAprobado($filas['aprobado']);
+				$this->setFechaHoraAprobacion($filas['fechaHoraAprobacion']);
+			}
+		}
+
+		private function cleanClass()
+		{
+			$this->setSerialNro(0);
+			$this->setMarca('');
+			$this->setModelo('');
+			$this->setFechaCompra('');
+			$this->setPrecioCompra(0);
+			$this->setFechaBaja('');
+			$this->setObs('');
+			$this->setUserCarga(0);
+			$this->setEstado(0);
+			$this->setUserAprobacion(0);
+			$this->setAprobado(false);
+			$this->setFechaHoraAprobacion('');
+		}
+
+		private function createTable()
+		{
+			return 'CREATE TABLE IF NOT EXISTS';
+		}
+
+		/*########################*/
+		/* METODOS PERSONALIZADOS */
+		/*########################*/
+
+		public function getNombreRoles(){
+			$handler = new UsuarioPerfil;
+			$roles = explode("|", $this->getRoles());
+			
+			$nombre_roles = "";
+			foreach ($roles as $key => $value) {
+				if(!empty($value)){
+					$handler->setId($value);
+					$nombre_roles = $nombre_roles.$handler->select()->getNombre().",";				
+				}
+			}			
+			return $nombre_roles;
+		}
+
 		public function selectXPlaza($plaza)
 		{			
 			try {
@@ -215,7 +254,7 @@
 				if($plaza=='' || $plaza == '0'){
 					$query = "SELECT 
 					impresoras.serialNro, impresoras.modelo, impresoras.marca, 
-					impresoras.fechaCompra, impresoras.precioCompra, impresoras.fechaBaja, impresoras.obs
+					impresoras.fechaCompra, impresoras.precioCompra, impresoras.fechaBaja, impresoras.obs,impresoras.estado
 					FROM impresoras left join impresora_plaza 
 					on impresoras.serialNro = impresora_plaza.serialNro
 					WHERE fechaDev is null or fechaBaja is null
@@ -243,7 +282,7 @@
 				if($gestorId=='' || $gestorId == '0'){
 					$query = "SELECT 
 					impresoras.serialNro, impresoras.modelo, impresoras.marca, 
-					impresoras.fechaCompra, impresoras.precioCompra, impresoras.fechaBaja, impresoras.obs
+					impresoras.fechaCompra, impresoras.precioCompra, impresoras.fechaBaja, impresoras.obs, impresoras.estado
 					FROM impresoras left join impresora_plaza 
 					on impresoras.serialNro = impresora_plaza.serialNro 
 					WHERE fechaDev is null or fechaBaja is null
@@ -304,62 +343,53 @@
 			}		
 		}
 
-		public function setPropiedadesBySelect($filas)
-		{	
-			if(empty($filas)){
-				$this->cleanClass();
-			}
-			else{
-				$this->setSerialNro($filas['serialNro']);
-				$this->setMarca(trim($filas['marca']));			
-				$this->setModelo(trim($filas['modelo']));			
-				$this->setFechaCompra($filas['fechaCompra']);			
-				$this->setPrecioCompra(trim($filas['precioCompra']));			
-				$this->setFechaBaja($filas['fechaBaja']);			
-				$this->setObs($filas['obs']);
-				$this->setUserCarga($filas['userCarga']);
-				$this->setUserAprobacion($filas['userAprobacion']);
-				$this->setAprobado($filas['aprobado']);
-				$this->setFechaHoraAprobacion($filas['fechaHoraAprobacion']);
-			}
-		}
-
-		private function cleanClass()
+		public function editarImpresora($conexion)
 		{
-			$this->setSerialNro(0);
-			$this->setMarca('');
-			$this->setModelo('');
-			$this->setFechaCompra('');
-			$this->setPrecioCompra(0);
-			$this->setFechaBaja('');
-			$this->setObs('');
-			$this->setUserCarga(0);
-			$this->setUserAprobacion(0);
-			$this->setAprobado(false);
-			$this->setFechaHoraAprobacion('');
+			try {
+
+				# Validaciones 			
+				if(empty($this->getSerialNro()))
+					throw new Exception("Impresora no identificada");
+
+				
+				# Query 			
+				$query="UPDATE impresoras SET
+								fechaCompra='".$this->getFechaCompra()."',
+								precioCompra=".$this->getPrecioCompra().",
+								userAprobacion=".$this->getUserAprobacion().",
+								aprobado='".$this->getAprobado()."',
+								fechaHoraAprobacion='".$this->getFechaHoraAprobacion()."'
+							WHERE serialNro='".$this->getSerialNro()."'";
+							
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
 		}
 
-		private function createTable()
+		public function cambiarEstado($conexion,$estado)
 		{
-			return 'CREATE TABLE IF NOT EXISTS';
+			try {
+
+				# Validaciones 			
+				if(empty($this->getSerialNro()))
+					throw new Exception("Impresora no identificada");
+
+				
+				# Query 			
+				$query="UPDATE impresoras SET
+							estado=".$estado."
+							WHERE serialNro='".$this->getSerialNro()."'";
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
 		}
 
-		/*########################*/
-		/* METODOS PERSONALIZADOS */
-		/*########################*/
-
-		public function getNombreRoles(){
-			$handler = new UsuarioPerfil;
-			$roles = explode("|", $this->getRoles());
-			
-			$nombre_roles = "";
-			foreach ($roles as $key => $value) {
-				if(!empty($value)){
-					$handler->setId($value);
-					$nombre_roles = $nombre_roles.$handler->select()->getNombre().",";				
-				}
-			}			
-			return $nombre_roles;
-		}
 	}
 ?>

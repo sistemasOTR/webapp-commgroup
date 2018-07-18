@@ -9,7 +9,6 @@
     <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-nuevo'>
         <i class="fa fa-plus"></i> Agregar
     </a>
-    <div class="col-xs-12 col-md-2 pull-right"><input type="text" id="search" class="form-control" placeholder="Escribe para buscar..." /></div>
   </div>
 
   <div class="box-body table-responsive"> 
@@ -47,11 +46,12 @@
                   $gestorXId = $handlerUs->selectById($gestorId);
 	              	$nombre = $gestorXId->getNombre(). " " . $gestorXId->getApellido();
                   $baja= "<a href='".$url_impresion."fserialNro=".$value->getSerialNro()."&fgestor=".$gestorXId->getId()."&fasigId=".$impresoraEnPlaza["_asigId"]."' target='_blank'><i class='ion-document text-yellow' data-toggle='tooltip' title='Ver Comodato'></i></a>"; 
+                  $asig = "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-devGestor' data-gestorId='".$impresoraEnPlaza['_gestorId']."' data-plaza='".$impresoraEnPlaza['_plaza']."' data-fechaEnt='".$fechaDev."' data-serialNro='".$impresoraEnPlaza['_serialNro']."' data-asigId='".$impresoraEnPlaza['_asigId']."' onclick='cargarDatosDev(".$i.")'><i class='fa fa-user-times text-blue'></i></a>";
 	              } else {
 	              	$nombre = '-';
-                  $baja= ""; 
+                  $baja= "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-asigGestor' data-plaza='".$impresoraEnPlaza['_plaza']."' data-serialNro='".$impresoraEnPlaza['_serialNro']."' data-asigId='".$impresoraEnPlaza['_asigId']."' onclick='cargarDatosAsig(".$i.")'><i class='fa fa-user-plus text-green'></i></a>";
 	              }
-                $estado = '<span class = "label label-success" style="font-size: 13px; font-weight: normal;">Asignada</span>';
+                
 
 
             } else {
@@ -61,7 +61,6 @@
       				$nombre = '-';
       				$asig= "<a href='".$url_asignacion."&fserialNro=".$value->getSerialNro()."'><i class='ion-location text-green'></i></a>";
               $baja = "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-baja' data-serialnro='".$value->getSerialNro()."' data-obsimp='".$value->getObs()."' onclick='bajaImp(".$i.")'><i class='ion-close text-red'></i></a>";
-              $estado = '<span class = "label label-warning" style="font-size: 13px; font-weight: normal;">Disponible</span>';
             }
 
 
@@ -73,6 +72,30 @@
             } elseif($plaza=='MANTENIMIENTO') {
               $estado = '<span class = "label label-warning" style="font-size: 13px; font-weight: normal;">Averiada</span>';
             } 
+
+            switch ($value->getEstado()) {
+              case 1:
+                $estado = '<span class = "label label-primary" style="font-size: 13px; font-weight: normal;">Disponible</span>';
+                break;
+              case 2:
+                if ($nombre !='-') {
+                  $estado = '<span class = "label label-success" style="font-size: 13px; font-weight: normal;">Asignada</span>';
+                } else {
+                  $estado = '<span class = "label label-info" style="font-size: 13px; font-weight: normal;">En Bodega</span>';
+                }
+                
+                break;
+              case 3:
+                $estado = '<span class = "label label-danger" style="font-size: 13px; font-weight: normal;">Rota</span>';
+                break;
+              case 4:
+                $estado = '<span class = "label label-warning" style="font-size: 13px; font-weight: normal;">Mantenimiento</span>';
+                break;
+              
+              default:
+                # code...
+                break;
+            }
 
 
             echo 
@@ -238,6 +261,89 @@
     </div>
   </div>
 
+<div class="modal fade in" id="modal-asigGestor">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form id="asig-form" action="<?php echo $url_action_asignar; ?>" method="post">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Asignar a Gestor</h4>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                
+                <div class="col-md-10 col-md-offset-1">
+                    <label>Fecha de Entrega</label>
+                    <input type="date" name="fechaAsig" class="form-control">
+                    <input type="text" style="display: none;" id="asigIdEnt" name="asigId">
+                    <input type="text" style="display: none;" id="serialNro" name="serialNro">
+                    <input type="text" style="display: none;" id="slt_plazaEnt" name="slt_plaza" value="<?php echo $user->getAliasUserSistema() ?>">
+                    <label>Gestor</label>
+                    <select name="slt_gestor" id="slt_gestor" class="form-control" style="width: 100%" onchange="crearHrefG()">
+                      <option value="">Seleccionar</option>
+                      <?php 
+                        if(!empty($arrUsuarios)){
+                          foreach ($arrUsuarios as $usuario) {
+                            foreach ($arrGestor as $gestor) {
+                              if($fgestorId == $usuario->getId() && $usuario->getUserSistema() == $gestor->GESTOR11_CODIGO)
+                                  echo "<option value='".$usuario->getId()."' selected>".$usuario->getNombre()." ".$usuario->getApellido()."</option>";
+                                elseif ($usuario->getUserSistema() == $gestor->GESTOR11_CODIGO) {
+                                  echo "<option value='".$usuario->getId()."'>".$usuario->getNombre()." ".$usuario->getApellido()."</option>";
+                              }
+                            }
+                          } 
+                        }
+                      ?>
+                    </select>
+                    <label>Observaciones</label>
+                  <textarea name="txtObs" id="txtObs" class="form-control" rows="5"></textarea>
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Asignar</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+<div class="modal fade in" id="modal-devGestor">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form id="asig-form" action="<?php echo $url_action_devGestor; ?>" method="post">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Devolución a plaza</h4>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                
+                <div class="col-md-10 col-md-offset-1">
+                    <label>Fecha de Devolucion</label>
+                    <input type="date" name="fechaDev" id="fechaDev" class="form-control">
+                    <input type="text" style="display: none;" id="devfechaEnt" name="fechaEnt">
+                    <input type="text" style="display: none;" id="devAsigId" name="devAsigId">
+                    <input type="text" style="display: none;" id="devSerialNro" name="devSerialNro">
+                    <input type="text" style="display: none;" id="devPlaza" name="devPlaza">
+                    <label>Observaciones</label>
+                  <textarea name="txtDevObs" id="txtDevObs" class="form-control" rows="5"></textarea>
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Devolver</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
 <script type="text/javascript">   
   
 
@@ -256,6 +362,58 @@
       filtrarReporte(); 
     });
   });
+
+  
+  function crearHref()
+  {
+    f_gestorId = $("#slt_gestor").val();
+    f_plaza = $("#slt_plaza").val();   
+    url_filtro_reporte="index.php?view=impresorasxplaza";
+
+    if(f_plaza!=undefined)
+      if(f_plaza!='')
+        url_filtro_reporte= url_filtro_reporte +"&fplaza="+f_plaza;
+
+    if(f_gestorId!=undefined)
+      if(f_gestorId>0)
+        url_filtro_reporte= url_filtro_reporte +"&fgestorId="+f_gestorId;
+    
+    $("#filtro_reporte").attr("href", url_filtro_reporte);
+
+    document.cookie = "url-tmp-back="+url_filtro_reporte;
+  } 
+
+  function filtrarReporte()
+  {
+    crearHref();
+    window.location = $("#filtro_reporte").attr("href");
+  }
+
+  function cargarDatosAsig(id){
+    
+    asigId = document.getElementById(id+'_edit').getAttribute('data-asigId');
+    serialNro = document.getElementById(id+'_edit').getAttribute('data-serialNro');
+    plaza = document.getElementById(id+'_edit').getAttribute('data-plaza');
+
+    document.getElementById("serialNro").value = serialNro  ;
+    document.getElementById("asigIdEnt").value = asigId;
+    document.getElementById("slt_plazaEnt").value = plaza;
+    
+  }
+  function cargarDatosDev(id){
+    
+    asigId = document.getElementById(id+'_edit').getAttribute('data-asigId');
+    serialNro = document.getElementById(id+'_edit').getAttribute('data-serialNro');
+    fechaEnt = document.getElementById(id+'_edit').getAttribute('data-fechaEnt');
+    plaza = document.getElementById(id+'_edit').getAttribute('data-plaza');
+    
+    document.getElementById("devPlaza").value = plaza  ;
+    document.getElementById("devSerialNro").value = serialNro  ;
+    document.getElementById("devfechaEnt").value = fechaEnt  ;
+    document.getElementById("devAsigId").value = asigId;
+    
+  }
+  
 
   function cargarDatos(id){
     
@@ -279,25 +437,6 @@
       document.getElementById("txtObsImp").value = ' ';
     
   }
-
-  function crearHref()
-  {
-    f_gestorId = $("#slt_gestor").val();
-    f_plaza = $("#slt_plaza").val();   
-    url_filtro_reporte="index.php?view=impresorasxplaza";
-
-    if(f_plaza!=undefined)
-      if(f_plaza!='')
-        url_filtro_reporte= url_filtro_reporte +"&fplaza="+f_plaza;
-
-    if(f_gestorId!=undefined)
-      if(f_gestorId!='')
-        url_filtro_reporte= url_filtro_reporte +"&fgestorId="+f_gestorId;
-    
-    $("#filtro_reporte").attr("href", url_filtro_reporte);
-
-    document.cookie = "url-tmp-back="+url_filtro_reporte;
-  } 
 
   function filtrarReporte()
   {

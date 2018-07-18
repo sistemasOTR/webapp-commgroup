@@ -27,8 +27,10 @@
   $url_impresion = PATH_VISTA.'Modulos/Herramientas/Impresoras/imprimir_comodato.php?';
 
   $url_action_guardar = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_guardar.php';
+  $url_action_asignar = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_asignar.php';
   $url_action_devolver = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_devolver.php';
   $url_action_baja = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_baja.php';
+  $url_action_devGestor = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_devolver_gestor.php';
   
 
 ?>
@@ -52,6 +54,12 @@
     <?php include_once PATH_VISTA."info.php"; ?>
 
     <div class="row">
+      <?php if ($user->getUsuarioPerfil()->getNombre() != 'COORDINADOR') { ?>
+        <div class="col-md-12">
+          <?php include_once 'filtro_plaza.php'; ?>
+        </div>
+      <?php } ?>
+      
       <div class="col-md-12">
         <?php 
           switch ($user->getUsuarioPerfil()->getNombre()) {

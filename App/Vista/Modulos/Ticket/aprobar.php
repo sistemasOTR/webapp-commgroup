@@ -192,6 +192,7 @@
                           else
                             $class_estilos_aledanio = "<span class='label label-danger'>NO</span>";
 
+
                           $fechaT = $value->getFechaHora()->format('Y-m-d');
                           $usuarioSist = $value->getUsuarioId()->getUserSistema();
                           if($fplaza != '' || $fplaza != 0){
@@ -209,8 +210,13 @@
                             
                             if ($seguir) {
                               $countServ = new HandlerSistema;
-                              $cantServ = $countServ->selectCountServicios($fechaT, $fechaT, 100, null, $usuarioSist, null, null, null);  
-
+                              $cantServ = $countServ->selectCountServicios($fechaT, $fechaT, 100, null, $usuarioSist, null, null, null);
+                              $nomAledanio = $value->getAledNombre();
+                              if (trim($value->getConcepto()) == 'PEAJES') {
+                                $class_estilos_aledanio = '';
+                                // $nomAledanio = '';
+                                $cantServ[0]->CANTIDAD_SERVICIOS = '';
+                              }
                               echo "<tr>";                            
                                 echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
                                 echo "<td>".$value->getFechaHora()->format('d/m/Y h:s')."</td>";
@@ -224,7 +230,7 @@
                                 echo "<td>$ ".$value->getImporte()."</td>";    
                                 echo "<td>$ ".number_format($value->getImporteReintegro(),2)."</td>";
                                 echo "<td>".$class_estilos_aledanio."</td>";
-                                echo "<td>".$value->getAledNombre()."</td>";
+                                echo "<td>".$nomAledanio."</td>";
                                 echo "<td>".$cantServ[0]->CANTIDAD_SERVICIOS."</td>";                                                    
                                 echo "<td>".$class_estilos_aprobado."</td>";
                                 echo "<td><a href='".$value->getAdjunto()."' target='_blank'>VER</a></td>";

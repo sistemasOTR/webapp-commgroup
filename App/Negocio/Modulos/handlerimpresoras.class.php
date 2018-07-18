@@ -123,6 +123,9 @@
 			try {
 				
 					$handler = new ImpresorasPlaza;
+					$handlerImp = new Impresoras;
+					$handlerImp->setSerialNro($serialNro);
+					$handlerImp->cambiarEstado(false,2);
 
 					$handler->setSerialNro($serialNro);
 					$handler->setPlaza($plaza);
@@ -146,8 +149,13 @@
 			try {
 				
 					$handler = new ImpresorasPlaza;
+					$handlerImp = new Impresoras;
 
 					$handler->setAsigId($asigId);
+					$impresora = $handler->selectById($asigId);
+
+					$handlerImp->setSerialNro($impresora['_serialNro']);
+					$handlerImp->cambiarEstado(false,1);
 					$handler->setFechaDev($fechaDev);
 					$handler->setObsDev($obs);
 

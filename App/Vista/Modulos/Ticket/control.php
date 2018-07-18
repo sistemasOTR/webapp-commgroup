@@ -159,6 +159,7 @@
                               $class_estilos_aledanio = "<span class='label label-danger'>NO</span>";
                               $reintegro = 0;
                               $opAled = 0;
+                              $nombAledanio = '';
                               if ($value->getImporteReintegro() != 0 || $value->getAledanio()) {
                                 $reintegro = number_format($value->getImporteReintegro(),2);
                                 $opAled = $value->getAledanio();
@@ -167,6 +168,7 @@
                                 } else {
                                   $class_estilos_aledanio = "<span class='label label-danger'>NO</span>";
                                 }
+                                $nombAledanio = $value->getAledNombre();
                               } else {
                                 if (!empty($cpAt) && !empty($arrReintegro)) {
                                   foreach ($cpAt as $key => $cp) {
@@ -180,6 +182,7 @@
                                           $opAled = 0;
                                           $class_estilos_aledanio = "<span class='label label-danger'>NO</span>";
                                         }
+                                        $nombAledanio = $reintegroXCp->getDescripcion();
                                       }
                                     }
                                   }
@@ -209,6 +212,7 @@
                                             data-target='#modal-enviar' 
                                             data-reintegro='".number_format($reintegro,2)."' 
                                             data-aledanio='".$opAled."' 
+                                            data-nomAledanio='".$nombAledanio."' 
                                             data-cant_operaciones='".number_format($cantServ[0]->CANTIDAD_SERVICIOS,2)."'     
                                             onclick=btnEnviar(".$value->getId().")
                                             class = 'text-blue text-center'>
@@ -234,6 +238,11 @@
                                 $editar = "<a href='".$url_detalle.$value->getId()."' class='text-black text-center' >
                                           <i class='fa fa-edit' data-toggle='tooltip' data-original-title='Editar Ticket'></i></a>";
                               }
+                              if ($value->getConcepto() == 'PEAJES' || $value->getConcepto() == 'CRUCE/TUNEL') {
+                                $class_estilos_aledanio = '';
+                                $nombAledanio = '';
+                                $cantServ[0]->CANTIDAD_SERVICIOS = 0;
+                              }
        
                               echo "<tr>";                            
                                 echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
@@ -247,7 +256,7 @@
                                 echo "<td>$ ".number_format($value->getImporte(),2)."</td>";                          
                                 echo "<td>$ ".$reintegro."</td>";
                                 echo "<td class='text-center'>".$class_estilos_aledanio."</td>";
-                                echo "<td class='text-center'>".$value->getAledNombre()."</td>";
+                                echo "<td class='text-center'>".$nombAledanio."</td>";
                                 echo "<td class='text-center'>".$cantServ[0]->CANTIDAD_SERVICIOS."</td>";
                                 echo "<td class='text-center'>".$class_estilos_aprobado."</td>";
                                 echo "<td class='text-center'><a href='".$value->getAdjunto()."' target='_blank'>VER</a></td>";
@@ -384,8 +393,10 @@
 
         var reintegro= elemento.getAttribute('data-reintegro');     
         var aledanio = elemento.getAttribute('data-aledanio');     
+        var nomaledanio = elemento.getAttribute('data-nomAledanio');     
         var cant_operaciones = elemento.getAttribute('data-cant_operaciones');     
         
+        formEnviar.aledNombre.value = nomaledanio;
         formEnviar.reintegro.value = reintegro;
 
         if(aledanio==true)

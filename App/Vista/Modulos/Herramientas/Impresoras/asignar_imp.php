@@ -253,7 +253,7 @@
     url_filtro_reporte="index.php?view=asignar_imp&fserialNro="+f_serialNro;
 
     if(f_plaza!=undefined)
-      if(f_plaza>0)
+      if(f_plaza!='')
         url_filtro_reporte= url_filtro_reporte +"&fplaza="+f_plaza;
 
     if(f_gestorId!=undefined)
