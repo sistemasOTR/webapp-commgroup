@@ -20,7 +20,7 @@
 	$estados = false;
 	$entregada=0;
 
-	if ($tipo != 'CORDINADOR') {
+	if (trim($tipo) != 'COORDINADOR') {
 		$plaza = $tipo;
 	}
 	

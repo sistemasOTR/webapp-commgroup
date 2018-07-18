@@ -200,6 +200,8 @@
                             $consulta = $consulta[""];
                           }
                         foreach ($consulta as $key => $value) {
+                           // var_dump($consulta);
+                           //  exit();
 
                           $url_detalle_pedido = 'index.php?view=exp_detalle&idpedido='.$value->getId().'&plaza='.$value->getPlaza().'&item='.$value->getItemExpediciones().'&cantped='.$value->getCantidad().'&user='.$value->getUsuarioId().'&fechaped='.$value->getFecha()->format('d/m/Y').'&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados='.$festados.'&ftipo='.$ftipo.'&vista=control';
                           $cantidadtotal=($value->getCantidad()-$value->getEntregada());                          
