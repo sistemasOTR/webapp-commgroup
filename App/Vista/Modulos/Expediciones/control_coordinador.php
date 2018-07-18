@@ -5,7 +5,7 @@
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
   include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";         
 
-  $url_action_cambiar = PATH_VISTA.'Modulos/Expediciones/action_cambiar_estado.php';
+  
   $url_action_eliminar = PATH_VISTA.'Modulos/Expediciones/action_eliminar_pedido.php';
   $url_action_cancelar = PATH_VISTA.'Modulos/Expediciones/action_cancelar_pedido.php';
   
@@ -15,10 +15,11 @@
 
   $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());  
-  $ftipo= (isset($_GET["ftipo"])?$_GET["ftipo"]:'');
+//  $ftipo= (isset($_GET["ftipo"])?$_GET["ftipo"]:'');
   $festados= (isset($_GET["festados"])?$_GET["festados"]:'');
   $fusuario= (isset($_GET["fusuario"])?$_GET["fusuario"]:'');
   $fplaza= (isset($_GET["fplaza"])?$_GET["fplaza"]:'');
+  $plazaEnv= (isset($_GET["plazaEnv"])?$_GET["plazaEnv"]:'');
 
   $handlersistema = new HandlerSistema; 
   $plazas=$handlersistema->selectAllPlazasArray();
@@ -31,10 +32,16 @@
   $handler = new HandlerExpediciones;
   $arrTipo = $handler->selecionarTipo();
   $arrEstados = $handler->selecionarEstados();
-  $consulta = $handler->seleccionarByFiltros($fdesde,$fhasta,$ftipo,$festados,$fplaza);
+ // $consulta = $handler->seleccionarByFiltros($fdesde,$fhasta,$ftipo,9,$fplaza);
+  $sinpedir=$handler->seleccionarApedir();
+
+  $consulta = $handler->seleccionarByFiltroEnvios($fdesde,$fhasta,9,$fplaza);
 
 
-  $url_redireccion ='index.php?view=exp_control&fdesde='.$fdesde.'&fhasta='.$fhasta.'&fplaza='.$fplaza.'&festados='.$festados.'&ftipo='.$ftipo;
+  $url_action_cambiar = PATH_VISTA.'Modulos/Expediciones/action_enviar_pedido.php?id=';
+  $url_redireccion ='index.php?view=exp_control_coordinador&fdesde='.$fdesde.'&fhasta='.$fhasta.'&fplaza='.$fplaza.'&festados=9';
+  $url_action_eliminar_envio = PATH_VISTA.'Modulos/Expediciones/action_eliminaritem_envio.php?id=';
+  $url_action_publicar=PATH_VISTA.'Modulos/Expediciones/action_enviado.php?fdesde='.$fdesde.'&fhasta='.$fhasta.'&fplaza='.$fplaza;
 
 ?>
 
@@ -57,7 +64,7 @@
 
 
     <div class="row">
-      <div class='col-md-12'>
+      <div class='col-md-8'>
         <div class="box box-solid">
             <div class="box-header with-border">
               <i class="fa fa-filter"></i>
@@ -74,9 +81,8 @@
                       <input type="text" class="input-sm form-control" onchange="crearHref()" id="end" name="end" value="<?php echo $dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y'); ?>"/>
                     </div>
                 </div>
-                
                 <div class="col-md-2">
-                  <label>Plaza </label>                
+                  <label>Plazas</label>                
                   <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" onchange="crearHref()">
                     <option value=''>TODOS</option>
                     <?php
@@ -106,69 +112,18 @@
                       }
                     ?>
                   </select>
-                </div>                    
-
-                <div class="col-md-2">
-                  <label>Tipo </label>                
-                  <select id="slt_tipo" class="form-control" style="width: 100%" name="slt_tipo" onchange="crearHref()">
-                    <option value=''></option>
-                    <option value='0'>TODOS</option>
-                    <?php
-                      if(!empty($arrTipo))
-                      {                     
-                                     
-                        foreach ($arrTipo as $key => $value) {   
-
-
-                          if($ftipo == $value->getId())
-                            echo "<option value='".$value->getId()."' selected>".$value->getGrupo()."</option>";
-                          else
-                            echo "<option value='".$value->getId()."'>".$value->getGrupo()."</option>";                  
-                            
-                        }
-                        
-                      }  
-                    ?>
-                  </select>
-                </div> 
-
-                <div class="col-md-2">
-                  <label>Estados </label>                
-                  <select id="slt_estados" class="form-control" style="width: 100%" name="slt_estados" onchange="crearHref()">
-                    <option value=''></option>
-                    <option value='0'>TODOS</option>
-                    <?php
-                      if(!empty($arrEstados))
-                      {                     
-                                        
-                        foreach ($arrEstados as $key => $value) {                      
-
-                          if($festados == $value->getId())
-                            echo "<option value='".$value->getId()."' selected>".$value->getNombre()."</option>";
-                          else
-                            echo "<option value='".$value->getId()."'>".$value->getNombre()."</option>";                  
-                            
-                        }
-                        if($festados == 1000)
-                            echo "<option value='1000' selected>Adeudado</option>";
-                          else
-                            echo "<option value='1000'>Adeudado</option>";
-                        
-                      }       
-                    ?>
-                  </select>
                 </div>                 
 
-                <div class='col-md-3'>                
+                <div class='col-md-3 col-md-offset-4'>                
                   <label></label>                
                   <a class="btn btn-block btn-success" id="filtro_reporte" onclick="crearHref()"><i class='fa fa-filter'></i> Filtrar</a>
                 </div>
               </div>
             </div>
-        </div>
+        </div>     
       </div>
 
-      <div class='col-md-12'>
+      <div class='col-md-8'>
         <div class="box">
           <div class="box-header">
             <h3 class="box-title"> Control de Expediciones - <?php echo "desde <b>".$dFecha->FormatearFechas($fdesde,'Y-m-d','d/m/Y')."</b> hasta <b>".$dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y')."</b>"; ?></h3>   
@@ -178,17 +133,12 @@
               <table class="table table-striped" id='tabla'>
                 <thead>
                   <tr>
-                    <th>FECHA</th>
-                    <th >USUARIO</th>
-                    <th>PLAZA</th>
-                    <th>ITEM-DESCRIPCION</th>                                      
-                    <th width="50">PENDIENTE</th>             
-                    <th width="50">ENTREGADA</th>             
-                    <th>DETALLE</th>
-                    <th>ESTADO</th>             
-                    <th>OBSERVACIONES</th>   
-                    <th colspan="2">ACCION</th>                          
+                    <th width="150">ITEM-DESCRIPCION</th> 
+                    <th width="50">PLAZA</th>                                                 
+                    <th width="50">CANTIDAD</th>  
+                    <th width="50">ENVIAR</th>                          
                     <th width="50">PED</th>                          
+                    <th width="50">VER</th>                          
                   </tr>
                 </thead>
                 <tbody>
@@ -200,108 +150,45 @@
                             $consulta = $consulta[""];
                           }
                         foreach ($consulta as $key => $value) {
+                          // var_dump($consulta);
+                          //   exit();
 
-                          $url_detalle_pedido = 'index.php?view=exp_detalle&idpedido='.$value->getId().'&plaza='.$value->getPlaza().'&item='.$value->getItemExpediciones().'&cantped='.$value->getCantidad().'&user='.$value->getUsuarioId().'&fechaped='.$value->getFecha()->format('d/m/Y').'&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados='.$festados.'&ftipo='.$ftipo.'&vista=control';
-                          $cantidadtotal=($value->getCantidad()-$value->getEntregada());                          
-                          $item = $handler->selectById($value->getItemExpediciones());
-                          if (count($item)==1) {
-                            $item = $item[""];
-                          }
-                          $usuario_sol = $handlerUsuarios->selectById($value->getUsuarioId());
-                          $estado = $handler->selectEstado($value->getEstadosExpediciones()); 
+                           $url_detalle_pedido = 'index.php?view=exp_detalle&idpedido='.$value->getId().'&plaza='.$value->getPlaza().'&item='.$value->getItemExpediciones().'&cantped='.$value->getCantidad().'&user='.$value->getUsuarioId().'&fechaped='.$value->getFecha()->format('d/m/Y').'&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados='.$festados.'&vista=control';
+                         
+                            $cantEnv=$handler->selecionarSinEnviar($value->getId(),$sinenviar=1);
+                            
+                             if (count($cantEnv)==1) {
+                             $cantEnv = $cantEnv[""];
+                             }  
 
+                           
 
-                          // $control='asda';
-                          // if (condition) {
-                          //   # code...
-                          // }
+                           $item = $handler->selectById($value->getItemExpediciones());
+                           if (count($item)==1) {
+                             $item = $item[""];
+                           }
+                          // $usuario_sol = $handlerUsuarios->selectById($value->getUsuarioId());
+                           $estado = $handler->selectEstado($value->getEstadosExpediciones()); 
 
-                                                                             
-                          if ($estado->getId()==1 || $estado->getId()==3 || $estado->getId()==9 ) {
-                                        $envios='<i class="fa fa-eye text-red"></i>';
-                                       }
-                              else{
-                                $envios = "<a href='".$url_detalle_pedido."'  
+                        $envios = "<a href='".$url_detalle_pedido."'  
                                         type='button' 
-                                        class='fa fa-eye'></a>";
-                              }         
-
-
-                          if ( $estado->getId()==1) {
-                                    $recibirtruck = "<a href='#'
-                                        id='".$value->getId()."' 
-                                        data-iditem='".$item->getId()."'
-                                        data-resto='".$cantidadtotal."'
-                                        data-entregada='".$value->getEntregada()."'
-                                        data-ppedido='".$item->getPtopedido()."'
-                                        data-stock='".$item->getStock()."'
-                                        type='button' 
-                                        class='fa fa-truck' 
-                                        data-toggle='modal' 
-                                        data-target='#modalCambiar' 
-                                        data-cantidad='".$value->getCantidad()."'
-                                        onclick=btnCambiar(".$value->getId().")></a>";
-                                    $recibirclose = "<a href='#'
-                                        id='".$value->getId()."'                                             
-                                        type='button' 
-                                        class='fa fa-close' 
-                                        data-toggle='modal' 
-                                        data-target='#modal-eliminar'                                   
-                                        onclick=btnEliminar(".$value->getId().")></a>
-                              ";
-                             }  elseif ($estado->getId()==6 || $estado->getId()==7 ) {
-                                    if ($item->getStock() > 0) {
-                                      $recibirtruck = "<a href='#'
-                                        id='".$value->getId()."' 
-                                        data-resto='".$cantidadtotal."'
-                                        data-stock='".$item->getStock()."'
-                                        data-ppedido='".$item->getPtopedido()."'
-                                        data-iditem='".$item->getId()."'
-                                        data-entregada='".$value->getEntregada()."'
-                                        type='button' 
-                                        class='fa fa-truck' 
-                                        data-toggle='modal' 
-                                        data-target='#modalCambiar' 
-                                        data-cantidad='".$value->getCantidad()."'
-                                        onclick=btnCambiar(".$value->getId().")></a>";
-                                    } else {
-                                      $recibirtruck = '<i class="fa fa-exclamation-triangle text-yellow"></i>';
-                                    }
-                                    
-                                    
-                                    $recibirclose ="<a href='#'
-                                        id='".$value->getId()."'                                             
-                                        type='button' 
-                                        class='fa fa-stop' 
-                                        data-toggle='modal' 
-                                        data-target='#modal-cancelar'                                   
-                                        onclick=btnCancelar(".$value->getId().")></a>
-                              ";
-                                 
-                               }
-                                  
-                                    else {
-                                    $recibirtruck = '<i class="fa fa-ban text-red"></i>';
-                                    $recibirclose = '<i class="fa fa-ban text-red"></i>';
-                                  }      
+                                         class='fa fa-eye'></a>";
+                        $recibircheck = "<a href='".$url_action_cambiar.$value->getId()."&cantpedida=".$value->getCantidad()."&cantentregada=".$value->getEntregada()."&plaza=".$value->getPlaza()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fplaza=".$fplaza."' 
+                                         type='button' 
+                                         class='fa fa-check text-green'";
+                         
 
                           echo "
                             <tr>
-                              <td>".$value->getFecha()->format('d/m/Y')."</td>
-                              <td>".$usuario_sol->getNombre()." ".$usuario_sol->getApellido()."</td>
-                              <td>".$value->getPlaza()."</td>
-                              <td>".$item->getNombre()."-".$item->getDescripcion()."</td>                      
-                              <td>".$cantidadtotal."</td>
-                              <td>".$value->getEntregada()."</td>            
-                              <td>".$value->getDetalle()."</td>                        
+                              <td>".$item->getNombre()."-".$item->getDescripcion()."</td>  
+                              <td>".$value->getPlaza()."</td>                   
+                              <td>".$cantEnv->getCantidadEnviada()."</td>            
                               <td>
                                 <span class='label label-".$estado->getColor()."' style='font-size:12px;'>"
                                   .$estado->getNombre().
                                 "</span>
                               </td>
-                              <td>".$value->getObservaciones()."</td> 
-                              <td>".$recibirtruck."</td>
-                               <td>".$recibirclose."</td>
+                              <td>".$recibircheck."</td>
                                <td>".$envios."</td>
 
                           </tr>";
@@ -312,7 +199,61 @@
               </table>
           </div>
         </div>
-      </div>    
+
+      </div> 
+<div class='col-md-4'>
+        <div class="box box-solid">
+          <div class="box-header">
+            <h3 class="box-title"> Detalle Envio</h3>   
+            <a href="<?php echo $url_action_publicar.'&plazaEnv='.$plazaEnv; ?>" class="btn btn-success pull-right">Enviar</a>
+          </div>
+
+          <div class="box-body table-responsive">
+            
+              <table class="table table-striped" id='tabla'>
+                <thead>
+                  <tr>
+                    <th style="text-align: center;">ITEM-DESCRIPCIÓN</th>
+                    <th style="text-align: center;">CANTIDAD</th>             
+                  </tr>
+                </thead>
+                <tbody>
+                     <?php if(!empty($sinpedir)) 
+                      {  
+
+                        foreach ($sinpedir as $key => $value) {
+                           $idPed = $value->getIdPedido();
+                           $items=$handler->selectByIdEnvio($idPed);
+                           
+                           $item = $handler->selectById($items->getItemExpediciones());
+                           if (count($item)==1) {
+                            $item = $item[""];
+                           }
+                          echo "
+                            <tr>
+                            <td style='text-align: center;'>".$item->getNombre()."".$item->getDescripcion()."</td>
+                            <td style='text-align: center;'>".$value->getCantidadEnviada()."</td>
+                            <td>
+                                  <form action='".$url_action_eliminar_envio."' method='post'>
+                                    <input type='hidden' name='id' value='".$value->getIdPedido()."'>
+                                    <input type='hidden' name='fdesde' value='".$fdesde."'>
+                                    <input type='hidden' name='fhasta' value='".$fhasta."'>
+                                    <input type='hidden' name='fplaza' value='".$fplaza."'>
+                                    <button type='submit' class='btn btn-danger'>Quitar</button>
+                                  </form>
+                                </td>
+                            </tr>     
+                          ";
+                        }
+                      }
+                    ?> 
+
+            
+                  </tbody>
+              </table>
+          </div>
+        </div>
+      </div> 
     </div>
   </section>
 
@@ -337,18 +278,19 @@
 
       pend= cantOriginal-entregada;
 
+  
 
-        if (Number(enviar)>Number(stock)) {
-        alert("No hay stock"+"("+stock+")");
-        document.getElementById("cantidadenviada").value = stock;
-      }
-
-
-      if (Number(enviar)>Number(pend) || Number(enviar)<=0 ) {
+      if (enviar>pend || enviar<=0 ) {
         alert("cantidad erronea");
         document.getElementById("cantidadenviada").value = pend;
       }
      
+      if (enviar>stock) {
+        alert("No hay stock");
+        document.getElementById("cantidadenviada").value = stock;
+      }
+
+
       
     }
 
@@ -381,6 +323,7 @@
         document.getElementById("cantidadenviada").value = stock
 
        document.getElementById("msj-stock").innerHTML = ' Nivel de stock: '+stock+' unidades';
+
        
        document.getElementById("entregada").value = entregada;
        document.getElementById("cantidadoriginal").value =cantidad; 
@@ -585,7 +528,7 @@
       console.log(f_plaza);
       console.log(f_tipo);
 
-      url_filtro_reporte="index.php?view=exp_control&fdesde="+f_inicio+"&fhasta="+f_fin;  
+      url_filtro_reporte="index.php?view=exp_control_coordinador&fdesde="+f_inicio+"&fhasta="+f_fin;  
 
       url_filtro_reporte= url_filtro_reporte + "&fplaza="+f_plaza;
       

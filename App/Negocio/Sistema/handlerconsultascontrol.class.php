@@ -165,6 +165,78 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
+		public function seleccionarExpedicionesByFiltroEnvios($fdesde,$fhasta,$estados_expe, $plaza){
+			try {
+				
+				$f = new Fechas;
+
+				if($fdesde==$fhasta)
+				{
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "fecha = '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "fecha =  '".$tmp."' AND ";
+					}
+				}
+				else
+				{					
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "fecha >= '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "fecha <=  '".$tmp."' AND ";
+					}
+				}
+
+				$filtro_estados_expe="";
+				if(!empty($estados_expe))
+					
+						$filtro_estados_expe = "estados_expediciones_id = ".$estados_expe." AND ";				
+		
+											
+				$filtro_plaza="";
+				if(!empty($plaza))								
+					$filtro_plaza = "plaza = '".$plaza."' AND ";
+				
+				$filtro_sin_enviar = "sin_enviar =1";			
+
+				$query = "SELECT * FROM expediciones_envios as en inner join expediciones as ex
+							on en.id_pedido= ex.id 
+							inner join expediciones_items as i 
+							on ex.item_expediciones_id=i.item_id 
+								WHERE 									 
+									".$filtro_fdesde." 
+									".$filtro_fhasta." 										
+									".$filtro_plaza."
+									".$filtro_estados_expe."									
+									".$filtro_sin_enviar."
+								ORDER BY en.id desc, fecha ASC";
+
+
+				$result = SQL::selectObject($query, new Expediciones);	
+
+				if(count($result)==1)
+					$resultFinal[0] = $result;		
+				else
+					$resultFinal = $result;									
+
+				return $resultFinal;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
         public function seleccionarComprasByFiltros($fdesde, $fhasta,$tipo_expe,$estados_expe){
 			try {
 				

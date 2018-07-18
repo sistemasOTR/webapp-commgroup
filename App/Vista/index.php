@@ -215,6 +215,11 @@
 				$include = 'Modulos/Expediciones/control.php';			
 			break;
 
+		case 'exp_control_coordinador':				
+			if($permiso->getModuloInventariosBoolean() && ($usuarioActivoSesion->getId()==10164))
+				$include = 'Modulos/Expediciones/control_coordinador.php';			
+			break;	
+
 		case 'exp_tipo_abm':				
 			if($permiso->getModuloInventariosBoolean() && ($esBO || $esContabilidad))
 				$include = 'Modulos/Expediciones/tipo_abm.php';			
@@ -225,7 +230,7 @@
 			break;	
 
 		case 'exp_solicitud':				
-			if($permiso->getModuloInventariosBoolean() && $esCoordinador)
+			if($permiso->getModuloInventariosBoolean() && ($esBO || $esCoordinador|| $esContabilidad || $esRRHH))
 				$include = 'Modulos/Expediciones/solicitud.php';
 			break;
 
@@ -235,9 +240,9 @@
 			break;
 
 		case 'exp_seguimiento':				
-			if($permiso->getModuloInventariosBoolean() && $esCoordinador)
+			if($permiso->getModuloInventariosBoolean() && ($esCoordinador || $esBO || $esContabilidad || $esRRHH))
 				$include = 'Modulos/Expediciones/seguimiento.php';			
-			break;		
+			break;
 
 			case 'exp_compra':				
 			if($permiso->getModuloInventariosBoolean() && (($esBO || $esContabilidad)))

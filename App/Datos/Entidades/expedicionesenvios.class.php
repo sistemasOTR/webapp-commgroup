@@ -33,13 +33,25 @@
 		public function getFecha(){ return $this->_fecha; }
 		public function setFecha($fecha){ $this->_fecha=$fecha; }
 
-		private $_cantidad;
-		public function getCantidad(){ return $this->_cantidad; }
-		public function setCantidad($cantidad){ $this->_cantidad=$cantidad; }
+		private $_cantidadenviada;
+		public function getCantidadEnviada(){ return $this->_cantidadenviada; }
+		public function setCantidadEnviada($cantidadenviada){ $this->_cantidadenviada=$cantidadenviada; }
 
 		private $_usuario;
 		public function getUsuario(){ return $this->_usuario; }
 		public function setUsuario($usuario){ $this->_usuario=$usuario; }
+
+		private $_nroenvio;
+		public function getNroEnvio(){ return $this->_nroenvio; }
+		public function setNroEnvio($nroenvio){ $this->_nroenvio=$nroenvio; }
+
+		private $_sinenviar;
+		public function getSinEnviar(){ return $this->_sinenviar; }
+		public function setSinEnviar($sinenviar){ $this->_sinenviar=$sinenviar; }
+
+		private $_estado;
+		public function getEstado(){ return var_export($this->_estado,true); }
+		public function setEstado($estado){ $this->_estado=$estado; }
 		
 		/*#############*/
 		/* CONSTRUCTOR */
@@ -49,8 +61,11 @@
 			$this->setId(0);
 			$this->setIdPedido(0);					
 			$this->setFecha('');
-			$this->setCantidad('');
+			$this->setCantidadEnviada('');
 			$this->setUsuario(0);
+			$this->setNroEnvio(0);
+			$this->setSinEnviar(1);
+			$this->setEstado(true);
 		}
 
 		/*###################*/
@@ -79,13 +94,19 @@
 		        						id_pedido,
 		        						fecha_envio,
 		        						cantidad_enviada,
-		        						id_usuario
+		        						id_usuario,
+		        						nro_envio,
+		        						sin_enviar,
+		        						estado
 	        			) VALUES (
 	        							   	
 	        							".$this->getIdPedido().",   	   	
 	        							'".$this->getFecha()."',   	
-	        							".$this->getCantidad().",   	
-	        							".$this->getUsuario()."   	
+	        							".$this->getCantidadEnviada().",   	
+	        							".$this->getUsuario().",   	
+	        							".$this->getNroEnvio().",   	
+	        							".$this->getSinEnviar().",   	
+	        							'".$this->getEstado()."'  	
 	        							
 	        			)";
 	        		// var_dump($query);
@@ -98,14 +119,90 @@
 				throw new Exception($e->getMessage());
 			}		
 		}
+       
+       public function updateApedir($id,$sinpedir)
+		{
+			try {
 
+				# Validaciones 			
 
+				// if(empty($this->getIdPedido()))
+				// 	throw new Exception("IdPedido Vacio");
+
+				// if(empty($this->getFecha()))
+				// 	throw new Exception("fecha Vacio");
+				
+				// if(empty($this->getCantidad()))
+				// 	throw new Exception("cantidad vacio");
+
+				// if(empty($this->getUsuario()))
+				// 	throw new Exception("usuario vacio");
+				# Query 	
+				$conexion=false;		
+				$query="UPDATE expediciones_envios SET								
+								sin_enviar=".$sinpedir."
+
+							WHERE sin_enviar=1 AND id_pedido=".$id;
+	        		// var_dump($query);
+	        		// exit();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);
+			
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+		 public function updateEstadoNro($idped,$ultimaId,$fecha)
+		{
+			try {
+
+			
+				$conexion=false;		
+				$query="UPDATE expediciones_envios SET								
+								sin_enviar=2,
+								nro_envio=".$ultimaId.",
+								fecha_envio='".$fecha."'
+
+							WHERE id=".$idped;
+	        		// var_dump($query);
+	        		// exit();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);
+			
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+         public function delete($conexion)
+		{
+			try {
+				
+				# Validaciones 			
+				
+				# Query 			
+				$query="UPDATE expediciones_envios SET							
+								sin_enviar=1
+							WHERE sin_enviar=0 AND id_pedido=".$this->getIdPedido();
+
+							// var_dump($query);
+	      //   				exit();
+
+				# Ejecucion 	
+				return SQL::delete($conexion,$query);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
 		public function selectByIdPedido($id)
 		{			
 			try {
 											
 				# Query
-					$query="SELECT * FROM expediciones_envios WHERE id_pedido=".$id."  ORDER BY fecha_envio DESC";
+					$query="SELECT * FROM expediciones_envios WHERE id_pedido=".$id." ORDER BY fecha_envio DESC";
 				
 				
 				# Ejecucion 					
@@ -118,7 +215,45 @@
 			}
 
 		}
+		public function selectByIdPedidoSinEnviar($id,$sinenviar)
+		{			
+			try {
+											
+				# Query
+					$query="SELECT * FROM expediciones_envios WHERE id_pedido=".$id." AND sin_enviar=".$sinenviar." ORDER BY fecha_envio DESC";
+				
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new ExpedicionesEnvios);
+						
+				return $result;
 
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+         public function selectApedir()
+		{			
+			try {
+											
+				# Query
+					$query="SELECT * FROM expediciones_envios WHERE estado='true' AND sin_enviar=0  ORDER BY id DESC";
+				
+				// var_dump($query);
+	   //      		exit();
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new ExpedicionesEnvios);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		} 
+
+		
 		public function setPropiedadesBySelect($filas)
 		{	
 			if(empty($filas)){
@@ -128,8 +263,11 @@
 				$this->setId($filas['id']);
 				$this->setIdPedido($filas['id_pedido']);	
 				$this->setFecha($filas['fecha_envio']);				
-				$this->setCantidad($filas['cantidad_enviada']);
+				$this->setCantidadEnviada($filas['cantidad_enviada']);
 				$this->setUsuario($filas['id_usuario']);
+				$this->setNroEnvio($filas['nro_envio']);
+				$this->setSinEnviar($filas['sin_enviar']);
+				$this->setEstado($filas['estado']);
 				
 			}
 		}
@@ -139,8 +277,11 @@
 			$this->setId(0);
 			$this->setIdPedido(0);					
 			$this->setFecha('');
-			$this->setCantidad(0);
+			$this->setCantidadEnviada('');
 			$this->setUsuario(0);
+			$this->setNroEnvio(0);
+			$this->setSinEnviar(1);
+			$this->setEstado(true);
 		}
 
 		private function createTable()

@@ -92,7 +92,7 @@
                      <td><?php echo $usuario_sol->getNombre()." ".$usuario_sol->getApellido();?></td>                   
                      <td><?php echo $item->getNombre();?></td>
                      <td><?php echo $cantped;?></td>
-                     <td><?php echo $value->getCantidad();?></td>                    
+                     <td><?php echo $value->getCantidadEnviada();?></td>                    
                      <td><?php echo $userr->getNombre()." ".$userr->getApellido();?></td>
                      
                       
@@ -100,7 +100,7 @@
                      </tr>
                     <?php  
                       
-                      $suma+= $value->getCantidad();
+                      $suma+= $value->getCantidadEnviada();
                         }
                       
                     ?>

@@ -425,7 +425,27 @@
 				throw new Exception($e->getMessage());
 			}		
 		}
+        
+        public function updateEstadoItemExpedicion($id,$estado)
+		{			
+			try {
+				$conexion = false;							
+					$query="UPDATE expediciones SET
+								
+								estados_expediciones_id=".$estado."
+								
+								
+							WHERE id=".$id;
 
+			   
+							
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
 		public function pendientes()
 		{			
 			try {						
@@ -492,6 +512,24 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
 			}		
+		} 
+		public function selectById($id)
+		{			
+			try {
+											
+				# Query
+					$query="SELECT * FROM expediciones WHERE id=".$id;
+				
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new Expediciones);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
 		}
 
 
