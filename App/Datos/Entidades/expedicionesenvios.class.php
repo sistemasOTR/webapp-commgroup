@@ -215,6 +215,25 @@
 			}
 
 		}
+
+		public function selectByNroEnvio($idenviado)
+		{			
+			try {
+											
+				# Query
+					$query="SELECT * FROM expediciones_envios WHERE nro_envio=".$idenviado;
+				
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new ExpedicionesEnvios);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
 		public function selectByIdPedidoSinEnviar($id,$sinenviar)
 		{			
 			try {

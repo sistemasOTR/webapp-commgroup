@@ -1,3 +1,18 @@
+<head>
+<script type="text/javascript">
+<?php
+
+if(isset($_GET['pop'])){
+  $ultimaId = intval($_GET['pedID']);
+  $plazaEnv =$_GET['plazaEnv'];
+ 
+echo "window.open('".PATH_VISTA."Modulos/Expediciones/imprimir_enviado.php?pedID=".$ultimaId."&plazaEnv=".$plazaEnv."')";
+
+}
+
+?></script></head>
+
+
 <?php
   include_once PATH_NEGOCIO."Expediciones/handlerexpediciones.class.php";     
   include_once PATH_NEGOCIO."Sistema/handlerconsultascontrol.class.php";    
