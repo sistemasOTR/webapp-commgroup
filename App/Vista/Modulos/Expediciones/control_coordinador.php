@@ -28,7 +28,7 @@ echo "window.open('".PATH_VISTA."Modulos/Expediciones/imprimir_enviado.php?pedID
   $dFecha = new Fechas;
 
 
-  $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
+  $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->RestarDiasFechaActual(90));
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());  
 //  $ftipo= (isset($_GET["ftipo"])?$_GET["ftipo"]:'');
   $festados= (isset($_GET["festados"])?$_GET["festados"]:'');
