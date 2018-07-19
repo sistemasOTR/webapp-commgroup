@@ -12,7 +12,7 @@
     $ent_parciales= $handlerNotificacionExp->entParciales($userPlaza);
 
 
-    // var_dump();
+    // var_dump($entregados);
     // exit();
 
     $fechaActual = $dFechas->FechaActual();
@@ -40,6 +40,7 @@
       $countRParcial = 0;
     }
        if (!empty($entregados)) {
+
       $countEntregado = count($entregados);
       if ($countEntregado > 1) {
         $fechaEntregado = $entregados[0]->getFecha()->format('Y-m-d');
