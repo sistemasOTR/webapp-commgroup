@@ -55,7 +55,7 @@
                   $consumo = '';
                 } else {
                   $nombre = '-';
-                  $asig = "<a href='#' data-toggle='modal' id='".$impresoraEnPlaza['_asigId']."' data-target='#modal-devolver' data-asigId='".$impresoraEnPlaza['_asigId']."' onclick='cargarDatos(".$impresoraEnPlaza["_asigId"].")'><i class='ion-arrow-return-left text-maroon'></i></a>";
+                  $asig = "<a href='#' data-toggle='modal' id='".$impresoraEnPlaza['_asigId']."_dev' data-target='#modal-devolver' data-asigId='".$impresoraEnPlaza['_asigId']."' data-fechaEnt='".$fechaDev."' data-gestorId='".$impresoraEnPlaza["_gestorId"]."' data-serialnro='".$value->getSerialNro()."' onclick='cargarDatos(".$impresoraEnPlaza["_asigId"].")'><i class='ion-arrow-return-left text-maroon'></i></a>";
                   $baja= "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-asigGestor' data-gestorId='".$impresoraEnPlaza['_gestorId']."' data-serialNro='".$impresoraEnPlaza['_serialNro']."' data-asigId='".$impresoraEnPlaza['_asigId']."' onclick='cargarDatosAsig(".$i.")'><i class='fa fa-user-plus text-green'></i></a>";
                   $estado = '<span class = "text-yellow">En Oficina</span>';
                   $consumo = "<a href='#' data-toggle='modal' id='".$impresoraEnPlaza['_asigId']."' data-target='#modal-consumo' data-marca='".$value->getMarca()."' data-serialNro='".$impresoraEnPlaza['_serialNro']."' onclick='cargarConsumos(".$impresoraEnPlaza["_asigId"].")'><i class='ion-wrench'></i>";
@@ -156,12 +156,61 @@
                     <input type="text" style="display: none;" id="devAsigId" name="devAsigId">
                     <input type="text" style="display: none;" id="devSerialNro" name="devSerialNro">
                     <input type="text" style="display: none;" id="devPlaza" name="devPlaza" value="<?php echo $user->getAliasUserSistema() ?>">
+                    <label>Forma de devolución</label>
+                    <select name="txtTipoBaja" id="txtTipoBajaGestor" class="form-control" style="width: 100%" required="">
+                      <option value="">Seleccionar...</option>
+                      <option value="condi">En condiciones</option>
+                      <option value="roto">Equipo roto a cargo del usuario</option>
+                      <option value="robo">Equipo robado</option>
+                      <option value="perdida">Equipo perdido</option>
+                    </select>
                     <label>Observaciones</label>
                   <textarea name="txtDevObs" id="txtDevObs" class="form-control" rows="5"></textarea>
                 </div>
               </div>
           </div>
           <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Devolver</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+  <div class="modal fade in" id="modal-devolver">
+    <div class="modal-dialog">
+      <div class="modal-content">
+
+        <form id="asig-form" action="<?php echo $url_action_devolver; ?>" method="post">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Devolución de Impresora</h4>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <label>Fecha de devolución</label>
+                    <input type="date" name="fechaDev" id="fechaDev" class="form-control">
+                    <input type="text" style="display: none" id="fechaEntDev" name="fechaEnt">
+                    <input type="text" style="display: none" id="asigIdDev" name="asigId">
+                    <input type="text" style="display: none" id="userIdDev" name="userId">
+                    <input type="text" style="display: none" id="SerialNroDev" name="devSerialNro">
+                    <label>Forma de devolución</label>
+                    <select name="txtTipoBaja" id="txtTipoBaja" class="form-control" style="width: 100%" required="">
+                      <option value="">Seleccionar...</option>
+                      <option value="condi">En condiciones</option>
+                      <option value="roto">Equipo roto a cargo del usuario</option>
+                      <option value="robo">Equipo robado</option>
+                      <option value="perdida">Equipo perdido</option>
+                    </select>
+                    <label>Observaciones</label>
+                  <textarea name="txtObs" id="txtObs" class="form-control" rows="5"></textarea>
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cerrar</button>
             <button type="submit" class="btn btn-primary">Devolver</button>
           </div>
         </form>
@@ -272,7 +321,7 @@
               <hr style="margin: 5px 0;">
               <div class="col-md-12">
                 <label>Observaciones</label>
-                <textarea name="txtObs" id="txtObs" class="form-control" rows="5"></textarea>
+                <textarea name="txtObs" id="txtObsCons" class="form-control" rows="5"></textarea>
               </div>
             </div>
           </div>
@@ -299,6 +348,20 @@
       
     });
   });
+
+  function cargarDatos(id){
+    
+    asigId = document.getElementById(id+'_dev').getAttribute('data-asigId');
+    fechaEnt = document.getElementById(id+'_dev').getAttribute('data-fechaEnt');
+    userId = document.getElementById(id+'_dev').getAttribute('data-gestorId');
+    serialNro = document.getElementById(id+'_dev').getAttribute('data-serialnro');
+    
+    document.getElementById("fechaEntDev").value = fechaEnt  ;
+    document.getElementById("asigIdDev").value = asigId;
+    document.getElementById("userIdDev").value = userId;
+    document.getElementById("SerialNroDev").value =  "'" + serialNro + "'" ;
+    
+  }
 
   function cargarDatosAsig(id){
     
@@ -344,6 +407,16 @@
       controlFecha();
     });
   });
+    $(document).ready(function() {
+    $("#txtTipoBaja").on('change', function (e) { 
+      cambioObsDev();
+    });
+  });
+    $(document).ready(function() {
+    $("#txtTipoBajaGestor").on('change', function (e) { 
+      cambioObsDevGestor();
+    });
+  });
 
   function controlFecha(){
     fechadev = document.getElementById("fechaDev").value;
@@ -356,6 +429,20 @@
       document.getElementById("fechaDev").value = fechaent;
     } 
 
+  }
+  function cambioObsDev() {
+    tipoBaja = document.getElementById("txtTipoBaja").value;
+    
+    if (tipoBaja == 'roto') {
+      document.getElementById("txtObs").value = "con dictamen por parte del Servicio Técnico Oficial, [COMPLETAR CON DETALLE TECNICO] estado que hace imposible la reparación y/o uso para el comodante. En consecuencia, será a cargo del comodatario la suma de Pesos [COMPLETAR CON MONTO FORMATO TEXTO] ($0000,00.-) en concepto de sustitución por el nuevo equipo.";
+    }
+  }
+  function cambioObsDevGestor() {
+    tipoBaja = document.getElementById("txtTipoBajaGestor").value;
+    
+    if (tipoBaja == 'roto') {
+      document.getElementById("txtDevObs").value = "con dictamen por parte del Servicio Técnico Oficial, [COMPLETAR CON DETALLE TECNICO] estado que hace imposible la reparación y/o uso para el comodante. En consecuencia, será a cargo del comodatario la suma de Pesos [COMPLETAR CON MONTO FORMATO TEXTO] ($0000,00.-) en concepto de sustitución por el nuevo equipo.";
+    }
   }
 
        

@@ -46,6 +46,10 @@
 		private $_obsDev;
 		public function getObsDev(){ return $this->_obsDev; }
 		public function setObsDev($obsDev){ $this->_obsDev =$obsDev; }
+		
+		private $_tipoDev;
+		public function getTipoDev(){ return $this->_tipoDev; }
+		public function setTipoDev($tipoDev){ $this->_tipoDev =$tipoDev; }
 
 
 		/*#############*/
@@ -61,6 +65,7 @@
 			$this->setFechaDev('');
 			$this->setObs('');
 			$this->setObsDev('');
+			$this->setTipoDev('');
 			
 		}
 
@@ -111,27 +116,9 @@
 								gestorId=".$this->getGestorId().",
 								fechaAsig='".$this->getFechaAsig()."',
 								fechaDev='".$this->getFechaDev()."',
+								tipoDev='".$this->getTipoDev()."',
 								obs='".$this->getObs()."'
 							WHERE asigId=".$this->getAsigId();
-
-				# Ejecucion 					
-				return SQL::update($conexion,$query);	
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());
-			}		
-		}
-
-		public function devolver($conexion)
-		{
-			try {
-
-				# Query 			
-				$query="UPDATE impresora_plaza SET
-								fechaDev='".$this->getFechaDev()."',
-								obsDev='".$this->getObsDev()."'
-							WHERE asigId=".$this->getAsigId();
-
 
 				# Ejecucion 					
 				return SQL::update($conexion,$query);	
@@ -160,6 +147,80 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
 			}
+		}
+
+		public function setPropiedadesBySelect($filas)
+		{	
+			if(empty($filas)){
+				$this->cleanClass();
+			}
+			else{
+				$this->setAsigId($filas['asigId']);
+				$this->setSerialNro(trim($filas['serialNro']));
+				$this->setPlaza(trim($filas['plaza']));			
+				$this->setGestorId($filas['gestorId']);			
+				$this->setFechaAsig($filas['fechaAsig']);			
+				$this->setFechaDev($filas['fechaDev']);			
+				$this->setObs(trim($filas['obs']));
+				$this->setObsDev(trim($filas['obsDev']));
+				$this->setTipoDev(trim($filas['tipoDev']));
+			}
+		}
+
+		private function cleanClass()
+		{
+			$this->setAsigId(0);
+			$this->setSerialNro('');
+			$this->setPlaza('');
+			$this->setGestorId(0);
+			$this->setFechaAsig('');
+			$this->setFechaDev('');
+			$this->setObs('');
+			$this->setObsDev('');
+			$this->setTipoDev('');
+		}
+
+		private function createTable()
+		{
+			return 'CREATE TABLE IF NOT EXISTS';
+		}
+
+		/*########################*/
+		/* METODOS PERSONALIZADOS */
+		/*########################*/
+
+		public function getNombreRoles(){
+			$handler = new UsuarioPerfil;
+			$roles = explode("|", $this->getRoles());
+			
+			$nombre_roles = "";
+			foreach ($roles as $key => $value) {
+				if(!empty($value)){
+					$handler->setId($value);
+					$nombre_roles = $nombre_roles.$handler->select()->getNombre().",";				
+				}
+			}			
+			return $nombre_roles;
+		}
+
+		public function devolver($conexion)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE impresora_plaza SET
+								fechaDev='".$this->getFechaDev()."',
+								tipoDev='".$this->getTipoDev()."',
+								obsDev='".$this->getObsDev()."'
+							WHERE asigId=".$this->getAsigId();
+
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
 		}
 
 		public function selectXPlaza($enplaza)
@@ -244,58 +305,6 @@
 				throw new Exception($e->getMessage());						
 			}
 
-		}
-
-		public function setPropiedadesBySelect($filas)
-		{	
-			if(empty($filas)){
-				$this->cleanClass();
-			}
-			else{
-				$this->setAsigId($filas['asigId']);
-				$this->setSerialNro(trim($filas['serialNro']));
-				$this->setPlaza(trim($filas['plaza']));			
-				$this->setGestorId($filas['gestorId']);			
-				$this->setFechaAsig($filas['fechaAsig']);			
-				$this->setFechaDev($filas['fechaDev']);			
-				$this->setObs(trim($filas['obs']));
-				$this->setObsDev(trim($filas['obsDev']));
-			}
-		}
-
-		private function cleanClass()
-		{
-			$this->setAsigId(0);
-			$this->setSerialNro('');
-			$this->setPlaza('');
-			$this->setGestorId(0);
-			$this->setFechaAsig('');
-			$this->setFechaDev('');
-			$this->setObs('');
-			$this->setObsDev('');
-		}
-
-		private function createTable()
-		{
-			return 'CREATE TABLE IF NOT EXISTS';
-		}
-
-		/*########################*/
-		/* METODOS PERSONALIZADOS */
-		/*########################*/
-
-		public function getNombreRoles(){
-			$handler = new UsuarioPerfil;
-			$roles = explode("|", $this->getRoles());
-			
-			$nombre_roles = "";
-			foreach ($roles as $key => $value) {
-				if(!empty($value)){
-					$handler->setId($value);
-					$nombre_roles = $nombre_roles.$handler->select()->getNombre().",";				
-				}
-			}			
-			return $nombre_roles;
 		}
 	}
 ?>

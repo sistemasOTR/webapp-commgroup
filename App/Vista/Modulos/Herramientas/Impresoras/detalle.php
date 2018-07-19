@@ -27,6 +27,7 @@
   $arrUsuarios = $handlerUs->selectGestores();
   $impresora = $handlerimpresoras->getDatosConSerial($fserialNro);
   $arrDatos = $handlerimpresoras->getAsignaciones($impresora['_serialNro']);
+  $url_impresion = PATH_VISTA.'Modulos/Herramientas/Impresoras/imprimir_baja_comodato.php?';
   $fecha = new Fechas;
 
 ?>
@@ -91,6 +92,7 @@
                   <th class='text-center' width="150">Asignación</th>
                   <th class='text-center' width="150">Devolución</th>
                   <th class='text-left'>Observaciones</th>
+                  <th class='text-right'>Comodato</th>
                 </tr>
               </thead>
               <tbody>
@@ -117,6 +119,12 @@
                       $fechaDev = $asignaciones->getFechaDev()->format('d-m-Y');
                     }
                     $obs = $asignaciones->getObs();
+                    
+                    if(is_null($asignaciones->getFechaDev())){
+                      $imp_baja_comodato = '';
+                    } else {
+                      $imp_baja_comodato = "<a target='_blank' href='".PATH_VISTA."Modulos/Herramientas/Impresoras/imprimir_baja_comodato.php?fID=".$asignaciones->getAsigId()."&fTipo=".$asignaciones->getTipoDev()."'><i class='ion-document text-yellow' data-toggle='tooltip' title='Ver Comodato'></i></a>";
+                    }
 
                     //Impresión de los datos
                     echo "<tr>
@@ -125,6 +133,7 @@
                     <td>".$fechaAsig."</td>
                     <td>".$fechaDev."</td>
                     <td class='text-left'>".$obs."</td>
+                    <td class='text-right'>".$imp_baja_comodato."</td>
                     </tr>";
                   }}
                  ?>

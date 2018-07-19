@@ -42,7 +42,7 @@
 <div class="content-wrapper">  
   <section class="content-header">
     <h1>
-      Impresora <?php echo $impresora["_marca"]." ".$impresora["_modelo"];?>
+      Impresora <?php echo $impresora["_marca"]." ".$impresora["_modelo"]." - Nro de Serie: ".$impresora["_serialNro"] ;?>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -253,11 +253,11 @@
     url_filtro_reporte="index.php?view=asignar_imp&fserialNro="+f_serialNro;
 
     if(f_plaza!=undefined)
-      if(f_plaza!='')
+      if(f_plaza!='' && f_plaza != 0)
         url_filtro_reporte= url_filtro_reporte +"&fplaza="+f_plaza;
 
     if(f_gestorId!=undefined)
-      if(f_gestorId>0)
+      if(f_gestorId > 0)
         url_filtro_reporte= url_filtro_reporte +"&fgestorId="+f_gestorId;
     
     $("#filtro_reporte").attr("href", url_filtro_reporte);

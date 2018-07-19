@@ -1,6 +1,7 @@
 <?php 
  $arrGestor = $handler->selectAllGestor($fplaza); 
  ?>
+
  <div class="box box-solid">
   <div class="box-header with-border">
     <i class="fa fa-filter"></i>

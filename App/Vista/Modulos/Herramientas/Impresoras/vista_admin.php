@@ -45,13 +45,12 @@
 	              	$gestorId = $impresoraEnPlaza["_gestorId"];
                   $gestorXId = $handlerUs->selectById($gestorId);
 	              	$nombre = $gestorXId->getNombre(). " " . $gestorXId->getApellido();
-                  $baja= "<a href='".$url_impresion."fserialNro=".$value->getSerialNro()."&fgestor=".$gestorXId->getId()."&fasigId=".$impresoraEnPlaza["_asigId"]."' target='_blank'><i class='ion-document text-yellow' data-toggle='tooltip' title='Ver Comodato'></i></a>"; 
+                  $baja= "<a href='".$url_impresion."fserialNro=".$value->getSerialNro()."&fgestor=".$gestorXId->getId()."&fasigId=".$impresoraEnPlaza["_asigId"]."' target='_blank'><i class='ion-document text-yellow' data-toggle='tooltip' title='Ver Comodato'></i></a>";
                   $asig = "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-devGestor' data-gestorId='".$impresoraEnPlaza['_gestorId']."' data-plaza='".$impresoraEnPlaza['_plaza']."' data-fechaEnt='".$fechaDev."' data-serialNro='".$impresoraEnPlaza['_serialNro']."' data-asigId='".$impresoraEnPlaza['_asigId']."' onclick='cargarDatosDev(".$i.")'><i class='fa fa-user-times text-blue'></i></a>";
-	              } else {
-	              	$nombre = '-';
+                } else {
+                  $nombre = '-';
                   $baja= "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-asigGestor' data-plaza='".$impresoraEnPlaza['_plaza']."' data-serialNro='".$impresoraEnPlaza['_serialNro']."' data-asigId='".$impresoraEnPlaza['_asigId']."' onclick='cargarDatosAsig(".$i.")'><i class='fa fa-user-plus text-green'></i></a>";
-	              }
-                
+                }
 
 
             } else {
@@ -62,10 +61,7 @@
       				$asig= "<a href='".$url_asignacion."&fserialNro=".$value->getSerialNro()."'><i class='ion-location text-green'></i></a>";
               $baja = "<a href='#' data-toggle='modal' id='".$i."_edit' data-target='#modal-baja' data-serialnro='".$value->getSerialNro()."' data-obsimp='".$value->getObs()."' onclick='bajaImp(".$i.")'><i class='ion-close text-red'></i></a>";
             }
-
-
-
-
+            
             if(!is_null($value->getFechaBaja())){
               $estado = '<span class = "label label-danger" style="font-size: 13px; font-weight: normal;">Inactiva</span>';
               $asig= "<i class='ion-location text-gray'></i>";
@@ -91,12 +87,17 @@
               case 4:
                 $estado = '<span class = "label label-warning" style="font-size: 13px; font-weight: normal;">Mantenimiento</span>';
                 break;
+              case 5:
+                $estado = '<span class = "label label-danger" style="font-size: 13px; font-weight: normal;">Robada</span>';
+                break;
+              case 6:
+                $estado = '<span class = "label label-danger" style="font-size: 13px; font-weight: normal;">Perdida</span>';
+                break;
               
               default:
                 # code...
                 break;
             }
-
 
             echo 
             "<tr>
@@ -216,6 +217,16 @@
                     <input type="date" name="fechaDev" id="fechaDev" class="form-control">
                     <input type="text" style="display: none" id="fechaEnt" name="fechaEnt">
                     <input type="text" style="display: none" id="asigId" name="asigId">
+                    <input type="text" style="display: none" id="userId" name="userId">
+                    <input type="text" style="display: none" id="devSerialNro" name="devSerialNro">
+                    <label>Forma de devolución</label>
+                    <select name="txtTipoBaja" id="txtTipoBaja" class="form-control" style="width: 100%" required="">
+                      <option value="">Seleccionar...</option>
+                      <option value="condi">En condiciones</option>
+                      <option value="roto">Equipo roto a cargo del usuario</option>
+                      <option value="robo">Equipo robado</option>
+                      <option value="perdida">Equipo perdido</option>
+                    </select>
                     <label>Observaciones</label>
                   <textarea name="txtObs" id="txtObs" class="form-control" rows="5"></textarea>
                 </div>
@@ -298,7 +309,7 @@
                       ?>
                     </select>
                     <label>Observaciones</label>
-                  <textarea name="txtObs" id="txtObs" class="form-control" rows="5"></textarea>
+                  <textarea name="txtObs" id="txtObsAs" class="form-control" rows="5"></textarea>
                 </div>
               </div>
           </div>
@@ -326,10 +337,18 @@
                 <div class="col-md-10 col-md-offset-1">
                     <label>Fecha de Devolucion</label>
                     <input type="date" name="fechaDev" id="fechaDev" class="form-control">
-                    <input type="text" style="display: none;" id="devfechaEnt" name="fechaEnt">
-                    <input type="text" style="display: none;" id="devAsigId" name="devAsigId">
-                    <input type="text" style="display: none;" id="devSerialNro" name="devSerialNro">
-                    <input type="text" style="display: none;" id="devPlaza" name="devPlaza">
+                    <input type="text" style="display: none;" id="devfechaEntPL" name="fechaEnt">
+                    <input type="text" style="display: none;" id="devAsigIdPL" name="devAsigId">
+                    <input type="text" style="display: none;" id="devSerialNroPL" name="devSerialNro">
+                    <input type="text" style="display: none;" id="devPlazaPL" name="devPlaza">
+                    <label>Forma de devolución</label>
+                    <select name="txtTipoBaja" id="txtTipoBajaPL" class="form-control" style="width: 100%" required="">
+                      <option value="">Seleccionar...</option>
+                      <option value="condi">En condiciones</option>
+                      <option value="roto">Equipo roto a cargo del usuario</option>
+                      <option value="robo">Equipo robado</option>
+                      <option value="perdida">Equipo perdido</option>
+                    </select>
                     <label>Observaciones</label>
                   <textarea name="txtDevObs" id="txtDevObs" class="form-control" rows="5"></textarea>
                 </div>
@@ -343,6 +362,7 @@
       </div>
     </div>
   </div>
+
 
 <script type="text/javascript">   
   
@@ -362,32 +382,16 @@
       filtrarReporte(); 
     });
   });
-
-  
-  function crearHref()
-  {
-    f_gestorId = $("#slt_gestor").val();
-    f_plaza = $("#slt_plaza").val();   
-    url_filtro_reporte="index.php?view=impresorasxplaza";
-
-    if(f_plaza!=undefined)
-      if(f_plaza!='')
-        url_filtro_reporte= url_filtro_reporte +"&fplaza="+f_plaza;
-
-    if(f_gestorId!=undefined)
-      if(f_gestorId>0)
-        url_filtro_reporte= url_filtro_reporte +"&fgestorId="+f_gestorId;
-    
-    $("#filtro_reporte").attr("href", url_filtro_reporte);
-
-    document.cookie = "url-tmp-back="+url_filtro_reporte;
-  } 
-
-  function filtrarReporte()
-  {
-    crearHref();
-    window.location = $("#filtro_reporte").attr("href");
-  }
+    $(document).ready(function() {
+    $("#txtTipoBaja").on('change', function (e) { 
+      cambioObsDev();
+    });
+  });
+    $(document).ready(function() {
+    $("#txtTipoBajaPL").on('change', function (e) { 
+      cambioObsDevPL();
+    });
+  });
 
   function cargarDatosAsig(id){
     
@@ -407,10 +411,10 @@
     fechaEnt = document.getElementById(id+'_edit').getAttribute('data-fechaEnt');
     plaza = document.getElementById(id+'_edit').getAttribute('data-plaza');
     
-    document.getElementById("devPlaza").value = plaza  ;
-    document.getElementById("devSerialNro").value = serialNro  ;
-    document.getElementById("devfechaEnt").value = fechaEnt  ;
-    document.getElementById("devAsigId").value = asigId;
+    document.getElementById("devPlazaPL").value = plaza  ;
+    document.getElementById("devSerialNroPL").value = serialNro  ;
+    document.getElementById("devfechaEntPL").value = fechaEnt  ;
+    document.getElementById("devAsigIdPL").value = asigId;
     
   }
   
@@ -419,9 +423,13 @@
     
     asigId = document.getElementById(id).getAttribute('data-asigId');
     fechaEnt = document.getElementById(id).getAttribute('data-fechaEnt');
+    userId = document.getElementById(id).getAttribute('data-gestorId');
+    serialNro = document.getElementById(id).getAttribute('data-serialnro');
     
     document.getElementById("fechaEnt").value = fechaEnt  ;
     document.getElementById("asigId").value = asigId;
+    document.getElementById("userId").value = userId;
+    document.getElementById("devSerialNro").value =  "'" + serialNro + "'" ;
     
   }
 
@@ -437,6 +445,25 @@
       document.getElementById("txtObsImp").value = ' ';
     
   }
+
+  function crearHref()
+  {
+    f_gestorId = $("#slt_gestor").val();
+    f_plaza = $("#slt_plaza").val();   
+    url_filtro_reporte="index.php?view=impresorasxplaza";
+
+    if(f_plaza!=undefined)
+      if(f_plaza!='')
+        url_filtro_reporte= url_filtro_reporte +"&fplaza="+f_plaza;
+
+    if(f_gestorId!=undefined)
+      if(f_gestorId!='')
+        url_filtro_reporte= url_filtro_reporte +"&fgestorId="+f_gestorId;
+    
+    $("#filtro_reporte").attr("href", url_filtro_reporte);
+
+    document.cookie = "url-tmp-back="+url_filtro_reporte;
+  } 
 
   function filtrarReporte()
   {
@@ -464,10 +491,21 @@
     } 
 
   }
-
-  $(function () {
-
-  $('#search').quicksearch('table tbody tr');               
-});
+  
+  function cambioObsDev() {
+    tipoBaja = document.getElementById("txtTipoBaja").value;
+    
+    if (tipoBaja == 'roto') {
+      document.getElementById("txtObs").value = "con dictamen por parte del Servicio Técnico Oficial, [COMPLETAR CON DETALLE TECNICO] estado que hace imposible la reparación y/o uso para el comodante. En consecuencia, será a cargo del comodatario la suma de Pesos [COMPLETAR CON MONTO FORMATO TEXTO] ($0000,00.-) en concepto de sustitución por el nuevo equipo.";
+    }
+  }
+  
+  function cambioObsDevPL() {
+    tipoBaja = document.getElementById("txtTipoBajaPL").value;
+    
+    if (tipoBaja == 'roto') {
+      document.getElementById("txtDevObs").value = "con dictamen por parte del Servicio Técnico Oficial, [COMPLETAR CON DETALLE TECNICO] estado que hace imposible la reparación y/o uso para el comodante. En consecuencia, será a cargo del comodatario la suma de Pesos [COMPLETAR CON MONTO FORMATO TEXTO] ($0000,00.-) en concepto de sustitución por el nuevo equipo.";
+    }
+  }
        
 </script>

@@ -42,6 +42,10 @@
 		private $_obs;
 		public function getObs(){ return $this->_obs; }
 		public function setObs($obs){ $this->_obs =$obs; }
+		
+		private $_tipoBaja;
+		public function getTipoBaja(){ return $this->_tipoBaja; }
+		public function setTipoBaja($tipoBaja){ $this->_tipoBaja =$tipoBaja; }
 
 		private $_userCarga;
 		public function getUserCarga(){ return $this->_userCarga; }
@@ -76,6 +80,7 @@
 			$this->setPrecioCompra(0);
 			$this->setFechaBaja('');
 			$this->setObs('');
+			$this->setTipoBaja('');
 			$this->setUserCarga(0);
 			$this->setEstado(0);
 			$this->setUserAprobacion(0);
@@ -148,6 +153,7 @@
 				throw new Exception($e->getMessage());
 			}		
 		}
+
 		public function delete($conexion)
 		{
 			try {
@@ -159,6 +165,7 @@
 				# Query 			
 				$query="UPDATE impresoras SET							
 								fechaBaja = '".$this->getFecha()."
+								tipoBaja = '".$this->getTipoBaja()."
 							WHERE serialNro='".$this->getSerialNro()."'";
 
 				# Ejecucion 	
@@ -199,6 +206,7 @@
 				$this->setPrecioCompra(trim($filas['precioCompra']));			
 				$this->setFechaBaja($filas['fechaBaja']);			
 				$this->setObs($filas['obs']);
+				$this->setTipoBaja($filas['tipoBaja']);
 				$this->setUserCarga($filas['userCarga']);
 				$this->setEstado($filas['estado']);
 				$this->setUserAprobacion($filas['userAprobacion']);
@@ -216,6 +224,7 @@
 			$this->setPrecioCompra(0);
 			$this->setFechaBaja('');
 			$this->setObs('');
+			$this->setTipoBaja('');
 			$this->setUserCarga(0);
 			$this->setEstado(0);
 			$this->setUserAprobacion(0);
@@ -226,6 +235,46 @@
 		private function createTable()
 		{
 			return 'CREATE TABLE IF NOT EXISTS';
+			/*
+			USE [Prueba_AppWeb]
+			GO
+
+			SET ANSI_NULLS ON
+			GO
+
+			SET QUOTED_IDENTIFIER ON
+			GO
+
+			SET ANSI_PADDING ON
+			GO
+
+			CREATE TABLE [dbo].[impresoras](
+				[serialNro] [varchar](30) NOT NULL,
+				[marca] [varchar](50) NOT NULL,
+				[modelo] [varchar](30) NOT NULL,
+				[fechaCompra] [date] NULL,
+				[precioCompra] [decimal](18, 2) NULL,
+				[fechaBaja] [date] NULL,
+				[obs] [text] NULL,
+				[aprobado] [bit] NULL,
+				[userCarga] [int] NULL,
+				[userAprobacion] [int] NULL,
+				[fechaHoraAprobacion] [datetime] NULL,
+				[tipoBaja] [varchar](50) NULL,
+				[estado] [int] NULL,
+			 CONSTRAINT [PK_impresoras] PRIMARY KEY CLUSTERED 
+			(
+				[serialNro] ASC
+			)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+			) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+			GO
+
+			SET ANSI_PADDING OFF
+			GO
+
+
+			*/
 		}
 
 		/*########################*/
@@ -244,6 +293,33 @@
 				}
 			}			
 			return $nombre_roles;
+		}
+
+		public function editarImpresora($conexion)
+		{
+			try {
+
+				# Validaciones 			
+				if(empty($this->getSerialNro()))
+					throw new Exception("Impresora no identificada");
+
+				
+				# Query 			
+				$query="UPDATE impresoras SET
+								fechaCompra='".$this->getFechaCompra()."',
+								precioCompra=".$this->getPrecioCompra().",
+								userAprobacion=".$this->getUserAprobacion().",
+								aprobado='".$this->getAprobado()."',
+								fechaHoraAprobacion='".$this->getFechaHoraAprobacion()."'
+							WHERE serialNro='".$this->getSerialNro()."'";
+							
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
 		}
 
 		public function selectXPlaza($plaza)
@@ -282,7 +358,7 @@
 				if($gestorId=='' || $gestorId == '0'){
 					$query = "SELECT 
 					impresoras.serialNro, impresoras.modelo, impresoras.marca, 
-					impresoras.fechaCompra, impresoras.precioCompra, impresoras.fechaBaja, impresoras.obs, impresoras.estado
+					impresoras.fechaCompra, impresoras.precioCompra, impresoras.fechaBaja, impresoras.obs,impresoras.estado 
 					FROM impresoras left join impresora_plaza 
 					on impresoras.serialNro = impresora_plaza.serialNro 
 					WHERE fechaDev is null or fechaBaja is null
@@ -332,36 +408,12 @@
 				# Query 			
 				$query="UPDATE impresoras SET
 								fechaBaja='".$this->getFechaBaja()."',
+								tipoBaja='".$this->getTipoBaja()."',
 								obs='".$this->getObs()."'
-							WHERE serialNro=".$this->getSerialNro();
-
-				# Ejecucion 					
-				return SQL::update($conexion,$query);	
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());
-			}		
-		}
-
-		public function editarImpresora($conexion)
-		{
-			try {
-
-				# Validaciones 			
-				if(empty($this->getSerialNro()))
-					throw new Exception("Impresora no identificada");
-
-				
-				# Query 			
-				$query="UPDATE impresoras SET
-								fechaCompra='".$this->getFechaCompra()."',
-								precioCompra=".$this->getPrecioCompra().",
-								userAprobacion=".$this->getUserAprobacion().",
-								aprobado='".$this->getAprobado()."',
-								fechaHoraAprobacion='".$this->getFechaHoraAprobacion()."'
 							WHERE serialNro='".$this->getSerialNro()."'";
-							
 
+				// var_dump($query);
+				// exit();
 				# Ejecucion 					
 				return SQL::update($conexion,$query);	
 
@@ -390,6 +442,5 @@
 				throw new Exception($e->getMessage());
 			}		
 		}
-
 	}
 ?>

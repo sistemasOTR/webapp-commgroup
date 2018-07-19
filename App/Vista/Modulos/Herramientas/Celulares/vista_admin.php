@@ -43,9 +43,9 @@
         if(!empty($arrDatos)){
           foreach ($arrDatos as $nroLinea) {
             $IMEI = $nroLinea->getIMEI();
-            //var_dump($equipo);
-            //exit();
-            if($IMEI != ''){
+            // var_dump($IMEI);
+            // exit();
+            if($IMEI != '0'){
               $equipo = $handlerCel->getEquipoLinea($IMEI);
               $telefono = $equipo->getMarca()." ".$equipo->getModelo();
             } else {

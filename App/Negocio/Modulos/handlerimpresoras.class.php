@@ -125,6 +125,8 @@
 					$handler = new ImpresorasPlaza;
 					$handlerImp = new Impresoras;
 					$handlerImp->setSerialNro($serialNro);
+					// var_dump($handlerImp);
+					// exit();
 					$handlerImp->cambiarEstado(false,2);
 
 					$handler->setSerialNro($serialNro);
@@ -134,18 +136,15 @@
 						$handler->setFechaAsig($fechaAsig);
 					}
 					$handler->setObs($obs);
-					
 
 					$handler->insert(false);
-				
-
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
 			}
 		}
 		
-		public function devolverImpresora($asigId,$fechaDev,$obs){
+		public function devolverImpresora($asigId,$fechaDev,$obs,$tipo){
 			try {
 				
 					$handler = new ImpresorasPlaza;
@@ -158,11 +157,9 @@
 					$handlerImp->cambiarEstado(false,1);
 					$handler->setFechaDev($fechaDev);
 					$handler->setObsDev($obs);
-
+					$handler->setTipoDev($tipo);
 
 					$handler->devolver(false);
-				
-
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
@@ -209,11 +206,29 @@
 			try {
 				
 					$handler = new Impresoras;
+					$handlerImp = new Impresoras;
 
 					$handler->setSerialNro($serialNro);
 					$handler->setFechaBaja($fechaBaja);
 					$handler->setTipoBaja($tipoBaja);
 					$handler->setObs($obs);
+					$handlerImp->setSerialNro($serialNro);
+					switch ($tipoBaja) {
+						case 'roto':
+							$tipo = 3;
+							break;
+						case 'robo':
+							$tipo = 5;
+							break;
+						case 'perdida':
+							$tipo = 6;
+							break;
+						
+						default:
+							# code...
+							break;
+					}
+					$handlerImp->cambiarEstado(false,$tipo);
 
 					$handler->bajaImpresora(false);
 				
