@@ -37,6 +37,10 @@
 		public function getEstado(){ return var_export($this->_estado,true); }
 		public function setEstado($estado){ $this->_estado=$estado; }	
 
+		private $_recibido;
+		public function getRecibido(){ return var_export($this->_recibido,true); }
+		public function setRecibido($recibido){ $this->_recibido=$recibido; }
+
 		
 		
 		/*#############*/
@@ -48,6 +52,7 @@
 			$this->setPlaza(0);					
 			$this->setFecha('');
 			$this->setEstado(true);
+			$this->setRecibido(false);
 			
 		}
 
@@ -76,12 +81,14 @@
 				$query="INSERT INTO expediciones_enviados (
 		        						plaza,
 		        						fecha,
-		        						estado
+		        						estado,
+		        						recibido
 	        			) VALUES (
 	        							   	
 	        							'".$this->getPlaza()."', 	   	
 	        							'".$this->getFecha()."',   	
-	        							'".$this->getEstado()."'  	
+	        							'".$this->getEstado()."',  	
+	        							'".$this->getRecibido()."'  	
 	        							   	
 	        							
 	        			)";
@@ -103,6 +110,26 @@
 											
 				# Query
 					$query="SELECT * FROM expediciones_enviados";
+				
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new ExpedicionesEnviados);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}public function selectUltimosEnviados()
+		{			
+			try {
+											
+				# Query
+					$query="SELECT TOP 10 * FROM expediciones_enviados ORDER BY id DESC ";
+
+					// var_dump($query);
+					// exit();
 				
 				
 				# Ejecucion 					
@@ -145,6 +172,7 @@
 				$this->setPlaza($filas['plaza']);	
 				$this->setFecha($filas['fecha']);				
 				$this->setEstado($filas['estado']);
+				$this->setRecibido($filas['recibido']);
 				
 			}
 		}
@@ -155,6 +183,7 @@
 			$this->setPlaza(0);					
 			$this->setFecha('');
 			$this->setEstado(true);
+			$this->setRecibido(false);
 		}
 
 		private function createTable()

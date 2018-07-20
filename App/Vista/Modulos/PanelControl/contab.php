@@ -5,8 +5,6 @@
     include_once PATH_NEGOCIO."Expediciones/handlerexpediciones.class.php";
 ?>
     
-
-
 <div class="content-wrapper">  
   <section class="content-header">
     <h1>
@@ -34,10 +32,16 @@
          <?php include_once "Widget/Compras/compras.php"; ?>
         </div>
         <div class='col-md-8'>
-           <!-- INCLUDE TABLA SOLICITUD -->
+           <!-- INCLUDE TABLAS SOLICITUD,APROBADOS -->
            <?php include_once "Widget/Compras/solicitud.php"; ?>
+           <?php include_once "Widget/Envios/aprobados.php"; ?>
          
-        </div>                
+        </div> 
+         <div class='col-md-4'>
+           <!-- INCLUDE TABLA REMITO -->
+           <?php include_once "Widget/Envios/remito.php"; ?>
+         
+        </div>                   
       </div>
       
     </div>  

@@ -237,6 +237,65 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
+		public function seleccionarEnviados($fdesde,$fhasta){
+			try {
+				
+				$f = new Fechas;
+
+				if($fdesde==$fhasta)
+				{
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "fecha = '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "fecha =  '".$tmp."' AND ";
+					}
+				}
+				else
+				{					
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "fecha >= '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "fecha <=  '".$tmp."' AND ";
+					}
+				}
+
+				
+				
+				$filtro_estado = "estado =1";			
+
+				$query = "SELECT * FROM expediciones_enviados 
+								WHERE 									 
+									".$filtro_fdesde." 
+									".$filtro_fhasta." 												
+									".$filtro_estado."
+								ORDER BY fecha ASC";
+
+
+				$result = SQL::selectObject($query, new ExpedicionesEnviados);	
+
+				if(count($result)==1)
+					$resultFinal[0] = $result;		
+				else
+					$resultFinal = $result;									
+
+				return $resultFinal;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
         public function seleccionarComprasByFiltros($fdesde, $fhasta,$tipo_expe,$estados_expe){
 			try {
 				
