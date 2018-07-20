@@ -4,6 +4,7 @@
   include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";	
   include_once PATH_NEGOCIO."Usuarios/handlertipousuarios.class.php"; 
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php"; 
+  include_once PATH_NEGOCIO."Sistema/handlersupervisor.class.php"; 
 
 
   $url_add = PATH_VISTA.'Modulos/UsuariosAdmin/action_add_multiusuario.php';  
@@ -27,6 +28,9 @@
   $arrCoordinador = $handlerSistema->selectAllCoordinador(null);
   $arrGestor = $handlerSistema->selectAllGestor(null);  
   $arrOperador = $handlerSistema->selectAllOperador();
+
+  $handlerSupervisor = new HandlerSupervisor;
+  $arrSupervisor = $handlerSupervisor->selectAllSupervisor();
 
   $arrEmpresaArray = $handlerSistema->selectAllEmpresaReturnArray();
 ?>
@@ -192,6 +196,20 @@
                                 ?>
                               </select>
                             </div>
+
+                            <div id="parent_slt_supervisor">
+                              <select id="slt_supervisor" class="form-control" style="width: 100%" name="slt_supervisor"> 
+                                <option></option>
+                                <?php
+                                  if(!empty($arrSupervisor))
+                                  {                        
+                                    foreach ($arrSupervisor as $key => $value) {                                                  
+                                      echo "<option value='".$value["id"]."'>".$value["nombre"]."</option>";
+                                    }
+                                  }                      
+                                ?>
+                              </select>
+                            </div>                            
                           </div> 
                           <div class="col-md-2">                        
                             <input type="submit" class="btn btn-primary" style="margin-top: 20px;" value="Agregar">
@@ -351,7 +369,11 @@
 
       $("#slt_operador").select2({
           placeholder: "Seleccionar Operador",                  
-      });                     
+      });    
+
+      $("#slt_supervisor").select2({
+          placeholder: "Seleccionar Supervisor",                  
+      });                       
     });
 
 
@@ -360,6 +382,7 @@
     $("#parent_slt_gestor").hide();
     $("#parent_slt_coordinador").hide();
     $("#parent_slt_operador").hide();
+    $("#parent_slt_supervisor").hide();
 
     function mostrarSelector(option){
       
@@ -370,6 +393,7 @@
           $("#parent_slt_gestor").hide();
           $("#parent_slt_coordinador").hide();
           $("#parent_slt_operador").hide();
+          $("#parent_slt_supervisor").hide();
           break;
         case "2":
           $("#parent_slt_empresa").hide();
@@ -377,6 +401,7 @@
           $("#parent_slt_gestor").hide();
           $("#parent_slt_coordinador").hide();
           $("#parent_slt_operador").hide();
+          $("#parent_slt_supervisor").hide();
           break;
         case "3":
           $("#parent_slt_empresa").hide();
@@ -384,6 +409,7 @@
           $("#parent_slt_gestor").show();
           $("#parent_slt_coordinador").hide();
           $("#parent_slt_operador").hide();
+          $("#parent_slt_supervisor").hide();
           break;
         case "4":
           $("#parent_slt_empresa").hide();
@@ -391,6 +417,7 @@
           $("#parent_slt_gestor").hide();
           $("#parent_slt_coordinador").show();
           $("#parent_slt_operador").hide();
+          $("#parent_slt_supervisor").hide();
           break;
         case "5":
           $("#parent_slt_empresa").hide();
@@ -398,7 +425,16 @@
           $("#parent_slt_gestor").hide();
           $("#parent_slt_coordinador").hide();
           $("#parent_slt_operador").show();
+          $("#parent_slt_supervisor").hide();
           break;
+        case "6":
+          $("#parent_slt_empresa").hide();
+          $("#parent_slt_gerente").hide();
+          $("#parent_slt_gestor").hide();
+          $("#parent_slt_coordinador").hide();
+          $("#parent_slt_operador").hide();
+          $("#parent_slt_supervisor").show();
+          break;          
       }    
     }
 

@@ -2,6 +2,7 @@
   include_once PATH_NEGOCIO."Funciones/String/string.class.php";
   include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";	
   include_once PATH_NEGOCIO."Usuarios/handlertipousuarios.class.php"; 
+  include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php"; 
   include_once PATH_NEGOCIO."Usuarios/handlerperfiles.class.php";
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";   
 
@@ -16,6 +17,9 @@
   $arrGestor = $handlerSistema->selectAllGestor(null);
   $arrCoordinador = $handlerSistema->selectAllCoordinador(null);
   $arrOperador = $handlerSistema->selectAllOperador();
+
+  $handlerPlaza = new HandlerPlazaUsuarios;
+  $arrPlaza = $handlerPlaza->selectTodas();
 
   $handlerP = new HandlerPerfiles;
   $arrPerfiles = $handlerP->selectTodosNoAdmin();
@@ -69,7 +73,7 @@
                     <input type="password" class="form-control" id="passwords" name="password" placeholder="Ingresa la contraseña" value=''>
                   </div>
 
-                  <div class="col-md-12" style="margin-top: 20px;">  
+                  <div class="col-md-8" style="margin-top: 20px;">  
                     <label>Perfil</label>                          
                     <select id="slt_perfil" class="form-control" style="width: 100%" name="slt_perfil" required="">                    
                       <option></option>
@@ -77,6 +81,29 @@
                         if(!empty($arrPerfiles))
                         {                        
                           foreach ($arrPerfiles as $key => $value) {
+                            echo "<option value='".$value->getId()."'>".$value->getNombre()."</option>";
+                          }
+                        }                      
+                      ?>                      
+                    </select>                  
+                  </div>
+
+                  <div class="col-md-4" style="margin-top: 40px;">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="cambio_rol"> Permitir Cambio de Rol
+                      </label>
+                    </div>                    
+                  </div>
+
+                  <div class="col-md-12" style="margin-top: 20px;">  
+                    <label>Plaza</label>                          
+                    <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" required="">                    
+                      <option></option>
+                      <?php
+                        if(!empty($arrPlaza))
+                        {                        
+                          foreach ($arrPlaza as $key => $value) {
                             echo "<option value='".$value->getId()."'>".$value->getNombre()."</option>";
                           }
                         }                      
@@ -129,11 +156,90 @@
       mostrarImagen(this);
     });
 
+    $(document).ready(function() {
+      $("#slt_tipoUsuario").select2({
+          placeholder: "Seleccionar un Tipo de Usuario",                  
+      });
+
+      $("#slt_empresa").select2({
+          placeholder: "Seleccionar Empresa",                  
+      });
+
+      $("#slt_gerente").select2({
+          placeholder: "Seleccionar Gerente",                  
+      });
+
+      $("#slt_gestor").select2({
+          placeholder: "Seleccionar Gestor",                  
+      });
+
+      $("#slt_coordinador").select2({
+          placeholder: "Seleccionar Coordinador",                  
+      });
+
+      $("#slt_operador").select2({
+          placeholder: "Seleccionar Operador",                  
+      });                     
+    });
+
+
+    $("#parent_slt_empresa").hide();
+    $("#parent_slt_gerente").hide();
+    $("#parent_slt_gestor").hide();
+    $("#parent_slt_coordinador").hide();
+    $("#parent_slt_operador").hide();
+
+    function mostrarSelector(option){
+      
+      switch(option.value) {
+        case "1":
+          $("#parent_slt_empresa").show();
+          $("#parent_slt_gerente").hide();
+          $("#parent_slt_gestor").hide();
+          $("#parent_slt_coordinador").hide();
+          $("#parent_slt_operador").hide();
+          break;
+        case "2":
+          $("#parent_slt_empresa").hide();
+          $("#parent_slt_gerente").show();
+          $("#parent_slt_gestor").hide();
+          $("#parent_slt_coordinador").hide();
+          $("#parent_slt_operador").hide();
+          break;
+        case "3":
+          $("#parent_slt_empresa").hide();
+          $("#parent_slt_gerente").hide();
+          $("#parent_slt_gestor").show();
+          $("#parent_slt_coordinador").hide();
+          $("#parent_slt_operador").hide();
+          break;
+        case "4":
+          $("#parent_slt_empresa").hide();
+          $("#parent_slt_gerente").hide();
+          $("#parent_slt_gestor").hide();
+          $("#parent_slt_coordinador").show();
+          $("#parent_slt_operador").hide();
+          break;
+        case "5":
+          $("#parent_slt_empresa").hide();
+          $("#parent_slt_gerente").hide();
+          $("#parent_slt_gestor").hide();
+          $("#parent_slt_coordinador").hide();
+          $("#parent_slt_operador").show();
+          break;
+      }    
+    }
+
   </script>
 
   <script type="text/javascript">
     $(document).ready(function() {
       $("#slt_perfil").select2({
+          placeholder: "Seleccionar",                  
+      });
+    });    
+    $(document).ready(function() {
+      $("#slt_plaza").select2({
           placeholder: "Seleccionar",                  
       });
     });    

@@ -22,6 +22,14 @@
 	$slt_coordinador = (isset($_POST['slt_coordinador'])? $_POST['slt_coordinador']:'');
 	$slt_operador = (isset($_POST['slt_operador'])? $_POST['slt_operador']:'');
 
+	$cambio_rol = (isset($_POST['cambio_rol'])? $_POST['cambio_rol']:'');
+	$plaza = (isset($_POST['slt_plaza'])? $_POST['slt_plaza']:'');
+
+	if($cambio_rol=="on")
+		$cambio_rol = true;
+	else
+		$cambio_rol = false;
+
 	$err = "../../../../index.php?view=usuarioABM_edit&id=".$id."&err=";     		
 	$info = "../../../../index.php?view=usuarioABM&info=";     		
 
@@ -77,7 +85,7 @@
 		$perfil=$handlerPerfiles->selectById($slt_perfil);	
 
 		$handler = new HandlerUsuarios;     
-        $handler->updateUsuariosAdmin($id,$nombre,$apellido,$foto,$objTU,$id_user_sistema,$alias_user_sistema,$perfil,$email,$password);		
+        $handler->updateUsuariosAdmin($id,$nombre,$apellido,$foto,$objTU,$id_user_sistema,$alias_user_sistema,$perfil,$email,$password,$cambio_rol,$plaza);		
 
 		$msj="Se actualizo la configuracion del usuario. <b>".$nombre." ".$apellido."</b>";
 		header("Location: ".$info.$msj);

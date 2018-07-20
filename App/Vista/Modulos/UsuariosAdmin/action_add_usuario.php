@@ -21,6 +21,14 @@
 	$slt_coordinador = (isset($_POST['slt_coordinador'])? $_POST['slt_coordinador']:'');
 	$slt_operador = (isset($_POST['slt_operador'])? $_POST['slt_operador']:'');
 
+	$cambio_rol = (isset($_POST['cambio_rol'])? $_POST['cambio_rol']:'');
+	$plaza = (isset($_POST['slt_plaza'])? $_POST['slt_plaza']:'');
+
+	if($cambio_rol=="on")
+		$cambio_rol = true;
+	else
+		$cambio_rol = false;
+
 	$err = "../../../../index.php?view=usuarioABM_add&err=";     		
 	$info = "../../../../index.php?view=usuarioABM&info=";     		
 
@@ -88,7 +96,7 @@
         if(count($existeUsuario)>0)
         	throw new Exception("Usuario ya creado con el email ".$email);        	
 
-        $handler->insertUsuariosAdmin($nombre,$apellido,$foto,$email,$password,$perfil,$objTU,$id_user_sistema,$alias_user_sistema);		
+        $handler->insertUsuariosAdmin($nombre,$apellido,$foto,$email,$password,$perfil,$objTU,$id_user_sistema,$alias_user_sistema,$cambio_rol,$plaza);		
 
 		$msj="Se agrego un nuevo usuario. <b>".$email."</b>";
 		header("Location: ".$info.$msj);

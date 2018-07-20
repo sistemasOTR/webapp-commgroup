@@ -59,6 +59,10 @@
 		public function getUserSistema(){ return $this->_userSistema; }
 		public function setUserSistema($userSistema){ $this->_userSistema=$userSistema; }
 
+		private $_userPlaza;
+		public function getUserPlaza(){ return $this->_userPlaza; }
+		public function setUserPlaza($userPlaza){ $this->_userPlaza=$userPlaza; }
+
 		private $_aliasUserSistema;
 		public function getAliasUserSistema(){ return $this->_aliasUserSistema; }
 		public function setAliasUserSistema($aliasUserSistema){ $this->_aliasUserSistema=$aliasUserSistema; }
@@ -86,6 +90,7 @@
 			$this->setUsuarioPerfil(new UsuarioPerfil);
 			$this->setTipoUsuario(new TipoUsuario);
 			$this->setUserSistema(0);
+			$this->setUserPlaza(0);
 			$this->setAliasUserSistema('');
 			$this->setEstado(true);		
 			$this->setPasswordAux('');		
@@ -112,6 +117,7 @@
 		        						password,
 		        						foto_perfil,	        						
 		        						id_usuario_perfil,
+		        						id_plaza,
 		        						estado,
 		        						password_aux,
 		        						cambio_rol
@@ -122,6 +128,7 @@
 	        							'".$this->getPassword()."',
 	        							'".$this->getFotoPerfil()."',
 	        							".$this->getUsuarioPerfil()->getId().",	        							
+	        							".$this->getUserPlaza().",	        							
 	        							'".$this->getEstado()."',
 	        							'".$this->getPasswordAux()."',
 	        							'".$this->getCambioRol()."'
@@ -154,6 +161,7 @@
 								email='".$this->getEmail()."', 							
 								foto_perfil='".$this->getFotoPerfil()."', 
 								id_usuario_perfil=".$this->getUsuarioPerfil()->getId().",
+								id_plaza=".$this->getUserPlaza().",
 								estado='".$this->getEstado()."',
 								password='".$this->getPassword()."', 	
 								password_aux='".$this->getPasswordAux()."',
@@ -263,6 +271,7 @@
 				$tu = $tu->select();
 				$this->setTipoUsuario($tu);
 
+				$this->setUserPlaza($filas['id_plaza']);
 				$this->setUserSistema($filas['id_user_sistema']);
 				$this->setAliasUserSistema(trim($filas['alias_user_sistema']));
 				$this->setEstado($filas['estado']);
@@ -281,6 +290,7 @@
 			$this->setFotoPerfil('');
 			$this->setUsuarioPerfil(new UsuarioPerfil);
 			$this->setTipoUsuario(new TipoUsuario);
+			$this->setUserPlaza(0);
 			$this->setUserSistema(0);
 			$this->setAliasUserSistema('');
 			$this->setEstado(true);	
@@ -428,6 +438,23 @@
 			try {
 				
 				$query = "SELECT * FROM usuario WHERE estado='true' and (id_usuario_perfil = 5 or id_usuario_perfil = 7) order by nombre";
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new Usuario);
+
+				return $result;
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}					
+		}
+
+		public function selectByPlaza($id_plaza)
+		{		
+			try {
+				
+				$query = "SELECT * FROM usuario WHERE estado = 'true' and id_plaza = ".$id_plaza." order by nombre";
 				
 				# Ejecucion 				
 				$result = SQL::selectObject($query, new Usuario);

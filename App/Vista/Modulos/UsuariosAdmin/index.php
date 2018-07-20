@@ -1,5 +1,6 @@
       <?php        
         include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";        
+        include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php";        
         include_once PATH_NEGOCIO."Funciones/String/string.class.php";
 
         $url_add = "index.php?view=usuarioABM_add";
@@ -7,6 +8,7 @@
         $url_multiuser = "index.php?view=usuarioABM_multiuser&id=";
 
         $handler = new HandlerUsuarios;
+        $handlerPlaza = new HandlerPlazaUsuarios;
         $arrUsuarios = $handler->selectTodos();
       ?>
       
@@ -47,9 +49,10 @@
                         <th style="width: 10%;">Nombre</th>
                         <th style="width: 10%;">Apellido</th>
                         <th style="width: 15%;">Email</th>                        
-                        <th style="width: 15%;">Tipo Usuario</th>                        
-                        <th style="width: 15%;">Usuario Asociado</th>                        
-                        <th style="width: 10%;">Perfil</th>                        
+                        <th style="width: 10%;">Tipo Usuario</th> 
+                        <th style="width: 10%;">Usuario Asociado</th>                        
+                        <th style="width: 10%;">Perfil</th>
+                        <th style="width: 10%;">Plaza</th>
 
                         <th style="width: 10%;">Edición</th>                        
                       </tr>
@@ -65,7 +68,15 @@
                             if(StringUser::emptyUser($usuario->getFotoPerfil()))
                               $foto_perfil = PATH_VISTA."assets/dist/img/sinlogo_usuario.png";
                             else
-                              $foto_perfil = PATH_CLIENTE.$usuario->getFotoPerfil();                            
+                              $foto_perfil = PATH_CLIENTE.$usuario->getFotoPerfil();
+
+
+                            if (is_null($value->getUserPlaza())) {
+                              $plaza = '';
+                            } else {
+                              $id_plaza = $value->getUserPlaza();
+                              $plaza = $handlerPlaza->selectById($id_plaza)->getNombre(); 
+                            }
 
                             echo "
                               <tr>
@@ -88,9 +99,10 @@
 
                             echo "
                                 <td>".$usuario->getUsuarioPerfil()->getNombre()."</td>
+                                <td>".$plaza."</td>
                                 <td>
-                                  <a href='".$url_edit.$usuario->getId()."' class='btn btn-primary'><i class='fa fa-edit'></i></a>                                  
-                                  <a href='".$url_multiuser.$usuario->getId()."' class='btn btn-default'><i class='fa fa-users'></i></a>                                  
+                                  <a href='".$url_edit.$usuario->getId()."' class='btn btn-default'><i class='fa fa-edit'></i></a>                                  
+                                  <a href='".$url_multiuser.$usuario->getId()."' class='btn btn-info'><i class='fa fa-users'></i></a>                                  
                                 </td>
                               </tr>                      
                             ";

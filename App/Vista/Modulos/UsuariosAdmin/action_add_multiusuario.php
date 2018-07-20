@@ -5,6 +5,7 @@
 	include_once PATH_NEGOCIO."Usuarios/handlermultiusuarios.class.php";	
 	include_once PATH_NEGOCIO."Usuarios/handlerperfiles.class.php";		
 	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";		
+	include_once PATH_NEGOCIO."Sistema/handlersupervisor.class.php";
 	
 	$usuario = (isset($_POST['usuario'])? $_POST['usuario']:'');
 
@@ -14,6 +15,7 @@
 	$slt_gestor = (isset($_POST['slt_gestor'])? $_POST['slt_gestor']:'');
 	$slt_coordinador = (isset($_POST['slt_coordinador'])? $_POST['slt_coordinador']:'');
 	$slt_operador = (isset($_POST['slt_operador'])? $_POST['slt_operador']:'');
+	$slt_supervisor = (isset($_POST['slt_supervisor'])? $_POST['slt_supervisor']:'');
 
 	$err = "../../../../index.php?view=usuarioABM_multiuser&id=".$usuario."&err=";     		
 	$info = "../../../../index.php?view=usuarioABM_multiuser&id=".$usuario."&info=";     		
@@ -31,7 +33,7 @@
 			$objTU = $handlerTU->selectById($slt_tipousuario);
 
 			$handlerSistema = new HandlerSistema;
-
+			$handlerSupervisor = new HandlerSupervisor;
 
 			switch ($slt_tipousuario) {
 				case '1':
@@ -60,6 +62,12 @@
 					$id_user_sistema = 0;
 					$alias_user_sistema = $slt_operador;
 					break;
+
+				case '6':
+					$id_user_sistema = $slt_supervisor;
+					$objSupervisor = $handlerSupervisor->selectSupervisorById($slt_supervisor);
+					$alias_user_sistema = $objSupervisor["nombre"];
+					break;					
 			}
 		}
 

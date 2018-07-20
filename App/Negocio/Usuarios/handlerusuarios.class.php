@@ -25,8 +25,8 @@
 		public function selectById($id){
 			try{		
 
-			 if(empty($id))
-					throw new Exception("No se cargo el id del usuario");				
+				if(empty($id))
+					throw new Exception("No se cargo el id del usuario");					
 
 				$u = new Usuario;
 				$u->setId($id);
@@ -39,24 +39,6 @@
 				throw new Exception($e->getMessage());	
 			}
 		}	
-
-		// public function selectByTipo($tipo,$localidad){
-		// 	try{		
-
-		// 	 if(empty($tipo))
-		// 			throw new Exception("No se cargo el tipo de usuario");				
-
-		// 		$u = new Usuario;
-		// 		// $u->setId($id);
-		// 		$user = $u->selectByTipo($tipo,$localidad);				
-
-		// 		return $user;
-		// 	}
-		// 	catch(Exception $e)
-		// 	{
-		// 		throw new Exception($e->getMessage());	
-		// 	}
-		// }
 
 		public function selectByPerfil($perfil){
 			try{		
@@ -205,6 +187,7 @@
 				$u->setNombre($nombre);
 				$u->setApellido($apellido);				
 				$u->setUsuarioPerfil($u->getUsuarioPerfil());
+				$u->setPassword($u->getPasswordAux());
 
 				if(!empty($path_foto))
 					$u->setFotoPerfil($path_foto);
@@ -218,7 +201,7 @@
 			}
 		}		
 
-		public function updateUsuariosAdmin($id,$nombre,$apellido,$foto,$tipousuario,$idusersistema,$aliasusersistema,$perfil,$email,$password){
+		public function updateUsuariosAdmin($id,$nombre,$apellido,$foto,$tipousuario,$idusersistema,$aliasusersistema,$perfil,$email,$password,$cambio_rol,$plaza){
 			try{
 				if(empty($id))
 					throw new Exception("Cargue el id del usuario");				
@@ -270,7 +253,9 @@
 				$u->setApellido($apellido);		
 				$u->setPassword($password);				
 				$u->setPasswordAux($password);					
-				$u->setUsuarioPerfil($perfil);				
+				$u->setUsuarioPerfil($perfil);		
+				$u->setCambioRol($cambio_rol);
+				$u->setUserPlaza($plaza);
 				
 				if(!empty($tipousuario))		
 				{
@@ -296,7 +281,7 @@
 			}
 		}		
 
-		public function insertUsuariosAdmin($nombre,$apellido,$foto,$email,$password,$perfil,$tipousuario,$idusersistema,$aliasusersistema){
+		public function insertUsuariosAdmin($nombre,$apellido,$foto,$email,$password,$perfil,$tipousuario,$idusersistema,$aliasusersistema,$cambio_rol,$plaza){
 			try {
 
 				if(empty($nombre))
@@ -354,6 +339,8 @@
 				$u->setTipoUsuario($tipousuario);
 				$u->setUserSistema($idusersistema);
 				$u->setAliasUserSistema($aliasusersistema);
+				$u->setCambioRol($cambio_rol)		;
+				$u->setUserPlaza($plaza);
 				
 				$u->insert(null);
 				
@@ -385,8 +372,29 @@
 			{
 				throw new Exception($e->getMessage());				
 			}
-		}		
+		}	
 
+		public function updatePerfilUsuario($usuario,$perfil){
+			try {
+				
+				if(empty($usuario))
+					throw new Exception("Cargue el id del usuario");				
+				
+				if(empty($perfil))
+					throw new Exception("No se encontró el perfil");	
+
+				$u = new Usuario;
+				$u->setId($usuario);
+				$u = $u->select();
+												
+				$u->setUsuarioPerfil($perfil);
+				
+				$u->updatePerfilUsuario($usuario,$perfil);				
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
 
 		public function selectGestores(){
 			try{
@@ -407,6 +415,5 @@
 				throw new Exception($e->getMessage());				
 			}
 		}		
-
 	}
 ?>		

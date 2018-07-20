@@ -2,6 +2,7 @@
   include_once PATH_NEGOCIO."Funciones/String/string.class.php";
   include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";	
   include_once PATH_NEGOCIO."Usuarios/handlertipousuarios.class.php"; 
+  include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php";  
   include_once PATH_NEGOCIO."Usuarios/handlerperfiles.class.php";
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php"; 
 
@@ -26,6 +27,9 @@
   $arrGestor = $handlerSistema->selectAllGestor(null);
   $arrCoordinador = $handlerSistema->selectAllCoordinador(null);
   $arrOperador = $handlerSistema->selectAllOperador();
+
+  $handlerPlaza = new HandlerPlazaUsuarios;
+  $arrPlaza = $handlerPlaza->selectTodas();
 
   $handlerP = new HandlerPerfiles;
   $arrPerfiles = $handlerP->selectTodosNoAdmin();  
@@ -84,7 +88,7 @@
                     <input type="password" class="form-control" id="passwords" name="password" placeholder="Ingresa la contraseña" value='<?php echo $user->getPasswordAux(); ?>'>
                   </div>
                 
-                  <div class="col-md-12" style="margin-top: 20px;">  
+                  <div class="col-md-8" style="margin-top: 20px;">  
                     <label>Perfil</label>                          
                     <select id="slt_perfil" class="form-control" style="width: 100%" name="slt_perfil" required="">                    
                       <option></option>
@@ -101,6 +105,36 @@
                       ?>                      
                     </select>                  
                   </div>
+
+                  <div class="col-md-4" style="margin-top: 40px;">
+                    <div class="checkbox">
+                      <label>
+                        <?php if($user->getCambioRol()){ ?>
+                          <input type="checkbox" name="cambio_rol" checked=""> Permitir Cambio de Rol
+                        <?php }else{ ?>
+                          <input type="checkbox" name="cambio_rol"> Permitir Cambio de Rol
+                        <?php } ?>
+                      </label>
+                    </div>                    
+                  </div>
+
+                  <div class="col-md-12" style="margin-top: 20px;">  
+                    <label>Plaza</label>                          
+                    <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" required="">                    
+                      <option></option>
+                      <?php
+                        if(!empty($arrPlaza))
+                        {                        
+                          foreach ($arrPlaza as $key => $value) {
+                            if($user->getUserPlaza() == $value->getId())
+                              echo "<option value='".$value->getId()."' selected>".$value->getNombre()."</option>";
+                            else
+                              echo "<option value='".$value->getId()."'>".$value->getNombre()."</option>";
+                          }
+                        }                      
+                      ?>                      
+                    </select>                  
+                  </div>                  
                 </div>
 
                 <div class="col-md-6">
@@ -283,5 +317,10 @@
       $("#slt_perfil").select2({
           placeholder: "Seleccionar",                  
       });
-    });    
+    });      
+    $(document).ready(function() {
+      $("#slt_plaza").select2({
+          placeholder: "Seleccionar",                  
+      });
+    });     
   </script>
