@@ -15,7 +15,7 @@
 	
  
 
-	class ExpedicionesEnvios
+	class ExpedicionesEnvios  
 	{			
 		/*#####################################*/
 		/* DECLARACIONES / GETTERS AND SETTERS */
@@ -215,6 +215,25 @@
 			}
 
 		}
+
+		public function selectByNroEnvio($idenviado)
+		{			
+			try {
+											
+				# Query
+					$query="SELECT * FROM expediciones_envios WHERE nro_envio=".$idenviado;
+				
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new ExpedicionesEnvios);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
 		public function selectByIdPedidoSinEnviar($id,$sinenviar)
 		{			
 			try {
@@ -239,6 +258,26 @@
 											
 				# Query
 					$query="SELECT * FROM expediciones_envios WHERE estado='true' AND sin_enviar=0  ORDER BY id DESC";
+				
+				// var_dump($query);
+	   //      		exit();
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new ExpedicionesEnvios);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		} 
+
+		 public function selectAprobado()
+		{			
+			try {
+											
+				# Query
+					$query="SELECT * FROM expediciones_envios WHERE estado='true' AND sin_enviar=1  ORDER BY id DESC";
 				
 				// var_dump($query);
 	   //      		exit();

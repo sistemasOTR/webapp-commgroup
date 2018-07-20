@@ -10,6 +10,7 @@
     $entregados= $handlerNotificacionExp->entregados($userPlaza);
     $rec_parciales= $handlerNotificacionExp->recParciales();
     $ent_parciales= $handlerNotificacionExp->entParciales($userPlaza);
+    $aprobados=$handlerNotificacionExp->aprobados();
 
 
     // var_dump($entregados);
@@ -67,8 +68,16 @@
     } else {
       $countEParcial = 0;
     }
-        
-    // var_dump($fechaActual);
+     if (!empty($aprobados)) {
+       $countaprobados=count($aprobados);  
+      }
+      else{
+        $countaprobados=0;
+      }   
+     $url_aprobados='index.php?view=exp_control_coordinador&fdesde='.$dFechas->RestarDiasFechaActual(90);
+    
+
+    // var_dump($countaprobados);
     // exit();
     
   ?>
@@ -158,6 +167,38 @@
                 </li>
               <?php endif ?>
               
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </li>
+  <?php } ?>
+
+  <?php if($usuarioActivoSesion->getId()==10164 && $countaprobados>0 ){  ?>
+    <li class="dropdown notifications-menu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+        <i class="fa fa-cubes"></i> 
+        <span id="contador_noti_user" class="label" style="font-size:12px;"></span>
+
+        <?php if($countaprobados>0 ){ ?>
+          <span id="contador_noti_empresa" class="label label-danger" style="font-size:12px;">
+            <?php echo ($countaprobados); ?>
+          </span>
+        <?php } ?>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: auto;">
+            <ul class="menu" style="overflow: auto; width: 100%; height: auto;">
+              <?php if (($countaprobados)>0): ?>
+                <li>
+                  <a href="<?php echo $url_aprobados; ?>">
+                    <b>Aprobados</b><span class="badge bg-red pull-right">
+                      <?php echo $countaprobados; ?>
+                    </span>
+                  </a>
+                </li>
+              <?php endif ?>   
             </ul>
           </div>
         </li>

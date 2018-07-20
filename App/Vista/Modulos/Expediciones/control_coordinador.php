@@ -1,3 +1,18 @@
+<head>
+<script type="text/javascript">
+<?php
+
+if(isset($_GET['pop'])){
+  $ultimaId = intval($_GET['pedID']);
+  $plazaEnv =$_GET['plazaEnv'];
+ 
+echo "window.open('".PATH_VISTA."Modulos/Expediciones/imprimir_enviado.php?pedID=".$ultimaId."&plazaEnv=".$plazaEnv."')";
+
+}
+
+?></script></head>
+
+
 <?php
   include_once PATH_NEGOCIO."Expediciones/handlerexpediciones.class.php";     
   include_once PATH_NEGOCIO."Sistema/handlerconsultascontrol.class.php";    
@@ -13,7 +28,7 @@
   $dFecha = new Fechas;
 
 
-  $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
+  $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->RestarDiasFechaActual(90));
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());  
 //  $ftipo= (isset($_GET["ftipo"])?$_GET["ftipo"]:'');
   $festados= (isset($_GET["festados"])?$_GET["festados"]:'');

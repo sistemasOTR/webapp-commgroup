@@ -810,6 +810,25 @@
 				throw new Exception($e->getMessage());				
 			}
 		}
+		public function selectByNroEnvio($idenviado)
+		{
+			try {
+					
+				$handler = new ExpedicionesEnvios;
+
+				$data = $handler->selectByNroEnvio($idenviado);
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
 
 
 
@@ -895,6 +914,26 @@
 				$handler = new Expediciones;
 		
 				$data = $handler->pendientes();
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+
+		} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		} 
+
+		public function aprobados(){
+			try {			
+
+				$handler = new ExpedicionesEnvios;
+		
+				$data = $handler->selectAprobado();
 				if(count($data)==1){
 					$data = array('' => $data );                   
 					return $data;
