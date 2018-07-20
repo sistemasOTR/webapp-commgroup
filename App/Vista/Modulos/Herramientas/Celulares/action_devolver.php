@@ -17,7 +17,7 @@
 
 	try {
 
-		$hanlder->devolverLinea($entId,$fechaDev,$devNroLinea,$devIMEI,$obs);
+		$hanlder->devolverLinea($entId,$fechaDev,$devNroLinea,$devIMEI,$obs,$tipo);
 		if ($tipo == 'roto01' || $tipo == 'roto02') {
 			$tipoBaja='roto';
 			$hanlder->bajaEquipo($devIMEI,$fechaDev,$obs,$tipoBaja);

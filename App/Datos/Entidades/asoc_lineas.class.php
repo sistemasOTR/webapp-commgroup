@@ -51,6 +51,11 @@
 		public function getObsDev(){ return $this->_obsDev; }
 		public function setObsDev($obsDev){ $this->_obsDev =$obsDev; }
 
+		
+		private $_tipoDev;
+		public function getTipoDev(){ return $this->_tipoDev; }
+		public function setTipoDev($tipoDev){ $this->_tipoDev =$tipoDev; }
+
 
 		/*#############*/
 		/* CONSTRUCTOR */
@@ -66,6 +71,7 @@
 			$this->setFechaDev('');
 			$this->setObsEntrega('');
 			$this->setObsDev('');
+			$this->setTipoDev('');
 			
 		}
 
@@ -118,6 +124,7 @@
 								fechaEntregaLinea='".$this->getFechaEntregaLinea()."',
 								fechaDev='".$this->getFechaDev()."',
 								obsEntrega='".$this->getObsEntrega()."',
+								tipoDev='".$this->getTipoDev()."',
 								obsDev='".$this->getObsDev()."'
 							WHERE entId=".$this->getEntId();
 
@@ -128,25 +135,6 @@
 				throw new Exception($e->getMessage());
 			}		
 		}
-
-		public function devolver($conexion)
-		{
-			try {
-
-				# Query 			
-				$query="UPDATE asoc_lu SET
-								fechaDev='".$this->getFechaDev()."',
-								obsDev='".$this->getObsDev()."'
-							WHERE entId=".$this->getEntId();
-
-				# Ejecucion 					
-				return SQL::update($conexion,$query);	
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());
-			}		
-		}
-
 		
 		public function select()
 		{			
@@ -163,6 +151,81 @@
 				throw new Exception($e->getMessage());						
 			}
 
+		}
+
+		public function setPropiedadesBySelect($filas)
+		{	
+			if(empty($filas)){
+				$this->cleanClass();
+			}
+			else{
+				$this->setEntId($filas['entId']);
+				$this->setNroLinea(trim($filas['nroLinea']));			
+				$this->setIMEI(trim($filas['IMEI']));			
+				$this->setUsId(trim($filas['usId']));			
+				$this->setFechaEntregaLinea($filas['fechaEntregaLinea']);			
+				$this->setFechaEntregaEquipo($filas['fechaEntregaEquipo']);			
+				$this->setFechaDev($filas['fechaDev']);			
+				$this->setObsEntrega($filas['obsEntrega']);
+				$this->setObsDev($filas['obsDev']);
+				$this->setTipoDev($filas['tipoDev']);
+			}
+		}
+
+		private function cleanClass()
+		{
+			$this->setEntId(0);
+			$this->setNroLinea('');
+			$this->setIMEI('');
+			$this->setUsId(0);
+			$this->setFechaEntregaLinea('');
+			$this->setFechaEntregaEquipo('');
+			$this->setFechaDev('');
+			$this->setObsEntrega('');
+			$this->setObsDev('');
+			$this->setTipoDev('');
+		}
+
+		private function createTable()
+		{
+			return 'CREATE TABLE IF NOT EXISTS';
+		}
+
+		/*########################*/
+		/* METODOS PERSONALIZADOS */
+		/*########################*/
+
+		public function getNombreRoles(){
+			$handler = new UsuarioPerfil;
+			$roles = explode("|", $this->getRoles());
+			
+			$nombre_roles = "";
+			foreach ($roles as $key => $value) {
+				if(!empty($value)){
+					$handler->setId($value);
+					$nombre_roles = $nombre_roles.$handler->select()->getNombre().",";				
+				}
+			}			
+			return $nombre_roles;
+		}
+
+		public function devolver($conexion)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE asoc_lu SET
+								fechaDev='".$this->getFechaDev()."',
+								tipoDev='".$this->getTipoDev()."',
+								obsDev='".$this->getObsDev()."'
+							WHERE entId=".$this->getEntId();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
 		}
 
 		public function getLineasEntregadas()
@@ -267,60 +330,6 @@
 				throw new Exception($e->getMessage());						
 			}
 
-		}
-
-		public function setPropiedadesBySelect($filas)
-		{	
-			if(empty($filas)){
-				$this->cleanClass();
-			}
-			else{
-				$this->setEntId($filas['entId']);
-				$this->setNroLinea(trim($filas['nroLinea']));			
-				$this->setIMEI(trim($filas['IMEI']));			
-				$this->setUsId(trim($filas['usId']));			
-				$this->setFechaEntregaLinea($filas['fechaEntregaLinea']);			
-				$this->setFechaEntregaEquipo($filas['fechaEntregaEquipo']);			
-				$this->setFechaDev($filas['fechaDev']);			
-				$this->setObsEntrega($filas['obsEntrega']);
-				$this->setObsDev($filas['obsDev']);
-			}
-		}
-
-		private function cleanClass()
-		{
-			$this->setEntId(0);
-			$this->setNroLinea('');
-			$this->setIMEI('');
-			$this->setUsId(0);
-			$this->setFechaEntregaLinea('');
-			$this->setFechaEntregaEquipo('');
-			$this->setFechaDev('');
-			$this->setObsEntrega('');
-			$this->setObsDev('');
-		}
-
-		private function createTable()
-		{
-			return 'CREATE TABLE IF NOT EXISTS';
-		}
-
-		/*########################*/
-		/* METODOS PERSONALIZADOS */
-		/*########################*/
-
-		public function getNombreRoles(){
-			$handler = new UsuarioPerfil;
-			$roles = explode("|", $this->getRoles());
-			
-			$nombre_roles = "";
-			foreach ($roles as $key => $value) {
-				if(!empty($value)){
-					$handler->setId($value);
-					$nombre_roles = $nombre_roles.$handler->select()->getNombre().",";				
-				}
-			}			
-			return $nombre_roles;
 		}
 	}
 ?>

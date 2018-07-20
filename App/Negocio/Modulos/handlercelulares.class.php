@@ -209,7 +209,7 @@
 			}
 		}
 		
-		public function devolverLinea($entId,$fechaDev,$devNroLinea,$devIMEI,$obs){
+		public function devolverLinea($entId,$fechaDev,$devNroLinea,$devIMEI,$obs,$tipoDev){
 			try {
 				$handlerEntrega = new LineaUsuario;
 				$handlerLinea = new Lineas;
@@ -218,6 +218,7 @@
 				$handlerEntrega->setEntId($entId);
 				$handlerEntrega->setFechaDev($fechaDev);
 				$handlerEntrega->setObsDev($obs);
+				$handlerEntrega->setTipoDev($tipoDev);
 
 				$handlerLinea->setNroLinea($devNroLinea);
 				$handlerLinea->devolver(false);

@@ -224,6 +224,7 @@
                     <th>Obs Entrega</th>
                     <th>Fecha Devolución</th>
                     <th>Obs Devolución</th>
+                    <th>Comodato</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -241,6 +242,15 @@
                           $IMEI = 'Desconocido';
                         }
                         $usuarioHist = $handlerUs->selectById($usuarioIdHist);
+
+                    
+                        if(is_null($entrega->getFechaDev())){
+                          $imp_baja_comodato = '';
+                        } else {
+                          $imp_baja_comodato = "<a target='_blank' href='".PATH_VISTA."Modulos/Herramientas/Celulares/imprimir_baja_comodato.php?fID=".$entrega->getEntId()."&fTipo=".$entrega->getTipoDev()."'><i class='ion-document text-yellow' data-toggle='tooltip' title='Ver Comodato'></i></a>";
+                        }
+
+                        $tipo = $entrega->getTipoDev();
                       
 	                      echo "<tr>";
 	                        echo "<td>".$usuarioHist->getNombre()." ".$usuarioHist->getApellido()."</td>";
@@ -248,7 +258,8 @@
 	                        echo "<td>".$entrega->getFechaEntregaLinea()->format('d-m-Y')."</td>";
 	                        echo "<td>".$entrega->getObsEntrega()."</td>";
 	                        echo "<td>".$entrega->getFechaDev()->format('d-m-Y')."</td>";
-	                        echo "<td>".$entrega->getObsDev()."</td>";
+                          echo "<td>".$entrega->getObsDev()."</td>";
+                          echo "<td>".$imp_baja_comodato."</td>";
 	                      echo "</tr>";
                   		}
                     }
