@@ -80,6 +80,7 @@
                    foreach ($envios as $key => $value){
                      
                      $userr= $handlerUsuarios->selectById($value->getUsuario());
+                     $parcial=$value->getCantidadEnviada()-$value->getCantidadFaltante();
                        // var_dump($userr);
                         // exit();
                    	?>
@@ -92,7 +93,7 @@
                      <td><?php echo $usuario_sol->getNombre()." ".$usuario_sol->getApellido();?></td>                   
                      <td><?php echo $item->getNombre();?></td>
                      <td><?php echo $cantped;?></td>
-                     <td><?php echo $value->getCantidadEnviada();?></td>                    
+                     <td><?php echo $parcial; ?></td>                    
                      <td><?php echo $userr->getNombre()." ".$userr->getApellido();?></td>
                      
                       
@@ -100,7 +101,7 @@
                      </tr>
                     <?php  
                       
-                      $suma+= $value->getCantidadEnviada();
+                      $suma+= $parcial;
                         }
                       
                     ?>

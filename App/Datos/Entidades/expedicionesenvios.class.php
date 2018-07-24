@@ -37,6 +37,10 @@
 		public function getCantidadEnviada(){ return $this->_cantidadenviada; }
 		public function setCantidadEnviada($cantidadenviada){ $this->_cantidadenviada=$cantidadenviada; }
 
+		private $_cantidadfaltante;
+		public function getCantidadFaltante(){ return $this->_cantidadfaltante; }
+		public function setCantidadFaltante($cantidadfaltante){ $this->_cantidadfaltante=$cantidadfaltante; }
+
 		private $_usuario;
 		public function getUsuario(){ return $this->_usuario; }
 		public function setUsuario($usuario){ $this->_usuario=$usuario; }
@@ -66,6 +70,7 @@
 			$this->setNroEnvio(0);
 			$this->setSinEnviar(1);
 			$this->setEstado(true);
+			$this->setCantidadFaltante(0);
 		}
 
 		/*###################*/
@@ -97,7 +102,8 @@
 		        						id_usuario,
 		        						nro_envio,
 		        						sin_enviar,
-		        						estado
+		        						estado,
+		        						cantidad_faltante
 	        			) VALUES (
 	        							   	
 	        							".$this->getIdPedido().",   	   	
@@ -106,7 +112,8 @@
 	        							".$this->getUsuario().",   	
 	        							".$this->getNroEnvio().",   	
 	        							".$this->getSinEnviar().",   	
-	        							'".$this->getEstado()."'  	
+	        							'".$this->getEstado()."',
+	        							".$this->getCantidadFaltante()."  	
 	        							
 	        			)";
 	        		// var_dump($query);
@@ -166,6 +173,42 @@
 								fecha_envio='".$fecha."'
 
 							WHERE id=".$idped;
+	        		// var_dump($query);
+	        		// exit();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);
+			
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		} 
+		public function updateCantidadEnviada($idped,$cantidad)
+		{
+			try {	
+				$conexion=false;		
+				$query="UPDATE expediciones_envios SET		
+								cantidad_enviada='".$cantidad."'
+
+							WHERE id_pedido=".$idped;
+	        		// var_dump($query);
+	        		// exit();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);
+			
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+		public function updateCantidadFaltante($idped,$cantidad)
+		{
+			try {	
+				$conexion=false;		
+				$query="UPDATE expediciones_envios SET		
+								cantidad_faltante='".$cantidad."'
+
+							WHERE id_pedido=".$idped;
 	        		// var_dump($query);
 	        		// exit();
 
@@ -307,6 +350,7 @@
 				$this->setNroEnvio($filas['nro_envio']);
 				$this->setSinEnviar($filas['sin_enviar']);
 				$this->setEstado($filas['estado']);
+				$this->setCantidadFaltante($filas['cantidad_faltante']);
 				
 			}
 		}
@@ -321,6 +365,7 @@
 			$this->setNroEnvio(0);
 			$this->setSinEnviar(1);
 			$this->setEstado(true);
+			$this->setCantidadFaltante(0);
 		}
 
 		private function createTable()

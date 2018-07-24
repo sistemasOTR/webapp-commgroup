@@ -196,7 +196,25 @@
 				throw new Exception($e->getMessage());				
 			}
 		}
+        
+        public function seleccionarUltimosEnvios(){
+			try {
+				$handler = new ExpedicionesEnviados;								
 
+				$data = $handler->selectUltimosEnviados();
+
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
 		public function seleccionarByFiltros($fdesde, $fhasta, $tipo_expe, $estados_expe, $fplaza){
 
 				try {
@@ -226,6 +244,28 @@
 				$handler = new HandlerConsultasControl;
 
 				$data = $handler->seleccionarExpedicionesByFiltroEnvios($fdesde, $fhasta,$estados_expe,$fplaza);
+
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		
+		}
+
+		public function seleccionarByEnviados($fdesde,$fhasta){
+
+				try {
+					
+				$handler = new HandlerConsultasControl;
+
+				$data = $handler->seleccionarEnviados($fdesde,$fhasta);
 
 				if(count($data)==1){
 					$data = array('' => $data );                   
@@ -902,6 +942,17 @@
 				$handler = new ExpedicionesCompras;
 		
 				$handler->updateCompraRecibida($id,$recibido,$usuario,$fecha);
+
+
+		} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}public function modificarEnviadoRecibido($id,$recibido){
+			try {			
+
+				$handler = new ExpedicionesEnviados;
+		
+				$handler->updaterecibido($id,$recibido);
 
 
 		} catch (Exception $e) {

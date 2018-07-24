@@ -215,6 +215,16 @@
 				$include = 'Modulos/Expediciones/control.php';			
 			break;
 
+		case 'exp_remito':				
+			if($permiso->getModuloInventariosBoolean() && ($esContabilidad || $esBO))
+				$include = 'Modulos/Expediciones/remitos.php';		
+			break;
+
+		case 'exp_detalle_remito':				
+			if($permiso->getModuloInventariosBoolean() && ($esContabilidad || $esBO))
+	            $include = 'Modulos/Expediciones/detalle_remitos.php';		
+			break;	
+
 		case 'exp_control_coordinador':				
 			if($permiso->getModuloInventariosBoolean() && ($usuarioActivoSesion->getId()==10164))
 				$include = 'Modulos/Expediciones/control_coordinador.php';			
@@ -233,6 +243,15 @@
 			if($permiso->getModuloInventariosBoolean() && ($esBO || $esCoordinador|| $esContabilidad || $esRRHH))
 				$include = 'Modulos/Expediciones/solicitud.php';
 			break;
+		case 'exp_seguimiento_remito':				
+			if($permiso->getModuloInventariosBoolean() && $esCoordinador)
+				$include = 'Modulos/Expediciones/seguimiento_remito.php';
+			break;
+
+		case 'exp_recibir_remito':				
+			if($permiso->getModuloInventariosBoolean() && $esCoordinador)
+				$include = 'Modulos/Expediciones/recibir_remito.php';
+			break;	
 
 		case 'exp_detalle':				
 			if($permiso->getModuloInventariosBoolean() && ($esCoordinador || ($esBO || $esContabilidad || $esRRHH)))

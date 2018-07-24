@@ -54,11 +54,13 @@
         $url_roles = "index.php?view=roles";        
 
         $url_exp_control = "index.php?view=exp_control";
+        $url_exp_remito = "index.php?view=exp_remito";
         $url_exp_controlcoordinador = "index.php?view=exp_control_coordinador";
         $url_exp_tipo_abm = "index.php?view=exp_tipo_abm";
         $url_exp_item_abm = "index.php?view=exp_item_abm";
         $url_exp_solicitud = "index.php?view=exp_solicitud";
         $url_exp_seguimiento = "index.php?view=exp_seguimiento";
+        $url_exp_seguimiento_remito = "index.php?view=exp_seguimiento_remito";
         $url_exp_compra = "index.php?view=exp_compra";
 
         $url_guias_control = "index.php?view=guias_control";
@@ -397,6 +399,15 @@
                       </a>
                     </li> 
                     <?php } ?> 
+                     <?php if($esContabilidad){ ?>
+
+                    <li id="mnu_expediciones_remito">
+                      <a href=<?php echo $url_exp_remito; ?>>
+                        <i class="fa fa-file-text-o"></i> <span>Remitos</span>
+                      </a>
+                    </li>
+                    <?php } ?> 
+                     
                     
                     <?php if($esBO || $esCoordinador|| $esContabilidad || $esRRHH){ ?>
                     <li id="meu_expediciones_solicitud" >
@@ -405,10 +416,18 @@
                       </a>
                     </li> 
                      <?php } ?> 
-                      <?php if($esCoordinador || $esBO || $esContabilidad || $esRRHH){ ?>              
+                     <?php if($esCoordinador){ ?>
+
+                    <li id="mnu_expediciones_seguimiento_remito">
+                      <a href=<?php echo $url_exp_seguimiento_remito; ?>>
+                        <i class="fa fa-car"></i> <span>Seguimiento Remitos</span>
+                      </a>
+                    </li>
+                    <?php } ?> 
+                      <?php if($esBO || $esContabilidad || $esRRHH){ ?>              
                     <li id="mnu_expediciones_seguimiento">
                       <a href=<?php echo $url_exp_seguimiento; ?>>
-                        <i class="fa fa-check"></i> <span>Seguimiento</span>
+                        <i class="fa fa-car"></i> <span>Seguimiento</span>
                       </a>
                     </li>
                   <?php } ?>
