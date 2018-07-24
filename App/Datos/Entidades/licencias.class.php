@@ -468,7 +468,7 @@
 		public function huboLicencias($usuario,$fecha){
 			try {
 
-				$query="SELECT * FROM licencias WHERE id_usuario=".$usuario." AND fecha='".$fecha."' AND estado='true' ORDER BY fecha DESC";
+				$query="SELECT * FROM licencias WHERE id_usuario=".$usuario." AND fecha_inicio<='".$fecha."' AND fecha_fin>='".$fecha."' AND estado='true' ORDER BY fecha DESC";
 				
 				//echo $query;
 				//exit();

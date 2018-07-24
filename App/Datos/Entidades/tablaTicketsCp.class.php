@@ -246,5 +246,26 @@
 			}
 
 		}
+
+		public function selectByCP($FECHA,$cp)
+		{			
+			try {
+				if ($cp == '') {
+					$query = "SELECT TOP 1 * FROM operacion_reintegro WHERE '".$FECHA."' >= fecha_ini order by fecha_ini desc";
+				} else {
+					$query = "SELECT TOP 1 * FROM operacion_reintegro WHERE '".$FECHA."' >= fecha_ini AND cp=".$cp." order by fecha_ini desc";
+				}
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new Reintegro);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
 	}
 ?>

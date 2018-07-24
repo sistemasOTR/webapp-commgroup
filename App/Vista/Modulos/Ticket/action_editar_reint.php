@@ -1,11 +1,7 @@
 <?php
 	include_once "../../../Config/config.ini.php";	
 
-	include_once PATH_NEGOCIO."Modulos/handlertickets.class.php"; 
-	
-	$err = "../../../../index.php?".$_POST["url_redirect"]."&err=";     		
-	$info = "../../../../index.php?".$_POST["url_redirect"]."&info=";    
-
+	include_once PATH_NEGOCIO."Modulos/handlertickets.class.php";
 	$handler = new HandlerTickets();
 
 	$id = (isset($_POST["id"])?$_POST["id"]:'');
@@ -19,10 +15,9 @@
 	// 	$aledanio_val = false;
 
 	try {
-		$handler->aprobarTickets($id,$reintegro);
+		$handler->editarTickets($id,$reintegro);
 
-		$msj="Ticket Aprobado";
-		header("Location: ".$info.$msj);
+		
 	} catch (Exception $e) {
 		header("Location: ".$err.$e->getMessage());
 	}

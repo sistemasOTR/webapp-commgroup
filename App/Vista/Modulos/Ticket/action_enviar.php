@@ -11,6 +11,7 @@
 	$id = (isset($_POST["id"])?$_POST["id"]:'');
 	$reintegro = (isset($_POST["reintegro"])?$_POST["reintegro"]:'');
 	$aledanio = (isset($_POST["aledanio"])?$_POST["aledanio"]:'');
+	$traslado = (isset($_POST["traslado"])?$_POST["traslado"]:'');
 	$aledNombre = (isset($_POST["aledNombre"])?$_POST["aledNombre"]:'');
 	$operaciones = (isset($_POST["operaciones"])?$_POST["operaciones"]:'');
 
@@ -20,8 +21,17 @@
 	else
 		$aledanio_val = false;
 
+	if($traslado=="on") {
+		$traslado_val = true;
+		$reintegro = $reintegro + 66;
+	} else {
+		$traslado_val = false;
+	}
+		
+	
+
 	try {
-		$handler->enviarTickets($id,$reintegro,$aledanio_val,$operaciones,$aledNombre);
+		$handler->enviarTickets($id,$reintegro,$aledanio_val,$operaciones,$aledNombre,$traslado_val);
 
 		$msj="Ticket Enviado";
 		header("Location: ".$info.$msj);

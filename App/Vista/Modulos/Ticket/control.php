@@ -122,7 +122,9 @@
                       <th>CONCEPTO</th>
                       <th>IMPORTE</th>                      
                       <th>REINT</th>                      
-                      <th colspan="2">ALEDAÑO</th>          
+                      <th>ALED</th>          
+                      <th>LOC</th>          
+                      <th>TRAS</th>          
                       <th width="30">OPER</th>
                       <th>ESTADO</th>
                       <th width="30">ADJ</th>
@@ -188,6 +190,15 @@
                                   }
                                 }
                               }
+
+
+                              if ($value->getTraslado()) {
+                                $class_estilos_traslado = "<span class='label label-success'>SI</span>";
+                                $opTras = 1;
+                              } else {
+                                $class_estilos_traslado = "<span class='label label-danger'>NO</span>";
+                                $opTras = 0;
+                              }
                                 
 
                               if ($cantServ[0]->CANTIDAD_SERVICIOS < 5 || $diaSemana >=6) {
@@ -212,6 +223,7 @@
                                             data-target='#modal-enviar' 
                                             data-reintegro='".number_format($reintegro,2)."' 
                                             data-aledanio='".$opAled."' 
+                                            data-traslado='".$opTras."' 
                                             data-nomAledanio='".$nombAledanio."' 
                                             data-cant_operaciones='".number_format($cantServ[0]->CANTIDAD_SERVICIOS,2)."'     
                                             onclick=btnEnviar(".$value->getId().")
@@ -257,6 +269,7 @@
                                 echo "<td>$ ".$reintegro."</td>";
                                 echo "<td class='text-center'>".$class_estilos_aledanio."</td>";
                                 echo "<td class='text-center'>".$nombAledanio."</td>";
+                                echo "<td class='text-center'>".$class_estilos_traslado."</td>";
                                 echo "<td class='text-center'>".$cantServ[0]->CANTIDAD_SERVICIOS."</td>";
                                 echo "<td class='text-center'>".$class_estilos_aprobado."</td>";
                                 echo "<td class='text-center'><a href='".$value->getAdjunto()."' target='_blank'>VER</a></td>";
@@ -317,6 +330,11 @@
               <div class="col-md-12">
                  <label>
                     <input type="checkbox" name="aledanio" style="margin-top: 20px;"> Es Aledaño
+                  </label>
+              </div>
+              <div class="col-md-12">
+                 <label>
+                    <input type="checkbox" name="traslado" style="margin-top: 20px;"> Traslado
                   </label>
               </div>
             </div>
@@ -393,6 +411,7 @@
 
         var reintegro= elemento.getAttribute('data-reintegro');     
         var aledanio = elemento.getAttribute('data-aledanio');     
+        var traslado = elemento.getAttribute('data-traslado');     
         var nomaledanio = elemento.getAttribute('data-nomAledanio');     
         var cant_operaciones = elemento.getAttribute('data-cant_operaciones');     
         
@@ -403,6 +422,11 @@
           formEnviar.aledanio.checked = true;
         else
           formEnviar.aledanio.checked = false;
+
+        if(traslado==true)
+          formEnviar.traslado.checked = true;
+        else
+          formEnviar.traslado.checked = false;
 
         formEnviar.operaciones.value = cant_operaciones;   
 

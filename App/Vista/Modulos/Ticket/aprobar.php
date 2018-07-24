@@ -7,15 +7,13 @@
 
   $dFecha = new Fechas;
 
-  $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->RestarDiasFechaActual(30));
+  $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());    
   $fusuario= (isset($_GET["fusuario"])?$_GET["fusuario"]:'');
   $fplaza= (isset($_GET["fplaza"])?$_GET["fplaza"]:'');
   $festados= (isset($_GET["festados"])?$_GET["festados"]:'');
 
-  $handler = new HandlerTickets;  
-  $consulta = $handler->seleccionarByFiltrosAprobacion($fdesde,$fhasta,$fusuario,$festados);
-
+  $handler = new HandlerTickets;
   $handlerSist = new HandlerSistema;
   $arrGestor = $handlerSist->selectAllGestor($fplaza);
   $arrCoordinador = $handlerSist->selectAllPlazasArray();
@@ -66,16 +64,7 @@
               <button type="button" class="btn btn-box-tool pull-right bg-red" data-widget="collapse"><i class="fa fa-minus"></i></button>
             </div>
             <div class="box-body">
-              <div class='row'>  
-                <div class="col-md-3">
-                    <label>Fecha Desde - Hasta</label>
-                    <div class="input-group">
-                      <input type="date" class="input-sm form-control" onchange="crearHref()" id="start" name="start" value="<?php echo $fdesde; ?>"/>
-                      <span class="input-group-addon" >a</span>
-                      <input type="date" class="input-sm form-control" onchange="crearHref()" id="end" name="end" value="<?php echo $fhasta; ?>"/>
-                    </div>
-                    
-                </div>
+              <div class='row'> 
                 <div class="col-md-2">
                 <label>Plazas</label>
                 <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" onchange="crearHref()">                              
@@ -138,7 +127,16 @@
                   <option value='2'<?php if ($festados == 2) { echo "selected";} ?>>PENDIENTES</option>
                   
                 </select>
-              </div>
+              </div> 
+                <div class="col-md-3">
+                    <label>Fecha Desde - Hasta</label>
+                    <div class="input-group">
+                      <input type="date" class="input-sm form-control" onchange="crearHref()" id="start" name="start" value="<?php echo $fdesde; ?>"/>
+                      <span class="input-group-addon" >a</span>
+                      <input type="date" class="input-sm form-control" onchange="crearHref()" id="end" name="end" value="<?php echo $fhasta; ?>"/>
+                    </div>
+                    
+                </div>
                 
 
                 <div class='col-md-3'>                
@@ -159,18 +157,21 @@
               <table class="table table-striped table-condensed" id="tabla" cellspacing="0" width="100%">
                   <thead>
                     <tr>
+                    	<th width="100">ASIG</th>
+                    	<th style="display: none;">ASIG</th>
                       <th>USUARIO</th>
                       <th>FECHA HORA</th>
                       <th>DOCUMENTO</th>
                       <th>RAZON SOCIAL</th>
                       <th>CUIT</th>
-                      <th>ING.BRUTOS</th>
                       <th>DOMICILIO</th>
                       <th>COND.FISCAL</th>
                       <th>CONCEPTO</th>
                       <th>IMPORTE</th>                      
-                      <th>REINT</th>                      
-                      <th colspan="2">ALED</th>                      
+                      <th width="150">REINT</th>                      
+                      <th>ALED</th>                      
+                      <th>LOC</th>                      
+                      <th>TRAS</th>                      
                       <th width="30">OPER</th>
                       <th>ESTADO</th>
                       <th width="30">ADJ</th>
@@ -179,133 +180,250 @@
                   </thead>
                   <tbody>
                     <?php 
-                      if(!empty($consulta))
-                      {
-                        foreach ($consulta as $key => $value) {
-                          if($value->getAprobado())
-                            $class_estilos_aprobado = "<span class='label label-success'>APROBADO</span>";
-                          else
-                            $class_estilos_aprobado = "<span class='label label-warning'>PENDIENTE</span>";
+                    	$fechaDesde = date('Y-m-d',strtotime($fdesde));
+                      	$fechaHasta = date('Y-m-d',strtotime($fhasta));
+                      	$FECHA = $dFecha->FormatearFechas($fechaDesde,"Y-m-d","Y-m-d");
+                      	$HASTA = $dFecha->FormatearFechas($fechaHasta,"Y-m-d","Y-m-d");
+                      	$countSemana = 0;
+                      	$countCiclo = 0;
+                      	if ($fusuario!='') {
+								$usuarioSist = $handlerUsuarios->selectById($fusuario)->getUserSistema();
 
-                          if($value->getAledanio())
-                            $class_estilos_aledanio = "<span class='label label-success'>SI</span>";
-                          else
-                            $class_estilos_aledanio = "<span class='label label-danger'>NO</span>";
+                      	while (strtotime($FECHA) <= strtotime($HASTA)) {
+                      		$dia = $dFecha->Dias(date('l',strtotime($FECHA)));
+                      		$fechaOp =  date('d-m-Y',strtotime($FECHA));
+							$consulta = $handler->seleccionarByFiltrosAprobacion($FECHA,$FECHA,$fusuario,$festados);
+							
+								// var_dump($usuarioSist);
+								// exit();
 
+							
+							if($fplaza != '' || $fplaza != 0){
+								foreach ($arrGestor as $gestor) {
+									if($usuarioSist == $gestor->GESTOR11_CODIGO) {
+										$seguir = true;
+										break;
+									} else {
+										$seguir = false;
+									}
+								}
+							} else {
+								$seguir = true;
+							}
 
-                          $fechaT = $value->getFechaHora()->format('Y-m-d');
-                          $usuarioSist = $value->getUsuarioId()->getUserSistema();
-                          if($fplaza != '' || $fplaza != 0){
-                            foreach ($arrGestor as $gestor) {
-                                if($usuarioSist == $gestor->GESTOR11_CODIGO) {
-                                    $seguir = true;
-                                    break;
-                                } else {
-                                  $seguir = false;
-                                }
-                              }
-                            } else {
-                              $seguir = true;
-                            }
-                            
-                            if ($seguir) {
-                              $countServ = new HandlerSistema;
-                              $cantServ = $countServ->selectCountServicios($fechaT, $fechaT, 100, null, $usuarioSist, null, null, null);
-                              $nomAledanio = $value->getAledNombre();
-                              if (trim($value->getConcepto()) == 'PEAJES') {
-                                $class_estilos_aledanio = '';
-                                // $nomAledanio = '';
-                                $cantServ[0]->CANTIDAD_SERVICIOS = '';
-                              }
-                              echo "<tr>";                            
-                                echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
-                                echo "<td>".$value->getFechaHora()->format('d/m/Y h:s')."</td>";
-                                echo "<td>".$value->getTipo()."   ".$value->getPuntoVenta()."-".$value->getNumero()."</td>";
-                                echo "<td>".$value->getRazonSocial()."</td>";
-                                echo "<td>".$value->getCuit()."</td>";
-                                echo "<td>".$value->getIibb()."</td>";
-                                echo "<td>".$value->getDomicilio()."</td>";
-                                echo "<td>".$value->getCondFiscal()."</td>";
-                                echo "<td>".$value->getConcepto()."</td>";
-                                echo "<td>$ ".$value->getImporte()."</td>";    
-                                echo "<td>$ ".number_format($value->getImporteReintegro(),2)."</td>";
-                                echo "<td>".$class_estilos_aledanio."</td>";
-                                echo "<td>".$nomAledanio."</td>";
-                                echo "<td>".$cantServ[0]->CANTIDAD_SERVICIOS."</td>";                                                    
-                                echo "<td>".$class_estilos_aprobado."</td>";
-                                echo "<td><a href='".$value->getAdjunto()."' target='_blank'>VER</a></td>";
+							if ($seguir) {
+								$countServ = new HandlerSistema;
+								$cantServ = $countServ->selectCountServicios($FECHA, $FECHA, 100, null, $usuarioSist, null, null, null);
 
-                                $countServicios = 0;
-                                $estiloContServicios = "false";
-                                if($value->getUsuarioId()->getUsuarioPerfil()->getNombre()=="GESTOR")
+                              if($handlerUsuarios->selectById($fusuario)->getUsuarioPerfil()->getNombre()=="GESTOR")
                                 {
-                                  if($value->getUsuarioId()->getTipoUsuario()->getNombre()=="Gestor")
-                                  {
-                                    $handlerSistema = new HandlerSistema; 
-                                    $fFiltro = $value->getFechaHora()->format("Y-m-d"); 
-                                    $countServicios = $handlerSistema->selectCountServicios($fFiltro,$fFiltro,null,null,$value->getUsuarioId()->getUserSistema(),null,null,null)[0]->CANTIDAD_SERVICIOS;
-                                    $estiloContServicios = "false";
+                                	$cpAt = $countServ->cpAtendidos($FECHA, $usuarioSist);
+                                }
+							}
+
+                              $arrReintegro = $handler->selecionarReintegrosByDate($FECHA);
+							// var_dump($arrReintegro);
+							// exit();
+
+                              $class_estilos_aledanio = "<span class='label label-danger'>NO</span>";
+                              $reintegro = 0;
+                              $opAled = 0;
+                              $nombAledanio = '';
+                                if (!empty($cpAt) && !empty($arrReintegro)) {
+                                  foreach ($cpAt as $key => $cp) {
+                                  	$reint = $handler->selectByCP($FECHA,$cp->CP);
+                                  	// var_dump($reint);
+                                  	// exit();
+                                  	if(!empty($reint)){
+                                      if ($cp->CP != '' && $reintegro < $reint->getReintegro()){
+                                        $reintegro =  number_format($reint->getReintegro(),2);
+                                        if ($reint->getAled()) {
+                                          $opAled = 1;
+                                          $class_estilos_aledanio = "<span class='label label-success'>SI</span>";
+                                        } else {
+                                          $opAled = 0;
+                                          $class_estilos_aledanio = "<span class='label label-danger'>NO</span>";
+                                        }
+                                        $nombAledanio = $reint->getDescripcion();
+                                      }
                                   }
-                                  else
-                                  {
-                                    $countServicios = 0;
-                                    $estiloContServicios = "true";
                                   }
                                 }
-                                else
-                                {
-                                  $countServicios = 0;
-                                  $estiloContServicios = "true";
-                                }
+                             
 
-                                if(!$value->getAprobado()){
-                                  $editar = "<a href='".$url_detalle.$value->getId()."' class='text-black text-center' >
-                                          <i class='fa fa-edit' data-toggle='tooltip' data-original-title='Editar Ticket'></i></a>";
-                                  echo "<td class='text-center'>".$editar." <a 
-                                            id='boton_aprobar_".$value->getId()."'                                             
-                                            type='button' 
-                                            style='width:100%; font-size:20px;'
-                                            class='text-green' 
-                                            data-toggle='modal' 
-                                            data-target='#modal-aprobar' 
-                                            data-importe='".number_format($value->getImporte(),2)."' 
-                                            data-reintegro='".number_format($value->getImporteReintegro(),2)."' 
-                                            data-aledanio='".$value->getAledanio()."' 
-                                            data-cant_operaciones='".$cantServ[0]->CANTIDAD_SERVICIOS."'                     
-                                            onclick=btnAprobar(".$value->getId().")>
-                                              <i class='fa fa-thumbs-up' data-toggle='tooltip' data-original-title='Aprobar ticket'></i>
-                                              
-                                          </a>      
-                                          <a 
-                                            id='boton_rechazar_".$value->getId()."'                                             
-                                            type='button' 
-                                            style='width:100%; font-size:20px;'
-                                            class='text-red' 
-                                            data-toggle='modal' 
-                                            data-target='#modal-rechazar' 
-                                            data-reintegro='".number_format($value->getImporteReintegro(),2)."' 
-                                            data-aledanio='".$value->getAledanio()."' 
-                                            data-cant_operaciones='".$cantServ[0]->CANTIDAD_SERVICIOS."'                     
-                                            onclick=btnRechazar(".$value->getId().")>
-                                              <i class='fa fa-thumbs-down' data-toggle='tooltip' data-original-title='Rechazar ticket'></i>
-                                              
-                                          </a>   
+                      		if(!empty($consulta)) {
+		                        foreach ($consulta as $key => $value) {
+		                        	$fechaT = $value->getFechaHora()->format('Y-m-d');
 
-                                        </td>";
-                                }
-                                else
-                                {
-                                  echo "<td class='text-center'>
-                                        <a href='".$url_action_desaprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."' class='btn btn-danger btn-xs'>
-                                          <i class='fa fa-times' data-toggle='tooltip' data-original-title='Desaprobar ticket'></i>
-                                          Desaprobar Ticket
-                                        </a>
-                                      </td>";                                  
-                                }
-                              echo "</tr>";
-                          }
-                        }          
-                      }            
+									if($value->getAprobado()){
+										$class_estilos_aprobado = "<span class='label label-success'>APROBADO</span>";
+										$countSemana = $countSemana + $value->getImporteReintegro();
+										$countCiclo = $countCiclo + $value->getImporteReintegro();
+										$readonly = 'readonly=""';
+									}
+									else{
+										$class_estilos_aprobado = "<span class='label label-warning'>PENDIENTE</span>";
+										$readonly = '';
+									}
+
+									if($value->getAledanio()){
+										$class_estilos_aledanio = "<span class='label label-success'>SI</span>";
+									}
+									else{
+										$class_estilos_aledanio = "<span class='label label-danger'>NO</span>";
+									}
+									
+									
+									$nombAledanio = $value->getAledNombre();
+									if (trim($value->getConcepto()) == 'PEAJES') {
+										$class_estilos_aledanio = '';
+									    // $nomAledanio = '';
+										$cantServ[0]->CANTIDAD_SERVICIOS = 0;
+									}
+
+
+		                              if ($value->getTraslado()) {
+		                                $class_estilos_traslado = "<span class='label label-success'>SI</span>";
+		                                $opTras = 1;
+		                              } else {
+		                                $class_estilos_traslado = "<span class='label label-danger'>NO</span>";
+		                                $opTras = 0;
+		                              }
+									
+									echo "<tr>";
+									?>
+									<form id='<?php echo "form_".$value->getId(); ?>' action="<?php echo $url_action_aprobar; ?>" method="post">
+									<?php
+										echo "<td>".$dia."<br>".$fechaOp."</td>";
+										echo "<td style='display:none'>".$FECHA."</td>";
+										echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
+									    echo "<td>".$value->getFechaHora()->format('d/m/Y h:s')."</td>";
+									    echo "<td>".$value->getTipo()."   ".$value->getPuntoVenta()."-".$value->getNumero()."</td>";
+									    echo "<td>".$value->getRazonSocial()."</td>";
+									    echo "<td>".$value->getCuit()."</td>";
+									    echo "<td>".$value->getDomicilio()."</td>";
+									    echo "<td>".$value->getCondFiscal()."</td>";
+									    echo "<td>".$value->getConcepto()."</td>";
+									    echo "<td>$ ".$value->getImporte()."</td>";    
+									    echo "<td><input type='number' id='".$value->getId()."' name='reintegro' step='0.01' class='form-control input-reint' ".$readonly." value='".number_format($value->getImporteReintegro(),2)."'></td>";
+									    echo "<td>".$class_estilos_aledanio."</td>";
+									    echo "<td>".$nombAledanio."</td>";
+									    echo "<td>".$class_estilos_traslado."</td>";
+									    echo "<td>".number_format($value->getCantOperaciones(),0)."</td>";                                                    
+									    echo "<td>".$class_estilos_aprobado."</td>";
+									    echo "<td><a href='".$value->getAdjunto()."' target='_blank'>VER</a></td>";
+									    ?>
+
+									   	<input type="hidden" name="id" id="id" value='<?php echo $value->getId(); ?>'> 
+        								<input type="hidden" name="url_redirect" value="<?php echo $url_retorno; ?>"> 
+        								
+									    <?php if(!$value->getAprobado()){
+									      $editar = "<a href='".$url_detalle.$value->getId()."' class='btn btn-default btn-xs' >
+									              <i class='fa fa-edit' data-toggle='tooltip' data-original-title='Editar Ticket'></i></a>";
+									      echo "<td class='text-center'>".$editar." <button 
+									                id='boton_aprobar_".$value->getId()."'                                             
+									                type='submit'
+									                class='btn btn-success btn-xs'>
+									                  <i class='fa fa-thumbs-up' data-toggle='tooltip' data-original-title='Aprobar ticket'></i>
+									                  
+									              </button>      
+									              <a 
+									                id='boton_rechazar_".$value->getId()."'                                             
+									                type='button' 
+									                class='btn btn-danger btn-xs' 
+									                data-toggle='modal' 
+									                data-target='#modal-rechazar' 
+									                data-reintegro='".number_format($value->getImporteReintegro(),2)."' 
+									                data-aledanio='".$value->getAledanio()."' 
+									                data-cant_operaciones='".$cantServ[0]->CANTIDAD_SERVICIOS."'                     
+									                onclick=btnRechazar(".$value->getId().")>
+									                  <i class='fa fa-thumbs-down' data-toggle='tooltip' data-original-title='Rechazar ticket'></i>
+									                  
+									              </a>   
+
+									            </td>";
+									    }
+									    else
+									    {
+									      echo "<td class='text-center'>
+									            <a href='".$url_action_desaprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."' class='btn btn-danger btn-xs'>
+									              <i class='fa fa-times' data-toggle='tooltip' data-original-title='Desaprobar ticket'></i>
+									              Desaprobar Ticket
+									            </a>
+									          </td>";                                  
+									    } ?>
+									</form>
+									<?php
+
+									  echo "</tr>";
+									   }
+								} else {
+									
+										if ($dia == 'Domingo') {
+											echo "<tr class='bg-navy'>";
+											echo "<td>SUBTOTAL</td>";
+										} else {
+											echo "<tr>";
+											echo "<td>".$dia."<br>".$fechaOp."</td>";
+										}
+										
+										echo "<td style='display:none'>".$FECHA."</td>";
+										echo "<td></td>";
+										echo "<td></td>";
+										echo "<td></td>";
+										echo "<td></td>";
+										echo "<td></td>";
+										echo "<td></td>";
+										echo "<td></td>";
+										echo "<td></td>";
+										echo "<td></td>";
+										if ($dia == 'Domingo') {
+											echo "<td><b>$ ".number_format($countSemana,2)."</b></td>";
+											$countSemana = 0;
+											echo "<td></td>";
+											echo "<td></td>";
+										} else {
+											echo "<td></td>";
+										    echo "<td>".$class_estilos_aledanio."</td>";
+										    echo "<td>".$nombAledanio."</td>";
+											// echo "<td></td>";
+											// echo "<td></td>";
+										}
+										if ($dia == 'Domingo') {
+											echo "<td></td>";
+											echo "<td></td>";
+										} else {
+											echo "<td></td>";
+											echo "<td>".$cantServ[0]->CANTIDAD_SERVICIOS."</td>";
+										}
+										echo "<td></td>";
+										echo "<td></td>";
+										echo "<td></td>";
+									echo "</tr>";
+								}
+								$FECHA = date('Y-m-d',strtotime('+1 day',strtotime($FECHA)));
+							}
+							echo "<tr class='bg-green'>";
+								echo "<td>TOTAL</td>";
+								echo "<td style='display:none'>".$FECHA."</td>";
+								echo "<td></td>";
+								echo "<td></td>";
+								echo "<td></td>";
+								echo "<td></td>";
+								echo "<td></td>";
+								echo "<td></td>";
+								echo "<td></td>";
+								echo "<td></td>";
+								echo "<td></td>";
+								echo "<td><b>$".number_format($countCiclo,2)."</b></td>";
+								echo "<td></td>";
+								echo "<td></td>";
+								echo "<td></td>";
+								echo "<td></td>";
+								echo "<td></td>";
+								echo "<td></td>";
+							echo "</tr>";
+						}
                     ?>
                   </tbody>
               </table>
@@ -410,6 +528,31 @@
       filtrarReporte();
     });
   });
+
+  $(document).ready(function() {
+    $("#slt_estados").select2({
+        placeholder: "Seleccionar",                  
+    }).on('change', function (e) { 
+      filtrarReporte();
+    });
+  });
+
+  $('.input-reint').on('change',function() {
+  	var id = this.id;
+  	var	reintegro = $(this).val();
+  	$.ajax({
+			type: "POST",
+			url: 'App/Vista/Modulos/Ticket/action_editar_reint.php',
+			data: {
+				id: id,
+				reintegro: reintegro
+			},
+			success: function(data){
+				
+			}
+		});
+	});
+
 </script>
 <script type="text/javascript"> 
   $('#sandbox-container .input-daterange').datepicker({
@@ -508,6 +651,7 @@
           "dom": 'Bfrtip',
           "buttons": ['copy', 'csv', 'excel', 'print'],
           "iDisplayLength":100,
+          "order": [[ 1, "asc" ]],
           "language": {
               "sProcessing":    "Procesando...",
               "sLengthMenu":    "Mostrar _MENU_ registros",

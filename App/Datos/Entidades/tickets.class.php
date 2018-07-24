@@ -102,7 +102,11 @@
 
 		private $_rechazado;
 		public function getRechazado(){ return var_export($this->_rechazado,true); }
-		public function setRechazado($rechazado){ $this->_rechazado=$rechazado; }					
+		public function setRechazado($rechazado){ $this->_rechazado=$rechazado; }	
+
+		private $_traslado;
+		public function getTraslado(){ return var_export($this->_traslado,true); }
+		public function setTraslado($traslado){ $this->_traslado=$traslado; }					
 
 		private $_obsRechazo;
 		public function getObsRechazo(){ return $this->_obsRechazo; }
@@ -138,6 +142,7 @@
 			$this->setConcepto('');
 			$this->setAledNombre('');
 			$this->setRechazado(false);			
+			$this->setTraslado(false);			
 			$this->setObsRechazo('');
 			
 		}
@@ -177,6 +182,7 @@
 		        						enviado,
 		        						estado,
 		        						rechazado,
+		        						traslado,
 		        						obsRechazo
 	        			) VALUES (
 	        							".$this->getUsuarioId().",   	
@@ -200,6 +206,7 @@
 	        							'".$this->getEnviado()."',   
 	        							'".$this->getEstado()."',
 	        							'".$this->getRechazado()."',   
+	        							'".$this->getTraslado()."',   
 	        							'".$this->getObsRechazo()."'
 	        			)";        
 			
@@ -245,6 +252,7 @@
 								concepto='".$this->getConcepto()."',						
 								aled_nombre='".$this->getAledNombre()."',						
 								aprobado='".$this->getAprobado()."',
+								traslado='".$this->getTraslado()."',
 								enviado='".$this->getEnviado()."',
 								estado='".$this->getEstado()."'
 							WHERE id=".$this->getId();
@@ -345,6 +353,7 @@
 				$this->setEnviado($filas['enviado']);
 				$this->setEstado($filas['estado']);
 				$this->setRechazado($filas['rechazado']);
+				$this->setTraslado($filas['traslado']);
 				$this->setObsRechazo($filas['obsRechazo']);
 			}
 		}
@@ -376,6 +385,7 @@
 			$this->setConcepto('');
 			$this->setAledNombre('');
 			$this->setRechazado(false);			
+			$this->setTraslado(false);			
 			$this->setObsRechazo('');			
 		}
 
@@ -447,7 +457,7 @@
 
 		}
 
-		public function enviarTickets($id,$reintegro,$aledanio,$operaciones,$aledNombre){
+		public function enviarTickets($id,$reintegro,$aledanio,$operaciones,$aledNombre,$traslado){
 			try {
 
 				# Validaciones 			
@@ -460,6 +470,7 @@
 								rechazado=0,
 								importe_reintegro=".$reintegro.",
 								aledanio='".$aledanio."',
+								traslado='".$traslado."',
 								aled_nombre='".$aledNombre."',
 								cant_operaciones=".$operaciones."
 							WHERE id=".$id;
@@ -496,7 +507,7 @@
 			}
 		}
 
-		public function aprobarTickets($id,$reintegro,$aledanio,$operaciones){
+		public function aprobarTickets($id,$reintegro){
 			try {
 
 				# Validaciones 			
@@ -506,9 +517,31 @@
 				# Query 			
 				$query="UPDATE tickets SET								
 								aprobado=1,
-								importe_reintegro=".$reintegro.",
-								aledanio='".$aledanio."',
-								cant_operaciones=".$operaciones."								
+								importe_reintegro=".$reintegro."								
+							WHERE id=".$id;
+
+	        	//echo $query;
+	        	//exit();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);					
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
+
+		public function editarTickets($id,$reintegro){
+			try {
+
+				# Validaciones 			
+				if(empty($id))
+					throw new Exception("Ticket no identificado");
+
+				# Query 			
+				$query="UPDATE tickets SET
+								importe_reintegro=".$reintegro."								
 							WHERE id=".$id;
 
 	        	//echo $query;

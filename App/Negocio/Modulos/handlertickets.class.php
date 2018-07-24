@@ -85,7 +85,7 @@
 				throw new Exception($e->getMessage());				
 			}
 		}
-		public function enviarTickets($id,$reintegro,$aledanio,$operaciones,$aledNombre){
+		public function enviarTickets($id,$reintegro,$aledanio,$operaciones,$aledNombre,$traslado){
 			try {
 
 				if(empty($id))
@@ -99,7 +99,7 @@
 					throw new Exception("No se puede enviar el tickets con estados Aprobados");
 
 				$handler = new Tickets;
-				$handler->enviarTickets($id,$reintegro,$aledanio,$operaciones,$aledNombre);				
+				$handler->enviarTickets($id,$reintegro,$aledanio,$operaciones,$aledNombre,$traslado);				
 				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
@@ -126,7 +126,7 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
-		public function aprobarTickets($id,$reintegro,$aledanio,$operaciones,$aledNombre){
+		public function aprobarTickets($id,$reintegro){
 			try {
 
 				if(empty($id))
@@ -137,7 +137,24 @@
 				$t = $t->select();				
 
 				$handler = new Tickets;
-				$handler->aprobarTickets($id,$reintegro,$aledanio,$operaciones,$aledNombre);				
+				$handler->aprobarTickets($id,$reintegro);				
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}	
+		public function editarTickets($id,$reintegro){
+			try {
+
+				if(empty($id))
+					throw new Exception("No se encontro el ticket");
+					
+				$t = new Tickets;
+				$t->setId($id);
+				$t = $t->select();				
+
+				$handler = new Tickets;
+				$handler->editarTickets($id,$reintegro);				
 				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
@@ -186,22 +203,23 @@
 		public function guardarTickets($usuario,$fecha_hora,$tipo,$punto_venta,$numero,$razon_social,$cuit,$iibb,$domicilio,$condicion_fiscal,$importe,$adjunto,$concepto){
 			try {
 
-				// $dFecha = new Fechas();
-				// $fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(3);
-				// $fecha_ticket = $dFecha->FormatearFechas(substr($fecha_hora,0,10),'Y-m-d','Y-m-d');
+				$dFecha = new Fechas();
+				$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(1);
+				$fecha_ticket = $dFecha->FormatearFechas(substr($fecha_hora,0,10),'Y-m-d','Y-m-d');
 				
-				// if($fecha_ticket < $fecha_hoy_menos_tres )
-				// 	throw new Exception("No se puede cargar un ticket de mas de 3 días");	
+				if($fecha_ticket < $fecha_hoy_menos_tres )
+					throw new Exception("No se puede cargar un ticket de mas de 1 días");	
 
-				// $handlerLicencias = new HandlerLicencias;
+				$handlerLicencias = new HandlerLicencias;
 
-				// if($handlerLicencias->huboLicencias($usuario,$fecha_ticket))
-				// 	throw new Exception("Ese día estuvo de licencia");
-				
-				// $result = $this->selecionarFechasInhabilitadasByFecha($fecha_ticket); 
-				// $estado_result = (!empty($result)?true:false);
-				// if($estado_result)
-				// 	throw new Exception("No se puede cargar ticket en un día '".$result[0]["motivo"]."'");
+				if($handlerLicencias->huboLicencias($usuario,$fecha_ticket))
+					throw new Exception("Ese día estuvo de licencia");
+
+				$handlerFInhab = new TicketsFechasInhabilitadas;
+				$result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fecha_ticket); 
+				$estado_result = (!empty($result)?true:false);
+				if($estado_result)
+					throw new Exception("No se puede cargar ticket en un día '".$result[0]["motivo"]."'");
 
 				
 				$fecha=substr($fecha_hora,0,10);
@@ -268,22 +286,24 @@
 		public function guardarTicketsEnviados($usuario,$fecha_hora,$tipo,$punto_venta,$numero,$razon_social,$cuit,$iibb,$domicilio,$condicion_fiscal,$importe,$adjunto,$concepto){
 			try {
 
-				// $dFecha = new Fechas();
-				// $fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(3);
-				// $fecha_ticket = $dFecha->FormatearFechas(substr($fecha_hora,0,10),'Y-m-d','Y-m-d');
+				$dFecha = new Fechas();
+				$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(1);
+				$fecha_ticket = $dFecha->FormatearFechas(substr($fecha_hora,0,10),'Y-m-d','Y-m-d');
 				
-				// if($fecha_ticket < $fecha_hoy_menos_tres )
-				// 	throw new Exception("No se puede cargar un ticket de mas de 3 días");	
+				if($fecha_ticket < $fecha_hoy_menos_tres )
+					throw new Exception("No se puede cargar un ticket de mas de 1 días");	
 
-				// $handlerLicencias = new HandlerLicencias;
+				$handlerLicencias = new HandlerLicencias;
 
-				// if($handlerLicencias->huboLicencias($usuario,$fecha_ticket))
-				// 	throw new Exception("Ese día estuvo de licencia");
-				
-				// $result = $this->selecionarFechasInhabilitadasByFecha($fecha_ticket); 
-				// $estado_result = (!empty($result)?true:false);
-				// if($estado_result)
-				// 	throw new Exception("No se puede cargar ticket en un día '".$result[0]["motivo"]."'");
+				if($handlerLicencias->huboLicencias($usuario,$fecha_ticket))
+					throw new Exception("Ese día estuvo de licencia");
+
+				$handlerFInhab = new TicketsFechasInhabilitadas;
+				$result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fecha_ticket); 
+				$estado_result = (!empty($result)?true:false);
+				if($estado_result)
+					throw new Exception("No se puede cargar ticket en un día '".$result[0]["motivo"]."'");
+
 
 				
 				$fecha=substr($fecha_hora,0,10);
@@ -453,6 +473,20 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
 			}
+		}	
+
+		public function selectByCP($fecha,$cp){
+			try {
+				$handler = new Reintegro;							
+				$data = $handler->selectByCP($fecha,$cp);
+				
+				
+					return $data;
+					
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
 		}
 
 
@@ -536,7 +570,86 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
 			}
+		}	
+
+
+
+		public function selecionarFechasInhabilitadas(){
+			try {
+				$handler = new TicketsFechasInhabilitadas;								
+				$data = $handler->select();
+				
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
 		}
+
+		public function selecionarFechasInhabilitadasById($id){
+			try {
+				$handler = new TicketsFechasInhabilitadas;								
+				$handler->setId($id);
+				$data = $handler->select();
+				
+				if(count($data)==1){
+					$data = array('0' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
+		public function selecionarFechasInhabilitadasByFecha($fecha){
+			try {
+				$handler = new TicketsFechasInhabilitadas;								
+				$data = $handler->selecionarFechasInhabilitadasByFecha($fecha);
+				
+				return $data;
+		
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
+		public function guardarFechasInhabilitadasABM($id,$fecha,$motivo,$estado){
+			try {
+
+				if($estado=="EDITAR"){
+					$handler = new TicketsFechasInhabilitadas;
+
+					$handler->setId($id);
+					$handler->select();
+
+					$handler->setFecha($fecha);
+					$handler->setMotivo($motivo);
+
+					$handler->update(false);
+				}
+				else
+				{
+					$handler = new TicketsFechasInhabilitadas;
+
+					$handler->setFecha($fecha);
+					$handler->setMotivo($motivo);					
+					$handler->insert(false);
+				}
+						
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());					
+			}
+		}	
 
 	}
 

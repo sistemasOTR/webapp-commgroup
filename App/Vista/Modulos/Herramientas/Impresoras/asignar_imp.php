@@ -14,7 +14,8 @@
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
   include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";
   include_once PATH_NEGOCIO."Modulos/handlerimpresoras.class.php";
-  include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php";
+  include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
+  include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php"; 
 
   $handler = new HandlerSistema;
   $handlerimpresoras = new HandlerImpresoras;
