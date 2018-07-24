@@ -104,6 +104,7 @@
                     <th width="150">NRO REMITO</th> 
                     <th width="">FECHA</th>                                                             
                     <th width="150">RECIBIR</th>                          
+                    <th width="150">VER DETALLE</th>                          
                   </tr>
                 </thead>
                 <tbody>
@@ -117,17 +118,34 @@
                         foreach ($consulta as $key => $value) {
                           // $idPed =$handler->selectByNroEnvio($value->getId());
                           // $items=$handler->selectByIdEnvio($idPed);
+                          $url_ver_remito='index.php?view=exp_recibir_remito&id='.$value->getId().'&fechasolic='.$value->getFecha()->Format('d/m/Y').'&plaza='.$value->getPlaza().'&ver=si';
                           $url_recibir_remito ='index.php?view=exp_recibir_remito&id='.$value->getId().'&fechasolic='.$value->getFecha()->Format('d/m/Y').'&plaza='.$value->getPlaza();
-
-                           $envios = "<a href='".$url_recibir_remito."'  
+                            if ($value->getRecibido() == 0) {
+                             $envios = "<a href='".$url_recibir_remito."'  
                                         type='button' 
-                                         class='fa fa-play'></a>";            
+                                         class='fa fa-eye'></a>";
+                              $remito="";           
+                            } elseif($value->getRecibido() == 1){
+                              $envios="<i class='fa fa-check text-green'></i>";
+                                $remito="<a href='".$url_ver_remito."'  
+                                        type='button' 
+                                         class='fa fa-eye'></a>";
+                            }
+                            elseif ($value->getRecibido() == 2) {
+                              $envios="<i class='fa fa-close text-red'></i>";
+                              $remito="<a href='".$url_ver_remito."'  
+                                        type='button' 
+                                         class='fa fa-eye'></a>";
+                            }
+                           
+                                       
 
                           echo "
                             <tr>
                               <td>".$value->getId()."</td>  
                               <td>".$value->getFecha()->Format('d/m/Y')."</td>        
                                <td>".$envios."</td>
+                               <td>".$remito."</td>
 
                           </tr>";
                         } 

@@ -947,6 +947,17 @@
 		} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
 			}
+		}public function modificarEnviadoRecibido($id,$recibido){
+			try {			
+
+				$handler = new ExpedicionesEnviados;
+		
+				$handler->updaterecibido($id,$recibido);
+
+
+		} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
 		}
 		public function pendientes(){
 			try {			

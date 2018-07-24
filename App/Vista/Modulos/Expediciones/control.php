@@ -227,7 +227,9 @@
                               }         
 
 
-                          if ( $estado->getId()==1) {
+                          if ( $estado->getId()==1 ) {
+                             if ($item->getStock() > 0){
+
                                     $recibirtruck = "<a href='#'
                                         id='".$value->getId()."' 
                                         data-iditem='".$item->getId()."'
@@ -247,9 +249,12 @@
                                         class='fa fa-close' 
                                         data-toggle='modal' 
                                         data-target='#modal-eliminar'                                   
-                                        onclick=btnEliminar(".$value->getId().")></a>
-                              ";
-                             }  elseif ($estado->getId()==6 || $estado->getId()==7 ) {
+                                        onclick=btnEliminar(".$value->getId().")></a>"; 
+                                       } else {
+                                      $recibirtruck = '<i class="fa fa-exclamation-triangle text-yellow"></i>';
+                                    }      
+                              
+                             }  elseif ($estado->getId()==6 || $estado->getId()==7 || $estado->getId()==5 ) {
                                     if ($item->getStock() > 0) {
                                       $recibirtruck = "<a href='#'
                                         id='".$value->getId()."' 

@@ -52,7 +52,7 @@
 			$this->setPlaza(0);					
 			$this->setFecha('');
 			$this->setEstado(true);
-			$this->setRecibido(false);
+			$this->setRecibido(0);
 			
 		}
 
@@ -162,6 +162,24 @@
 			}
 
 		}
+
+		public function updaterecibido($id,$recibido)
+		{			
+			try {
+				$conexion = false;							
+					$query="UPDATE expediciones_enviados SET
+								
+								recibido=".$recibido."
+								
+							WHERE id=".$id;
+							
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
 		public function setPropiedadesBySelect($filas)
 		{	
 			if(empty($filas)){
@@ -183,7 +201,7 @@
 			$this->setPlaza(0);					
 			$this->setFecha('');
 			$this->setEstado(true);
-			$this->setRecibido(false);
+			$this->setRecibido(0);
 		}
 
 		private function createTable()

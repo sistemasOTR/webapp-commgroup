@@ -436,7 +436,6 @@
 								
 								
 							WHERE id=".$id;
-
 			   
 							
 				# Ejecucion 					

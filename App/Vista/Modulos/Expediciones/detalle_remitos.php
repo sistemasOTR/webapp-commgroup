@@ -50,6 +50,7 @@
                       <th width="200">USUARIO</th>
                       <th width="">ITEM-DESCRIPCIÓN</th>     
                       <th width="150">CANTIDAD</th>                 
+                      <th width="150">FALTANTE</th>                 
                     </tr>
                   </thead>
                   <tbody>
@@ -66,12 +67,19 @@
                            if (count($item)==1) {
                             $item = $item[""];
                            }
-                          echo " 
-                            <tr>
+
+                            if ($value->getCantidadFaltante()>0) {
+                              $color="class='bg-red'";
+                            } else {
+                              $color="class=''";
+                            }
+                          echo "<tr ".$color.">
+                            
                             <td>".$fechasolic."</td>
                             <td>".$usuario->getNombre()."".$usuario->getApellido()."</td>
                             <td>".$item->getNombre()."-".$item->getDescripcion()."</td>
                             <td>".$value->getCantidadEnviada()."</td>
+                            <td>".$value->getCantidadFaltante()."</td>
                             
                             </tr> ";    
                           

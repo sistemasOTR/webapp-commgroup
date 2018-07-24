@@ -7,6 +7,7 @@
   $id= (isset($_GET["id"])?$_GET["id"]:'');
   $fechasolic= (isset($_GET["fechasolic"])?$_GET["fechasolic"]:'');
   $plaza= (isset($_GET["plaza"])?$_GET["plaza"]:'');
+  $ver= (isset($_GET["ver"])?$_GET["ver"]:'');
 
   // var_dump($id,$fechasolic);
   // exit();
@@ -16,6 +17,7 @@
 	$handler= new handlerexpediciones;	
 
   $envios=$handler->selectByNroEnvio(intval($id));
+  $count=count($envios);
   $url_aprobar=PATH_VISTA.'Modulos/Expediciones/action_cambiarestado_remito.php';
 
 
@@ -49,12 +51,18 @@
                       <th width="150">FECHA SOLICITUD</th>
                       <th width="200">USUARIO</th>
                       <th width="">ITEM-DESCRIPCIÓN</th>     
-                      <th width="150">CANTIDAD</th>                   
-                      <th width="150">RECIBIDO</th>                   
-                    </tr>
+                      <th width="150">CANTIDAD</th>
+                      <?php if(!empty($ver))
+                        echo" <th width='150'>FALTANTE</th>";?>                  
+                     <?php 
+                     if(empty($ver))
+                      echo" <th width='150'>RECIBIDO</th>                   
+                      <th width='150'>CANTIDAD FALTANTE</th>                   
+                    </tr>";?>
                   </thead>
                   <tbody>
                       <?php if(!empty($envios)) 
+
                       {  
                           echo "<form method='POST' action='".$url_aprobar."'>";
                         foreach ($envios as $key => $value) {
@@ -67,20 +75,31 @@
                            if (count($item)==1) {
                             $item = $item[""];
                            }
-                          echo " 
-                            <tr>
+                           if ($value->getCantidadFaltante()>0) {
+                              $color="class='bg-red'";
+                            } else {
+                              $color="class=''";
+                            }
+                          echo "<tr ".$color.">
                             <td>".$fechasolic."</td>
                             <td>".$usuario->getNombre()."".$usuario->getApellido()."</td>
                             <td>".$item->getNombre()."-".$item->getDescripcion()."</td>
-                            <td>".$value->getCantidadEnviada()."</td>
-                            <td><input type='checkbox' name='enviado[]' value='1'></td>
-                            <td><input type='hidden' name='id' value='".$idPed."'></td>
-                            <td><input type='hidden' name='id2' value='".$value->getIdPedido()."'></td>
+                            <td>".$value->getCantidadEnviada()."</td>";
+                            if (!empty($ver)) {
+                              echo "<td>".$value->getCantidadFaltante()."</td>";
+                            }
+                            if (empty($ver)) {
+                           echo" <td><input type='checkbox' class='enviado' name='enviado_".$value->getIdPedido()."' value='0'></td>
+                            <td><input type='number' data-env='".$value->getCantidadEnviada()."' id='".$value->getIdPedido()."' onchange='validarEnvio(".$value->getIdPedido().")' name='cantidadnueva[]' value=''></td>
+                            <td><input type='hidden' name='id' value='".$id."'></td>
+                            <td><input type='hidden' name='countenvios' value='".$count."'></td>
+                            <td><input type='hidden' name='id2[]' value='".$value->getIdPedido()."'></td>
+                            
                        
                             
                             </tr>
                                    ";    
-                          
+                          }
                         }
                       }
                     ?> 
@@ -95,10 +114,13 @@
              <div class="col-md-4">
               <a href="javascript:history.back(-1);" class="btn btn-primary" title="Ir la página anterior">Regresar</a>
              </div>
-             <div class="col-md-2 pull-right">
-              <input type="submit" name="enviar"class="btn btn-success" value="Enviar">
-              <!-- <a href="#" class="btn btn-success" title="enviar">Enviar</a> -->
-             </div>
+             <?php 
+             if (empty($ver)) 
+             echo
+             "<div class='col-md-2 pull-right'>
+              <input type='submit' name='enviar'class='btn btn-success' value='Enviar'>
+             </div>";
+             ?>
              </form>
           </div>
 
@@ -106,3 +128,32 @@
            
        </section> 
      </div>
+
+     <script type="text/javascript">
+      $("document").ready(function(){
+       $(".enviado").click(function(){
+       if ($(this).is(":checked")) {
+         var valor=$(this).val(1);
+
+       } else {
+        var valor=$(this).val(0);
+       } 
+
+       })    
+      });  
+
+   function validarEnvio(id_pedido){
+    var id= id_pedido;
+      var enviar =document.getElementById(id).value;    
+       var cantidad=document.getElementById(id).getAttribute('data-env');
+
+        if(Number(enviar) > Number(cantidad) ){
+          alert("cantidad maxima "+Number(cantidad));
+        document.getElementById(id).value= Number(cantidad) ;
+        }if(Number(enviar)<0){
+          alert("numero invalido");    
+        document.getElementById(id).value=0;
+       } 
+     }
+
+     </script>
