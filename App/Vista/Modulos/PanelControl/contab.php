@@ -27,21 +27,17 @@
 
       <div class="row">     
         <div class='col-md-4'>
-         <!-- INCLUDES TABLAS ITEM , COMPRAS -->
+         <!-- INCLUDES TABLAS ITEM , COMPRAS, REMITOS -->
          <?php include_once "Widget/Compras/item.php"; ?>
          <?php include_once "Widget/Compras/compras.php"; ?>
+         <?php include_once "Widget/Envios/remito.php"; ?>
         </div>
         <div class='col-md-8'>
            <!-- INCLUDE TABLAS SOLICITUD,APROBADOS -->
            <?php include_once "Widget/Compras/solicitud.php"; ?>
            <?php include_once "Widget/Envios/aprobados.php"; ?>
          
-        </div> 
-         <div class='col-md-4'>
-           <!-- INCLUDE TABLA REMITO -->
-           <?php include_once "Widget/Envios/remito.php"; ?>
-         
-        </div>                   
+        </div>                 
       </div>
       
     </div>  
