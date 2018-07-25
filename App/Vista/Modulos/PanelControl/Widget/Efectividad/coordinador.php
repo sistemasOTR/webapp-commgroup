@@ -38,7 +38,7 @@
       $efectividad_dia = 0;
     }
 
-    $arrGestores = $handler->selectServiciosByGestor($fHOY,$fHOY, null, null, null, null, $user->getAliasUserSistema(), null);
+    $arrGestores = $handler->selectServiciosByGestor($fHOY,$fHOY, 400, null, null, null, $user->getAliasUserSistema(), null);
 
     $class_semaforo = "bg-red";
     if($efectividad_dia>=0 && $efectividad_dia<60)

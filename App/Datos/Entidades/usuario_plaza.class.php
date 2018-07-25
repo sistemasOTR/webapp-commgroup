@@ -110,7 +110,7 @@
 				
 				# Query
 				if(empty($this->getId())){
-					$query = "SELECT * FROM plazas_otr WHERE estado='true'";
+					$query = "SELECT * FROM plazas_otr WHERE estado='true' order by nombre";
 				}
 				else{
 					if(empty($this->getId()))

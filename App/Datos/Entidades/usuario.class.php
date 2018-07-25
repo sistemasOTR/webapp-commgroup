@@ -437,7 +437,24 @@
 		{		
 			try {
 				
-				$query = "SELECT * FROM usuario WHERE estado='true' and (id_usuario_perfil = 5 or id_usuario_perfil = 7) order by nombre";
+				$query = "SELECT * FROM usuario WHERE estado='true' and id_tipo_usuario = 3 order by apellido";
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new Usuario);
+
+				return $result;
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}					
+		}
+
+		public function selectEmpleados()
+		{		
+			try {
+				
+				$query = "SELECT * FROM usuario WHERE estado='true' and id_tipo_usuario <> 1 order by apellido";
 				
 				# Ejecucion 				
 				$result = SQL::selectObject($query, new Usuario);
