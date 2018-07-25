@@ -29,6 +29,9 @@
   $arrGestor = $handler->selectAllGestor($fplaza); 
   $arrUsuarios = $handlerUs->selectTodos();
 
+  $handlerPlaza = new HandlerPlazaUsuarios;
+  $arrPlaza = $handlerPlaza->selectTodas();
+
   $url_detalle = "index.php?view=impresora_detalle";
   $url_asignacion = "index.php?view=asignar_imp";
 
@@ -90,20 +93,19 @@
                   <option value="">Seleccionar...</option>
                   <option value='0'>TODAS</option>
                   <?php
-                    if(!empty($arrCoordinador))
-                    {                        
-                      foreach ($arrCoordinador as $key => $value) {                                                  
-                        if($fplaza==$value['PLAZA'])
-                          echo "<option value='".trim($value['PLAZA'])."' selected>".$value['PLAZA']."</option>";
-                        else
-                          echo "<option value='".trim($value['PLAZA'])."'>".$value['PLAZA']."</option>";
-                      }
-                    }
-                    if($fplaza=='MANTENIMIENTO')
-                      echo "<option value='MANTENIMIENTO' selected>MANTENIMIENTO</option>";
-                    else
-                      echo "<option value='MANTENIMIENTO'>MANTENIMIENTO</option>"; 
-                  ?>
+                    
+                        if(!empty($arrPlaza))
+                        {                        
+                          foreach ($arrPlaza as $key => $value) {
+                            if ($value->getNombre() == $fplaza) {
+                              echo "<option value='".$value->getNombre()." selected'>".$value->getNombre()."</option>";
+                            } else {
+                              echo "<option value='".$value->getNombre()."'>".$value->getNombre()."</option>";
+                            }
+                            
+                          }
+                        }                      
+                      ?>                      
                 </select>
               </div>
               <div class="col-md-5">

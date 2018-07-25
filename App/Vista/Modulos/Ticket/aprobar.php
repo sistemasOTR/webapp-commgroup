@@ -525,7 +525,7 @@
     $("#slt_plaza").select2({
         placeholder: "Seleccionar",                  
     }).on('change', function (e) { 
-      filtrarReporte();
+      filtrarReportePlaza();
     });
   });
 
@@ -604,6 +604,31 @@
   function filtrarReporte()
   {
     crearHref();
+    window.location = $("#filtro_reporte").attr("href");
+  }
+
+  function crearHrefPlaza()
+  {
+      aStart = $("#start").val();
+      aEnd = $("#end").val();
+
+      f_inicio = aStart[2] +"-"+ aStart[1] +"-"+ aStart[0];
+      f_fin = aEnd[2] +"-"+ aEnd[1] +"-"+ aEnd[0]; 
+      f_plaza = $("#slt_plaza").val();
+
+      url_filtro_reporte="index.php?view=tickets_aprobar&fdesde="+aStart+"&fhasta="+aEnd;
+
+
+    if(f_plaza!=undefined)
+      if(f_plaza!='' && f_plaza!=0)
+        url_filtro_reporte= url_filtro_reporte +"&fplaza="+f_plaza;      
+      
+      $("#filtro_reporte").attr("href", url_filtro_reporte);
+  } 
+
+  function filtrarReportePlaza()
+  {
+    crearHrefPlaza();
     window.location = $("#filtro_reporte").attr("href");
   }
 </script>
