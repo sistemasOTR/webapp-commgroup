@@ -47,7 +47,7 @@
         </span>
       </h3>
     </div>
-    <div class="col-xs-12 no-padding">
+    <div class="col-xs-12 no-padding table-responsive">
       <table class="table table-condensed">
         <thead>
           <tr>
@@ -94,7 +94,7 @@
         </span>
       </h3>
     </div>
-    <div class="col-xs-12 no-padding">
+    <div class="col-xs-12 no-padding table-responsive">
       <table class="table table-condensed">
         <thead>
           <tr>
@@ -122,7 +122,7 @@
                         <td>".$value->DNI."</td>
                         <td>".$value->DIRECCION."</td>
                         <td>".$value->LOCALIDAD."</td>
-                        <td>".$value->TELEFONO."</td>
+                        <td><a href='tel:".$value->TELEFONO."'>".$value->TELEFONO."</a></td>
                         <td>".$value->HORARIO."</td>
                         <td>".$value->EMPRESA."</td>                 
                       </tr>";                

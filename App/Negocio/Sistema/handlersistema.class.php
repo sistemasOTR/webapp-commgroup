@@ -2066,7 +2066,10 @@
 				$f = new Fechas;
 
 				$filtro_fecha="";														
-				$filtro_fecha = "SERTT11_FECSER = '".$f->FechaActual()."' AND ";						
+				$filtro_fecha = "SERTT11_FECSER = '".$f->FechaActual()."' AND ";
+				if (!PRODUCCION) {
+					$filtro_fecha = "SERTT11_FECSER = '2018-07-11' AND ";
+				}						
 			
 				$filtro_estado="";				
 				if(!empty($estado)){
@@ -2137,8 +2140,8 @@
 					) AS CONSULTA						
 					WHERE ESTADO =  '".$tipo_servicios."'";
 				
-				//echo $query;				
-				//exit();
+				// echo $query;				
+				// exit();
 
 				$result = SQLsistema::selectObject($query);
 						

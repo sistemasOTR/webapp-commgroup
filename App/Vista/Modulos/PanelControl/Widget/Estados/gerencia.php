@@ -23,7 +23,8 @@
     /*-------------------------*/
 
     //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
-    
+    if(!PRODUCCION)
+      $fHOY = "2018-07-11";
 
   	
 	$sum_total_estados=0; 
@@ -59,6 +60,9 @@ else
 	<div class="box box-solid">
 	  	<div class="box-header with-border">
 	      <h3 class="box-title"><i class="ion-ios-paperplane"></i> Visor de Servicios Gestionados.</h3>
+        <a href="#" class="pull-right text-navy" data-toggle='modal' data-target='#modal-detalle'>
+            <i class="fa fa-search"  data-toggle='tooltip' title='Detalle de gestiones'></i>
+        </a>
 	    </div>
 	  	<div class="box-body no-padding">
 
@@ -79,6 +83,60 @@ else
 
                 </div>
             </div>
+            
         </div>
     </div>
 </div>
+
+<div class="modal fade in" id="modal-detalle">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Detalle</h4>
+          </div>
+          <div class="modal-body">
+            <div class="no-padding">
+                <ul class="nav nav-stacked">
+              <?php
+
+                $sum_total_estados=0; 
+                  $sum_estados_gestionados=0;
+                  $porc_estados_gestionados=0;
+
+                  if(!empty($arrEstados))
+                  {                   
+                    foreach ($arrEstados as $key => $value) {
+                        $url_estados = "?view=servicio&fdesde=".$fHOY."&fhasta=".$fHOY."&festado=".$value->SERTT91_ESTADO;
+
+                      $f_array = new FuncionesArray;
+                      $class_estado = $f_array->buscarValor($allEstados,"1",$value->ESTADOS_DESCCI,"2");
+
+                        if(!($value->ESTADOS_DESCCI=="Liquidar C. Parcial") || !($value->ESTADOS_DESCCI=="No Efectivas"))
+                        {
+                          echo "                  
+                            <li><a href='".$url_estados."'>".$value->ESTADOS_DESCCI." <span class='pull-right badge ".$class_estado."'>
+                            ".round($value->CANTIDAD_SERVICIOS,2)."
+                            </span></a></li>";
+                        }
+
+                        // totales
+                        $sum_total_estados = $sum_total_estados + $value->CANTIDAD_SERVICIOS;
+                        if($value->SERTT91_ESTADO>2)
+                          $sum_estados_gestionados=$sum_estados_gestionados+$value->CANTIDAD_SERVICIOS;
+                    }
+
+                    if(empty($sum_total_estados))
+                      $porc_estados_gestionados = 0;
+                    else  
+                      $porc_estados_gestionados = ($sum_estados_gestionados / $sum_total_estados) *100;
+                  }                  
+              ?>
+                </ul>
+            </div>
+          </div>
+
+      </div>
+    </div>
+  </div>

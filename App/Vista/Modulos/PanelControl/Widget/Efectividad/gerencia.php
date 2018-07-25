@@ -23,11 +23,13 @@
 
 
     //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
+    if(!PRODUCCION)
+      $fHOY = "2018-07-11";
    
 
   	$cerrados_efec =  $handler->selectCountServicios($fHOY,$fHOY, 6, null, null, null, null, null);
   	$despachados_efec = $handler->selectCountServicios($fHOY,$fHOY, 400, null, null, null, null, null);
-  	//$total_efec = $handler->selectCountServicios($fHOY,$fHOY, null, null, null, null, null, null);    
+  	//$total_efec = $handler->selectCountServicios($fHOY,$fHOY, null, null, null, null, null, null);  
 
   	if($despachados_efec[0]->CANTIDAD_SERVICIOS>0){        
     	$efectividad_dia = 100 * $cerrados_efec[0]->CANTIDAD_SERVICIOS / $despachados_efec[0]->CANTIDAD_SERVICIOS;
