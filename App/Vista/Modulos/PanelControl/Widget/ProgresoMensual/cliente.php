@@ -50,7 +50,7 @@
     	$servCerrados = $handler->selectCountServiciosGestion($i,$i,200,$user->getUserSistema(),null,null,null,null);
     	$servTotales = $handler->selectCountServiciosGestion($i,$i,null,$user->getUserSistema(),null,null,null,null);
     	if ($servTotales[0]->CANTIDAD_SERVICIOS != 0 && $servCerrados[0]->CANTIDAD_SERVICIOS != 0) {
-    		$datos[] = array('dia' => $dia.'-'.$mes,
+    		$dataGraf[] = array('dia' => $dia.'-'.$mes,
     						'EFICIENCIA' => number_format($servCerrados[0]->CANTIDAD_SERVICIOS*100/$servTotales[0]->CANTIDAD_SERVICIOS,2) );
     	}
     }
@@ -59,7 +59,7 @@
     $labels = '';
     $data = '' ;
 
-    foreach ($datos as $key => $value) {
+    foreach ($dataGraf as $key => $value) {
     	$labels = $labels."'".$value['dia']."', ";
     	$data = $data.$value['EFICIENCIA'].", ";
     	$eficienciaDiaria[] = floatval($value['EFICIENCIA']);

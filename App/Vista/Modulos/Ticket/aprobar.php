@@ -2,7 +2,8 @@
   include_once PATH_NEGOCIO."Modulos/handlertickets.class.php";       
   include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
-  include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";         
+  include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";  
+  include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php";         
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";          
 
   $dFecha = new Fechas;
@@ -18,8 +19,12 @@
   $arrGestor = $handlerSist->selectAllGestor($fplaza);
   $arrCoordinador = $handlerSist->selectAllPlazasArray();
 
+  $handlerPlaza = new HandlerPlazaUsuarios;
+  $arrPlaza = $handlerPlaza->selectTodas();
+
   $handlerUsuarios = new HandlerUsuarios;
-  $arrUsuarios = $handlerUsuarios->selectTodos();
+  $arrUsuarios = $handlerUsuarios->selectEmpleados();
+  $arrGestores = $handlerUsuarios->selectGestores();
 
   $url_action_aprobar = PATH_VISTA.'Modulos/Ticket/action_aprobar.php?id=';  
   $url_action_desaprobar = PATH_VISTA.'Modulos/Ticket/action_desaprobar.php?id=';  
@@ -67,21 +72,23 @@
               <div class='row'> 
                 <div class="col-md-2">
                 <label>Plazas</label>
-                <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" onchange="crearHref()">                              
-                  <option value="">Seleccionar...</option>
-                  <option value='0'>TODAS</option>
+                <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" required="">                    
+                  <option value=''></option>
+                  <option value='0'>TODOS</option>
                   <?php
-                    if(!empty($arrCoordinador))
+                    if(!empty($arrPlaza))
                     {                        
-                      foreach ($arrCoordinador as $coord) {                                                  
-                        if($fplaza==$coord['PLAZA'])
-                          echo "<option value='".trim($coord['PLAZA'])."' selected>".$coord['PLAZA']."</option>";
-                        else
-                          echo "<option value='".trim($coord['PLAZA'])."'>".$coord['PLAZA']."</option>";
+                      foreach ($arrPlaza as $key => $value) {
+                        if($fplaza == $value->getNombre()){
+                          echo "<option value='".$value->getNombre()."' selected>".$value->getNombre()."</option>";
+                        } else {
+                          echo "<option value='".$value->getNombre()."'>".$value->getNombre()."</option>";
+                        }
+                        
                       }
-                    }
-                  ?>
-                </select>
+                    }                      
+                  ?>                      
+                </select>     
               </div>
               
                 
@@ -91,25 +98,25 @@
                     <option value=''></option>
                     <option value='0'>TODOS</option>
                     <?php
-                      if(!empty($arrUsuarios)){
+                      if(!empty($arrGestores) || !empty($arrUsuarios)){
                         if ($fplaza != '') {
 
-                          foreach ($arrUsuarios as $user) {
+                          foreach ($arrGestores as $user) {
 
                             foreach ($arrGestor as $gestor) {
                               if($fusuario == $user->getId() && $user->getUserSistema() == $gestor->GESTOR11_CODIGO && $user->getTipoUsuario()->getNombre()!= 'Empresa'){
-                                echo "<option value='".$user->getId()."' selected>".$user->getNombre()." ".$user->getApellido()."</option>";
+                                echo "<option value='".$user->getId()."' selected>".$user->getApellido()." ".$user->getNombre()."</option>";
                               } elseif ($user->getUserSistema() == $gestor->GESTOR11_CODIGO && $user->getTipoUsuario()->getNombre()!= 'Empresa') {
-                                echo "<option value='".$user->getId()."'>".$user->getNombre()." ".$user->getApellido()."</option>";
+                                echo "<option value='".$user->getId()."'>".$user->getApellido()." ".$user->getNombre()."</option>";
                                 }
                               }
                             }
                         } else {
                           foreach ($arrUsuarios as $user) {
                             if($fusuario == $user->getId())
-                                echo "<option value='".$user->getId()."' selected>".$user->getNombre()." ".$user->getApellido()."</option>";
+                                echo "<option value='".$user->getId()."' selected>".$user->getApellido()." ".$user->getNombre()."</option>";
                               else
-                                echo "<option value='".$user->getId()."'>".$user->getNombre()." ".$user->getApellido()."</option>";                  
+                                echo "<option value='".$user->getId()."'>".$user->getApellido()." ".$user->getNombre()."</option>";                  
                                 
                             }
                           }
@@ -525,7 +532,7 @@
     $("#slt_plaza").select2({
         placeholder: "Seleccionar",                  
     }).on('change', function (e) { 
-      filtrarReporte();
+      filtrarReportePlaza();
     });
   });
 
@@ -604,6 +611,31 @@
   function filtrarReporte()
   {
     crearHref();
+    window.location = $("#filtro_reporte").attr("href");
+  }
+
+  function crearHrefPlaza()
+  {
+      aStart = $("#start").val();
+      aEnd = $("#end").val();
+
+      f_inicio = aStart[2] +"-"+ aStart[1] +"-"+ aStart[0];
+      f_fin = aEnd[2] +"-"+ aEnd[1] +"-"+ aEnd[0]; 
+      f_plaza = $("#slt_plaza").val();
+
+      url_filtro_reporte="index.php?view=tickets_aprobar&fdesde="+aStart+"&fhasta="+aEnd;
+
+
+    if(f_plaza!=undefined)
+      if(f_plaza!='' && f_plaza!=0)
+        url_filtro_reporte= url_filtro_reporte +"&fplaza="+f_plaza;      
+      
+      $("#filtro_reporte").attr("href", url_filtro_reporte);
+  } 
+
+  function filtrarReportePlaza()
+  {
+    crearHrefPlaza();
     window.location = $("#filtro_reporte").attr("href");
   }
 </script>

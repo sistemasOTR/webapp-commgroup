@@ -371,7 +371,7 @@
               if($permiso->getModuloInventariosBoolean()){    
             ?>
               <li class="treeview" id="mnu_expediciones">
-                <a href="#"><i class="fa fa-check-square-o"></i> <span>Expediciones</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><i class="fa fa-cubes"></i> <span>Expediciones</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
 
                   <?php if(($esBO || $esContabilidad ) || $esGerencia){ ?>
