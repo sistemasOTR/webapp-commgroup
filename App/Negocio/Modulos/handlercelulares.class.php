@@ -235,6 +235,30 @@
 			}
 		}
 		
+		public function suspender($NroLinea){
+			try {
+				$handlerLinea = new Lineas;
+				$handlerLinea->setNroLinea($NroLinea);
+				$handlerLinea->suspender(false);
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
+		public function activar($NroLinea){
+			try {
+				$handlerLinea = new Lineas;
+				$handlerLinea->setNroLinea($NroLinea);
+				$handlerLinea->activar(false);
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
 		public function nuevaLinea($fechaAlta,$nroLinea,$empresa,$plan,$costo,$consumo,$obs){
 			try {
 				$handlerLinea = new Lineas;

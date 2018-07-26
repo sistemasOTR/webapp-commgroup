@@ -280,6 +280,23 @@
 
 		}
 
+		public function getLineasDisponibles()
+		{			
+			try {
+											
+				$query = "SELECT * FROM lineas where ocupada = 'false' and estado = 0 ";
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new Lineas);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+
 		public function getDatosByNroLinea($nroLinea)
 		{			
 			try {
@@ -304,6 +321,23 @@
 				# Query 			
 				$query="UPDATE lineas SET
 								estado = 1
+							WHERE nroLinea=".$this->getNroLinea();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+		public function activar($conexion)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE lineas SET
+								estado = 0
 							WHERE nroLinea=".$this->getNroLinea();
 
 				# Ejecucion 					

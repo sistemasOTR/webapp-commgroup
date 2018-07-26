@@ -1,5 +1,5 @@
 <<?php
-	include_once "../../../Config/config.ini.php";		
+	include_once "../../../../Config/config.ini.php";		
 
 	include_once PATH_NEGOCIO."Modulos/handlercelulares.class.php";
 	
@@ -8,7 +8,7 @@
 	$id = (isset($_POST["id"])?$_POST["id"]:'');
 
 	try {
-		$handler->suspender($id);
+		$handler->baja($id);
 
 		
 	} catch (Exception $e) {

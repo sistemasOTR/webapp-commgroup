@@ -103,7 +103,9 @@
     unset($eficienciaDiaria);
 
 ?>
-
+<style>
+  .col-xs-4 {padding-left: 5px;padding-right: 5px;}
+</style>
 <div class="col-lg-3 col-md-4 col-sm-6">
   <div class="box box-solid">
   <div class="box-header with-border">
@@ -116,28 +118,28 @@
   <div class="box-body text-center">
     <div class="col-xs-4 border-right">
       <h5>Promedio</h5>
-      <h3 class="text-yellow"><?php echo $promEf; ?>%</h3>
+      <h4 class="text-yellow"><?php echo $promEf; ?>%</h4>
     </div>
     <div class="col-xs-4 border-right">
       <h5>Máximo</h5>
-      <h3 class="text-green"><?php echo $maxEf; ?>%</h3>
+      <h4 class="text-green"><?php echo $maxEf; ?>%</h4>
     </div>
     <div class="col-xs-4">
       <h5>Mínimo</h5>
-      <h3 class="text-red"><?php echo $minEf ?>%</h3>
+      <h4 class="text-red"><?php echo $minEf ?>%</h4>
     </div>
     <canvas id="<?php echo $value["EMPTT11_CODIGO"];?>" class="col-xs-12 chart"></canvas>
     <div class="col-xs-4 border-right">
       <h5>Cerradas</h5>
-      <h3 class="text-light-blue"><?php echo $cerrados; ?></h3>
+      <h4 class="text-light-blue"><?php echo $cerrados; ?></h4>
     </div>
     <div class="col-xs-4 border-right">
       <h5>Total</h5>
-      <h3 class="text-blue"><?php echo $totales; ?></h3>
+      <h4 class="text-blue"><?php echo $totales; ?></h4>
     </div>
     <div class="col-xs-4">
       <h5>Eficiencia</h5>
-      <h3 class="text-blue"><?php echo number_format($cerrados*100/$totales,2); ?> %</h3>
+      <h4 class="text-blue"><?php echo number_format($cerrados*100/$totales,2); ?> %</h4>
     </div>
   </div>
 </div>

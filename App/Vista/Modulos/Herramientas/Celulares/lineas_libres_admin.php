@@ -1,8 +1,10 @@
 <?php 
   $url_action_nueva_linea = PATH_VISTA.'Modulos/Herramientas/Celulares/action_nueva_linea.php';
+  $url_action_suspender = PATH_VISTA.'Modulos/Herramientas/Celulares/action_susp.php';
+  $url_action_activar = PATH_VISTA.'Modulos/Herramientas/Celulares/action_activar.php';
+  $url_action_nueva_linea = PATH_VISTA.'Modulos/Herramientas/Celulares/action_nueva_linea.php';
 
 ?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.2.1/jquery.quicksearch.js"></script>
 <style>
   a i {margin: 0 5px;}
 </style>
@@ -34,10 +36,12 @@
           foreach ($arrLLibres as $nroLinea) {
             switch ($nroLinea->getEstado()) {
               case '0':
-                $estado = 'Disponible';
+                $estado = '<span class="label label-success">Disponible</span>';
+                $icon_1 = "<a href='".$url_action_suspender."?id=".$nroLinea->getNroLinea()."' ><i class = 'fa fa-exclamation-triangle text-yellow ' data-toggle='tooltip' title='Suspender línea'></i></a>";
                 break;
               case '1':
-                $estado = 'Suspendida';
+                $estado = '<span class="label label-warning">Suspendida</span>';
+                $icon_1 = "<a href='".$url_action_activar."?id=".$nroLinea->getNroLinea()."' ><i class = 'fa fa-bolt text-green ' data-toggle='tooltip' title='Activar línea'></i></a>";
                 break;
               
               default:
@@ -48,7 +52,7 @@
               echo "<td>".$nroLinea->getNroLinea()."</td>";
               echo "<td>".$nroLinea->getNombrePlan()."</td>";
               echo "<td>".$estado."</td>";
-              echo "<td style='font-size: 18px'><a href='#' class='susp-linea' id='".$nroLinea->getNroLinea()."'><i class = 'fa fa-exclamation-triangle text-yellow'></i></a><a href='#' class='baja-linea' id='".$nroLinea->getNroLinea()."'><i class = 'fa fa-times text-red'></i></a><a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."&active=ll'><i class='fa fa-eye text-blue'></i></a></td>";
+              echo "<td style='font-size: 18px'>".$icon_1."<a  class='baja-linea' id='".$nroLinea->getNroLinea()."'><i class = 'fa fa-times text-red'></i></a><a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."&active=ll'><i class='fa fa-eye text-blue'></i></a></td>";
              echo "</tr>";
           }
         }
@@ -58,14 +62,7 @@
     </table> 
   </div>             
 </div>
-<script type="text/javascript">   
 
-  $(function () {
-
-  $('#search-linea').quicksearch('#tabla-lineas tbody tr');               
-});
-       
-</script>
 
 <div class="modal fade in" id="modal-nueva-linea">
     <div class="modal-dialog">
@@ -119,37 +116,41 @@
     </div>
   </div>
   <script>
-    function nuevaLinea(fecha) {
-      document.getElementById('txtFechaAlta').value = fecha;
-      document.getElementById('txtNroLinea').value = '';
-      document.getElementById('txtPlan').value = '';
-    }
-
   $('.baja-linea').on('click',function() {
     var id = this.id;
+    console.log(id);
     $.ajax({
       type: "POST",
       url: 'App/Vista/Modulos/Herramientas/Celulares/action_baja.php',
       data: {
-        id: id,
+        id: id
       },
       success: function(data){
-        
+        alert('OK');
       }
     });
   });
 
   $('.susp-linea').on('click',function() {
     var id = this.id;
+    var reint = 1;
+    console.log(id);
+    console.log(reint);
+
     $.ajax({
       type: "POST",
       url: 'App/Vista/Modulos/Herramientas/Celulares/action_susp.php',
       data: {
-        id: id
+        id: id,
+        reint: reint,
       },
       success: function(data){
-        
+        alert('OK');
+      },
+      error: function(data){
+        alert('Error');
       }
+
     });
   });
   </script>
