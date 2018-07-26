@@ -36,11 +36,11 @@
           foreach ($arrLLibres as $nroLinea) {
             switch ($nroLinea->getEstado()) {
               case '0':
-                $estado = '<span class="label label-success">Disponible</span>';
+                $estado = '<span class="text-green"><b>Disponible</b></span>';
                 $icon_1 = "<a href='".$url_action_suspender."?id=".$nroLinea->getNroLinea()."' ><i class = 'fa fa-exclamation-triangle text-yellow ' data-toggle='tooltip' title='Suspender línea'></i></a>";
                 break;
               case '1':
-                $estado = '<span class="label label-warning">Suspendida</span>';
+                $estado = '<span class="text-yellow"><b>Suspendida</b></span>';
                 $icon_1 = "<a href='".$url_action_activar."?id=".$nroLinea->getNroLinea()."' ><i class = 'fa fa-bolt text-green ' data-toggle='tooltip' title='Activar línea'></i></a>";
                 break;
               
