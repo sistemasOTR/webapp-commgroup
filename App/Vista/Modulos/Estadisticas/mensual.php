@@ -25,58 +25,72 @@
       $fHOY = "2018-07-12";
 
     //ESTADO = 300 --> Cerrado Parcial, Re pactado, Re llamar, Cerrado, Negativo (los 5 estados que se toman como operacion en la calle)
-    $countServiciosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,null,null,null,null,$user->getAliasUserSistema(),null);
+    $countServiciosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,null,null,null,null,$est_plaza,null);
+       
 
 
-    $countDiasMesCurso = $handler->selectCountFechasServicios($fMES,$fHOY,null,null,null,null,$user->getAliasUserSistema(),null);
+    $countDiasMesCurso = $handler->selectCountFechasServicios($fMES,$fHOY,null,null,null,null,$est_plaza,null);
+
    
     if(!empty($countDiasMesCurso[0]->CANTIDAD_DIAS))
       $countServiciosTotalGestion = round((intval($countServiciosMesCursoGestion[0]->CANTIDAD_SERVICIOS) / intval($countDiasMesCurso[0]->CANTIDAD_DIAS)),0);
     else
-      $countServiciosTotalGestion = round(0,2);    
+      $countServiciosTotalGestion = round(0,2);   
+
+ 
+
 
     //ESTADO = 200 --> Cerrado, Enviado y Liquidar (los 3 estados que se toman como operacion cerrada)
-    $countServiciosCerradosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,200,null,null,null,$user->getAliasUserSistema(),null);        
+    $countServiciosCerradosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,200,null,null,null,$est_plaza,null); 
+
+         
 
     if(!empty($countServiciosMesCursoGestion[0]->CANTIDAD_SERVICIOS))
       $efectividadMesCursoGestion = round(($countServiciosCerradosMesCursoGestion[0]->CANTIDAD_SERVICIOS) / intval(intval($countServiciosMesCursoGestion[0]->CANTIDAD_SERVICIOS))*100,0);
     else
       $efectividadMesCursoGestion = round(0,2);
 
+	 
   	// Gestion graficos //
     $fdesde = date('Y-m-01',strtotime($fHOY));
     $fhasta = $dFecha->RestarDiasFechaActual(1);
 	$fhasta = $dFecha->FormatearFechas($fhasta,"Y-m-d","Y-m-d");
+	
  
     // Construccion de array para graficos //
+
     $cerrados = 0;
     $totales = 0;
     for ($i=$fdesde; $i <= $fhasta; $i++) { 
     	list($año, $mes, $dia) = split('[/.-]', $i);
-    	$servCerrados = $handler->selectCountServiciosGestion($i,$i,200,null,null,null,$user->getAliasUserSistema(),null);
+    	$servCerrados = $handler->selectCountServiciosGestion($i,$i,200,null,null,null,$est_plaza,null);
     	$cerrados += $servCerrados[0]->CANTIDAD_SERVICIOS;
-    	$servTotales = $handler->selectCountServiciosGestion($i,$i,null,null,null,null,$user->getAliasUserSistema(),null);
+    	$servTotales = $handler->selectCountServiciosGestion($i,$i,null,null,null,null,$est_plaza,null);
     	$totales += $servTotales[0]->CANTIDAD_SERVICIOS;
     	if ($servTotales[0]->CANTIDAD_SERVICIOS != 0 && $servCerrados[0]->CANTIDAD_SERVICIOS != 0) {
-    		$datosConfig[] = array('dia' => $dia.'-'.$mes,
+    		$dataGraf[] = array('dia' => $dia.'-'.$mes,
     						'EFICIENCIA' => number_format($servCerrados[0]->CANTIDAD_SERVICIOS*100/$servTotales[0]->CANTIDAD_SERVICIOS,2) );
     	}
     }
+
 
     // Construccion de labels y datos para representacion //
     $labels = '';
     $data = '' ;
 
-    foreach ($datosConfig as $key => $value) {
+    foreach ($dataGraf as $key => $value) {
     	$labels = $labels."'".$value['dia']."', ";
-    	$data = $data.$value['EFICIENCIA'].", ";
+    	$data = $data.$value['EFICIENCIA'].", "; 
     	$eficienciaDiaria[] = floatval($value['EFICIENCIA']);
     }
+   // var_dump($labels);
+   //  	exit();
 
     // Valores representativos //
     $maxEf = max($eficienciaDiaria);
     $minEf = min($eficienciaDiaria);
     $promEf = number_format(array_sum($eficienciaDiaria)/count($eficienciaDiaria),2);
+    unset($eficienciaDiaria);
 ?>
 
 <div class="box box-solid">
@@ -101,27 +115,29 @@
 			<h3 class="text-red"><?php echo $minEf ?>%</h3>
 		</div>
 		<canvas id="budget_month_chart" class="col-xs-12 chart"></canvas>
-		<div class="col-xs-6 border-right">
+		<div class="col-xs-4 border-right">
 			<h5>Cerradas</h5>
 			<h3 class="text-light-blue"><?php echo $cerrados; ?></h3>
 		</div>
-		<div class="col-xs-6">
+		<div class="col-xs-4 border-right">
 			<h5>Total</h5>
 			<h3 class="text-blue"><?php echo $totales; ?></h3>
 		</div>
+	    <div class="col-xs-4">
+	      <h5>Eficiencia</h5>
+	      <h3 class="text-blue"><?php echo number_format($cerrados*100/$totales,2); ?> %</h3>
+	    </div>
 	</div>
 </div>
 
 <!-- SCRIPTS PARA GRAFICAR -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-<script src="https://rawgit.com/chartjs/chartjs-plugin-annotation/master/chartjs-plugin-annotation.js"></script>
 <script>
 	var config_BSF = {
 		type: 'line',
 		data: {
 			labels: [<?php echo $labels ?>],
-			datasets: [{
+			datasets: [{ 
 				label: 'Efectividad',
 				data: [<?php echo $data ?>],
 				fill: false,
@@ -188,11 +204,5 @@
 				],
 			},
 		}
-	};
-
-	window.onload = function() {
-		var ctx_BSF = document.getElementById('budget_month_chart').getContext('2d');
-		window.myLine_BSF = new Chart(ctx_BSF, config_BSF);
-		
 	};
 </script>

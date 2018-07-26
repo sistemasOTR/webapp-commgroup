@@ -93,22 +93,6 @@
                         foreach ($arrUsuarios as $key => $usuario) {
                          foreach ($arrGestor as $gestor) {
                         
-                         // if ($value->getTipoUsuario()->getId()=='1') {
-                         //   echo $value->getNombre();
-
-                         // }
-
-                          // if (!is_array($value->getTipoUsuario())) {
-                          //   if ($value->getTipoUsuario()->getId() != '1') {
-                              
-                            
-                          //     $notHidden = true;
-                          //   } else {
-                          //     $notHidden = false;
-                          //   }
-                          // } else {
-                          //   $notHidden = true;
-                          // }
                           if($fusuario == $usuario->getId() && $usuario->getUserSistema() == $gestor->GESTOR11_CODIGO){
                             echo "<option value='".$usuario->getId()."'selected>".$usuario->getNombre()." ".$usuario->getApellido()."</option>";
                           }

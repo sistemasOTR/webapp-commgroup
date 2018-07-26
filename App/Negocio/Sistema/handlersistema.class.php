@@ -823,6 +823,61 @@
 				throw new Exception($e->getMessage());	
 			}
 		}	
+		 
+		 public function selectAllEmpresaFiltroArray($empresa, $gestor, $gerente, $coordinador, $operador){
+			try {
+
+				$filtro_empresa="";
+				if(!empty($empresa))								
+					$filtro_empresa = "SERTT91_CODEMPRE = ".$empresa." AND ";
+
+				$filtro_gestor="";
+				if(!empty($gestor))								
+					$filtro_gestor = "SERTT91_CODGESTOR = ".$gestor." AND ";
+
+				$filtro_coordinador="";
+				if(!empty($coordinador))								
+					$filtro_coordinador = "SERTT91_COOALIAS = '".$coordinador."' AND ";
+				
+				$filtro_gerente="";
+				if(!empty($gerente))								
+					$filtro_gerente = "SERTT91_GTEALIAS = '".$gerente."' AND ";
+
+				$filtro_operador="";
+				if(!empty($operador))								
+					$filtro_operador = "SERTT91_OPERAD = '".$operador."' AND ";				
+				
+				$query = "SELECT 
+							EMPTT11_CODIGO, EMPTT21_NOMBREFA 
+						FROM SERVTT
+						INNER JOIN EMPRESASTT ON
+							SERVTT.SERTT91_CODEMPRE = EMPRESASTT.EMPTT11_CODIGO 
+						INNER JOIN GESTORESTT ON
+							SERVTT.SERTT91_CODGESTOR = GESTORESTT.GESTOR11_CODIGO 	
+						LEFT JOIN SERTELPER ON
+							SERVTT.SERTT91_IDOPORT=SERTELPER.TEPE11_NROGEST
+						WHERE  				
+							".$filtro_empresa." 
+							".$filtro_gestor." 
+							".$filtro_coordinador." 
+							".$filtro_gerente." 
+							".$filtro_operador." 
+							SERTT91_CODEMPRE = EMPTT11_CODIGO AND 
+							SERTT91_CODGESTOR = GESTOR11_CODIGO 
+						GROUP BY 
+							EMPTT11_CODIGO, EMPTT21_NOMBREFA";
+
+							//echo $query;
+							//exit;
+
+				$result = SQLsistema::selectArray($query);
+						
+				return $result;
+ 
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}	
 		
 
 		public function selectAllGerenteFiltro($empresa, $gestor, $gerente, $coordinador, $operador){
@@ -1458,6 +1513,7 @@
 				$result = SQLsistema::selectObject($query);
 						
 				return $result;
+
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
