@@ -143,7 +143,7 @@
               </tbody>
             </table>
             <br>
-            <a href="index.php?view=celulares" class="pull-left btn btn-default"><i class="ion-chevron-left"></i> Volver</a>
+            <a href="index.php?view=celulares&active=el" class="pull-left btn btn-default"><i class="ion-chevron-left"></i> Volver</a>
           </div>
         </div>
       </div>

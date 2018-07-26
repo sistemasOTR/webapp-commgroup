@@ -1,29 +1,19 @@
-<?php
-	include_once "../../../../Config/config.ini.php";	
+<<?php
+	include_once "../../../Config/config.ini.php";		
 
-	include_once PATH_NEGOCIO."Modulos/handlerimpresoras.class.php";
+	include_once PATH_NEGOCIO."Modulos/handlercelulares.class.php";
 	
-	$hanlder = new HandlerImpresoras();
+	$hanlder = new HandlerCelulares();
 
-	$serialNro = (isset($_POST["bajaSerialNro"])?$_POST["bajaSerialNro"]:'');
-	
-	$fechaBaja = (isset($_POST["fechaBaja"])?$_POST["fechaBaja"]:'');
-	$obs = (isset($_POST["txtObsImp"])?$_POST["txtObsImp"]:'');
-	
-	$err = "../../../../../index.php?view=impresorasxplaza&err=";     		
-	$info = "../../../../../index.php?view=impresorasxplaza&info=";     		
+	$id = (isset($_POST["id"])?$_POST["id"]:'');
 
 	try {
+		$handler->suspender($id);
 
-		$hanlder->bajaImpresora($serialNro,$fechaBaja,$obs);
 		
-		
-		$msj="Impresora dada de baja con éxito.";
-				
-		header("Location: ".$info.$msj);
-
 	} catch (Exception $e) {
 		header("Location: ".$err.$e->getMessage());
 	}
+?>
 	
 ?>

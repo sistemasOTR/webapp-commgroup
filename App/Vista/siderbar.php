@@ -504,7 +504,7 @@
                     <?php if($esGerencia || ($esBO || $esContabilidad || $esRRHH)){ ?>
                     <li id="mnu_celulares">
                       <a href=<?php echo $url_celulares; ?>>
-                        <i class="fa fa-mobile"></i> <span>Celulares</span>
+                        <i class="fa fa-mobile"></i> <span>Líneas y Equipos</span>
                       </a>
                     </li>
                   <li id="mnu_insumos">

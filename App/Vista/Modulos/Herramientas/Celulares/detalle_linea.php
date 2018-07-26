@@ -20,6 +20,25 @@
   $handlerUs = new HandlerUsuarios;
 
   $nroLinea = (isset($_GET["fNroLinea"])?$_GET["fNroLinea"]:'');
+  $activo = (isset($_GET["active"])?$_GET["active"]:'');
+  switch ($activo) {
+    case 'el':
+      $act_1 = '';
+      $act_2 = '';
+      $act_3 = ' active';
+      break;
+    case 'll':
+      $act_1 = '';
+      $act_2 = ' active';
+      $act_3 = '';
+      break;
+    
+    default:
+      $act_1 = ' active';
+      $act_2 = '';
+      $act_3 = '';
+      break;
+    }
   $datosLinea = $handlerCel->getDatosByNroLinea($nroLinea);
   if($datosLinea->getOcupada()){
     $datosEntrega=$handlerCel->getEntrega($nroLinea);
@@ -113,7 +132,7 @@
               </tbody>
             </table>
             <br>
-            <a href="index.php?view=celulares" class="pull-left btn btn-default"><i class="ion-chevron-left"></i> Volver</a>
+            <a href="index.php?view=celulares&active=<?php echo $activo ?>" class="pull-left btn btn-default"><i class="ion-chevron-left"></i> Volver</a>
           </div>
         </div>
         <div class="box box-solid">

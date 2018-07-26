@@ -50,6 +50,10 @@
 		private $_ocupada;
 		public function getOcupada(){ return $this->_ocupada; }
 		public function setOcupada($ocupada){ $this->_ocupada =$ocupada; }
+		
+		private $_estado;
+		public function getEstado(){ return $this->_estado; }
+		public function setEstado($estado){ $this->_estado =$estado; }
 
 
 		/*#############*/
@@ -63,6 +67,7 @@
 			$this->setFechaAlta('');
 			$this->setCosto(0);
 			$this->setConsEstimado(0);
+			$this->setEstado(0);
 			$this->setFechaBaja('');
 			$this->setObs('');
 			$this->setOcupada(false);
@@ -84,6 +89,7 @@
 		        						fechaAlta,
 		        						costo,
 		        						consEstimado,
+		        						estado,
 		        						obs,
 		        						ocupada
 	        			) VALUES (
@@ -93,6 +99,7 @@
 	        							'".$this->getFechaAlta()."',
 	        							".$this->getCosto().",
 	        							".$this->getConsEstimado().",
+	        							0,
 	        							'".$this->getObs()."',
 	        							'false'
 	        			)"; 
@@ -118,40 +125,6 @@
 				$query="UPDATE lineas SET
 								fechaBaja='".$this->getFechaBaja()."',
 								obs='".$this->getObs()."',
-							WHERE nroLinea=".$this->getNroLinea();
-
-				# Ejecucion 					
-				return SQL::update($conexion,$query);	
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());
-			}		
-		}
-
-		public function entregada($conexion)
-		{
-			try {
-
-				# Query 			
-				$query="UPDATE lineas SET
-								ocupada='true'
-							WHERE nroLinea='".$this->getNroLinea()."'";
-
-				# Ejecucion 					
-				return SQL::update($conexion,$query);	
-
-			} catch (Exception $e) {
-				throw new Exception($e->getMessage());
-			}		
-		}
-
-		public function devolver($conexion)
-		{
-			try {
-
-				# Query 			
-				$query="UPDATE lineas SET
-								ocupada='false'
 							WHERE nroLinea=".$this->getNroLinea();
 
 				# Ejecucion 					
@@ -198,6 +171,96 @@
 				throw new Exception($e->getMessage());						
 			}
 
+		}		
+
+		public function setPropiedadesBySelect($filas)
+		{	
+			if(empty($filas)){
+				$this->cleanClass();
+			}
+			else{
+				$this->setNroLinea(trim($filas['nroLinea']));
+				$this->setEmpresa(trim($filas['empresa']));			
+				$this->setNombrePlan(trim($filas['nombrePlan']));			
+				$this->setFechaAlta($filas['fechaAlta']);
+				$this->setCosto(trim($filas['costo']));			
+				$this->setConsEstimado(trim($filas['consEstimado']));			
+				$this->setFechaBaja($filas['fechaBaja']);			
+				$this->setObs($filas['obs']);
+				$this->setEstado($filas['estado']);
+				$this->setOcupada(trim($filas['ocupada']));
+			}
+		}
+
+		private function cleanClass()
+		{
+			$this->setNroLinea('');
+			$this->setEmpresa('');
+			$this->setNombrePlan('');
+			$this->setFechaAlta('');
+			$this->setCosto(0);
+			$this->setConsEstimado(0);
+			$this->setEstado(0);
+			$this->setFechaBaja('');
+			$this->setObs('');
+			$this->setOcupada(false);
+		}
+
+		private function createTable()
+		{
+			return 'CREATE TABLE IF NOT EXISTS';
+		}
+
+		/*########################*/
+		/* METODOS PERSONALIZADOS */
+		/*########################*/
+
+		public function getNombreRoles(){
+			$handler = new UsuarioPerfil;
+			$roles = explode("|", $this->getRoles());
+			
+			$nombre_roles = "";
+			foreach ($roles as $key => $value) {
+				if(!empty($value)){
+					$handler->setId($value);
+					$nombre_roles = $nombre_roles.$handler->select()->getNombre().",";				
+				}
+			}			
+			return $nombre_roles;
+		}
+
+		public function entregada($conexion)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE lineas SET
+								ocupada='true'
+							WHERE nroLinea='".$this->getNroLinea()."'";
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+		public function devolver($conexion)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE lineas SET
+								ocupada='false'
+							WHERE nroLinea=".$this->getNroLinea();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
 		}
 
 		public function getLineasLibres()
@@ -234,60 +297,21 @@
 
 		}
 
-		
-
-		public function setPropiedadesBySelect($filas)
-		{	
-			if(empty($filas)){
-				$this->cleanClass();
-			}
-			else{
-				$this->setNroLinea(trim($filas['nroLinea']));
-				$this->setEmpresa(trim($filas['empresa']));			
-				$this->setNombrePlan(trim($filas['nombrePlan']));			
-				$this->setFechaAlta($filas['fechaAlta']);
-				$this->setCosto(trim($filas['costo']));			
-				$this->setConsEstimado(trim($filas['consEstimado']));			
-				$this->setFechaBaja($filas['fechaBaja']);			
-				$this->setObs($filas['obs']);
-				$this->setOcupada(trim($filas['ocupada']));
-			}
-		}
-
-		private function cleanClass()
+		public function suspender($conexion)
 		{
-			$this->setNroLinea('');
-			$this->setEmpresa('');
-			$this->setNombrePlan('');
-			$this->setFechaAlta('');
-			$this->setCosto(0);
-			$this->setConsEstimado(0);
-			$this->setFechaBaja('');
-			$this->setObs('');
-			$this->setOcupada(false);
-		}
+			try {
 
-		private function createTable()
-		{
-			return 'CREATE TABLE IF NOT EXISTS';
-		}
+				# Query 			
+				$query="UPDATE lineas SET
+								estado = 1
+							WHERE nroLinea=".$this->getNroLinea();
 
-		/*########################*/
-		/* METODOS PERSONALIZADOS */
-		/*########################*/
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
 
-		public function getNombreRoles(){
-			$handler = new UsuarioPerfil;
-			$roles = explode("|", $this->getRoles());
-			
-			$nombre_roles = "";
-			foreach ($roles as $key => $value) {
-				if(!empty($value)){
-					$handler->setId($value);
-					$nombre_roles = $nombre_roles.$handler->select()->getNombre().",";				
-				}
-			}			
-			return $nombre_roles;
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
 		}
 	}
 ?>

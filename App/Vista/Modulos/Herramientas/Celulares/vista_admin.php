@@ -8,6 +8,7 @@
   $url_detalle_linea = "index.php?view=detalle_linea";
   $url_detalle_equipo = "index.php?view=detalle_equipo";
 
+
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.2.1/jquery.quicksearch.js"></script>
 
@@ -18,7 +19,7 @@
 
     
     <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-entrega-linea' onclick="entregaLinea('<?php echo $fHoy; ?>')">
-        <i class="fa fa-share"></i> Entregar
+        <i class="fa fa-plus"></i> Nueva asignación
     </a>
     
   </div>
@@ -78,7 +79,7 @@
               echo "<td>".$entregaEquipo."</td>";
               echo "<td>".$usuario->getNombre()." ".$usuario->getApellido()."</td>";
               echo "<td style='max-width:150px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; '><i ".$visible." class='fa fa-sort-down pull-left' data-toggle='tooltip' data-placement='bottom' title='' data-original-title='".trim(strip_tags($nroLinea->getObsEntrega()))."'></i>".trim(strip_tags($nroLinea->getObsEntrega()))."</td>";
-              echo "<td style='font-size: 20px;' width='30'><a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."'><i class='ion-eye text-blue'></i></td>";
+              echo "<td style='font-size: 20px;' width='30'><a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."&active=as'><i class='ion-eye text-blue'></i></td>";
               echo "<td style='font-size: 20px;' width='30'>".$devolucion."</td>";
               echo "<td style='font-size: 20px;' width='30'><a href='".$url_impresion."fID=".$nroLinea->getEntId()."' target='_blank'><i class='ion-document text-yellow' data-toggle='tooltip' title='Ver Comodato'></i></td>";
             echo "</tr>";

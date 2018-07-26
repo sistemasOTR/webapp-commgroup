@@ -3,7 +3,9 @@
 
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.2.1/jquery.quicksearch.js"></script>
-
+<style>
+  a i {margin: 0 5px;}
+</style>
 <div class="box box-solid">
   <div class="box-header with-border">
     <i class="fa fa-list"></i>
@@ -14,14 +16,15 @@
     
   </div>
 
-  <div class="box-body table-responsive"> 
+  <div class="box-body table-responsive col-md-10 col-md-offset-1"> 
     <div class="col-xs-12 col-md-6 pull-right"><input type="text" id="search-linea" class="form-control" placeholder="Escribe para buscar..." /></div>
     <table class="table table-striped table-condensed" id="tabla-lineas" cellspacing="0" width="100%" style="text-align:center;">
       <thead>
         <tr>
-          <th class='text-center' width="100">Nro Línea</th>
-          <th class='text-center' width="100">Plan</th>
-          <th></th>
+          <th class='text-center' width="30%">NRO LÍNEA</th>
+          <th class='text-center' width="30%">PLAN</th>
+          <th class='text-center' width="30%">ESTADO</th>
+          <th class='text-center' width="10%">ACCION</th>
         </tr>
       </thead>
 
@@ -29,11 +32,23 @@
       <?php    
         if(!empty($arrLLibres)){
           foreach ($arrLLibres as $nroLinea) {
-            
+            switch ($nroLinea->getEstado()) {
+              case '0':
+                $estado = 'Disponible';
+                break;
+              case '1':
+                $estado = 'Suspendida';
+                break;
+              
+              default:
+                $estado = 'Disponible';
+                break;
+            }
             echo "<tr>";
               echo "<td>".$nroLinea->getNroLinea()."</td>";
               echo "<td>".$nroLinea->getNombrePlan()."</td>";
-              echo "<td style='font-size: 20px;' width='30'><a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."'><i class='ion-eye text-blue'></i></td>";
+              echo "<td>".$estado."</td>";
+              echo "<td style='font-size: 18px'><a href='#' class='susp-linea' id='".$nroLinea->getNroLinea()."'><i class = 'fa fa-exclamation-triangle text-yellow'></i></a><a href='#' class='baja-linea' id='".$nroLinea->getNroLinea()."'><i class = 'fa fa-times text-red'></i></a><a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."&active=ll'><i class='fa fa-eye text-blue'></i></a></td>";
              echo "</tr>";
           }
         }
@@ -109,4 +124,32 @@
       document.getElementById('txtNroLinea').value = '';
       document.getElementById('txtPlan').value = '';
     }
+
+  $('.baja-linea').on('click',function() {
+    var id = this.id;
+    $.ajax({
+      type: "POST",
+      url: 'App/Vista/Modulos/Herramientas/Celulares/action_baja.php',
+      data: {
+        id: id,
+      },
+      success: function(data){
+        
+      }
+    });
+  });
+
+  $('.susp-linea').on('click',function() {
+    var id = this.id;
+    $.ajax({
+      type: "POST",
+      url: 'App/Vista/Modulos/Herramientas/Celulares/action_susp.php',
+      data: {
+        id: id
+      },
+      success: function(data){
+        
+      }
+    });
+  });
   </script>

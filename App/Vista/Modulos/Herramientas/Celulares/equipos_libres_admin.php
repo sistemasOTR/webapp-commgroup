@@ -40,7 +40,7 @@
               $estado = 'Perdido';
             } else {
               $class_estado = 'text-green';
-              $estado = 'OK';
+              $estado = 'Disponible';
             }
             echo "<tr>";
               echo "<td>".$equipo->getIMEI()."</td>";

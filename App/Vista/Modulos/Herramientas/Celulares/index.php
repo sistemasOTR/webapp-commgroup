@@ -51,6 +51,25 @@ echo "window.open('".PATH_VISTA."Modulos/Herramientas/Celulares/imprimir_baja_co
   $url_action_baja = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_baja.php';*/
   
 
+  $activo = (isset($_GET["active"])?$_GET["active"]:'');
+  switch ($activo) {
+    case 'el':
+      $act_1 = '';
+      $act_2 = '';
+      $act_3 = ' active';
+      break;
+    case 'll':
+      $act_1 = '';
+      $act_2 = ' active';
+      $act_3 = '';
+      break;
+    
+    default:
+      $act_1 = ' active';
+      $act_2 = '';
+      $act_3 = '';
+      break;
+    }
 ?>
 <style>
   .box-header.with-border {height: 55px;}
@@ -100,11 +119,16 @@ echo "window.open('".PATH_VISTA."Modulos/Herramientas/Celulares/imprimir_baja_co
       </div>                
     </div>
     <div class="row">
-      <div class="col-md-8">
-
-         
-
-            <?php 
+      <div class="col-md-12">
+        <div class="nav-tabs-custom">
+          <ul class="nav nav-tabs">
+            <li class='<?php echo $act_1 ?>'><a href="#tab_1" data-toggle="tab" aria-expanded="true">Asignaciones</a></li>
+            <li class='<?php echo $act_2 ?>'><a href="#tab_2" data-toggle="tab" aria-expanded="false">Líneas Libres</a></li>
+            <li class='<?php echo $act_3 ?>'><a href="#tab_3" data-toggle="tab" aria-expanded="false">Equipos Libres</a></li>
+          </ul>
+          <div class="tab-content col-xs-12">
+            <div class='tab-pane <?php echo $act_1 ?>' id="tab_1">
+              <?php 
               switch ($user->getUsuarioPerfil()->getNombre()) {
                 //case 'COORDINADOR':
 
@@ -118,11 +142,8 @@ echo "window.open('".PATH_VISTA."Modulos/Herramientas/Celulares/imprimir_baja_co
                   break;                                            
               }
             ?>
-          
-
-      </div>
-      <div class="col-md-4">
-        <div class="col-md-12">
+            </div>
+            <div class='tab-pane <?php echo $act_2 ?>' id="tab_2">
           <?php 
             switch ($user->getUsuarioPerfil()->getNombre()) {
               //case 'COORDINADOR':
@@ -134,10 +155,8 @@ echo "window.open('".PATH_VISTA."Modulos/Herramientas/Celulares/imprimir_baja_co
                   break;
             }
           ?>
-              
-
-          </div>
-        <div class="col-md-12">
+            </div>
+            <div class='tab-pane <?php echo $act_3 ?>' id="tab_3">
           <?php 
             switch ($user->getUsuarioPerfil()->getNombre()) {
               //case 'COORDINADOR':
@@ -148,10 +167,12 @@ echo "window.open('".PATH_VISTA."Modulos/Herramientas/Celulares/imprimir_baja_co
                 break;
             }
           ?>
-              
-
+            </div>
           </div>
         </div>
+      </div>
+              
+
     </div>
   </section>
   
