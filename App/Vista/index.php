@@ -431,6 +431,11 @@
 				$include = 'Modulos/Estadisticas/estadisticas_plazas.php';
 			break;
 
+		case 'estadisticas_coordinador':
+			if($permiso->getModuloMetricasBoolean() && $esCoordinador)
+				$include = 'Modulos/Estadisticas/estadisticas_coordinador.php';
+			break;	
+
 		  /*###############*/
 		 /* CONFIGURACION */
 		/*###############*/

@@ -90,12 +90,15 @@
     $maxEf = max($eficienciaDiaria);
     $minEf = min($eficienciaDiaria);
     $promEf = number_format(array_sum($eficienciaDiaria)/count($eficienciaDiaria),2);
+    // url ver detalle //
+    $url_ver_detalle='index.php?view=estadisticas_coordinador&plaza='.$user->getAliasUserSistema();
 ?>
 
 <div class="box box-solid">
 	<div class="box-header with-border">
 		<h3 class="box-title"><i class="ion-stats-bars"></i> Progreso Mensual hasta el <?php echo $dia."-".$mes."-".$año ?></h3>
 		<div class="box-tools pull-right">
+			<a href="<?php echo $url_ver_detalle ; ?>" class="btn btn-primary"><i class="fa fa-file-o"></i> Ver Detalle</a>
 			<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
 			<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
 		</div>
