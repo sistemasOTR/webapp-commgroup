@@ -187,10 +187,12 @@
       $clase_efectividad = 'class="text-center text-red"';
     }  
   //FIN PUNTAJE MENSUAL   
+
+    $url_redireccion_plaza='index.php?view=estadisticas_plaza&plaza='.$value->PLAZA;
 ?>
 
 <div class="box box-solid">
-  <div class="box-header with-border"><h3 class="box-title"><i class="ion-arrow-graph-up-right"> </i> <?php echo $value->PLAZA ?></h3></div>
+  <div class="box-header with-border"><h3 class="box-title"><i class="ion-arrow-graph-up-right"> </i> <?php echo $value->PLAZA ?></h3><a href="<?php echo $url_redireccion_plaza ; ?>"  class="fa fa-bar-chart-o  pull-right"></a></div>
   <div class="box-body">
     <h4>DIARIO</h4>
     <div class="info-box bg-aqua">

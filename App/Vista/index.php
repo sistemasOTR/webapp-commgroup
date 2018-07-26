@@ -426,6 +426,11 @@
 				$include = 'Modulos/Estadisticas/index.php';
 			break;
 
+		case 'estadisticas_plaza':
+			if($permiso->getModuloMetricasBoolean() && $esGerencia)
+				$include = 'Modulos/Estadisticas/estadisticas_plazas.php';
+			break;
+
 		  /*###############*/
 		 /* CONFIGURACION */
 		/*###############*/
