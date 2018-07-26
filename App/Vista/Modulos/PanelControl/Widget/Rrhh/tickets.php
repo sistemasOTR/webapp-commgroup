@@ -37,7 +37,7 @@
 	    	
 	    </h3>
 	  </div>
-	  <div class="box-body table-responsive" style='text-align: center;'>
+	  <div class="box-body table-responsive">
 	  	<table class="table table-striped table-condensed" id="tabla-tickets" cellspacing="0" width="100%">
 
         <thead>
@@ -47,14 +47,14 @@
                       <th style='text-align: center;'>CONCEPTO</th>
                       <th style='text-align: center;'>IMPORTE</th>                      
                       <th style='text-align: center;'>REINT</th>                      
-                      <th style='text-align: center;'colspan="2">ALEDAÑO</th>          
+                      <th style='text-align: center;'>ALED</th>          
+                      <th style='text-align: center;'>LOCALIDAD</th>          
                       <th style='text-align: center;'>OPER</th>
                       <th style='text-align: center;'>ESTADO</th>
                       <th style='text-align: center;'>VER</th>
                     </tr>
                   </thead>
                   <tbody>
-                   <tbody>
                     <?php 
                       if(!empty($consulta))
                       {
@@ -114,30 +114,6 @@
                                 
                                 <?php
 
-                                $countServicios = 0;
-                                $estiloContServicios = "false";
-                                if($value->getUsuarioId()->getUsuarioPerfil()->getNombre()=="GESTOR")
-                                {
-                                  if($value->getUsuarioId()->getTipoUsuario()->getNombre()=="Gestor")
-                                  {
-                                    $handlerSistema = new HandlerSistema; 
-                                    $fFiltro = $value->getFechaHora()->format("Y-m-d"); 
-                                    $countServicios = $handlerSistema->selectCountServicios($fFiltro,$fFiltro,null,null,$value->getUsuarioId()->getUserSistema(),null,null,null)[0]->CANTIDAD_SERVICIOS;
-                                    $estiloContServicios = "false";
-                                  }
-                                  else
-                                  {
-                                    $countServicios = 0;
-                                    $estiloContServicios = "true";
-                                  }
-                                }
-                                else
-                                {
-                                  $countServicios = 0;
-                                  $estiloContServicios = "true";
-                                }
-
-                                
                               echo "</tr>";
                               }
 

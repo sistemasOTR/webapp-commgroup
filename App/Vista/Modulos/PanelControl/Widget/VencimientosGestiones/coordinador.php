@@ -24,7 +24,7 @@
 
     //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
     if(!PRODUCCION)
-      $fHOY = "2018-07-04";
+      $fHOY = "2018-07-11";
 
     $arrVencido = $handler->selectServiciosPorVencerByGestor(2,null,null,null,$user->getAliasUserSistema(),null,'VENCIDOS');     
     $arrPorVencer = $handler->selectServiciosPorVencerByGestor(2,null,null,null,$user->getAliasUserSistema(),null,'A TIEMPO');     
