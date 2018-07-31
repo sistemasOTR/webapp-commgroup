@@ -471,7 +471,29 @@
 		{		
 			try {
 				
-				$query = "SELECT * FROM usuario WHERE estado = 'true' and id_plaza = ".$id_plaza." order by nombre";
+				$query = "SELECT * FROM usuario WHERE estado = 'true' and id_plaza = ".$id_plaza." order by apellido";
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new Usuario);
+
+				return $result;
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}					
+		}
+
+		public function selectGestoresByPlaza($id_plaza)
+		{		
+			try {
+				if (!empty($id_plaza)) {
+					$query = "SELECT * FROM usuario WHERE estado = 'true' AND id_tipo_usuario = 3 and id_plaza = ".$id_plaza." order by apellido";
+				}else{
+					$query = "SELECT * FROM usuario WHERE estado = 'true' AND id_tipo_usuario = 3 order by apellido";
+				}
+				
+				
 				
 				# Ejecucion 				
 				$result = SQL::selectObject($query, new Usuario);

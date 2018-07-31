@@ -33,6 +33,7 @@
         $url_tickets_conceptos = "index.php?view=tickets_conceptos";
         $url_tickets_fechas = "index.php?view=tickets_fechas_inhabilitadas";
         $url_tickets_reintegro = "index.php?view=tickets_reintegros";
+        $url_tickets_resumen = "index.php?view=tickets_resumen";
         
         $url_licencias_carga = "index.php?view=licencias_carga";
         $url_licencias_control = "index.php?view=licencias_control";       
@@ -165,7 +166,12 @@
                       <a href=<?php echo $url_tickets_reintegro; ?>> 
                         <i class="fa fa-list"></i> <span>Tabla Reintegros</span> </i>
                       </a>              
-                    </li>                      
+                    </li>
+                    <li class="treeview" id="mnu_tickets_resumen">
+                      <a href=<?php echo $url_tickets_resumen; ?>>
+                        <i class="fa fa-list"></i> <span>Resumen Viáticos</span> </i>
+                      </a>
+                    </li>
                   <?php } ?>    
 
                   

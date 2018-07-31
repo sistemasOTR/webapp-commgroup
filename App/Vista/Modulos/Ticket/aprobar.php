@@ -194,12 +194,12 @@
                       	$countSemana = 0;
                       	$countCiclo = 0;
                       	if ($fusuario!='') {
-								$usuarioSist = $handlerUsuarios->selectById($fusuario)->getUserSistema();
+								        $usuarioSist = $handlerUsuarios->selectById($fusuario)->getUserSistema();
 
                       	while (strtotime($FECHA) <= strtotime($HASTA)) {
                       		$dia = $dFecha->Dias(date('l',strtotime($FECHA)));
                       		$fechaOp =  date('d-m-Y',strtotime($FECHA));
-							$consulta = $handler->seleccionarByFiltrosAprobacion($FECHA,$FECHA,$fusuario,$festados);
+							             $consulta = $handler->seleccionarByFiltrosAprobacion($FECHA,$FECHA,$fusuario,$festados);
 							
 								// var_dump($usuarioSist);
 								// exit();
@@ -222,10 +222,10 @@
 								$countServ = new HandlerSistema;
 								$cantServ = $countServ->selectCountServicios($FECHA, $FECHA, 100, null, $usuarioSist, null, null, null);
 
-                              if($handlerUsuarios->selectById($fusuario)->getUsuarioPerfil()->getNombre()=="GESTOR")
-                                {
-                                	$cpAt = $countServ->cpAtendidos($FECHA, $usuarioSist);
-                                }
+                if($handlerUsuarios->selectById($fusuario)->getUsuarioPerfil()->getNombre()=="GESTOR")
+                  {
+                  	$cpAt = $countServ->cpAtendidos($FECHA, $usuarioSist);
+                  }
 							}
 
                               $arrReintegro = $handler->selecionarReintegrosByDate($FECHA);
@@ -316,7 +316,7 @@
 									    echo "<td>".$class_estilos_aledanio."</td>";
 									    echo "<td>".$nombAledanio."</td>";
 									    echo "<td>".$class_estilos_traslado."</td>";
-									    echo "<td>".number_format($value->getCantOperaciones(),0)."</td>";                                                    
+									    echo "<td>".number_format($cantServ[0]->CANTIDAD_SERVICIOS,0)."</td>";                                                    
 									    echo "<td>".$class_estilos_aprobado."</td>";
 									    echo "<td><a href='".$value->getAdjunto()."' target='_blank'>VER</a></td>";
 									    ?>

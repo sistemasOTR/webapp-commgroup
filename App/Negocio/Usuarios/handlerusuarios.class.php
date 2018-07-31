@@ -416,6 +416,26 @@
 			}
 		}		
 
+		public function selectGestoresByPlaza($id_plaza){
+			try{
+				$u = new Usuario;
+				$data = $u->selectGestoresByPlaza($id_plaza);				
+	
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+			}
+			catch(Exception $e)
+			{
+				throw new Exception($e->getMessage());				
+			}
+		}		
+
 		public function selectEmpleados(){
 			try{
 				$u = new Usuario;
