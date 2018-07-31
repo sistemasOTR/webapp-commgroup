@@ -26,14 +26,12 @@
 
         for ($i=6; $i >= 1 ; $i--) { 
             
-            $monthsMinus = '- '.$i .' month';
             
-
-            $fdesde = date('Y-m-01',strtotime($monthsMinus));
-            $fhasta = date('Y-m-t',strtotime($monthsMinus));
+            $fdesde = date('Y-m-01', mktime(0,0,0,date('m')-$i,1,date('Y')));
+            $fhasta = date('Y-m-t', mktime(0,0,0,date('m')-$i,1,date('Y')));
             setlocale(LC_TIME, 'spanish');  
-            $nombreMES = strftime("%B",mktime(0, 0, 0, date('m',strtotime($monthsMinus)), 1, 2000));      
-            $anioMES = date('Y',strtotime($monthsMinus));
+            $nombreMES = strftime("%B",mktime(0, 0, 0, date('m')-$i, 1, 2000));      
+            $anioMES = date('Y',mktime(0,0,0,date('m')-$i,1,date('Y')));
            
              $servCerrados = $handler->selectCountServiciosGestion($fdesde,$fhasta,200,null,null,null,$est_plaza,null);
              $cerrados2 += $servCerrados[0]->CANTIDAD_SERVICIOS;
