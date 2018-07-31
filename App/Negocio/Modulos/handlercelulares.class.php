@@ -67,6 +67,24 @@
 			}
 		}
 				
+		public function getLineasDisponibles(){
+			try {
+				$handlerLinea = new Lineas;								
+				$data = $handlerLinea->getLineasDisponibles();
+				
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+				
 		public function getEquiposLibres(){
 			try {
 				$handlerLinea = new Equipos;

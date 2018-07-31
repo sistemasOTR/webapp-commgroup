@@ -204,7 +204,11 @@
 			try {
 
 				$dFecha = new Fechas();
-				$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(1);
+				if (date('N',strtotime($dFecha->FechaActual())) == 1) {
+					$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(3);
+				} else {
+					$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(1);
+				}
 				$fecha_ticket = $dFecha->FormatearFechas(substr($fecha_hora,0,10),'Y-m-d','Y-m-d');
 				
 				if($fecha_ticket < $fecha_hoy_menos_tres )
@@ -567,6 +571,27 @@
 				$t = new Tickets;
 				$t->rechazarTicketsAprob($id,$obsRechazo);
 					
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}	
+
+
+      public function resumenGestor($idGestor, $fechaDesde, $fechaHasta){
+			try {
+
+				
+				$handler = new Tickets;
+				$data = $handler->resumenGestor($idGestor, $fechaDesde, $fechaHasta);
+
+
+				if(count($data)==1){
+					$data = array('' => $data );
+					return $data;
+				}else{
+					return $data;
+				}
+				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
 			}

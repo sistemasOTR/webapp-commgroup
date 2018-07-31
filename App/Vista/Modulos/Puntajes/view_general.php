@@ -47,7 +47,7 @@
     <?php include_once PATH_VISTA."info.php"; ?>
 
     <div class="row">
-      <div class='col-md-12'>
+      <!-- <div class='col-md-12'>
           <div class="box box-solid">
               <div class="box-header with-border">
                 <i class="fa fa-filter"></i>
@@ -78,17 +78,16 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
       
         <?php
-         for ($i=0; $i <= 5 ; $i++) { 
-            $monthsMinus = '- '.$i .' month';
-            $fdesde = date('Y-m-01',strtotime($monthsMinus));
-            $fhasta = date('Y-m-t',strtotime($monthsMinus));
+         for ($i=0; $i <= 5 ; $i++) {
+            $fdesde = date('Y-m-01', mktime(0,0,0,date('m')-$i,1,date('Y')));
+            $fhasta = date('Y-m-t', mktime(0,0,0,date('m')-$i,1,date('Y')));
             setlocale(LC_TIME, 'spanish');  
-            $nombreMES = strftime("%B",mktime(0, 0, 0, date('m',strtotime($monthsMinus)), 1, 2000));      
-            $anioMES = date('Y',strtotime($monthsMinus));
+            $nombreMES = strftime("%B",mktime(0, 0, 0, date('m')-$i, 1, 2000));      
+            $anioMES = date('Y',mktime(0,0,0,date('m')-$i,1,date('Y')));
             $total_servicios = 0;
             $total_servicios_cerrados = 0;
             $total_efectividad = 0;

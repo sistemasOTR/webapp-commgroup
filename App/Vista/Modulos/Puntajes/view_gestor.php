@@ -21,6 +21,8 @@
 
   $handler =  new HandlerConsultas;
   
+  $url_detalle_xgestor = "index.php?view=puntajes_general_xgestor&fgestor=";
+  
 ?>
 
 <div class="content-wrapper">  
@@ -44,12 +46,11 @@
      
         <?php
         for ($i=0; $i <= 5 ; $i++) { 
-            $monthsMinus = '- '.$i .' month';
-            $fdesde = date('Y-m-01',strtotime($monthsMinus));
-            $fhasta = date('Y-m-t',strtotime($monthsMinus));
+            $fdesde = date('Y-m-01', mktime(0,0,0,date('m')-$i,1,date('Y')));
+            $fhasta = date('Y-m-t', mktime(0,0,0,date('m')-$i,1,date('Y')));
             setlocale(LC_TIME, 'spanish');  
-            $nombreMES = strftime("%B",mktime(0, 0, 0, date('m',strtotime($monthsMinus)), 1, 2000));      
-            $anioMES = date('Y',strtotime($monthsMinus));
+            $nombreMES = strftime("%B",mktime(0, 0, 0, date('m')-$i, 1, 2000));      
+            $anioMES = date('Y',mktime(0,0,0,date('m')-$i,1,date('Y')));
             $total_servicios = 0;
             $total_servicios_cerrados = 0;
             $total_efectividad = 0;
@@ -60,7 +61,7 @@
 
             $objetivo=0;
             $consulta = $handler->consultaPuntajes($fdesde, $fhasta, $fgestor);
-
+                 
             if(!empty($consulta))
             {
               foreach ($consulta as $key => $value) { 
@@ -70,35 +71,46 @@
                 $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
                 if ($value->FECHA->format('d-m-Y')>= $fechaPuntajeActual->format('d-m-Y')) {
                   $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
+                  if ($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $value->CP_GEST == '2000') {
+                    $puntaje = 2;
+                  }
                 } else {
                   $puntaje = $handlerP->buscarPuntajeFecha($value->COD_EMPRESA,$value->FECHA->format('Y-m-d'));
+                  if ($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $value->CP_GEST == '2000') {
+                    $puntaje = 2;
+                  }
                 }
-
+                
                 if(empty($objetivo))                                                  
                   $objetivo = 0;
 
-                if(empty($puntaje))
-                  $puntaje_cerrados = 0;
-                else
-                  $puntaje_cerrados = round($value->CERRADO*$puntaje,2);
+                if (($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && $value->FECHA->format('d-m-Y') <= date('d-m-Y',strtotime('31-06-2018'))) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $value->CP_GEST == '2000') {
 
-                if(empty($puntaje))
-                  $puntaje_enviadas = 0;
-                else
-                  $puntaje_enviadas = round($value->ENVIADO*$puntaje,2);                        
+                  if(empty($puntaje))
+                    $puntaje_enviadas = 0;
+                  else
+                    $puntaje_enviadas = round($value->TOTAL_SERVICIOS*$puntaje,2);
 
-                if(!empty($value->TOTAL_SERVICIOS))
-                  $efectividad = round($value->CERRADO/$value->TOTAL_SERVICIOS,2) * 100;
-                else
-                  $efectividad = 0;
-                
+                  $total_puntajes_enviadas = $total_puntajes_enviadas + $puntaje_enviadas;
+
+                }else{
+                  if(empty($puntaje))
+                    $puntaje_cerrados = 0;
+                  else
+                    $puntaje_cerrados = round($value->CERRADO*$puntaje,2);
+
+                  if(empty($puntaje))
+                    $puntaje_enviadas = 0;
+                  else
+                    $puntaje_enviadas = round($value->ENVIADO*$puntaje,2);
+
+                  $total_puntajes_cerrados = $total_puntajes_cerrados + $puntaje_cerrados;
+                  $total_puntajes_enviadas = $total_puntajes_enviadas + $puntaje_enviadas; 
+                }
 
                 $total_servicios = $total_servicios + $value->TOTAL_SERVICIOS;
                 $total_servicios_cerrados = $total_servicios_cerrados + $value->CERRADO;
-                $total_puntajes_cerrados = $total_puntajes_cerrados + $puntaje_cerrados;                        
-
                 $total_servicios_enviadas = $total_servicios_enviadas + $value->ENVIADO;
-                $total_puntajes_enviadas = $total_puntajes_enviadas + $puntaje_enviadas;                        
               }
             }
 
@@ -114,31 +126,33 @@
             } else {
               $clase_medidor = 'class="info-box bg-yellow"';
               $puntajePorciento = 50;
+              $txtPuntajePorciento = 50.00;
             }
 
             if(!empty($total_servicios)){
               $total_efectividad = round(($total_servicios_enviadas+$total_servicios_cerrados)/$total_servicios,2) *100;
               if ($total_efectividad > 70) {
-                $clase_efectividad = 'class="info-box-icon bg-green"';
+                $clase_efectividad = 'class="text-center text-green"';
               } else if($total_efectividad < 60){
-                $clase_efectividad = 'class="info-box-icon bg-red"';
+                $clase_efectividad = 'class="text-center text-red"';
               } else {
-                $clase_efectividad = 'class="info-box-icon bg-yellow"';
+                $clase_efectividad = 'class="text-center text-yellow"';
               }
              } else {
               $total_efectividad = 0;
-              $clase_efectividad = 'class="info-box-icon bg-red"';
+              $clase_efectividad = 'class="text-center text-red"';
             }
         ?>
 
-        <div class="col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+        <div class="col-sm-6 col-md-4">
             <div class="box box-solid">
               <div class="box-header with-border">
                 <h3 class="box-title" style="text-transform: uppercase;"><?php echo $nombreMES ?> <?php echo $anioMES ?></h3>
+                <a class="text-navy pull-right" href="<?php echo $url_detalle_xgestor.$fgestor."&fnomgestor=".$value->NOM_GESTOR."&fdesde=".$fdesde."&fhasta=".$fhasta; ?>"><i class="fa fa-search"></i></a>
               </div>    
-              <div class="box-body">
+              <div class="box-body no-padding">
 
-                <div class="col-sm-12">
+                <div class="col-sm-12 no-padding">
                 <div <?php echo $clase_medidor; ?>>
                       <span class="info-box-icon"><i class="ion-calculator"></i></span>
                       <div class="info-box-content">
@@ -154,45 +168,21 @@
                       </div>
                     </div>
                   </div>
-                <div class="col-sm-6 col-lg-3">
-                  <div class="info-box">
-                    <span class="info-box-icon bg-yellow"><i class="ion-lock-combination"></i></span>
-
-                    <div class="info-box-content">
-                      <span class="info-box-text">CERRADOS</span>
-                      <span class="info-box-number"><?php echo $total_servicios_cerrados; ?></span>
-                    </div>
-                  </div>
+                <div class="col-xs-6 col-md-3 border-right">
+                  <p class="text-center text-olive">CERRADOS<br>
+                  <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios_cerrados; ?></span></p>
                 </div>
-                <div class="col-sm-6 col-lg-3">
-                  <div class="info-box">
-                    <span class="info-box-icon bg-aqua"><i class="ion-ios-paperplane"></i></span>
-
-                    <div class="info-box-content">
-                      <span class="info-box-text">ENVIADOS</span>
-                      <span class="info-box-number"><?php echo $total_servicios_enviadas; ?></span>
-                    </div>
-                  </div>
+                <div class="col-xs-6 col-md-3 border-right">
+                  <p class="text-center text-aqua">ENVIADOS<br>
+                  <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios_enviadas; ?></span></p>
                 </div>
-                <div class="col-sm-6 col-lg-3">
-                  <div class="info-box">
-                    <span class="info-box-icon bg-blue"><i class="ion-briefcase"></i></span>
-
-                    <div class="info-box-content">
-                      <span class="info-box-text">TOTAL</span>
-                      <span class="info-box-number"><?php echo $total_servicios; ?></span>
-                    </div>
-                  </div>
+                <div class="col-xs-6 col-md-3 border-right">
+                  <p class="text-center text-blue">TOTAL<br>
+                  <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios; ?></span></p>
                 </div>
-                <div class="col-sm-6 col-lg-3">
-                  <div class="info-box">
-                    <span <?php echo $clase_efectividad; ?>><i class="ion-arrow-graph-up-right"></i></span>
-
-                    <div class="info-box-content">
-                      <span class="info-box-text">EFECTIVIDAD</span>
-                      <span class="info-box-number"><?php echo $total_efectividad; ?> %</span>
-                    </div>
-                  </div>
+                <div class="col-xs-6 col-md-3">
+                  <p <?php echo $clase_efectividad; ?>>EFECTIVIDAD<br>
+                  <span style="font-weight: bold;font-size: 20px"><?php echo $total_efectividad; ?>%</span></p>
                 </div>
                 
               </div>

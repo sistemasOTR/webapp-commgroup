@@ -512,6 +512,11 @@
 			if($permiso->getModuloTicketsBoolean() && ($esBO || $esContabilidad || $esRRHH))
 				$include = 'Modulos/Ticket/operacion_reintegro.php';
 			break;	
+		
+		case 'tickets_resumen':			
+			if($permiso->getModuloTicketsBoolean() && ($esBO || $esContabilidad || $esRRHH))
+				$include = 'Modulos/Ticket/resumen.php';
+			break;	
 
 		case 'tickets_fechas_inhabilitadas':			
 			if($permiso->getModuloTicketsBoolean() && ($esGerencia || ($esBO || $esContabilidad || $esRRHH) || $esCoordinador || $esSupervisor))
@@ -585,6 +590,16 @@
 		case 'puntajes_general_detalle':			
 			if($permiso->getModuloPuntajesBoolean() && $esGerencia)
 				$include = 'Modulos/Puntajes/view_general_detalle.php';
+			break;	
+
+		case 'puntajes_general_gestores':			
+			if($permiso->getModuloPuntajesBoolean() && $esGerencia)
+				$include = 'Modulos/Puntajes/view_general_gestores.php';
+			break;	
+
+		case 'puntajes_general_xgestor':			
+			if($permiso->getModuloPuntajesBoolean() && ($esGerencia || $esCoordinador || $esGestor))
+				$include = 'Modulos/Puntajes/view_general_xgestor.php';
 			break;
 
 		  /*##############*/

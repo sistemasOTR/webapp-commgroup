@@ -14,12 +14,12 @@
 
   $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());      
-  $fcoordinador= $user->getAliasUserSistema();
+  $fcoordinador = (isset($_GET["fcoordinador"])?$_GET["fcoordinador"]:'');      
+  // $fcoordinador= $user->getAliasUserSistema();
   $arrGestor = $handler->selectAllGestor($fcoordinador);
 
   $handler =  new HandlerConsultas;
   $consulta = $handler->consultaPuntajesCoordinador($fdesde, $fhasta, $fcoordinador);
-  
   $url_detalle_xgestor = "index.php?view=puntajes_general_xgestor&fgestor=";
 ?>
 
@@ -64,35 +64,46 @@
                 $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
                 if ($value->FECHA->format('d-m-Y')>= $fechaPuntajeActual->format('d-m-Y')) {
                   $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
+                  if ($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $value->CP_GEST == '2000') {
+                    $puntaje = 2;
+                  }
                 } else {
                   $puntaje = $handlerP->buscarPuntajeFecha($value->COD_EMPRESA,$value->FECHA->format('Y-m-d'));
+                  if ($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $value->CP_GEST == '2000') {
+                    $puntaje = 2;
+                  }
                 }
-
+                
                 if(empty($objetivo))                                                  
                   $objetivo = 0;
 
-                if(empty($puntaje))
-                  $puntaje_cerrados = 0;
-                else
-                  $puntaje_cerrados = round($value->CERRADO*$puntaje,2);
+                if (($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && $value->FECHA->format('d-m-Y') <= date('d-m-Y',strtotime('31-06-2018'))) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $value->CP_GEST == '2000') {
 
-                if(empty($puntaje))
-                  $puntaje_enviadas = 0;
-                else
-                  $puntaje_enviadas = round($value->ENVIADO*$puntaje,2);                        
+                  if(empty($puntaje))
+                    $puntaje_enviadas = 0;
+                  else
+                    $puntaje_enviadas = round($value->TOTAL_SERVICIOS*$puntaje,2);
 
-                if(!empty($value->TOTAL_SERVICIOS))
-                  $efectividad = round($value->CERRADO/$value->TOTAL_SERVICIOS,2) * 100;
-                else
-                  $efectividad = 0;
-                
+                  $total_puntajes_enviadas = $total_puntajes_enviadas + $puntaje_enviadas;
+
+                }else{
+                  if(empty($puntaje))
+                    $puntaje_cerrados = 0;
+                  else
+                    $puntaje_cerrados = round($value->CERRADO*$puntaje,2);
+
+                  if(empty($puntaje))
+                    $puntaje_enviadas = 0;
+                  else
+                    $puntaje_enviadas = round($value->ENVIADO*$puntaje,2);
+
+                  $total_puntajes_cerrados = $total_puntajes_cerrados + $puntaje_cerrados;
+                  $total_puntajes_enviadas = $total_puntajes_enviadas + $puntaje_enviadas; 
+                }
 
                 $total_servicios = $total_servicios + $value->TOTAL_SERVICIOS;
                 $total_servicios_cerrados = $total_servicios_cerrados + $value->CERRADO;
-                $total_puntajes_cerrados = $total_puntajes_cerrados + $puntaje_cerrados;                        
-
                 $total_servicios_enviadas = $total_servicios_enviadas + $value->ENVIADO;
-                $total_puntajes_enviadas = $total_puntajes_enviadas + $puntaje_enviadas;                        
               }
             }
 
@@ -178,7 +189,7 @@
           }
         } ?>
         <div class="col-xs-12">
-          <a href="index.php?view=puntajes_coordinador" class="btn btn-default"><i class="fa fa-chevron-left"></i> Volver</a>
+          <a href="#" onClick="history.go(-1);return true;" class="btn btn-default"><i class="fa fa-chevron-left"></i> Volver</a>
         </div>
       </div>                
     </div>

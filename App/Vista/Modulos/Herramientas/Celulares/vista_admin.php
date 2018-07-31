@@ -2,12 +2,13 @@
   $arrDatos = $handlerCel->getLineasEntregadas();
   $arrELibres = $handlerCel->getEquiposLibres();
   $arrLLibres = $handlerCel->getLineasLibres();
+  $arrLDisponibles = $handlerCel->getLineasDisponibles();
+
   $url_action_entregar = PATH_VISTA.'Modulos/Herramientas/Celulares/action_entregar.php';
   $url_action_devolver = PATH_VISTA.'Modulos/Herramientas/Celulares/action_devolver.php';
   $url_action_enrocar = PATH_VISTA.'Modulos/Herramientas/Celulares/action_enrocar.php';
   $url_detalle_linea = "index.php?view=detalle_linea";
   $url_detalle_equipo = "index.php?view=detalle_equipo";
-
 
 ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.2.1/jquery.quicksearch.js"></script>
@@ -19,7 +20,7 @@
 
     
     <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-entrega-linea' onclick="entregaLinea('<?php echo $fHoy; ?>')">
-        <i class="fa fa-plus"></i> Nueva asignación
+        <i class="fa fa-share"></i> Entregar
     </a>
     
   </div>
@@ -44,8 +45,8 @@
         if(!empty($arrDatos)){
           foreach ($arrDatos as $nroLinea) {
             $IMEI = $nroLinea->getIMEI();
-            // var_dump($IMEI);
-            // exit();
+            //var_dump($equipo);
+            //exit();
             if($IMEI != '0'){
               $equipo = $handlerCel->getEquipoLinea($IMEI);
               $telefono = $equipo->getMarca()." ".$equipo->getModelo();
@@ -79,7 +80,7 @@
               echo "<td>".$entregaEquipo."</td>";
               echo "<td>".$usuario->getNombre()." ".$usuario->getApellido()."</td>";
               echo "<td style='max-width:150px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; '><i ".$visible." class='fa fa-sort-down pull-left' data-toggle='tooltip' data-placement='bottom' title='' data-original-title='".trim(strip_tags($nroLinea->getObsEntrega()))."'></i>".trim(strip_tags($nroLinea->getObsEntrega()))."</td>";
-              echo "<td style='font-size: 20px;' width='30'><a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."&active=as'><i class='ion-eye text-blue'></i></td>";
+              echo "<td style='font-size: 20px;' width='30'><a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."'><i class='ion-eye text-blue'></i></td>";
               echo "<td style='font-size: 20px;' width='30'>".$devolucion."</td>";
               echo "<td style='font-size: 20px;' width='30'><a href='".$url_impresion."fID=".$nroLinea->getEntId()."' target='_blank'><i class='ion-document text-yellow' data-toggle='tooltip' title='Ver Comodato'></i></td>";
             echo "</tr>";
@@ -124,8 +125,8 @@
                       <option value="">Seleccionar</option>
                       <option value="0">Todos</option>
                       <?php 
-                        if(!empty($arrLLibres)){
-                          foreach ($arrLLibres as $nroLinea) {
+                        if(!empty($arrLDisponibles)){
+                          foreach ($arrLDisponibles as $nroLinea) {
                             echo "<option value='".$nroLinea->getNroLinea()."'>".$nroLinea->getNroLinea()."</option>";
                           } 
                         }
@@ -361,48 +362,48 @@
   });
 
     function devolverLinea(id){
-		nroLinea = document.getElementById(id).getAttribute('data-nroLinea');
-		IMEI = document.getElementById(id).getAttribute('data-IMEI');
-		fechaEnt = document.getElementById(id).getAttribute('data-fechaEnt');
+    nroLinea = document.getElementById(id).getAttribute('data-nroLinea');
+    IMEI = document.getElementById(id).getAttribute('data-IMEI');
+    fechaEnt = document.getElementById(id).getAttribute('data-fechaEnt');
 
-		document.getElementById("devNroLinea").value = nroLinea;
-		document.getElementById("entId").value = id;
-		document.getElementById("devIMEI").value = IMEI;
-		document.getElementById("fechaEnt").value = fechaEnt;
-	}
+    document.getElementById("devNroLinea").value = nroLinea;
+    document.getElementById("entId").value = id;
+    document.getElementById("devIMEI").value = IMEI;
+    document.getElementById("fechaEnt").value = fechaEnt;
+  }
 
     function enroqueEquipo(id){
-		nroLinea = document.getElementById(id+"_equipo").getAttribute('data-nroLinea');
-		IMEI = document.getElementById(id+"_equipo").getAttribute('data-IMEI');
-		fechaEnt = document.getElementById(id+"_equipo").getAttribute('data-fechaEnt');
-		userId = document.getElementById(id+"_equipo").getAttribute('data-user');
-		tipo = document.getElementById(id+"_equipo").getAttribute('data-tipo');
+    nroLinea = document.getElementById(id+"_equipo").getAttribute('data-nroLinea');
+    IMEI = document.getElementById(id+"_equipo").getAttribute('data-IMEI');
+    fechaEnt = document.getElementById(id+"_equipo").getAttribute('data-fechaEnt');
+    userId = document.getElementById(id+"_equipo").getAttribute('data-user');
+    tipo = document.getElementById(id+"_equipo").getAttribute('data-tipo');
     if (fechaEnt == '1900-01-01') {fechaEnt= document.getElementById(id).getAttribute('data-fechaEnt');}
 
-		document.getElementById("EquiposEnroque").style.display = "block";
-		
-		document.getElementById("estado").value = "equipo";
-		document.getElementById("enroENroLinea").value = nroLinea;
-		document.getElementById("EnroEEntId").value = id;
-		document.getElementById("EnroEIMEI").value = IMEI;
-		document.getElementById("fechaACambiar").value = fechaEnt;
-		document.getElementById("EnroEuserId").value = userId;
-	}
+    document.getElementById("EquiposEnroque").style.display = "block";
+    
+    document.getElementById("estado").value = "equipo";
+    document.getElementById("enroENroLinea").value = nroLinea;
+    document.getElementById("EnroEEntId").value = id;
+    document.getElementById("EnroEIMEI").value = IMEI;
+    document.getElementById("fechaACambiar").value = fechaEnt;
+    document.getElementById("EnroEuserId").value = userId;
+  }
 
     function enroqueLinea(id){
-		nroLinea = document.getElementById(id).getAttribute('data-nroLinea');
-		IMEI = document.getElementById(id).getAttribute('data-IMEI');
-		fechaEnt = document.getElementById(id).getAttribute('data-fechaEnt');
-		userId = document.getElementById(id).getAttribute('data-user');
-		
-		document.getElementById("LineasEnroque").style.display = "block";
-		document.getElementById("estado").value = "linea";
-		document.getElementById("enroENroLinea").value = nroLinea;
-		document.getElementById("EnroEEntId").value = id;
-		document.getElementById("EnroEIMEI").value = IMEI;
-		document.getElementById("fechaACambiar").value = fechaEnt;
-		document.getElementById("EnroEuserId").value = userId;
-	}
+    nroLinea = document.getElementById(id).getAttribute('data-nroLinea');
+    IMEI = document.getElementById(id).getAttribute('data-IMEI');
+    fechaEnt = document.getElementById(id).getAttribute('data-fechaEnt');
+    userId = document.getElementById(id).getAttribute('data-user');
+    
+    document.getElementById("LineasEnroque").style.display = "block";
+    document.getElementById("estado").value = "linea";
+    document.getElementById("enroENroLinea").value = nroLinea;
+    document.getElementById("EnroEEntId").value = id;
+    document.getElementById("EnroEIMEI").value = IMEI;
+    document.getElementById("fechaACambiar").value = fechaEnt;
+    document.getElementById("EnroEuserId").value = userId;
+  }
 
   function controlFecha(){
     fechadev = document.getElementById("fechaDev").value;

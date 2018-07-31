@@ -18,8 +18,7 @@
     
   </div>
 
-  <div class="box-body table-responsive col-md-10 col-md-offset-1"> 
-    <div class="col-xs-12 col-md-6 pull-right"><input type="text" id="search-linea" class="form-control" placeholder="Escribe para buscar..." /></div>
+  <div class="box-body table-responsive col-md-10 col-md-offset-1">
     <table class="table table-striped table-condensed" id="tabla-lineas" cellspacing="0" width="100%" style="text-align:center;">
       <thead>
         <tr>
@@ -116,41 +115,9 @@
     </div>
   </div>
   <script>
-  $('.baja-linea').on('click',function() {
-    var id = this.id;
-    console.log(id);
-    $.ajax({
-      type: "POST",
-      url: 'App/Vista/Modulos/Herramientas/Celulares/action_baja.php',
-      data: {
-        id: id
-      },
-      success: function(data){
-        alert('OK');
-      }
-    });
-  });
-
-  $('.susp-linea').on('click',function() {
-    var id = this.id;
-    var reint = 1;
-    console.log(id);
-    console.log(reint);
-
-    $.ajax({
-      type: "POST",
-      url: 'App/Vista/Modulos/Herramientas/Celulares/action_susp.php',
-      data: {
-        id: id,
-        reint: reint,
-      },
-      success: function(data){
-        alert('OK');
-      },
-      error: function(data){
-        alert('Error');
-      }
-
-    });
-  });
+    function nuevaLinea(fecha) {
+      document.getElementById('txtFechaAlta').value = fecha;
+      document.getElementById('txtNroLinea').value = '';
+      document.getElementById('txtPlan').value = '';
+    }
   </script>
