@@ -63,6 +63,9 @@ else
         <a href="#" class="pull-right text-navy" data-toggle='modal' data-target='#modal-detalle'>
             <i class="fa fa-search"  data-toggle='tooltip' title='Detalle de gestiones'></i>
         </a>
+        <a style="margin-left: 5px; margin-right: 5px;" href="index.php?view=estadisticas_global" class="pull-right">
+            <i class="fa fa-bar-chart"  data-toggle='tooltip' title='Estadisticas Globales'></i>
+        </a>
 	    </div>
 	  	<div class="box-body no-padding">
 

@@ -4,9 +4,9 @@
     include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php";  
     include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php"; 
 
-    $est_plaza=(isset($_GET['plaza'])?$_GET['plaza']:'');
-    $handlerPlaza = new HandlerPlazaUsuarios;
-    $arrPlaza = $handlerPlaza->selectTodas();
+    $est_plaza='';
+
+
 $activo = (isset($_GET["active"])?$_GET["active"]:'');
   switch ($activo) { 
     case 'panel':
@@ -21,12 +21,14 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
       $act_3 = '';
       break;
     }
+
+
 ?>
 <div class="content-wrapper">  
   <section class="content-header">
     <h1>
-      Estadisticas
-      <small>Resumen general de toda la actividad</small>
+       <i class="ion-arrow-graph-up-right"></i> ESTADISTICAS GLOBALES
+      <small>Resumen general de toda la estadistica</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -40,39 +42,6 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
     <?php include_once PATH_VISTA."info.php"; ?>
 
     <div class='container-fluid'>     
-            <div class="row">  
-              <div class='col-md-12'>
-                <div class="box box-solid">
-                  <div class="box-header with-border">
-                    <i class="fa fa-filter"></i>
-                    <h3 class="box-title">Filtros Disponibles</h3>
-                    <button type="button" class="btn btn-box-tool pull-right bg-red" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                  </div>
-                    <div class="box-body">
-                      <div class="col-md-2 pull-left">  
-                         <label>Plaza</label>                          
-                           <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" required="">
-                               <?php
-                                if(!empty($arrPlaza))
-                                {                        
-                                  foreach ($arrPlaza as $key => $value) {
-                                    if($est_plaza == $value->getNombre())
-                                        echo "<option value='".$value->getNombre()."' selected>".$value->getNombre()."</option>";
-                                    else
-                                        echo "<option value='".$value->getNombre()."'>".$value->getNombre()."</option>";   
-                                      }
-                                    }                      
-                                ?>                      
-                           </select>                  
-                      </div>
-                     <div class='col-md-2' style="display: none;">                
-                       <label></label>                
-                        <a class="btn btn-block btn-success" id="filtro_reporte" onclick="crearHref()"><i class='fa fa-filter'></i> Filtrar</a>
-                     </div>
-                 </div> 
-             </div>
-           </div>
-      </div>
         <div class="row">
           <!-- MULTI PESTAÑAS -->
           <div class="col-md-12">
@@ -84,12 +53,12 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
           </ul>
           <div class="tab-content col-xs-12">
             <div class='tab-pane <?php echo $act_1 ?>' id="tab_1">
-              <div class='col-md-6'>
+               <div class='col-md-6'>
                 <?php include_once"efectividad_coordinador.php";?>
              </div>
               <div class='col-md-6'>
                 <?php include_once"estados_gestiones.php"; ?>
-              </div>  
+              </div> 
             </div>         
            <div class='tab-pane <?php echo $act_2 ?>' id="tab_2">
            
@@ -97,13 +66,10 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
                   <?php include_once"mensual.php"; ?>
                 </div>  
                 <div class='col-md-4'>
-                    <?php include_once"puntaje_mensual.php"; ?> 
-                 </div> 
-                 <div class='col-md-4'>
                    <?php include_once"ultimo_semestre.php"; ?> 
-                 </div>
-                 <div class='col-md-4 'style="display: none;">
-                   <?php include_once"errores.php"; ?>  
+                 </div> 
+                 <div class='col-md-4' style="display: none;">
+                    <?php include_once"errores.php"; ?> 
                  </div>
             </div>
             <div class='tab-pane <?php echo $act_3 ?>' id="tab_3">
@@ -139,13 +105,6 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
     window.myLine_BSF = new Chart(ctx_sem, config_sem);
     var ctx_err = document.getElementById('err_chart').getContext('2d');
     window.myLine_BSF = new Chart(ctx_err, config_err);
-
-   //  var ctx_cord = document.getElementById('budget_cord_chart').getContext('2d');
-   // var myChart = window.myLine_BSF = new Chart(ctx_cord, config_cord);
-
-   // var ctx_est = document.getElementById('budget_estados_chart').getContext('2d');
-   // window.myLine_BSF = new Chart(ctx_est, config_est);
-
     <?php 
       foreach ($cod_emp as $key => $value) { ?>
         var ctx_<?php echo $value["EMPRESA"] ?> = document.getElementById('<?php echo $value["EMPRESA"] ?>').getContext('2d');
@@ -155,6 +114,7 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
     
   };
 
+  
   $(document).ready(function(){
 
       
@@ -201,41 +161,6 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
         );
    
     });
-
-
-  $(document).ready(function() {
-    $("#slt_plaza").select2({
-        placeholder: "Seleccionar una Plaza",                  
-    });
-  }); 
-
-  $(document).ready(function() {
-    $("#slt_plaza").select2({
-        placeholder: "Seleccionar",                  
-    }).on('change', function (e) { 
-      filtrarReporte();
-    });
-  });
-
-  function filtrarReporte()
-  {
-    crearHref();
-    window.location = $("#filtro_reporte").attr("href");
-  }
-
-  // crearHref();
-  function crearHref()
-  {
-                                    
-      f_plaza = $("#slt_plaza").val();       
-      console.log(f_plaza);
-
-      url_filtro_reporte="index.php?view=estadisticas_plaza";  
-
-      url_filtro_reporte= url_filtro_reporte + "&plaza="+f_plaza;
  
-
-      $("#filtro_reporte").attr("href", url_filtro_reporte);
-  } 
 
 </script>

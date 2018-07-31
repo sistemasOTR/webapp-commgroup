@@ -7,10 +7,23 @@
     $est_plaza=(isset($_GET['plaza'])?$_GET['plaza']:'');
 
 
-?>
+$activo = (isset($_GET["active"])?$_GET["active"]:'');
+  switch ($activo) { 
+    case 'panel':
+      $act_1 = '';
+      $act_2 = ' active';
+      $act_3 = '';
+      break;
     
+    default:
+      $act_1 = ' active';
+      $act_2 = '';
+      $act_3 = '';
+      break;
+    }
 
 
+?>
 <div class="content-wrapper">  
   <section class="content-header">
     <h1>
@@ -30,25 +43,48 @@
 
     <div class='container-fluid'>     
         <div class="row">
-          <div class='col-md-4'>
-            <?php include_once"mensual.php"; ?>
-          </div>  
-           <div class='col-md-4'>
-          <?php include_once"ultimo_semestre.php"; ?> 
-          </div> 
-          <div class='col-md-4' style="display: none;">
-          <?php include_once"errores.php"; ?> 
+          <!-- MULTI PESTAÑAS -->
+          <div class="col-md-12">
+        <div class="nav-tabs-custom">
+          <ul class="nav nav-tabs">
+            <li class='<?php echo $act_1 ?>'><a href="#tab_1" data-toggle="tab" aria-expanded="true">Diario</a></li>
+            <li class='<?php echo $act_2 ?>'><a href="#tab_2" data-toggle="tab" aria-expanded="false">Historico</a></li>
+            <li class='<?php echo $act_3 ?>'><a href="#tab_3" data-toggle="tab" aria-expanded="false">Hist.Empresa</a></li>
+          </ul>
+          <div class="tab-content col-xs-12">
+            <div class='tab-pane <?php echo $act_1 ?>' id="tab_1">
+               <div class='col-md-6'>
+                <?php include_once"efectividad_coordinador.php";?>
+             </div>
+              <div class='col-md-6'>
+                <?php include_once"estados_gestiones.php"; ?>
+              </div> 
+            </div>         
+           <div class='tab-pane <?php echo $act_2 ?>' id="tab_2">
+           
+             <div class='col-md-4'>
+                  <?php include_once"mensual.php"; ?>
+                </div>  
+                <div class='col-md-4'>
+                   <?php include_once"ultimo_semestre.php"; ?> 
+                 </div> 
+                 <div class='col-md-4' style="display: none;">
+                    <?php include_once"errores.php"; ?> 
+                 </div>
+            </div>
+            <div class='tab-pane <?php echo $act_3 ?>' id="tab_3">
+              <div class="row">
+                <?php include_once"empresas_plaza.php"; ?>
+              </div>
+             <!--  -->
+            </div>
+
           </div>
         </div>
-        <h3>
-        EMPRESAS
-        <small>Resumen general de todas las empresas</small>
-        </h3>
-        <div class="row">
-          <?php include_once"empresas_plaza.php"; ?>
-        </div>
+                
+      </div>        
+     </div>
     </div>  
-
   </section>
 </div>
 
@@ -77,6 +113,54 @@
 
     
   };
+
+  
+  $(document).ready(function(){
+
+      
+        var ctx_cord = $("#budget_cord_chart").get(0).getContext("2d");
+        var chartjs = new Chart(ctx_cord,config_cord);
+        var codigo= [ <?php echo implode(",",$codigo);?> ]; 
+        console.log(codigo);
+     var segments = chartjs.segments;
+     console.log(segments);
+    for (var i = 0; i < codigo.length; i++) {
+        // Add properties in here like this
+        codigo[i].filter = (i); 
+
+    }
+ 
+        $("#budget_cord_chart").click(
+            function(evt){
+                var activePoints = chartjs.getElementAtEvent(evt);
+                var url = "index.php?view=servicio&fdesde=<?php echo $today;?>&fhasta=<?php echo $today;?>&fgestor="+codigo[activePoints[0]['_index']]; 
+                location.href=url;
+            }
+        );
+   
+    });
+
+  $(document).ready(function(){
+
+      
+        var ctx_est = $("#budget_estados_chart").get(0).getContext("2d");
+        var chartestados = new Chart(ctx_est,config_est);
+        var est= [ <?php echo implode(",",$est);?> ]; 
+    for (var i = 0; i < est.length; i++) {
+        // Add properties in here like this
+        est[i].filter = (i); 
+
+    }
+ 
+        $("#budget_estados_chart").click(
+            function(evt){
+                var activePoints = chartestados.getElementAtEvent(evt);
+                var url = "index.php?view=servicio&fdesde=<?php echo $today;?>&fhasta=<?php echo $today;?>&festado="+est[activePoints[0]['_index']]; 
+                location.href=url;
+            }
+        );
+   
+    });
  
 
 </script>

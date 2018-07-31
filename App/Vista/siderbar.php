@@ -10,7 +10,8 @@
         $url_cambiarUsuario = "index.php?view=cambiarUsuario";  
         $url_cambiorol = "index.php?view=cambioRol";  
         $url_estadisticas = "index.php?view=estadisticas";
-        $url_estadisticas_plaza = "index.php?view=estadisticas_plaza";
+        $url_estadisticas_plaza = "index.php?view=estadisticas_plaza&plaza=CABA";
+        $url_estadisticas_global = "index.php?view=estadisticas_global&global=si";
         $url_configuraciones = "index.php?view=configuraciones";
         $url_importacion = "index.php?view=importacion";
         $url_importacion_manual = "index.php?view=importacion_manual";
@@ -548,7 +549,12 @@
             ?>              
               <li id="mnu_estadisticas_plaza">
                 <a href=<?php echo $url_estadisticas_plaza; ?>>
-                  <i class="fa fa-check"></i> <span>Est.Plazas</span> </i>
+                  <i class="fa fa-line-chart"></i> <span>Est.Plazas</span> </i>
+                </a>              
+              </li>
+                <li id="mnu_estadisticas_global">
+                <a href=<?php echo $url_estadisticas_global; ?>>
+                  <i class="fa fa-pie-chart"></i> <span>Global</span> </i>
                 </a>              
               </li>
               <?php 

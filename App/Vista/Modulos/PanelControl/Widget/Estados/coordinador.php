@@ -28,13 +28,15 @@
 
   	$arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,null,null,null,$user->getAliasUserSistema(),null);     
 	$allEstados = $handler->selectAllEstados();
+
+	 $url_ver_historico='index.php?view=estadisticas_coordinador&plaza='.$user->getAliasUserSistema();
 ?>
 
 <div class="col-md-12 nopadding">
 	<div class="box box-solid">
 	  	<div class="box-header with-border">
 	    	<i class="ion-arrow-graph-up-right"></i>
-	    	<h3 class="box-title">Gestiones. <span class='text-yellow'><b><?php echo $dFecha->FormatearFechas($fHOY,'Y-m-d','d/m/Y - h:i'); ?></b></span></h3>
+	    	<h3 class="box-title">Gestiones.<span class='text-yellow'><b><?php echo $dFecha->FormatearFechas($fHOY,'Y-m-d','d/m/Y - h:i'); ?></b></span></h3><a href="<?php echo $url_ver_historico ?>" class="pull-right"><i class="fa fa-bar-chart"></i></a>
 	  	</div>
 	  	<div class="box-body no-padding">
 
