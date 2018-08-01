@@ -76,7 +76,7 @@
                 }                
                 if ($efec_gestor < 60) {
                       $bgcolour = '#dd4b39';
-                    } elseif ($efec_gestor<=75) {
+                    } elseif ($efec_gestor<=70) {
                       $bgcolour = '#f39c12';
                     } else {
                       $bgcolour = '#00a65a';

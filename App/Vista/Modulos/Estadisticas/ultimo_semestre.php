@@ -33,11 +33,11 @@
             $nombreMES = strftime("%B",mktime(0, 0, 0, date('m')-$i, 1, 2000));      
             $anioMES = date('Y',mktime(0,0,0,date('m')-$i,1,date('Y')));
            
-             $servCerrados = $handler->selectCountServiciosGestion($fdesde,$fhasta,200,null,null,null,$est_plaza,null);
+             $servCerrados = $handler->selectCountServicios($fdesde,$fhasta,200,null,null,null,$est_plaza,null);
              $cerrados2 += $servCerrados[0]->CANTIDAD_SERVICIOS;
-             $servTotales = $handler->selectCountServiciosGestion($fdesde,$fhasta,null,null,null,null,$est_plaza,null);
+             $servTotales = $handler->selectCountServicios($fdesde,$fhasta,null,null,null,null,$est_plaza,null);
              $totales2 += $servTotales[0]->CANTIDAD_SERVICIOS;
-              if ($servTotales[0]->CANTIDAD_SERVICIOS != 0 && $servCerrados[0]->CANTIDAD_SERVICIOS != 0) {
+              if ($servTotales[0]->CANTIDAD_SERVICIOS > 1 && $servCerrados[0]->CANTIDAD_SERVICIOS > 1) {
                   $dataG[] = array('mes' => $nombreMES,
                        'EFICIENCIA' => number_format($servCerrados[0]->CANTIDAD_SERVICIOS*100/$servTotales[0]->CANTIDAD_SERVICIOS,2) );
       }
@@ -65,7 +65,7 @@
 
   <div class="box box-solid">
   <div class="box-header with-border">
-    <h3 class="box-title"><i class="ion-stats-bars"></i> Ultimo Semestre <?php echo $año ?></h3>
+    <h3 class="box-title"><i class="ion-stats-bars"></i> Últimos 6 meses</h3>
     <div class="box-tools pull-right">
       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
       <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>

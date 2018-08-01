@@ -162,5 +162,5 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
    
     });
  
-
+setTimeout('document.location.reload()',300000);
 </script>

@@ -237,5 +237,5 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
 
       $("#filtro_reporte").attr("href", url_filtro_reporte);
   } 
-
+setTimeout('document.location.reload()',300000);
 </script>

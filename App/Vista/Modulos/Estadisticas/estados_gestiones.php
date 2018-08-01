@@ -106,12 +106,12 @@
         data: [<?php echo $data5 ?>],
         fill: false,
         borderColor: 'white',
-        backgroundColor:['#2874A6','#229954','#85C1E9','#D2B4DE','#f56954','#C0392B','#B7950B','#979A9A','#A04000','#F1C40F','#D2B4DE']
+        backgroundColor:['#229954','#2874A6','#85C1E9','#D2B4DE','#f56954','#C0392B','#B7950B','#979A9A','#A04000','#F1C40F','#D2B4DE']
       }]
     },
     options: {
       responsive: true,
-      legend: {display:false},
+      legend: {display:true,position:'right'},
       title: {
         display: false,
       },
