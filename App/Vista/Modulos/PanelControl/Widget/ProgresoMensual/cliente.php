@@ -40,9 +40,17 @@
       $efectividadMesCursoGestion = round(0,2);
 
   	// Gestion graficos //
-    $fdesde = date('Y-m-01',strtotime($fHOY));
-    $fhasta = $dFecha->RestarDiasFechaActual(1);
-	$fhasta = $dFecha->FormatearFechas($fhasta,"Y-m-d","Y-m-d");
+    list($año, $mes, $dia) = split('[/.-]', $dFecha->FechaActual());
+	if ( $dia == '1') {
+		$fechaAux = $dFecha->RestarDiasFechaActual(1);
+		$fdesde = date('Y-m-01',strtotime($fechaAux));
+		$fhasta = $fechaAux;
+		$fhasta = $dFecha->FormatearFechas($fhasta,"Y-m-d","Y-m-d");
+	} else {
+		$fdesde = date('Y-m-01',strtotime($fHOY));
+		$fhasta = $dFecha->RestarDiasFechaActual(1);
+		$fhasta = $dFecha->FormatearFechas($fhasta,"Y-m-d","Y-m-d");
+	}
  
     // Construccion de array para graficos //
     for ($i=$fdesde; $i <= $fhasta; $i++) { 

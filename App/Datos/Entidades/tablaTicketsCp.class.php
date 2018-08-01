@@ -146,7 +146,7 @@
 		public function select()
 		{			
 			try {
-				$query = "SELECT * FROM operacion_reintegro WHERE fecha_fin is NULL";
+				$query = "SELECT * FROM operacion_reintegro WHERE fecha_fin is NULL order by plaza,cp";
 				
 				# Ejecucion 				
 				$result = SQL::selectObject($query, new Reintegro);

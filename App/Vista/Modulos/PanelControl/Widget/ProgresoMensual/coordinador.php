@@ -52,11 +52,17 @@
 
 	 
   	// Gestion graficos //
-    $fdesde = date('Y-m-01',strtotime($fHOY));
-    $fhasta = $dFecha->RestarDiasFechaActual(1);
-	$fhasta = $dFecha->FormatearFechas($fhasta,"Y-m-d","Y-m-d");
-	
- 
+	list($año, $mes, $dia) = split('[/.-]', $dFecha->FechaActual());
+	if ( $dia == '1') {
+		$fechaAux = $dFecha->RestarDiasFechaActual(1);
+		$fdesde = date('Y-m-01',strtotime($fechaAux));
+		$fhasta = $fechaAux;
+		$fhasta = $dFecha->FormatearFechas($fhasta,"Y-m-d","Y-m-d");
+	} else {
+		$fdesde = date('Y-m-01',strtotime($fHOY));
+		$fhasta = $dFecha->RestarDiasFechaActual(1);
+		$fhasta = $dFecha->FormatearFechas($fhasta,"Y-m-d","Y-m-d");
+	}
     // Construccion de array para graficos //
 
     $cerrados = 0;
@@ -77,7 +83,7 @@
     // Construccion de labels y datos para representacion //
     $labels = '';
     $data = '' ;
-
+if(!empty($dataGraf)){
     foreach ($dataGraf as $key => $value) {
     	$labels = $labels."'".$value['dia']."', ";
     	$data = $data.$value['EFICIENCIA'].", "; 
@@ -91,7 +97,15 @@
     $minEf = min($eficienciaDiaria);
     $promEf = number_format(array_sum($eficienciaDiaria)/count($eficienciaDiaria),2);
     // url ver detalle //
-    $url_ver_detalle='index.php?view=estadisticas_coordinador&plaza='.$user->getAliasUserSistema().'&active=panel';
+} else {
+     $maxEf =0;
+    $minEf = 0;
+    $promEf = 0;
+    $dia = '';
+    $mes = '';
+    $año = '';
+}
+	$url_ver_detalle='index.php?view=estadisticas_coordinador&plaza='.$user->getAliasUserSistema().'&active=panel';
 ?>
 
 <div class="box box-solid">

@@ -204,10 +204,6 @@
                               if ($cantServ[0]->CANTIDAD_SERVICIOS < 5 || $diaSemana >=6) {
                                 $reintegro = number_format($reintegro * 0.53 ,0);
                               }
-                        
-                              if ($reintegro > number_format($value->getImporte(),2) ) {
-                                $reintegro = number_format($value->getImporte(),2);
-                              }
 
                               $editar = "<a href='".$url_detalle.$value->getId()."' class='text-navi text-center' >
                                           <i class='fa fa-edit' data-toggle='tooltip' data-original-title='Deshace Envio'></i></a>";
