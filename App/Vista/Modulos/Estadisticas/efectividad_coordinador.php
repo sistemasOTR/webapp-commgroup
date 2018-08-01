@@ -74,35 +74,36 @@
                 else{
                   $efec_gestor = 0;
                 }                
-                       
+                if ($efec_gestor < 60) {
+                      $bgcolour = '#dd4b39';
+                    } elseif ($efec_gestor<=75) {
+                      $bgcolour = '#f39c12';
+                    } else {
+                      $bgcolour = '#00a65a';
+                    }
 
               $url_detalle = "index.php?view=servicio&fdesde=".$fHOY."&fhasta=".$fHOY."&fgestor=".$value->CODGESTOR;
 
              $dataGestores[] = array('gestores' => $value->NOMGESTOR,
                                      'link' => '<a href="'.$url_detalle.'">'.$value->NOMGESTOR.'<a>',                  
-                                     'EFICIENCIA' => round($efec_gestor,2));
+                                     'EFICIENCIA' => round($efec_gestor,2),
+                                      'COLOR' => $bgcolour);
 
              $codigo[]=intval($value->CODGESTOR);
         
       }
       }
-           
-    
-
     $labels4 = '';
     $data4 = '' ;
     $link='';
-   
-
-
+    $barColor='';
     foreach ($dataGestores as $key => $val) {
       $labels4 = $labels4."'".$val['gestores']."', ";
       $data4 = $data4.$val['EFICIENCIA'].", "; 
       $link= $link."'".$val['link']."', ";
+      $barColor= $barColor."'".$val['COLOR']."', ";
       
     }
-   
-   
         ?>
 
 	 <canvas id="budget_cord_chart" class="col-xs-12 chart"></canvas>
@@ -127,7 +128,7 @@ type: 'bar',
         data: [<?php echo $data4 ?>],
         fill: false,
         borderColor: 'cornflowerblue',
-        backgroundColor:['#EAEDED','#2874A6','#85C1E9','#48C9B0','#BB8FCE','#FDEBD0','#B7950B','#979A9A','#A04000','#F1C40F','#D2B4DE','#2E4053','#FAD7A0','#D5F5E3','#145A32','#784212','#D4AC0D','#D4EFDF','#512E5F','#3498DB','#D6EAF8','#D2B4DE'], 
+        backgroundColor:[<?php echo $barColor ?>], 
         borderWidth: 0,
         lineTension: 0,
         pointRadius: 1,
