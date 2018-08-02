@@ -206,6 +206,7 @@
           <div class="progress-bar" style="width: <?php echo round($porc_estados_gestionados,2)."%"; ?>"></div>
         </div>
         <span class="progress-description">
+          <?php echo $sum_total_estados; ?> <small>Total</small>
           <span class="pull-right"><?php echo $sum_estados_gestionados; ?><small> Gestionadas</small></span>
         </span>
 
