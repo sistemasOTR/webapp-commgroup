@@ -235,6 +235,24 @@
                     ?>
                   </select>
                 </div>
+                <div class="col-md-12">
+                  <label>Gestor </label>                
+                  <select id="fgestor" class="form-control" style="width: 100%" name="fgestor">                              
+                    <option value=''></option>
+                    <option value='0'>TODOS</option>
+                    <?php
+                      if(!empty($arrGestor))
+                      {                        
+                        foreach ($arrGestor as $key => $value) {                                                  
+                          if($fgestor==$value->GESTOR11_CODIGO)
+                            echo "<option value='".trim($value->GESTOR11_CODIGO)."' selected>".$value->GESTOR21_ALIAS."</option>";
+                          else
+                            echo "<option value='".trim($value->GESTOR11_CODIGO)."'>".$value->GESTOR21_ALIAS."</option>";
+                        }
+                      }                      
+                    ?>
+                  </select>
+                </div>
             </div>
           </div>
           <div class="modal-footer">
@@ -296,6 +314,14 @@
   });
 
   $(document).ready(function() {
+    $("#fgestor").select2({
+        placeholder: "Seleccionar",                  
+    }).on('change', function (e) {
+      linkImprimir()();
+    });
+  });
+
+  $(document).ready(function() {
     $("#slt_operador").select2({
         placeholder: "Seleccionar",                  
     });
@@ -325,6 +351,7 @@
     f_fechaRecep = $('#fechaRecep').val();
     f_plaza = $('#plaza').val();
     f_cuenta = $('#cuenta').val();
+    f_gestor = $('#fgestor').val();
 
     if(f_fechaRecep!=undefined)
       if(f_fechaRecep!='')
@@ -338,6 +365,10 @@
     if(f_cuenta!=undefined)
       if(f_cuenta!='')
         url_imprimir = url_imprimir + "&cuenta=" + f_cuenta;
+
+    if(f_gestor!=undefined)
+      if(f_gestor!='')
+        url_imprimir = url_imprimir + "&fgestor=" + f_gestor;
 
     $("#btn-imprimir").attr("href", url_imprimir);
 
