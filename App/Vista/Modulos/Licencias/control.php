@@ -18,7 +18,10 @@
   $handlerUsuarios = new HandlerUsuarios;
 
   $user = $usuarioActivoSesion;  
-  $arrLicencias = $handler->seleccionarByFiltros($fdesde,$fhasta,$fusuario,$festados);
+  
+   // $arrLicencias = $handler->seleccionarByFiltrosRRHH($fdesde,$fhasta,$fusuario,$festados);
+   
+
  
   
   $arrUsuarios = $handlerUsuarios->selectTodos();
@@ -46,7 +49,7 @@
   <section class="content-header">
     <h1>
       Licencias
-      <small>Licencias solicitadas por el gestor</small>
+      <small>Licencias solicitadas por Empleados</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -152,6 +155,7 @@
                       <th>USUARIO</th>
                       <th>FECHA</th>
                       <th>TIPO LICENCIA</th>
+                      <th style="display: none">DESDE</th>
                       <th>DESDE</th>
                       <th>HASTA</th>
                       <th>OBSERVACIONES</th>
@@ -166,84 +170,117 @@
                   </thead>
                   <tbody>
                     <?php 
-                      if(!empty($arrLicencias))
-                      {
-                        foreach ($arrLicencias as $key => $value) {
-                          
-                          if(!$value->getAprobado() && !$value->getRechazado()){
-                            $estado = "<span class='label label-warning'>PENDIENTE</span>";
-                            $frech = '';
-                          }
-                          elseif($value->getAprobado()) {
-                            $estado = "<span class='label label-success'>APROBADO</span>";
-                            $frech = '';
-                          } elseif ($value->getRechazado()) {
-                            $estado = "<span class='label label-danger'>RECHAZADO</span>";
-                            $frech = $value->getFechaRechazo()->format('d-m-Y');
-                          }
-
-                          echo "<tr>";
-                            echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
-                            echo "<td>".$value->getFecha()->format('d/m/Y')."</td>";
-                            echo "<td>".$value->getTipoLicenciasId()->getNombre()."</td>";
-                            echo "<td>".$value->getFechaInicio()->format('d/m/Y')."</td>";
-                            echo "<td>".$value->getFechaFin()->format('d/m/Y')."</td>";
-                            echo "<td>".$value->getObservaciones()."</td>";
-
-                            if(!empty($value->getAdjunto1()))
-                              echo "<td><a href='".$value->getAdjunto1()."' target='_blank'>VER ADJUNTO</a></td>";
-                            else
-                              echo "<td></td>";
-
-                            if(!empty($value->getAdjunto2()))
-                              echo "<td><a href='".$value->getAdjunto2()."' target='_blank'>VER ADJUNTO</a></td>";
-                            else
-                              echo "<td></td>";
-
-                            echo "<td>".$estado."</td>";
-                            echo "<td>".$frech."</td>";
-                            echo "<td>".$value->getObsRechazo()."</td>";
-
-                            if(!$value->getAprobado() && !$value->getRechazado()){
-                              echo "<td class='text-center' width='100'>
-                                      <a href='".$url_action_aprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."' class='btn btn-success btn-xs pull-left'>
-                                        <i class='fa fa-thumbs-up' data-toggle='tooltip' data-original-title='Aprobar Licencia'></i>
-                                        
-                                      </a> 
-                                      <a href='#' id='".$value->getId()."' data-toggle='modal' data-target='#modal-rechazar' class='btn btn-danger btn-xs pull-left' style='margin-left:10px;' data-id='".$value->getId()."' onclick='rechazar(".$value->getId().")'>
-                                        <i class='fa fa-thumbs-down' data-toggle='tooltip' data-original-title='Rechazar Licencia'></i>
-                                        
-                                      </a>
-                                    </td>";
+                        $fechaDesde = date('Y-m-d',strtotime($fdesde));
+                        $fechaHasta = date('Y-m-d',strtotime($fhasta));
+                        $FECHA = $dFecha->FormatearFechas($fechaDesde,"Y-m-d","Y-m-d");
+                        $HASTA = $dFecha->FormatearFechas($fechaHasta,"Y-m-d","Y-m-d");
+                        $arrayIde[]=0;
+                        while (strtotime($FECHA) <= strtotime($HASTA)) {
+                        $arrLicencia = $handler->seleccionarByFiltrosRRHH($FECHA,$FECHA,$fusuario,$festados);
+                        // var_dump(count($arrLicencia));
+                        
+                        if(!empty($arrLicencia))
+                           {   
+                                                                    
+                        foreach ($arrLicencia as $key => $value) {
+                            foreach ($arrayIde as $idrepeate) {
+                              if (intval($value->getId()) == $idrepeate) {
+                                $seguir = false;
+                                break;
+                              } else {
+                                $seguir = true;
+                              }
                             }
-                            elseif($value->getRechazado()){
-                              echo "<td class='text-center' width='60'>
-                                      
-                                    </td>";
+                         
+                             if($seguir){
+                                $arrayIde[]=intval($value->getId());
+                            
+                              if(!$value->getAprobado() && !$value->getRechazado()){
+                                $estado = "<span class='label label-warning'>PENDIENTE</span>";
+                                $frech = '';
+                              }
+                              elseif($value->getAprobado()) {
+                                $estado = "<span class='label label-success'>APROBADO</span>";
+                                $frech = '';
+                              } elseif ($value->getRechazado()) {
+                                $estado = "<span class='label label-danger'>RECHAZADO</span>";
+                                $frech = $value->getFechaRechazo()->format('d-m-Y');
+                              }
 
-                            } else
-                            {
-                              echo "<td class='text-center'>
-                                    <a href='".$url_action_desaprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."' class='btn btn-danger btn-xs'>
-                                      <i class='fa fa-times' data-toggle='tooltip' data-original-title='Desaprobar Licencia'></i>
-                                      Desaprobar Licencia
-                                    </a>
-                                  </td>";                                  
-                            } 
+                              echo "<tr>";
+                                echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
+                                echo "<td>".$value->getFecha()->format('d/m/Y')."</td>";
+                                echo "<td>".$value->getTipoLicenciasId()->getNombre()."</td>";
+                                echo "<td style='display: none;'>".$value->getFechaInicio()->format('Y-m-d')."</td>";
+                                echo "<td>".$value->getFechaInicio()->format('d/m/Y')."</td>";
+                                echo "<td>".$value->getFechaFin()->format('d/m/Y')."</td>";
+                                echo "<td>".$value->getObservaciones()."</td>";
 
-                            if($value->getAprobado()){
-                              echo "<td class='text-center'>
-                                      <a href='".$url_action_imprimir.$value->getId()."' class='btn btn-default btn-xs'>
-                                        <i class='fa fa-print' data-toggle='tooltip' data-original-title='Imprimir'></i>
-                                        Imprimir
-                                      </a>
-                                    </td>";
-                            } else {
-                              echo "<td></td>";
-                            }                           
-                          echo "</tr>";
-                        }          
-                      }            
+                                if(!empty($value->getAdjunto1()))
+                                  echo "<td><a href='".$value->getAdjunto1()."' target='_blank'>VER ADJUNTO</a></td>";
+                                else
+                                  echo "<td></td>";
+
+                                if(!empty($value->getAdjunto2()))
+                                  echo "<td><a href='".$value->getAdjunto2()."' target='_blank'>VER ADJUNTO</a></td>";
+                                else
+                                  echo "<td></td>";
+
+                                echo "<td>".$estado."</td>";
+                                echo "<td>".$frech."</td>";
+                                echo "<td>".$value->getObsRechazo()."</td>";
+
+                                if(!$value->getAprobado() && !$value->getRechazado()){
+                                  echo "<td class='text-center' width='100'>
+                                          <a href='".$url_action_aprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."' class='btn btn-success btn-xs pull-left'>
+                                            <i class='fa fa-thumbs-up' data-toggle='tooltip' data-original-title='Aprobar Licencia'></i>
+                                            
+                                          </a> 
+                                          <a href='#' id='".$value->getId()."' data-toggle='modal' data-target='#modal-rechazar' class='btn btn-danger btn-xs pull-left' style='margin-left:10px;' data-id='".$value->getId()."' onclick='rechazar(".$value->getId().")'>
+                                            <i class='fa fa-thumbs-down' data-toggle='tooltip' data-original-title='Rechazar Licencia'></i>
+                                            
+                                          </a>
+                                        </td>";
+                                }
+                                elseif($value->getRechazado()){
+                                  echo "<td class='text-center' width='60'>
+                                          
+                                        </td>";
+
+                                } else
+                                {
+                                  echo "<td class='text-center'>
+                                        <a href='".$url_action_desaprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."' class='btn btn-danger btn-xs'>
+                                          <i class='fa fa-times' data-toggle='tooltip' data-original-title='Desaprobar Licencia'></i>
+                                          Desaprobar Licencia
+                                        </a>
+                                      </td>";                                  
+                                } 
+
+                                if($value->getAprobado()){
+                                  echo "<td class='text-center'>
+                                          <a href='".$url_action_imprimir.$value->getId()."' class='btn btn-default btn-xs'>
+                                            <i class='fa fa-print' data-toggle='tooltip' data-original-title='Imprimir'></i>
+                                            Imprimir
+                                          </a>
+                                        </td>";
+                                } else {
+                                  echo "<td></td>";
+                                }                           
+                              echo "</tr>";
+                              
+                            }
+                             
+                          }
+                          
+                             
+                      } 
+
+                     $FECHA = date('Y-m-d',strtotime('+1 day',strtotime($FECHA)));    
+
+                    }
+                          
+
                     ?>
                   </tbody>
               </table>
@@ -344,6 +381,7 @@
           "dom": 'Bfrtip',
           "buttons": ['copy', 'csv', 'excel', 'print'],
           "iDisplayLength":100,
+          "order": [[ 3, "asc" ]],
           "language": {
               "sProcessing":    "Procesando...",
               "sLengthMenu":    "Mostrar _MENU_ registros",

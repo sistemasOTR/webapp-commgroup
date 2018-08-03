@@ -6,15 +6,15 @@
   include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";         
 
   $dFecha = new Fechas;
-
-  $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
+  $fechahoy=$dFecha->FechaActual();
+  $fdesde =$dFecha->RestarDiasFechaActual(31);
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());    
   $fusuario= (isset($_GET["fusuario"])?$_GET["fusuario"]:'');
-  $fin=$dFecha->SumarDiasFechaActual(20);
+  $fin=$dFecha->SumarDiasFechaActual(365);
 
 
   $handler = new HandlerLicencias;  
-  $arrLicencias = $handler->seleccionarByFiltros($fdesde,$fin,null,null);
+  $arrLicencias = $handler->seleccionarByFiltrosRRHH($fdesde,$fin,null,null);
   // var_dump($arrLicencias);
   // exit();
                           
@@ -54,16 +54,8 @@
                       if(!empty($arrLicencias))
                       {
                         foreach ($arrLicencias as $key => $value) {
-                           // var_dump($value);
-                           // exit();
-               
 
-
-                          $fechahoy=$dFecha->FechaActual();
-
-
-                          
-                           if ($fechahoy>$value->getFechaInicio()->format('Y-m-d') && $fechahoy < $value->getFechaFin()->format('Y-m-d') ) {
+                           if ($fechahoy>$value->getFechaInicio()->format('Y-m-d') && $fechahoy <= $value->getFechaFin()->format('Y-m-d') ) {
 
                             $situacion="<span class='label label-success'>EN CURSO</span>";
                             }
@@ -75,7 +67,7 @@
  
                            if($value->getAprobado()) {
 
-                            if ($fechahoy < $value->getFechaFin()->format('Y-m-d') ) {
+                            if ($fechahoy <= $value->getFechaFin()->format('Y-m-d') ) {
      
                           echo "<tr>";
                             echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
@@ -87,8 +79,8 @@
 
                                   
                           echo "</tr>"; 
-                          }
-                          }
+                            }
+                            }
                            }
                           }
                         }          

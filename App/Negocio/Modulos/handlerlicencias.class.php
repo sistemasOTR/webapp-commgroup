@@ -98,6 +98,25 @@
 				throw new Exception($e->getMessage());				
 			}
 		}
+		public function seleccionarByFiltrosRRHH($fdesde,$fhasta,$usuario,$festados){
+			try {
+					
+				$handler = new Licencias;
+
+				$data = $handler->seleccionarByFiltrosRRHH($fdesde,$fhasta,$usuario,$festados);
+
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
 
 		public function seleccionarLicencias($usuario){
 			try {					
@@ -148,7 +167,25 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
 			}
-		}			
+		}		
+
+		public function aprobarLicenciasCoord($id){
+			try {
+
+				if(empty($id))
+					throw new Exception("No se encontro la licencia");
+					
+				$t = new Licencias;
+				$t->setId($id);
+				$t = $t->select();				
+
+				$handler = new Licencias;
+				$handler->aprobarLicenciasCoord($id);				
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}				
 
 		public function rechazarLicencias($id,$fechaRechazo,$obsRechazo){
 			try {
@@ -201,7 +238,7 @@
 			}
 		}
 
-		public function guardarLicencias($fecha,$usuario,$tipoLicencia,$observaciones,$fechaInicio,$fechaFin,$adjunto1,$adjunto2){
+		public function guardarLicencias($fecha,$usuario,$tipoLicencia,$observaciones,$fechaInicio,$fechaFin,$adjunto1,$adjunto2,$aprobadoCo){
 			try {
 
 				$f = new Fechas;
@@ -219,7 +256,9 @@
 				$handler->setFecha($fecha);
 				$handler->setFechaInicio($fechaInicio);
 				$handler->setFechaFin($fechaFin);
-				$handler->setObservaciones($observaciones);				
+				$handler->setObservaciones($observaciones);	
+				$handler->setAprobadoCo($aprobadoCo);	
+
 				
 				if(!empty($adjunto1["size"]))
 					$handler->setAdjunto1($this->cargarArchivos($usuario,"ADJUNTO_1",$adjunto1));

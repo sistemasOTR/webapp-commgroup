@@ -12,17 +12,17 @@
     $userPlaza = $usuarioActivoSesion->getAliasUserSistema();
 
     $dFechas = new Fechas;
-    $fdesde=$dFechas->FechaActual();
-    $fhasta= $dFechas->SumarDiasFechaActual(360);
+    $fdesde=$dFechas->RestarDiasFechaActual(60);
+    // $fhasta= $dFechas->RestarDiasFechaActual(13);
+    $fhasta= $dFechas->SumarDiasFechaActual(180);
     $ini=date('Y-m-01',strtotime($dFechas->FechaActual()));
 
-
-
-    $arrLicencias = $handlerLic->seleccionarByFiltros($fdesde,$fhasta,null,2);
+   
+    $arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($fdesde,$fhasta,null,2);
     $url_redireccion ='index.php?view=licencias_control&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados=2&fusuario=';
     $url_redireccionCord ='index.php?view=licencias_controlcoord&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados=2&fusuario=';
-    $url_pendientes ='index.php?view=licencias_control&fdesde='.$ini.'&fhasta='.$fhasta.'&festados=1&fusuario=';
-    $url_pendientesCoord ='index.php?view=licencias_controlcoord&fdesde='.$ini.'&fhasta='.$fhasta.'&festados=1&fusuario=';
+    $url_pendientes ='index.php?view=licencias_control&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados=1&fusuario=';
+    $url_pendientesCoord ='index.php?view=licencias_controlcoord&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados=1&fusuario=';
 
     if ($esCoordinador) {
   
@@ -42,7 +42,7 @@
 
 
     foreach ($arrUsuarios as $key => $value) {
-      $arrLicencias = $handlerLic->seleccionarByFiltros($fdesde,$fhasta,$value->getId(),2);
+      $arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($fdesde,$fhasta,$value->getId(),2);
         if(!empty($arrLicencias)){
           foreach ($arrLicencias as $licencia) {
             if ($licencia->getAprobado() && $licencia->getFechaFin()->format('Y-m-d') >= $fdesde) {
@@ -57,10 +57,10 @@
 
         
     }
-// var_dump($datos);
-// exit();
 
-   $arrLicenciasPend = $handlerLic->seleccionarByFiltros($ini,$fhasta,null,1);
+
+   $arrLicenciasPend = $handlerLic->seleccionarByFiltros($fdesde,$fhasta,null,1);
+
 
 if ($esCoordinador) {
 
@@ -77,7 +77,39 @@ if ($esCoordinador) {
         }
       }
       else{
-         $licPendientes=count($arrLicenciasPend);
+             $fechaDesde = date('Y-m-d',strtotime($fdesde));
+             $fechaHasta = date('Y-m-d',strtotime($fhasta));
+             $FECHA = $dFechas->FormatearFechas($fechaDesde,"Y-m-d","Y-m-d");
+             $HASTA = $dFechas->FormatearFechas($fechaHasta,"Y-m-d","Y-m-d");  
+             $suma=0;                
+             $arrayId[]=0;
+               while (strtotime($FECHA) <= strtotime($HASTA)) {
+                   $arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($FECHA,$FECHA,null,1);             
+                     if(!empty($arrLicencias))
+                     {   
+                       foreach ($arrLicencias as $key => $value) {
+                         foreach ($arrayId as $idrepeat) {
+
+                            if (intval($value->getId()) == $idrepeat) {
+                              $seguir = false;
+                              break;
+                            } else {
+                              $seguir = true;
+                            }
+                          }
+                          if($seguir){
+                             $arrayId[]=intval($value->getId());
+                             $suma+=1;
+                           }
+                          
+                        }
+                      } 
+
+                   $FECHA = date('Y-m-d',strtotime('+1 day',strtotime($FECHA)));
+
+               }
+             $licPendientes=$suma;
+  
       }
 
       $numLic = count($datos);

@@ -15,15 +15,24 @@
 
 
 
-  	if ($cord) {
+  	if (!empty($cord)) {
+  		try {
   		$err = "../../../../index.php?view=licencias_controlcoord&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&err=";     		
-	    $info = "../../../../index.php?view=licencias_controlcoord&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&info=";   	
+	    $info = "../../../../index.php?view=licencias_controlcoord&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&info=";   
+		$handler->aprobarLicenciasCoord($id);
+
+		$msj="Licencia Aprobada";
+		header("Location: ".$info.$msj);
+	} catch (Exception $e) {
+		header("Location: ".$err.$e->getMessage());
+	   }	
   	}
     else {
+    	try {
 	$err = "../../../../index.php?view=licencias_control&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&err=";     		
 	$info = "../../../../index.php?view=licencias_control&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&info=";    
-}
-	try {
+
+	
 		$handler->aprobarLicencias($id);
 
 		$msj="Licencia Aprobada";
@@ -31,4 +40,6 @@
 	} catch (Exception $e) {
 		header("Location: ".$err.$e->getMessage());
 	}
+
+}
 ?>
