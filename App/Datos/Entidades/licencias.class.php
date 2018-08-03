@@ -71,7 +71,11 @@
 
 		private $_obsRechazo;
 		public function getObsRechazo(){ return $this->_obsRechazo; }
-		public function setObsRechazo($obsRechazo){ $this->_obsRechazo=$obsRechazo; }					
+		public function setObsRechazo($obsRechazo){ $this->_obsRechazo=$obsRechazo; }
+
+		private $_aprobadoco;
+		public function getAprobadoCo(){ return var_export($this->_aprobadoco,true); }
+		public function setAprobadoCo($aprobadoco){ $this->_aprobadoco=$aprobadoco; }					
 
 		/*#############*/
 		/* CONSTRUCTOR */
@@ -92,6 +96,7 @@
 			$this->setEstado(true);
 			$this->setAprobado(false);
 			$this->setRechazado(false);
+			$this->setAprobadoCo(false);
 		}
 
 		/*###################*/
@@ -123,7 +128,8 @@
 		        						estado,
 		        						rechazado,
 		        						fecha_rechazo,
-		        						obs_rechazo
+		        						obs_rechazo,
+		        						aprobado_co
 	        			) VALUES (
 	        							'".$this->getFecha()."',   	
 	        							".$this->getUsuarioId().",   	
@@ -137,7 +143,8 @@
 	        							'".$this->getEstado()."',
 	        							'".$this->getRechazado()."',
 	        							'".$this->getFechaRechazo()."',
-	        							'".$this->getObsRechazo()."'
+	        							'".$this->getObsRechazo()."',
+	        							'".$this->getAprobadoCo()."'
 	        			)";        
 			
 	        	//echo $query;
@@ -179,7 +186,8 @@
 								estado='".$this->getEstado()."',
 								rechazado='".$this->getRechazado()."',
 								fecha_rechazo='".$this->getFechaRechazo()."',
-								obs_rechazo='".$this->getObsRechazo()."'
+								obs_rechazo='".$this->getObsRechazo()."',
+								aprobado_co='".$this->getAprobado()."'
 							WHERE id=".$this->getId();
 
 				//echo $query;
@@ -271,6 +279,7 @@
 				$this->setFechaRechazo($filas['fecha_rechazo']);
 				$this->setObsRechazo($filas['obs_rechazo']);
 				$this->setEstado($filas['estado']);
+				$this->setAprobadoCo($filas['aprobado_co']);
 			}
 		}
 
@@ -288,6 +297,7 @@
 			$this->setEstado(true);
 			$this->setAprobado(false);
 			$this->setRechazado(false);
+			$this->setAprobadoCo(false);
 		}
 
 		private function createTable()
@@ -321,7 +331,29 @@
 				throw new Exception($e->getMessage());
 			}
 		}
+       
+       public function aprobarLicenciasCoord($id){
+			try {
 
+				# Validaciones 			
+				if(empty($id))
+					throw new Exception("Licencias no identificada");
+
+				# Query 			
+				$query="UPDATE licencias SET								
+								aprobado_co=1
+							WHERE id=".$id;
+
+	        	//echo $query;
+	        	//exit();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);					
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
 		public function rechazarLicencias($id,$fRechazo,$obs){
 			try {
 
@@ -369,7 +401,10 @@
 				throw new Exception($e->getMessage());
 			}
 		}		
+         
+         
 
+		
 		public function seleccionarByFiltros($fdesde,$fhasta,$usuario,$estados){
 			try {
 				
@@ -380,13 +415,13 @@
 					$filtro_fdesde="";
 					if(!empty($fdesde)){					
 						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
-						$filtro_fdesde = "CAST (licencias.fecha_fin AS DATE) = '".$tmp."' AND ";
+						$filtro_fdesde = "CAST (licencias.fecha_inicio AS DATE) <= '".$tmp."' AND ";
 					}
 
 					$filtro_fhasta="";
 					if(!empty($fhasta)){					
 						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
-						$filtro_fhasta = "CAST (licencias.fecha_fin AS DATE) =  '".$tmp."' AND ";
+						$filtro_fhasta = "CAST (licencias.fecha_fin AS DATE) >=  '".$tmp."' AND ";
 					}
 				}
 				else
@@ -394,13 +429,90 @@
 					$filtro_fdesde="";
 					if(!empty($fdesde)){					
 						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
-						$filtro_fdesde = "CAST (licencias.fecha_fin AS DATE) >= '".$tmp."' AND ";
+						$filtro_fdesde = "CAST (licencias.fecha_inicio AS DATE) >= '".$tmp."' AND ";
 					}
 
 					$filtro_fhasta="";
 					if(!empty($fhasta)){					
 						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
-						$filtro_fhasta = "CAST (licencias.fecha_fin AS DATE) <=  '".$tmp."' AND ";
+						$filtro_fhasta = "CAST (licencias.fecha_inicio AS DATE) <=  '".$tmp."' AND ";
+					}
+				}
+											
+				$filtro_usuario="";
+				if(!empty($usuario))								
+					$filtro_usuario = "licencias.id_usuario = ".$usuario." AND ";
+
+				$filtro_estados="";
+				if(!empty($estados))
+				   switch ($estados) {
+				   		case '1':
+				   	      $filtro_estados = "licencias.aprobado_co = 'false' AND licencias.rechazado ='false' AND ";							
+				   			break;
+				   		case '2':
+				   	      $filtro_estados = "licencias.aprobado_co = 'true' AND ";
+				   	        break;							
+				   		case '3':
+				   	      $filtro_estados = "licencias.rechazado = 'true' AND ";	
+				   			break;						
+				   					};								
+					
+				
+				$filtro_estado = "licencias.estado = 'true'";
+
+
+				$query="SELECT * FROM licencias 
+								WHERE
+									".$filtro_fdesde." 
+									".$filtro_fhasta." 										
+									".$filtro_usuario."
+									".$filtro_estados."			
+									".$filtro_estado;
+
+				//echo $query;
+				//exit();
+
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new Licencias);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}			
+		}
+
+		public function seleccionarByFiltrosRRHH($fdesde,$fhasta,$usuario,$estados){
+			try {
+				
+				$f = new Fechas;
+
+				if($fdesde==$fhasta)
+				{
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "CAST (licencias.fecha_inicio AS DATE) <= '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "CAST (licencias.fecha_fin AS DATE) >=  '".$tmp."' AND ";
+					}
+				}
+				else
+				{					
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "CAST (licencias.fecha_inicio AS DATE) >= '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "CAST (licencias.fecha_inicio AS DATE) <=  '".$tmp."' AND ";
 					}
 				}
 											
@@ -423,7 +535,8 @@
 				   					};								
 					
 				
-				$filtro_estado = "licencias.estado = 'true'";
+				$filtro_estado = "licencias.estado = 'true' AND ";
+				$filtro_aprobado_co="licencias.aprobado_co= 'true'";
 
 
 				$query="SELECT * FROM licencias 
@@ -432,10 +545,11 @@
 									".$filtro_fhasta." 										
 									".$filtro_usuario."
 									".$filtro_estados."			
-									".$filtro_estado;
+									".$filtro_estado."
+									".$filtro_aprobado_co;
 
-				//echo $query;
-				//exit();
+				// var_dump($query);
+				// exit();
 
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new Licencias);

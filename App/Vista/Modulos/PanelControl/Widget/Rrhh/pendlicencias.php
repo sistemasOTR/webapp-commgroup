@@ -10,11 +10,11 @@
   $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());    
   $fusuario= (isset($_GET["fusuario"])?$_GET["fusuario"]:'');
-  $fechaInicial= date('Y-m-01',strtotime($dFecha->FechaActual()));
-  $fechaFin= $dFecha->SumarDiasFechaActual(365);
+  $fechaInicial=$dFecha->RestarDiasFechaActual(60);
+  $fechaFin= $dFecha->SumarDiasFechaActual(180);
 
   $handler = new HandlerLicencias;  
-  $arrLicencias = $handler->seleccionarByFiltros($fechaInicial,$fechaFin,$fusuario,null);
+  $arrLicencias = $handler->seleccionarByFiltrosRRHH($fechaInicial,$fechaFin,$fusuario,null);
 
   $handlerUsuarios = new HandlerUsuarios;
   $arrUsuarios = $handlerUsuarios->selectByPerfil("GESTOR");

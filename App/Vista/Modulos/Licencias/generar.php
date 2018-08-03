@@ -16,6 +16,10 @@
   $handler = new HandlerLicencias; 
   $arrLicencias = $handler->seleccionarLicencias($user->getId());
   $arrTipoLicencias = $handler->selecionarTipos();
+  $handlerusuario=new handlerusuarios;
+  $arrEmpleados=$handlerusuario->selectEmpleados();
+  $fechas= new Fechas;
+
 
 ?>
 
@@ -69,15 +73,28 @@
                       if(!empty($arrLicencias))
                       {
                         foreach ($arrLicencias as $key => $value) {
+                          // var_dump($user->getUsuarioPerfil()->getNombre());
                           
-                          if(!$value->getAprobado() && !$value->getRechazado()){
+                          if(!$value->getAprobadoCo() && !$value->getRechazado()){
                             $estado = "<span class='label label-warning'>PENDIENTE</span>";
                             $frech = '';
                           }
                           elseif($value->getAprobado()) {
                             $estado = "<span class='label label-success'>APROBADO</span>";
                             $frech = '';
-                          } elseif ($value->getRechazado()) {
+                          }
+                           elseif(!$value->getAprobado() && $value->getRechazado()) {
+                            $estado = "<span class='label label-danger'>RECHAZADO</span>";
+                            $frech = '';
+                          }
+                          elseif($value->getAprobadoCo() && $user->getUsuarioPerfil()->getNombre()!= 'GESTOR') {
+                            $estado = "<span class='label label-warning'>PENDIENTE</span>";
+                            $frech = '';
+                          }
+                          elseif($value->getAprobadoCo() && $user->getUsuarioPerfil()->getNombre()== 'GESTOR') {
+                            $estado = "<span class='label label-success'>APROBADO COORDINADOR</span>";
+                            $frech = '';
+                          } elseif ($value->getRechazado() && !$value->getAprobado()) {
                             $estado = "<span class='label label-danger'>RECHAZADO</span>";
                             $frech = $value->getFechaRechazo()->format('d-m-Y');
                           }
@@ -90,6 +107,29 @@
                             echo "<td>".$value->getFechaFin()->format('d/m/Y')."</td>";
                             echo "<td>".$value->getObservaciones()."</td>";
 
+                            $fechafin=$value->getFechaFin()->format('Y-m-d');
+                            $fechaActual=$fechas->FechaActual();
+                              
+                            $dif_dias = $fechas->DiasDiferenciaFechas($fechafin,$fechaActual,"Y-m-d");
+                            $diadelasemana= intval($value->getFechaFin()->format('N'));
+
+                              // var_dump($dif_dias);
+                               // exit();
+                              
+                               if ($diadelasemana<=2) {
+                                $diashabiles=3;
+                              } else {
+                                $diashabiles=5;
+                              }
+                             
+                             if (intval($dif_dias) > $diashabiles && $fechaActual> $fechafin ) {
+                                echo "<td><button type='button'style='width:100%;'class='btn btn-default btn-xs' disabled><i class='fa fa-paperclip' data-toggle='tooltip' data-original-title='Adjuntar'></i>
+                                          Adjuntar</button></td>";
+                                echo "<td><button type='button'style='width:100%;'class='btn btn-default btn-xs' disabled><i class='fa fa-paperclip' data-toggle='tooltip' data-original-title='Adjuntar'></i>
+                                          Adjuntar</button></td>";          
+                               }  
+                                
+                             else {
                             if(!empty($value->getAdjunto1()))
                               echo "<td><a href='".$value->getAdjunto1()."' target='_blank'>VER ADJUNTO</a></td>";
                             else
@@ -100,7 +140,7 @@
                                         style='width:100%;'
                                         class='btn btn-default btn-xs' 
                                         data-toggle='modal' 
-                                        data-target='#modal-adjuntar1'                                         
+                                        data-target='#modal-adjuntar1'                                        
                                         onclick=btnAdjuntar1(".$value->getId().")>
                                           <i class='fa fa-paperclip' data-toggle='tooltip' data-original-title='Adjuntar'></i>
                                           Adjuntar
@@ -123,7 +163,7 @@
                                           Adjuntar
                                       </button>
                                     </td>"; 
-
+                            }
                             echo "<td>".$estado."</td>";
                             echo "<td>".$frech."</td>";
                             echo "<td>".$value->getObsRechazo()."</td>";
@@ -156,6 +196,7 @@
 
       <form action="<?php echo $url_action_guardar_licencias; ?>" method="post"  enctype="multipart/form-data">
         <input type="hidden" name="usuario" value="<?php echo $user->getId(); ?>">
+        <input type="hidden" name="userSistema" value="<?php echo $user->getUsuarioPerfil()->getNombre(); ?>">
 
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -163,7 +204,25 @@
           <h4 class="modal-title">Nuevo</h4>
         </div>
         <div class="modal-body">
-            <div class="row">             
+            <div class="row"> 
+               <div class='col-md-12'>
+             
+                 <?php                  
+                    if($user->getUsuarioPerfil()->getNombre()=='BACK OFFICE' ||$user->getUsuarioPerfil()->getNombre()=='RRHH'){ 
+                    echo" <label>USUARIO</label>
+                          <select name='tipo_usuario' class='form-control' required=''>" ; 
+                     echo"<option value='".$user->getId()."' selected='selected'>".$user->getNombre()." ".$user->getApellido()."</option>";                  
+                        foreach ($arrEmpleados as $key => $value) {                       
+                         echo" <option value=".$value->getId().">".$value->getNombre()." ".$value->getApellido()."</option>";
+                        }                     
+                    }
+                    else{
+
+                          echo"<input type='hidden' name='tipo_usuario' value='".$user->getId()."'>";
+                    }               
+                  ?>
+                </select>
+              </div>                   
               <div class="col-md-12">
                 <label>Tipo Licencia</label>
                 <select name="tipo_licencia" class='form-control' required="">
