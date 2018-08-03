@@ -2208,7 +2208,7 @@
 			}
 		}
 
-		public function contarRecibidos($fecha, $empresa, $plaza){
+		public function contarRecibidos($fecha, $empresa, $plaza,$gestor){
 			try {
 
 				$f = new Fechas;
@@ -2219,6 +2219,11 @@
 				$filtro_empresa="";
 				if(!empty($empresa))								
 					$filtro_empresa = "SERTT91_CODEMPRE = ".$empresa." AND ";
+
+				$filtro_gestor="";
+				if(!empty($gestor))								
+					$filtro_gestor = "SERTT91_CODGESTOR = ".$gestor." AND ";
+
 				$filtro_plaza="";
 				if(!empty($plaza))								
 					$filtro_plaza = "SERTT91_COOALIAS = '".$plaza."'";
@@ -2229,6 +2234,7 @@
 						".$filtro_fecha." 
 						".$filtro_estado." 
 						".$filtro_empresa." 
+						".$filtro_gestor." 
 						".$filtro_plaza;
 				
 				//echo $query;				

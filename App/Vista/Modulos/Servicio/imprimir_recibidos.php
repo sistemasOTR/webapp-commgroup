@@ -30,7 +30,7 @@
   $arrDatos = $handler->selectServicios($fechaRecep,$fechaRecep,$festado,$fcliente,$fgestor,null,$plaza,$foperador,$fequipoventa);
   $arrEstados = $handler->selectAllEstados();    
   $allEstados = $handler->selectAllEstados(); 
-  $totalRecib = $handler->contarRecibidos($fechaRecep, $fcliente, $plaza);
+  $totalRecib = $handler->contarRecibidos($fechaRecep, $fcliente, $plaza,$fgestor);
 
                     
 
