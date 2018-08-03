@@ -45,7 +45,7 @@
       $arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($fdesde,$fhasta,$value->getId(),2);
         if(!empty($arrLicencias)){
           foreach ($arrLicencias as $licencia) {
-            if ($licencia->getAprobado() && $licencia->getFechaFin()->format('Y-m-d') >= $fdesde) {
+            if ($licencia->getAprobado() && $licencia->getFechaFin()->format('Y-m-d') >= $dFechas->FechaActual() ) {
               $datos[]= array('userId' => $licencia->getUsuarioId()->getId(),
                               'Nombre' => $licencia->getUsuarioId()->getNombre()." ".$licencia->getUsuarioId()->getApellido(),
                               'Desde' => $licencia->getFechaInicio()->format('d-m-Y'),
@@ -65,6 +65,7 @@
 if ($esCoordinador) {
 
   $licPendientes='';
+if (!empty($arrLicenciasPend)) {
 
   foreach ($arrLicenciasPend as $key => $value) {
      foreach ($arrGestoresSist as $gestor) {
@@ -76,6 +77,7 @@ if ($esCoordinador) {
          } 
         }
       }
+   }
       else{
              $fechaDesde = date('Y-m-d',strtotime($fdesde));
              $fechaHasta = date('Y-m-d',strtotime($fhasta));
