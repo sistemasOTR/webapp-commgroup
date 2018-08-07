@@ -151,7 +151,7 @@
 			}
 		}		
 
-		public function aprobarLicencias($id){
+		public function aprobarLicencias($id,$obs){
 			try {
 
 				if(empty($id))
@@ -162,7 +162,7 @@
 				$t = $t->select();				
 
 				$handler = new Licencias;
-				$handler->aprobarLicencias($id);				
+				$handler->aprobarLicencias($id,$obs);				
 				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	

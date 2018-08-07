@@ -69,12 +69,12 @@
         <div class="col-sm-4 invoice-col">
           <b>
             Rosario, 
-            <?php echo $f->Dias($f->FormatearFechas($f->fechaActual(),'Y-m-d','l')); ?>
-            <?php echo $f->FormatearFechas($f->fechaActual(),'Y-m-d','d'); ?>
+            <?php echo $licencia->getFechaInicio()->format('l'); ?>
+            <?php echo $licencia->getFechaInicio()->format('d'); ?>
             de
-            <?php echo $f->Mes($f->FormatearFechas($f->fechaActual(),'Y-m-d','m')); ?>
+            <?php echo $licencia->getFechaInicio()->format('m'); ?>
             de
-            <?php echo $f->FormatearFechas($f->fechaActual(),'Y-m-d','Y'); ?>            
+            <?php echo $licencia->getFechaInicio()->format('Y'); ?>            
           </b>
         </div>
 

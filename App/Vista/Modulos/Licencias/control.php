@@ -33,10 +33,10 @@
   // exit();
 
 
-  $url_action_aprobar = PATH_VISTA.'Modulos/Licencias/action_aprobar.php?id=';  
+  $url_action_aprobar = PATH_VISTA.'Modulos/Licencias/action_aprobar.php?fdesde='.$fdesde.'&fhasta='.$fhasta.'&fusuario='.$fusuario.'&festados='.$festados;  
   $url_action_desaprobar = PATH_VISTA.'Modulos/Licencias/action_desaprobar.php?id=';  
   $url_action_rechazar = PATH_VISTA.'Modulos/Licencias/action_rechazar.php?fdesde='.$fdesde.'&fhasta='.$fhasta.'&fusuario='.$fusuario.'&festados='.$festados;  
-  $url_action_imprimir = 'index.php?view=licencias_imprimir&id=';
+  $url_action_imprimir =  PATH_VISTA.'Modulos/Licencias/action_imprimir.php?id=';
 
   $url_redireccion ='&fdesde='.$fdesde.'&fhasta='.$fhasta.'&fusuario='.$fusuario.'&festados='.$festados;
 
@@ -232,10 +232,10 @@
 
                                 if(!$value->getAprobado() && !$value->getRechazado()){
                                   echo "<td class='text-center' width='100'>
-                                          <a href='".$url_action_aprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."' class='btn btn-success btn-xs pull-left'>
+                                          <a href='#' id='".$value->getId()."_aprobar' data-toggle='modal' data-target='#modal-aprobar' class='btn btn-success btn-xs pull-left' style='margin-left:10px;' data-id='".$value->getId()."' onclick='aprobar(".$value->getId().")'>
                                             <i class='fa fa-thumbs-up' data-toggle='tooltip' data-original-title='Aprobar Licencia'></i>
-                                            
-                                          </a> 
+                                          </a>
+
                                           <a href='#' id='".$value->getId()."' data-toggle='modal' data-target='#modal-rechazar' class='btn btn-danger btn-xs pull-left' style='margin-left:10px;' data-id='".$value->getId()."' onclick='rechazar(".$value->getId().")'>
                                             <i class='fa fa-thumbs-down' data-toggle='tooltip' data-original-title='Rechazar Licencia'></i>
                                             
@@ -259,7 +259,7 @@
 
                                 if($value->getAprobado()){
                                   echo "<td class='text-center'>
-                                          <a href='".$url_action_imprimir.$value->getId()."' class='btn btn-default btn-xs'>
+                                          <a target='_blank' href='".$url_action_imprimir.$value->getId()."' class='btn btn-default btn-xs'>
                                             <i class='fa fa-print' data-toggle='tooltip' data-original-title='Imprimir'></i>
                                             Imprimir
                                           </a>
@@ -291,6 +291,36 @@
   </section>
 </div>
 
+<div class="modal modal-success fade" id="modal-aprobar">
+     <div class="modal-dialog ">
+    <div class="modal-content ">
+
+      
+      <form  method="post" enctype="multipart/form-data" action=<?php echo $url_action_aprobar;?>>
+
+        <div class="modal-header ">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span></button>
+          <h3 class="modal-title" style="" >Aprobar licencia</h3>
+        </div>
+        <div class="modal-body ">
+            <div class="row">
+              <div class="col-md-10 col-md-offset-1">  
+                  <label>Observación </label>  
+                  <input type="text" name="observaciones" class="form-control" placeholder="Ingrese una observación">
+                </div>                                                      
+                <input type="number" name="id" id="idAprobar" class="form-control"  required="" style="display:none;">
+                <input type="hidden" name="url_redireccion" class="form-control" value='<?php echo $url_redireccion; ?>'> 
+              </div>
+        </div>
+        <div class="modal-footer ">
+          <input type="submit" name="submit" value="Aprobar" class="btn btn-success">
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
 <div class="modal modal-danger fade" id="modal-rechazar">
      <div class="modal-dialog ">
     <div class="modal-content ">
@@ -346,6 +376,9 @@
 
   function rechazar(id){
     document.getElementById('idRechazar').value = id;
+  }
+  function aprobar(id){
+    document.getElementById('idAprobar').value = id;
   }
 
 

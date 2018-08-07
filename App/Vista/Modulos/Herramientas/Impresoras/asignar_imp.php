@@ -98,7 +98,7 @@
                         {                        
                           foreach ($arrPlaza as $key => $value) {
                             if ($value->getNombre() == $fplaza) {
-                              echo "<option value='".$value->getNombre()." selected'>".$value->getNombre()."</option>";
+                              echo "<option value='".$value->getNombre()."' selected>".$value->getNombre()."</option>";
                             } else {
                               echo "<option value='".$value->getNombre()."'>".$value->getNombre()."</option>";
                             }

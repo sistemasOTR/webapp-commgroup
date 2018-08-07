@@ -309,7 +309,7 @@
 		/* METODOS PERSONALIZADOS */
 		/*########################*/
 
-		public function aprobarLicencias($id){
+		public function aprobarLicencias($id,$obs){
 			try {
 
 				# Validaciones 			
@@ -318,7 +318,8 @@
 
 				# Query 			
 				$query="UPDATE licencias SET								
-								aprobado=1
+								aprobado=1,
+								observaciones='".$obs."'
 							WHERE id=".$id;
 
 	        	//echo $query;

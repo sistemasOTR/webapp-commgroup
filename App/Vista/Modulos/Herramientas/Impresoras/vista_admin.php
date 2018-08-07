@@ -371,7 +371,7 @@
     $("#slt_plaza").select2({
         placeholder: "Seleccionar",                  
     }).on('change', function (e) { 
-      filtrarReporte(); 
+      filtrarReportePlaza(); 
     });
   });
 
@@ -453,12 +453,14 @@
     url_filtro_reporte="index.php?view=impresorasxplaza";
 
     if(f_plaza!=undefined)
-      if(f_plaza!='')
+      if(f_plaza!='' && f_plaza!='0'){
         url_filtro_reporte= url_filtro_reporte +"&fplaza="+f_plaza;
+        if(f_gestorId!=undefined)
+          if(f_gestorId!='')
+            url_filtro_reporte= url_filtro_reporte +"&fgestorId="+f_gestorId;
+      }
 
-    if(f_gestorId!=undefined)
-      if(f_gestorId!='')
-        url_filtro_reporte= url_filtro_reporte +"&fgestorId="+f_gestorId;
+    
     
     $("#filtro_reporte").attr("href", url_filtro_reporte);
 
@@ -468,6 +470,31 @@
   function filtrarReporte()
   {
     crearHref();
+    window.location = $("#filtro_reporte").attr("href");
+  }
+
+
+  function crearHrefPlaza()
+  {
+    f_gestorId = $("#slt_gestor").val();
+    f_plaza = $("#slt_plaza").val();   
+    url_filtro_reporte="index.php?view=impresorasxplaza";
+
+    if(f_plaza!=undefined)
+      if(f_plaza!='' && f_plaza!='0'){
+        url_filtro_reporte= url_filtro_reporte +"&fplaza="+f_plaza;
+      }
+
+    
+    
+    $("#filtro_reporte").attr("href", url_filtro_reporte);
+
+    document.cookie = "url-tmp-back="+url_filtro_reporte;
+  } 
+
+  function filtrarReportePlaza()
+  {
+    crearHrefPlaza();
     window.location = $("#filtro_reporte").attr("href");
   }
 

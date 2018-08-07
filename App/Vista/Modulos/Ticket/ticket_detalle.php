@@ -6,9 +6,13 @@
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";        
 
   $dFecha = new Fechas;
-
+  $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
+  $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());    
+  $fusuario= (isset($_GET["fusuario"])?$_GET["fusuario"]:'');
+  $fplaza= (isset($_GET["fplaza"])?$_GET["fplaza"]:'');
+  $festados= (isset($_GET["festados"])?$_GET["festados"]:'');
   $fticket = (isset($_GET["fticket"])?$_GET["fticket"]:'');    
-  $fusuario= $usuarioActivoSesion->getId();
+  // $fusuario= $usuarioActivoSesion->getId();
 
   $handler = new HandlerTickets;  
   $consulta = $handler->seleccionarById($fticket);
@@ -17,6 +21,9 @@
 
   $url_action_actualizar = PATH_VISTA.'Modulos/Ticket/action_actualizar.php';
   $url_action_eliminar = PATH_VISTA.'Modulos/Ticket/action_eliminar.php?id=';
+
+  $url_retorno = "index.php?view=tickets_aprobar&fdesde=".$fdesde."&fhasta=".$fhasta."&fplaza=".$fplaza."&fusuario=".$fusuario."&festados=".$festados;
+  
 ?>
 
 <div class="content-wrapper">  
@@ -75,6 +82,7 @@
                 <label>Razon Social</label>
                 <input type="text" name="razon_social" class="form-control"  required="" value='<?php echo trim($value->getRazonSocial()); ?>'>
                 <input type="text" name="tipo_usuario" class="form-control" style="display: none;" required="" value='<?php echo $usuarioActivoSesion->getUsuarioPerfil()->getNombre(); ?>'>
+                <input type="text" name="url_retorno" class="form-control" style="display: none;" required="" value='<?php echo $url_retorno; ?>'>
                 <input type="number" name="idTicket" class="form-control" style="display: none;" required="" value='<?php echo $value->getId(); ?>'>
               </div>
               <div class="col-md-6">
@@ -127,7 +135,7 @@
             </div>
             <hr>
             <div class="col-xs-12">
-              <button type="button" onclick="history.back()" class="pull-left btn btn-default"><i class="ion-chevron-left"></i> Volver</button>
+              <a href='<?php echo $url_retorno; ?>' class="pull-left btn btn-default"><i class="ion-chevron-left"></i> Volver</a>
               <button type="submit" class="btn btn-primary pull-right">Guardar</button>
             </div>
           </form>

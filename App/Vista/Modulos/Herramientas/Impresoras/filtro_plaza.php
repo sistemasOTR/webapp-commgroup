@@ -11,51 +11,60 @@
   <div class="box-body"> 
     <!-- Filtro por plaza -->
     <div class="col-md-4">
-      <label>Plazas</label>
-
-      <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_coordinador" onchange="crearHrefP()">                              
-        <option value="">Seleccionar...</option>
-        <option value='0'>TODAS</option>
-        <?php
-          if(!empty($arrCoordinador))
-          {                        
-            foreach ($arrCoordinador as $key => $value) {                                                  
-              if($fplaza==$value['PLAZA'])
-                echo "<option value='".trim($value['PLAZA'])."' selected>".$value['PLAZA']."</option>";
-              else
-                echo "<option value='".trim($value['PLAZA'])."'>".$value['PLAZA']."</option>";
-            }
-          }
-          if($fplaza=='MANTENIMIENTO')
-                echo "<option value='MANTENIMIENTO' selected>MANTENIMIENTO</option>";
-              else
-                echo "<option value='MANTENIMIENTO'>MANTENIMIENTO</option>";
-
-        ?>
-      </select>
-    </div>
-
-    <!-- Filtro por usuario -->
-
-    <div class="col-md-4">
-      <label>Gestor</label>
-      <select name="slt_gestor" id="slt_gestor" class="form-control" style="width: 100%" onchange="crearHrefG()">
-        <option value="">Seleccionar</option>
-        <option value="0">Todos</option>
-        <?php 
-          if(!empty($arrUsuarios)){
-            foreach ($arrUsuarios as $usuario) {
-                if($fgestorId == $usuario->getId())
-                    echo "<option value='".$usuario->getId()."' selected>".$usuario->getNombre()." ".$usuario->getApellido()."</option>";
-                  else {
-                    echo "<option value='".$usuario->getId()."'>".$usuario->getNombre()." ".$usuario->getApellido()."</option>";
-                }
+                <label>Plazas</label>
+                <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" required="">                    
+                  <option value=''></option>
+                  <option value='0'>TODOS</option>
+                  <?php
+                    if(!empty($arrPlaza))
+                    {                        
+                      foreach ($arrPlaza as $key => $value) {
+                        if($fplaza == $value->getNombre()){
+                          echo "<option value='".$value->getNombre()."' selected>".$value->getNombre()."</option>";
+                        } else {
+                          echo "<option value='".$value->getNombre()."'>".$value->getNombre()."</option>";
+                        }
+                        
+                      }
+                    }                      
+                  ?>                      
+                </select>     
+              </div>
               
-            } 
-          }
-        ?>
-      </select>
-    </div>
+                
+                <div class="col-md-4">
+                  <label>Usuarios </label>  
+                  <select id="slt_gestor" class="form-control" style="width: 100%" name="slt_gestor" onchange="crearHref()">
+                    <option value=''></option>
+                    <option value='0'>TODOS</option>
+                    <?php
+                      if(!empty($arrGestores) || !empty($arrUsuarios)){
+                        if ($fplaza != '') {
+
+                          foreach ($arrGestores as $user) {
+
+                            foreach ($arrGestor as $gestor) {
+                              if($fgestorId == $user->getId() && $user->getUserSistema() == $gestor->GESTOR11_CODIGO && $user->getTipoUsuario()->getNombre()!= 'Empresa'){
+                                echo "<option value='".$user->getId()."' selected>".$user->getApellido()." ".$user->getNombre()."</option>";
+                              } elseif ($user->getUserSistema() == $gestor->GESTOR11_CODIGO && $user->getTipoUsuario()->getNombre()!= 'Empresa') {
+                                echo "<option value='".$user->getId()."'>".$user->getApellido()." ".$user->getNombre()."</option>";
+                                }
+                              }
+                            }
+                        } else {
+                          foreach ($arrUsuarios as $user) {
+                            if($fgestorId == $user->getId())
+                                echo "<option value='".$user->getId()."' selected>".$user->getApellido()." ".$user->getNombre()."</option>";
+                              else
+                                echo "<option value='".$user->getId()."'>".$user->getApellido()." ".$user->getNombre()."</option>";                  
+                                
+                            }
+                          }
+                        }
+                                 
+                    ?>
+                  </select>
+                </div>    
     <div class='col-md-2' style="display: none;">                
       <label></label>                
       <?php 

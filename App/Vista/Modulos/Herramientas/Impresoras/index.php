@@ -29,7 +29,8 @@ echo "window.open('".PATH_VISTA."Modulos/Herramientas/Impresoras/imprimir_baja_c
 
 
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
-  include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";
+  include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";  
+  include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php";  
   include_once PATH_NEGOCIO."Modulos/handlerimpresoras.class.php";
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php";
 
@@ -42,7 +43,12 @@ echo "window.open('".PATH_VISTA."Modulos/Herramientas/Impresoras/imprimir_baja_c
   $fgestor=(isset($_GET["fgestor"])?$_GET["fgestor"]:'');
   $fgestorId=(isset($_GET["fgestorId"])?$_GET["fgestorId"]:0);
   $arrCoordinador = $handler->selectAllPlazasArray();
-  $arrUsuarios = $handlerUs->selectGestores();
+
+  $handlerPlaza = new HandlerPlazaUsuarios;
+  $arrPlaza = $handlerPlaza->selectTodas();
+
+  $arrUsuarios = $handlerUs->selectEmpleados();
+  $arrGestores = $handlerUs->selectGestores();
 
   $url_detalle = "index.php?view=impresora_detalle";
   $url_asignacion = "index.php?view=asignar_imp";

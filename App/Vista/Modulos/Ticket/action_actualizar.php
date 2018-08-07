@@ -31,8 +31,8 @@
 			$info = "../../../../index.php?view=tickets_control&info=";
    		} elseif ($tipo_usuario == 'BACK OFFICE') {
    			
-   			$err = "../../../../index.php?view=tickets_aprobar&err=";
-			$info = "../../../../index.php?view=tickets_aprobar&info=";
+   			$err = "../../../../".$_POST['url_retorno']."&err=";
+			$info = "../../../../".$_POST['url_retorno']."&info=";
    		} else {
    			$err = "../../../../index.php?view=tickets_carga&err=";
 			$info = "../../../../index.php?view=tickets_carga&info=";

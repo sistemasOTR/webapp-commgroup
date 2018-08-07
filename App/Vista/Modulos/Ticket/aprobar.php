@@ -32,6 +32,7 @@
   $url_detalle = 'index.php?view=tickets_detalle&fticket=';   
 
   $url_retorno = "view=tickets_aprobar&fdesde=".$fdesde."&fhasta=".$fhasta."&fplaza=".$fplaza."&fusuario=".$fusuario."&festados=".$festados;
+  $url_retorno_corta = "&fdesde=".$fdesde."&fhasta=".$fhasta."&fplaza=".$fplaza."&fusuario=".$fusuario."&festados=".$festados;
 ?>
 <style>
   .input-group {position: relative;display: block;border-collapse: separate;}
@@ -194,12 +195,12 @@
                       	$countSemana = 0;
                       	$countCiclo = 0;
                       	if ($fusuario!='') {
-								        $usuarioSist = $handlerUsuarios->selectById($fusuario)->getUserSistema();
+								$usuarioSist = $handlerUsuarios->selectById($fusuario)->getUserSistema();
 
                       	while (strtotime($FECHA) <= strtotime($HASTA)) {
                       		$dia = $dFecha->Dias(date('l',strtotime($FECHA)));
                       		$fechaOp =  date('d-m-Y',strtotime($FECHA));
-							             $consulta = $handler->seleccionarByFiltrosAprobacion($FECHA,$FECHA,$fusuario,$festados);
+							$consulta = $handler->seleccionarByFiltrosAprobacion($FECHA,$FECHA,$fusuario,$festados);
 							
 								// var_dump($usuarioSist);
 								// exit();
@@ -222,10 +223,10 @@
 								$countServ = new HandlerSistema;
 								$cantServ = $countServ->selectCountServicios($FECHA, $FECHA, 100, null, $usuarioSist, null, null, null);
 
-                if($handlerUsuarios->selectById($fusuario)->getUsuarioPerfil()->getNombre()=="GESTOR")
-                  {
-                  	$cpAt = $countServ->cpAtendidos($FECHA, $usuarioSist);
-                  }
+                              if($handlerUsuarios->selectById($fusuario)->getUsuarioPerfil()->getNombre()=="GESTOR")
+                                {
+                                	$cpAt = $countServ->cpAtendidos($FECHA, $usuarioSist);
+                                }
 							}
 
                               $arrReintegro = $handler->selecionarReintegrosByDate($FECHA);
@@ -285,8 +286,11 @@
 									if (trim($value->getConcepto()) == 'PEAJES') {
 										$class_estilos_aledanio = '';
 									    // $nomAledanio = '';
-										$cantServ[0]->CANTIDAD_SERVICIOS = 0;
-									}
+                    $clasePeaje = 'color: white !important';
+										// $cantServ[0]->CANTIDAD_SERVICIOS = 0;
+									} else {
+                    $clasePeaje = 'color: black !important';
+                  }
 
 
 		                              if ($value->getTraslado()) {
@@ -316,7 +320,7 @@
 									    echo "<td>".$class_estilos_aledanio."</td>";
 									    echo "<td>".$nombAledanio."</td>";
 									    echo "<td>".$class_estilos_traslado."</td>";
-									    echo "<td>".number_format($cantServ[0]->CANTIDAD_SERVICIOS,0)."</td>";                                                    
+									    echo "<td style='".$clasePeaje."'>".number_format($cantServ[0]->CANTIDAD_SERVICIOS,0)."</td>";                                                    
 									    echo "<td>".$class_estilos_aprobado."</td>";
 									    echo "<td><a href='".$value->getAdjunto()."' target='_blank'>VER</a></td>";
 									    ?>
@@ -325,7 +329,7 @@
         								<input type="hidden" name="url_redirect" value="<?php echo $url_retorno; ?>"> 
         								
 									    <?php if(!$value->getAprobado()){
-									      $editar = "<a href='".$url_detalle.$value->getId()."' class='btn btn-default btn-xs' >
+									      $editar = "<a href='".$url_detalle.$value->getId().$url_retorno_corta."' class='btn btn-default btn-xs' >
 									              <i class='fa fa-edit' data-toggle='tooltip' data-original-title='Editar Ticket'></i></a>";
 									      echo "<td class='text-center'>".$editar." <button 
 									                id='boton_aprobar_".$value->getId()."'                                             
@@ -428,6 +432,7 @@
 								echo "<td></td>";
 								echo "<td></td>";
 								echo "<td></td>";
+                echo "<td></td>";
 								echo "<td></td>";
 							echo "</tr>";
 						}
