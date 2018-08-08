@@ -1,19 +1,27 @@
 <?php 
-    include_once PATH_NEGOCIO."Modulos/handlertickets.class.php";       
-    include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
+  include_once PATH_NEGOCIO."Modulos/handlertickets.class.php";       
+  include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
 
 //  include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
 //  include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";
-    include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
+  include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";  
+  include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php";
 
-    $f = new Fechas;
-    $handler = new HandlerSistema;
-    $handlerTickets= new HandlerTickets();
-    $reintegra= $handlerTickets->selecionarReintegros();
-    $arrCoordinador = $handler->selectAllPlazasArray();
+  $fplaza= (isset($_GET["fplaza"])?$_GET["fplaza"]:'');
+
+  $f = new Fechas;
+  $handler = new HandlerSistema;
+  $handlerTickets= new HandlerTickets();
+  $reintegra= $handlerTickets->selecionarReintegros($fplaza);
+  $arrCoordinador = $handler->selectAllPlazasArray();
+
+  $handlerPlaza = new HandlerPlazaUsuarios;
+  $arrPlaza = $handlerPlaza->selectTodas();
 
   $url_action_editar = PATH_VISTA.'Modulos/Ticket/action_editreintegro.php?id=';
   $url_action_eliminar = PATH_VISTA.'Modulos/Ticket/action_deletereintegro.php?id=';
+
+  $url_retorno = "index.php?view=tickets_reintegros&fplaza=".$fplaza;
 
 ?>
 
@@ -35,8 +43,32 @@
       <div class='col-md-12'>
         <div class="box box-solid">
           <div class="box-header with-border">
-            <i class="fa fa-dollar"></i>
-            <h3 class="box-title">Tabla Reintegros</h3>
+            <h3 class="box-title col-md-3"><i class="fa fa-dollar"></i>
+            Tabla Reintegros</h3>
+            <div class="col-md-3">
+                <label>Plazas</label>
+                <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" required="">                    
+                  <option value=''></option>
+                  <option value='0'>TODOS</option>
+                  <?php
+                    if(!empty($arrPlaza))
+                    {                        
+                      foreach ($arrPlaza as $key => $value) {
+                        if($fplaza == $value->getNombre()){
+                          echo "<option value='".$value->getNombre()."' selected>".$value->getNombre()."</option>";
+                        } else {
+                          echo "<option value='".$value->getNombre()."'>".$value->getNombre()."</option>";
+                        }
+                        
+                      }
+                    }                      
+                  ?>                      
+                </select>     
+              </div>
+              <div class='col-md-3' style="display: none;">                
+                  <label></label>                
+                  <a class="btn btn-block btn-success" id="filtro_reporte" onclick="crearHref()"><i class='fa fa-filter'></i> Filtrar</a>
+                </div>
             <a href="#" class="btn btn-success pull-right" id="btn-nuevo" data-toggle='modal' data-target='#modal-nuevo' data-estado='nuevo' onclick="cargarNuevo()">
                 Nuevo
             </a>
@@ -52,7 +84,9 @@
                       <th>PLAZA</th>
                       <th style="text-align: center;">ALEDAÑO</th>
                       <th width="100" class="text-center">REINTEGRO</th> 
-                      <th colspan="2" style="text-align: center;">ACCIONES</th>
+                      <th width="100" class="text-center">MÍN OPS</th> 
+                      <th style="text-align: center;">ACCIONES</th>
+
                     </tr>
                   </thead>
                   <tbody>
@@ -74,8 +108,8 @@
                          <td> <?php echo $value->getPlaza();?> </td>
                          <td style="text-align: center;"> <?php echo $txtAled;?> </td>
                          <td class="text-center">$ <?php echo number_format($value->getReintegro(),2);?> </td>
-                         <td width="70" style="text-align: center;"> <a href="#" id='<?php echo $value->getId() ?>' data-id='<?php echo $value->getId() ?>' data-cp='<?php echo $value->getCp() ?>' data-estado='editar'data-descripcion='<?php echo $value->getDescripcion() ?>' data-reintegro='<?php echo $value->getReintegro() ?>' data-aled='<?php echo $aled ?>'data-plaza='<?php echo $value->getPlaza() ?>' class="btn btn-warning btn-xs" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId() ?>)'>Editar</a></td>
-                         <td width="70" style="text-align: center;"> <a href="#" class='btn btn-danger btn-xs' id='<?php echo $value->getId() ?>_elim' onclick='eliminarDatos(<?php echo $value->getId() ?>)' data-id='<?php echo $value->getId() ?>' data-fechafin='<?php echo $f->FechaActual()?>' data-toggle='modal' data-target='#modal-eliminar'>Eliminar</a></td>
+                         <td class="text-center"><?php echo number_format($value->getCantOp(),0);?></td>
+                         <td width="100" style="text-align: center;"> <a href="#" id='<?php echo $value->getId() ?>' data-id='<?php echo $value->getId() ?>' data-cp='<?php echo $value->getCp() ?>' data-cantop='<?php echo $value->getCantOp() ?>' data-fechaValida='<?php echo $value->getFechaIni()->format('Y-m-d') ?>' data-estado='editar'data-descripcion='<?php echo $value->getDescripcion() ?>' data-reintegro='<?php echo $value->getReintegro() ?>' data-aled='<?php echo $aled ?>'data-plaza='<?php echo $value->getPlaza() ?>' class="btn btn-warning" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId() ?>)'><i class="fa fa-edit"></i></a> <a href="#" class='btn btn-danger' id='<?php echo $value->getId() ?>_elim' onclick='eliminarDatos(<?php echo $value->getId() ?>)' data-id='<?php echo $value->getId() ?>' data-fechafin='<?php echo $f->FechaActual()?>' data-toggle='modal' data-target='#modal-eliminar'><i class="fa fa-trash"></i></a></td>
 
                        </tr>
                     <?php 
@@ -96,6 +130,7 @@
 
       <form action="<?php echo $url_action_editar; ?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="usuario" value="<?php echo $fusuario; ?>">
+        <input type="hidden" name="url_retorno" value="<?php echo $url_retorno; ?>">
 
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -106,7 +141,8 @@
             <div class="row">
               <div class="col-md-6">
                 <label>Fecha Vigencia</label>
-                <input type="date" name="fechaini" class="form-control" required="">
+                <input type="date" id="fechaini" name="fechaini" class="form-control" required="">
+                <input type="date" id="fechaValida" name="fechaValida" class="form-control" style="display: none;">
               </div>                                             
               <div class="col-md-6">
                 <label>Codigo Postal</label>
@@ -114,8 +150,9 @@
               </div>
               
               <div class="col-md-6">
-                <label>Descripcion</label>
-                <input type="text" name="descripcion" class="form-control" id="descripcion" required=""><input type="text" name="estado" id="estado" style="display: none;" class="form-control" >
+                <label>Localidad</label>
+                <input type="text" name="descripcion" class="form-control" id="descripcion" required="">
+                <input type="text" name="estado" id="estado" style="display: none;" class="form-control" >
                 <input type="text" name="reintegro_id" id="reintegro_id" style="display: none;" class="form-control" >
               </div>         
               <div class="col-md-6">
@@ -145,8 +182,12 @@
                   <option value="1">SI</option>
                 </select>
                 
-              </div>   
               </div>
+              <div class="col-md-6 col-md-offset-3">
+                <label>Mínimas Operaciones</label>
+                <input type="number" name="cant_op" id="cant_op"  class="form-control" step="0.01"  required="">
+              </div>     
+            </div>
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-primary">Guardar</button>
@@ -163,6 +204,7 @@
 
       <form action="<?php echo $url_action_eliminar;?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="usuario" value="<?php echo $fusuario; ?>">
+        <input type="hidden" name="url_retorno" value="<?php echo $url_retorno; ?>">
 
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -205,6 +247,31 @@
   $(document).ready(function(){                
     $("#mnu_tickets").addClass("active");
   });
+
+    $(document).ready(function() {
+    $("#fechaini").on('change', function (e) { 
+      controlFecha();
+    });
+  });
+
+  $(document).ready(function() {
+    $("#slt_plaza").select2({
+        placeholder: "Seleccionar",                  
+    }).on('change', function (e) { 
+      filtrarReportePlaza();
+    });
+  });
+
+
+  function controlFecha(){
+    fechadev = document.getElementById("fechaini").value;
+    fechaent = document.getElementById("fechaValida").value;
+    if(fechadev<fechaent){
+      alert("Nueva fecha de vigencia previa a la fecha de vigencia anterior.");
+      document.getElementById("fechaini").value = fechaent;
+    } 
+
+  }
   
   function cargarDatos(id){
     
@@ -215,6 +282,8 @@
     estado = document.getElementById(id).getAttribute('data-estado');
     reintegro_id = document.getElementById(id).getAttribute('data-id');
     aled = document.getElementById(id).getAttribute('data-aled');
+    cant_op = document.getElementById(id).getAttribute('data-cantop');
+    fechaini = document.getElementById(id).getAttribute('data-fechaValida');
    
     document.getElementById("aled").value = aled;
     document.getElementById("estado").value = estado;
@@ -223,6 +292,8 @@
     document.getElementById("reintegro").value = reintegro;
     document.getElementById("plaza").value = plaza;
     document.getElementById("reintegro_id").value = reintegro_id;
+    document.getElementById("cant_op").value = cant_op;
+    document.getElementById("fechaValida").value = fechaini;
     
   }
   function cargarNuevo(){
@@ -235,6 +306,8 @@
     document.getElementById("reintegro").value = '';
     document.getElementById("plaza").value = '';
     document.getElementById("aled").value = 0;
+    document.getElementById("cant_op").value = 0;
+    document.getElementById("fechaValida").value = '';
     
     
   }
@@ -245,6 +318,26 @@
 
     document.getElementById("id_eliminar").value = id_eliminar;
     document.getElementById("fechafin").value = fechafin;
+  }
+
+  function crearHrefPlaza()
+  {
+      f_plaza = $("#slt_plaza").val();
+
+      url_filtro_reporte="index.php?view=tickets_reintegros";
+
+
+    if(f_plaza!=undefined)
+      if(f_plaza!='' && f_plaza!=0)
+        url_filtro_reporte= url_filtro_reporte +"&fplaza="+f_plaza;      
+      
+      $("#filtro_reporte").attr("href", url_filtro_reporte);
+  } 
+
+  function filtrarReportePlaza()
+  {
+    crearHrefPlaza();
+    window.location = $("#filtro_reporte").attr("href");
   }
  
   

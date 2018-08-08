@@ -7,20 +7,22 @@
 
 	$handler = new HandlerLicencias();
 
-	$id= (isset($_POST["id"])?$_POST["id"]:'');
+	$id= (isset($_GET["id"])?$_GET["id"]:'');
+	$idR= (isset($_POST["idAprobar"])?$_POST["idAprobar"]:'');
 	$fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
   	$fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual()); 
-  	$fusuario=(isset($_POST["fusuario"])?$_POST["fusuario"]:'');
-  	$festados=(isset($_POST["festados"])?$_POST["festados"]:'');
-  	$cord=(isset($_POST["cord"])?$_POST["cord"]:'');
+  	$fusuario=(isset($_GET["fusuario"])?$_GET["fusuario"]:'');
+  	$festados=(isset($_GET["festados"])?$_GET["festados"]:'');
+  	$cord=(isset($_GET["cord"])?$_GET["cord"]:'');
 	$observaciones = (isset($_POST["observaciones"])?$_POST["observaciones"]:'');
-
+	$url_redireccion = (isset($_POST["url_redireccion"])?$_POST["url_redireccion"]:'');
 
 
   	if (!empty($cord)) {
   		try {
   		$err = "../../../../index.php?view=licencias_controlcoord&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&err=";     		
 	    $info = "../../../../index.php?view=licencias_controlcoord&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&info=";   
+
 		$handler->aprobarLicenciasCoord($id);
 
 		$msj="Licencia Aprobada";
@@ -31,11 +33,11 @@
   	}
     else {
     	try {
-	$err = "../../../../index.php?view=licencias_control&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&err=";     		
-	$info = "../../../../index.php?view=licencias_control&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."&info=";    
+	$err = "../../../../index.php?view=licencias_control".$url_redireccion."&err=";     		
+	$info = "../../../../index.php?view=licencias_control".$url_redireccion."&info=";    
 
 	
-		$handler->aprobarLicencias($id,$observaciones);
+		$handler->aprobarLicencias($idR,$observaciones);
 
 		$msj="Licencia Aprobada";
 		header("Location: ".$info.$msj);

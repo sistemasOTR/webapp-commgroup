@@ -124,14 +124,20 @@
         <h4 class="text-right">Rosario, <?php echo $fdia.' de '.$mes.' de '.$fyear; ?>.-</h4>
         <br>
         <?php if ($tipo == 'condi') { ?>
-          <p>Recibí del Sr/a <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?> el siguiente bien:</p>
+          <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de una impresora multifunción.<br>Los datos del bien entragado son:</p>
 
-          <p>Multifunción <?php echo $impresora['_marca']; ?> <?php echo $impresora['_modelo']; ?> con Nº de serie <?php echo $impresora['_serialNro']; ?> en estado satisfactorio para el comodante. Este bien fue oportunamente recibido en condición de comodatario conforme contrato de comodato de fecha <?php echo $ffechaAsig; ?>. En consecuencia, nada tendrán que reclamarse las partes por el vínculo contractual habido.</p>
+          <p><b>MARCA Y MODELO</b>: <?php echo $impresora['_marca']; ?> <?php echo $impresora['_modelo']; ?></p>
+          <p><b>N° DE SERIE</b>: <?php echo $impresora['_serialNro']; ?>
+          <p><b>ESTADO</b>: Satisfactorio.</p>
+          <p>Este bien fue oportunamente recibido en condición de comodatario conforme contrato de comodato de fecha <?php echo $ffechaAsig; ?>. En consecuencia, nada tendrán que reclamarse las partes por el vínculo contractual habido.</p>
 
         <?php } elseif ($tipo == 'roto') { ?>
-          <p>Recibí del Sr/a <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?> el siguiente bien:</p>
+          <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de una impresora multifunción.<br>Los datos del bien entragado son:</p>
 
-          <p>Multifunción <?php echo $impresora['_marca']; ?> <?php echo $impresora['_modelo']; ?> con Nº de serie <?php echo $impresora['_serialNro']; ?>, <?php echo $asignacion['_obsDev'] ?>. Este bien fue oportunamente recibido en condición de comodatario conforme contrato de comodato de fecha <?php echo $ffechaAsig; ?>.</p>
+          <p><b>MARCA Y MODELO</b>: <?php echo $impresora['_marca']; ?> <?php echo $impresora['_modelo']; ?></p>
+          <p><b>N° DE SERIE</b>: <?php echo $impresora['_serialNro']; ?>
+          <p><b>ESTADO</b>: <?php echo $asignacion['_obsDev'] ?>.</p>
+          <p>Este bien fue oportunamente recibido en condición de comodatario conforme contrato de comodato de fecha <?php echo $ffechaAsig; ?>.</p>
 
         <?php } elseif ($tipo == 'robo') { ?>
           <p>Se deja sin efecto el comodato a nombre del Sr/a. <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?> iniciado el día <?php echo $ffechaAsig; ?> referido a tal bien: Multifunción <?php echo $impresora['_marca']; ?> <?php echo $impresora['_modelo']; ?> con Nº de serie <?php echo $impresora['_serialNro']; ?> siendo que ha sufrido un hecho de inseguridad (robo en la vía pública) mientras cumplía tareas laborales cuya denuncia en sede policial acredita la declaración del empleado y se adjunta a la presenta baja de comodato</p>

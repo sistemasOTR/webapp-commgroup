@@ -587,7 +587,7 @@
 
 				# Query 			
 				$query="UPDATE tickets SET								
-								enviado=0,
+								enviado=1,
 								rechazado = 'true',
 								obsRechazo='".$obsRechazo."'
 							WHERE id=".$id;
@@ -654,11 +654,14 @@
 				   			break;
 				   		case '2':
 				   	      $filtro_estados = "tickets.aprobado = 'false' AND ";
+				   	        break;	
+				   		case '3':
+				   		  $filtro_enviada = "";
+				   	      $filtro_estados = "tickets.rechazado = 'true' AND ";
 				   	        break;							
 				   						
-				   					};								
-					
-													
+				   					};
+
 				$filtro_estado = "tickets.estado = 'true'";
 
 

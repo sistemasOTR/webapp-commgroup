@@ -202,6 +202,24 @@
 			}
 		}
 		
+		public function selectByGestor($gestorId){
+			try {
+				$handlerImp = new ImpresorasPlaza;								
+				$data = $handlerImp->selectByGestor($gestorId);
+				
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
 		public function bajaImpresora($serialNro,$fechaBaja,$tipoBaja,$obs){
 			try {
 				

@@ -331,5 +331,23 @@
 			}
 
 		}
+
+		
+		public function getEntregasByUser($idUsuario)
+		{			
+			try {
+											
+				$query = "SELECT * FROM asoc_lu where usId=".$idUsuario." order by fechaEntregaLinea desc, fechaEntregaEquipo desc";
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new LineaUsuario);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
 	}
 ?>

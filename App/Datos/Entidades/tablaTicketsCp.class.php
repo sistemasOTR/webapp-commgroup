@@ -29,6 +29,10 @@
         private $_reintegro;
 		public function getReintegro(){ return $this->_reintegro; }
 		public function setReintegro($reintegro){ $this->_reintegro=$reintegro; }
+
+        private $_cantOp;
+		public function getCantOp(){ return $this->_cantOp; }
+		public function setCantOp($cantOp){ $this->_cantOp=$cantOp; }
         
 
 		private $_fechaIni;
@@ -56,6 +60,7 @@
 			$this->setCp(0);			
 			$this->setDescripcion('');
 			$this->setReintegro(0);
+			$this->setCantOp(0);
 			$this->setFechaIni('');
 			$this->setFechaFin('');	
 			$this->setPlaza('');			
@@ -77,6 +82,7 @@
 		        						cp,
 		        						descripcion,
 		        						reintegro,
+		        						cant_op,
 		        						fecha_ini,
 		        						plaza,
 		        						aled
@@ -85,6 +91,7 @@
 	        							".$this->getCp().",
 	        							'".$this->getDescripcion()."',
 	        							".$this->getReintegro().",
+	        							".$this->getCantOp().",
 	        							'".$this->getFechaIni()."',
 	        							'".$this->getPlaza()."',
 	        							'".$this->getAled()."'
@@ -171,6 +178,7 @@
 				$this->setCp($filas['cp']);
 				$this->setDescripcion($filas['descripcion']);											
 				$this->setReintegro($filas['reintegro']);
+				$this->setCantOp($filas['cant_op']);
 				$this->setFechaIni($filas['fecha_ini']);
 				$this->setFechaFin($filas['fecha_fin']);
 				$this->setPlaza($filas['plaza']);
@@ -184,6 +192,7 @@
 			$this->setCp(0);			
 			$this->setDescripcion('');
 			$this->setReintegro(0);
+			$this->setCantOp(0);
 			$this->setFechaIni('');
 			$this->setFechaFin('');
 			$this->setPlaza('');		
@@ -213,6 +222,7 @@
 				[fecha_fin] [date] NULL,
 				[plaza] [varchar](50) NOT NULL,
 				[aled] [bit] NULL,
+				[cant_op] [int] NULL,
 			 CONSTRAINT [PK_operacion_reintegro] PRIMARY KEY CLUSTERED 
 			(
 				[id] ASC
@@ -255,6 +265,49 @@
 				} else {
 					$query = "SELECT TOP 1 * FROM operacion_reintegro WHERE '".$FECHA."' >= fecha_ini AND cp=".$cp." order by fecha_ini desc";
 				}
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new Reintegro);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
+
+		public function selectByLocalidad($FECHA,$localidad)
+		{			
+			try {
+				if ($localidad == '') {
+					$query = "SELECT * FROM operacion_reintegro WHERE '".$FECHA."' >= fecha_ini AND ('".$FECHA."' <= fecha_fin OR fecha_fin IS NULL) order by fecha_ini desc";
+				} else {
+					$query = "SELECT * FROM operacion_reintegro WHERE '".$FECHA."' >= fecha_ini AND ('".$FECHA."' <= fecha_fin OR fecha_fin IS NULL) AND descripcion='".$localidad."' order by cant_op desc";
+				}
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new Reintegro);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
+
+		public function selectByPlaza($plaza)
+		{			
+			try {
+				if (!empty($plaza)) {
+					$query = "SELECT * FROM operacion_reintegro WHERE fecha_fin is NULL AND plaza='".$plaza."' order by plaza,cp,cant_op";
+				} else {
+					$query = "SELECT * FROM operacion_reintegro WHERE fecha_fin is NULL order by plaza,cp,cant_op";
+				}
+				
 				
 				# Ejecucion 				
 				$result = SQL::selectObject($query, new Reintegro);

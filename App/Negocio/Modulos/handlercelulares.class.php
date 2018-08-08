@@ -30,7 +30,26 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
 			}
-		}		
+		}
+				
+		public function getEntregasByUser($idUsuario){
+			try {
+				$handlerLinea = new LineaUsuario;								
+				$data = $handlerLinea->getEntregasByUser($idUsuario);
+				
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
 		public function getLineaEntregada($entId){
 			try {
 				$handlerLinea = new LineaUsuario;								

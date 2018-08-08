@@ -133,6 +133,7 @@
                   <option value='0' <?php if ($festados == 0) { echo "selected";} ?>>TODAS</option>
                   <option value='1'<?php if ($festados == 1) { echo "selected";} ?>>APROBADOS</option>
                   <option value='2'<?php if ($festados == 2) { echo "selected";} ?>>PENDIENTES</option>
+                  <option value='3'<?php if ($festados == 3) { echo "selected";} ?>>RECHAZADOS</option>
                   
                 </select>
               </div> 
@@ -195,43 +196,42 @@
                       	$countSemana = 0;
                       	$countCiclo = 0;
                       	if ($fusuario!='') {
-								$usuarioSist = $handlerUsuarios->selectById($fusuario)->getUserSistema();
+								        $usuarioSist = $handlerUsuarios->selectById($fusuario)->getUserSistema();
 
                       	while (strtotime($FECHA) <= strtotime($HASTA)) {
                       		$dia = $dFecha->Dias(date('l',strtotime($FECHA)));
                       		$fechaOp =  date('d-m-Y',strtotime($FECHA));
-							$consulta = $handler->seleccionarByFiltrosAprobacion($FECHA,$FECHA,$fusuario,$festados);
+                          $consulta = $handler->seleccionarByFiltrosAprobacion($FECHA,$FECHA,$fusuario,$festados);
 							
 								// var_dump($usuarioSist);
 								// exit();
 
 							
-							if($fplaza != '' || $fplaza != 0){
-								foreach ($arrGestor as $gestor) {
-									if($usuarioSist == $gestor->GESTOR11_CODIGO) {
-										$seguir = true;
-										break;
-									} else {
-										$seguir = false;
-									}
-								}
-							} else {
-								$seguir = true;
-							}
+            							if($fplaza != '' || $fplaza != 0){
+            								foreach ($arrGestor as $gestor) {
+            									if($usuarioSist == $gestor->GESTOR11_CODIGO) {
+            										$seguir = true;
+            										break;
+            									} else {
+            										$seguir = false;
+            									}
+            								}
+            							} else {
+            								$seguir = true;
+            							}
 
-							if ($seguir) {
-								$countServ = new HandlerSistema;
-								$cantServ = $countServ->selectCountServicios($FECHA, $FECHA, 100, null, $usuarioSist, null, null, null);
+            							if ($seguir) {
+            								$countServ = new HandlerSistema;
+            								$cantServ = $countServ->selectCountServicios($FECHA, $FECHA, 100, null, $usuarioSist, null, null, null);
 
-                              if($handlerUsuarios->selectById($fusuario)->getUsuarioPerfil()->getNombre()=="GESTOR")
-                                {
-                                	$cpAt = $countServ->cpAtendidos($FECHA, $usuarioSist);
-                                }
-							}
-
-                              $arrReintegro = $handler->selecionarReintegrosByDate($FECHA);
-							// var_dump($arrReintegro);
-							// exit();
+                            if($handlerUsuarios->selectById($fusuario)->getUsuarioPerfil()->getNombre()=="GESTOR")
+                              {
+                              	$cpAt = $countServ->cpAtendidos($FECHA, $usuarioSist);
+                              }
+            							}
+                         $arrReintegro = $handler->selecionarReintegrosByDate($FECHA);
+            							// var_dump($arrReintegro);
+            							// exit();
 
                               $class_estilos_aledanio = "<span class='label label-danger'>NO</span>";
                               $reintegro = 0;
@@ -254,46 +254,63 @@
                                         }
                                         $nombAledanio = $reint->getDescripcion();
                                       }
-                                  }
+                                    }
                                   }
                                 }
+
+                                $valReint=0;
+
+                                if ($nombAledanio != '') {
+                                  $arrRintLocalidad = $handler->selectByLocalidad($FECHA,$nombAledanio);
+                                  if (!empty($arrRintLocalidad)) {
+                                    foreach ($arrRintLocalidad as $reintLoc) {
+
+                                      if ($reintLoc->getCantOp() < $cantServ[0]->CANTIDAD_SERVICIOS) {
+                                        $valReint = $reintLoc->getReintegro();
+                                        break;
+                                      }
+                                    }
+                                  }
+                                }
+
                              
 
                       		if(!empty($consulta)) {
 		                        foreach ($consulta as $key => $value) {
 		                        	$fechaT = $value->getFechaHora()->format('Y-m-d');
 
-									if($value->getAprobado()){
-										$class_estilos_aprobado = "<span class='label label-success'>APROBADO</span>";
-										$countSemana = $countSemana + $value->getImporteReintegro();
-										$countCiclo = $countCiclo + $value->getImporteReintegro();
-										$readonly = 'readonly=""';
-									}
-									else{
-										$class_estilos_aprobado = "<span class='label label-warning'>PENDIENTE</span>";
-										$readonly = '';
-									}
+              									if($value->getAprobado()){
+              										$class_estilos_aprobado = "<span class='label label-success'>APROBADO</span>";
+              										$countSemana = $countSemana + $value->getImporteReintegro();
+              										$countCiclo = $countCiclo + $value->getImporteReintegro();
+              										$readonly = 'readonly=""';
+              									}
+                                elseif($value->getRechazado())
+                                {
+                                  $class_estilos_aprobado = "<span class='label label-danger' data-toggle='tooltip' data-original-title='".$value->getObsRechazo()."'>RECHAZADO</span>";
+                                  $readonly = 'readonly=""';                     
+                                } else{
+              										$class_estilos_aprobado = "<span class='label label-warning'>PENDIENTE</span>";
+              										$readonly = '';
+              									}
 
-									if($value->getAledanio()){
-										$class_estilos_aledanio = "<span class='label label-success'>SI</span>";
-									}
-									else{
-										$class_estilos_aledanio = "<span class='label label-danger'>NO</span>";
-									}
-									
-									
-									$nombAledanio = $value->getAledNombre();
-									if (trim($value->getConcepto()) == 'PEAJES') {
-										$class_estilos_aledanio = '';
-									    // $nomAledanio = '';
-                    $clasePeaje = 'color: white !important';
-										// $cantServ[0]->CANTIDAD_SERVICIOS = 0;
-									} else {
-                    $clasePeaje = 'color: black !important';
-                  }
+              									if($value->getAledanio()){
+              										$class_estilos_aledanio = "<span class='label label-success'>SI</span>";
+              									}
+              									else{
+              										$class_estilos_aledanio = "<span class='label label-danger'>NO</span>";
+              									}
+              									
+              									
+              									if (trim($value->getConcepto()) == 'PEAJES') {
+              										$class_estilos_aledanio = '';
+                                  $clasePeaje = 'color: white !important';
+              										// $cantServ[0]->CANTIDAD_SERVICIOS = 0;
+              									} else {
+                                  $clasePeaje = 'color: black !important';
+                                }
 
-
-		                              if ($value->getTraslado()) {
+                                  if ($value->getTraslado()) {
 		                                $class_estilos_traslado = "<span class='label label-success'>SI</span>";
 		                                $opTras = 1;
 		                              } else {
@@ -301,141 +318,144 @@
 		                                $opTras = 0;
 		                              }
 									
-									echo "<tr>";
-									?>
-									<form id='<?php echo "form_".$value->getId(); ?>' action="<?php echo $url_action_aprobar; ?>" method="post">
-									<?php
-										echo "<td>".$dia."<br>".$fechaOp."</td>";
-										echo "<td style='display:none'>".$FECHA."</td>";
-										echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
-									    echo "<td>".$value->getFechaHora()->format('d/m/Y h:s')."</td>";
-									    echo "<td>".$value->getTipo()."   ".$value->getPuntoVenta()."-".$value->getNumero()."</td>";
-									    echo "<td>".$value->getRazonSocial()."</td>";
-									    echo "<td>".$value->getCuit()."</td>";
-									    echo "<td>".$value->getDomicilio()."</td>";
-									    echo "<td>".$value->getCondFiscal()."</td>";
-									    echo "<td>".$value->getConcepto()."</td>";
-									    echo "<td>$ ".$value->getImporte()."</td>";    
-									    echo "<td><input type='number' id='".$value->getId()."' name='reintegro' step='0.01' class='form-control input-reint' ".$readonly." value='".number_format($value->getImporteReintegro(),2)."'></td>";
-									    echo "<td>".$class_estilos_aledanio."</td>";
-									    echo "<td>".$nombAledanio."</td>";
-									    echo "<td>".$class_estilos_traslado."</td>";
-									    echo "<td style='".$clasePeaje."'>".number_format($cantServ[0]->CANTIDAD_SERVICIOS,0)."</td>";                                                    
-									    echo "<td>".$class_estilos_aprobado."</td>";
-									    echo "<td><a href='".$value->getAdjunto()."' target='_blank'>VER</a></td>";
-									    ?>
+          									echo "<tr>";
+          									?>
+          									<form id='<?php echo "form_".$value->getId(); ?>' action="<?php echo $url_action_aprobar; ?>" method="post">
+          									<?php
+          										echo "<td>".$dia."<br>".$fechaOp."</td>";
+          										echo "<td style='display:none'>".$FECHA."</td>";
+          										echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
+          									    echo "<td>".$value->getFechaHora()->format('d-m-Y H:i')."</td>";
+          									    echo "<td>".$value->getTipo()."   ".str_pad(strval(trim($value->getPuntoVenta())),4,"0",STR_PAD_LEFT)."-".str_pad(strval(trim($value->getNumero())),8,"0",STR_PAD_LEFT)."</td>";
+          									    echo "<td>".$value->getRazonSocial()."</td>";
+          									    echo "<td>".$value->getCuit()."</td>";
+          									    echo "<td>".$value->getDomicilio()."</td>";
+          									    echo "<td>".$value->getCondFiscal()."</td>";
+          									    echo "<td>".$value->getConcepto()."</td>";
+          									    echo "<td>$ ".$value->getImporte()."</td>";    
+          									    echo "<td><input type='number' id='".$value->getId()."' name='reintegro' step='0.01' class='form-control input-reint' ".$readonly." value='".number_format($valReint,2)."'></td>";
+          									    echo "<td>".$class_estilos_aledanio."</td>";
+          									    echo "<td>".$nombAledanio."</td>";
+          									    echo "<td>".$class_estilos_traslado."</td>";
+          									    echo "<td style='".$clasePeaje."'>".number_format($cantServ[0]->CANTIDAD_SERVICIOS,0)."</td>";                                                    
+          									    echo "<td>".$class_estilos_aprobado."</td>";
+          									    echo "<td><a href='".$value->getAdjunto()."' target='_blank'>VER</a></td>";
+          									    ?>
 
-									   	<input type="hidden" name="id" id="id" value='<?php echo $value->getId(); ?>'> 
-        								<input type="hidden" name="url_redirect" value="<?php echo $url_retorno; ?>"> 
-        								
-									    <?php if(!$value->getAprobado()){
-									      $editar = "<a href='".$url_detalle.$value->getId().$url_retorno_corta."' class='btn btn-default btn-xs' >
-									              <i class='fa fa-edit' data-toggle='tooltip' data-original-title='Editar Ticket'></i></a>";
-									      echo "<td class='text-center'>".$editar." <button 
-									                id='boton_aprobar_".$value->getId()."'                                             
-									                type='submit'
-									                class='btn btn-success btn-xs'>
-									                  <i class='fa fa-thumbs-up' data-toggle='tooltip' data-original-title='Aprobar ticket'></i>
-									                  
-									              </button>      
-									              <a 
-									                id='boton_rechazar_".$value->getId()."'                                             
-									                type='button' 
-									                class='btn btn-danger btn-xs' 
-									                data-toggle='modal' 
-									                data-target='#modal-rechazar' 
-									                data-reintegro='".number_format($value->getImporteReintegro(),2)."' 
-									                data-aledanio='".$value->getAledanio()."' 
-									                data-cant_operaciones='".$cantServ[0]->CANTIDAD_SERVICIOS."'                     
-									                onclick=btnRechazar(".$value->getId().")>
-									                  <i class='fa fa-thumbs-down' data-toggle='tooltip' data-original-title='Rechazar ticket'></i>
-									                  
-									              </a>   
+          									   	<input type="hidden" name="id" id="id" value='<?php echo $value->getId(); ?>'> 
+                  								<input type="hidden" name="url_redirect" value="<?php echo $url_retorno; ?>"> 
+                  								
+          									    <?php if(!$value->getAprobado() && !$value->getRechazado()){
+          									      $editar = "<a href='".$url_detalle.$value->getId().$url_retorno_corta."' class='btn btn-default btn-xs' >
+          									              <i class='fa fa-edit' data-toggle='tooltip' data-original-title='Editar Ticket'></i></a>";
+          									      echo "<td class='text-center'>".$editar." <button 
+          									                id='boton_aprobar_".$value->getId()."'                                             
+          									                type='submit'
+          									                class='btn btn-success btn-xs'>
+          									                  <i class='fa fa-thumbs-up' data-toggle='tooltip' data-original-title='Aprobar ticket'></i>
+          									                  
+          									              </button>      
+          									              <a 
+          									                id='boton_rechazar_".$value->getId()."'                                             
+          									                type='button' 
+          									                class='btn btn-danger btn-xs' 
+          									                data-toggle='modal' 
+          									                data-target='#modal-rechazar' 
+          									                data-reintegro='".number_format($value->getImporteReintegro(),2)."' 
+          									                data-aledanio='".$value->getAledanio()."' 
+          									                data-cant_operaciones='".$cantServ[0]->CANTIDAD_SERVICIOS."'                     
+          									                onclick=btnRechazar(".$value->getId().")>
+          									                  <i class='fa fa-thumbs-down' data-toggle='tooltip' data-original-title='Rechazar ticket'></i>
+          									                  
+          									              </a>   
 
-									            </td>";
-									    }
-									    else
-									    {
-									      echo "<td class='text-center'>
-									            <a href='".$url_action_desaprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."' class='btn btn-danger btn-xs'>
-									              <i class='fa fa-times' data-toggle='tooltip' data-original-title='Desaprobar ticket'></i>
-									              Desaprobar Ticket
-									            </a>
-									          </td>";                                  
-									    } ?>
-									</form>
-									<?php
+          									            </td>";
+          									    }
+          									    elseif($value->getRechazado())
+          									    {
+          									      echo "<td class='text-center'>".$value->getObsRechazo()."
+          									          </td>";                                  
+          									    } else {
+                                  echo "<td class='text-center'>
+                                        <a href='".$url_action_desaprobar.$value->getId()."&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$fusuario."&festados=".$festados."' class='btn btn-danger btn-xs'>
+                                          <i class='fa fa-times' data-toggle='tooltip' data-original-title='Desaprobar ticket'></i>
+                                          Desaprobar Ticket
+                                        </a>
+                                      </td>";                                  
+                                } ?>
+          									</form>
+          									<?php
 
-									  echo "</tr>";
-									   }
-								} else {
-									
-										if ($dia == 'Domingo') {
-											echo "<tr class='bg-navy'>";
-											echo "<td>SUBTOTAL</td>";
-										} else {
-											echo "<tr>";
-											echo "<td>".$dia."<br>".$fechaOp."</td>";
-										}
-										
-										echo "<td style='display:none'>".$FECHA."</td>";
-										echo "<td></td>";
-										echo "<td></td>";
-										echo "<td></td>";
-										echo "<td></td>";
-										echo "<td></td>";
-										echo "<td></td>";
-										echo "<td></td>";
-										echo "<td></td>";
-										echo "<td></td>";
-										if ($dia == 'Domingo') {
-											echo "<td><b>$ ".number_format($countSemana,2)."</b></td>";
-											$countSemana = 0;
-											echo "<td></td>";
-											echo "<td></td>";
-										} else {
-											echo "<td></td>";
-										    echo "<td>".$class_estilos_aledanio."</td>";
-										    echo "<td>".$nombAledanio."</td>";
-											// echo "<td></td>";
-											// echo "<td></td>";
-										}
-										if ($dia == 'Domingo') {
-											echo "<td></td>";
-											echo "<td></td>";
-										} else {
-											echo "<td></td>";
-											echo "<td>".$cantServ[0]->CANTIDAD_SERVICIOS."</td>";
-										}
-										echo "<td></td>";
-										echo "<td></td>";
-										echo "<td></td>";
-									echo "</tr>";
-								}
-								$FECHA = date('Y-m-d',strtotime('+1 day',strtotime($FECHA)));
-							}
-							echo "<tr class='bg-green'>";
-								echo "<td>TOTAL</td>";
-								echo "<td style='display:none'>".$FECHA."</td>";
-								echo "<td></td>";
-								echo "<td></td>";
-								echo "<td></td>";
-								echo "<td></td>";
-								echo "<td></td>";
-								echo "<td></td>";
-								echo "<td></td>";
-								echo "<td></td>";
-								echo "<td></td>";
-								echo "<td><b>$".number_format($countCiclo,2)."</b></td>";
-								echo "<td></td>";
-								echo "<td></td>";
-								echo "<td></td>";
-								echo "<td></td>";
-								echo "<td></td>";
-                echo "<td></td>";
-								echo "<td></td>";
-							echo "</tr>";
-						}
+          									  echo "</tr>";
+          									   }
+          								} else {
+          									
+          										if ($dia == 'Domingo') {
+          											echo "<tr class='bg-navy'>";
+          											echo "<td>SUBTOTAL</td>";
+          										} else {
+          											echo "<tr>";
+          											echo "<td>".$dia."<br>".$fechaOp."</td>";
+          										}
+          										
+          										echo "<td style='display:none'>".$FECHA."</td>";
+          										echo "<td></td>";
+          										echo "<td></td>";
+          										echo "<td></td>";
+          										echo "<td></td>";
+          										echo "<td></td>";
+          										echo "<td></td>";
+          										echo "<td></td>";
+          										echo "<td></td>";
+          										echo "<td></td>";
+          										if ($dia == 'Domingo') {
+          											echo "<td><b>$ ".number_format($countSemana,2)."</b></td>";
+          											$countSemana = 0;
+          											echo "<td></td>";
+          											echo "<td></td>";
+          										} else {
+          											echo "<td></td>";
+          										    echo "<td>".$class_estilos_aledanio."</td>";
+          										    echo "<td>".$nombAledanio."</td>";
+          											// echo "<td></td>";
+          											// echo "<td></td>";
+          										}
+          										if ($dia == 'Domingo') {
+          											echo "<td></td>";
+          											echo "<td></td>";
+          										} else {
+          											echo "<td></td>";
+          											echo "<td>".$cantServ[0]->CANTIDAD_SERVICIOS."</td>";
+          										}
+          										echo "<td></td>";
+          										echo "<td></td>";
+          										echo "<td></td>";
+          									echo "</tr>";
+          								}
+          								$FECHA = date('Y-m-d',strtotime('+1 day',strtotime($FECHA)));
+          							}
+          							echo "<tr class='bg-green'>";
+          								echo "<td>TOTAL</td>";
+          								echo "<td style='display:none'>".$FECHA."</td>";
+          								echo "<td></td>";
+          								echo "<td></td>";
+          								echo "<td></td>";
+          								echo "<td></td>";
+          								echo "<td></td>";
+          								echo "<td></td>";
+          								echo "<td></td>";
+          								echo "<td></td>";
+          								echo "<td></td>";
+          								echo "<td><b>$".number_format($countCiclo,2)."</b></td>";
+          								echo "<td></td>";
+          								echo "<td></td>";
+          								echo "<td></td>";
+          								echo "<td></td>";
+          								echo "<td></td>";
+                          echo "<td></td>";
+          								echo "<td></td>";
+          							echo "</tr>";
+          						}
                     ?>
                   </tbody>
               </table>

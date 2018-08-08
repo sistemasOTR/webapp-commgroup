@@ -25,7 +25,7 @@
 
 	try {
 
-		$hanlder->devolverLinea($entId,$fechaNueva,$nroLineaACambiar,$equipoACambiar,$obs);
+		$hanlder->devolverLinea($entId,$fechaNueva,$nroLineaACambiar,$equipoACambiar,$obs,$tipo);
 		$obser = $obs;
 		$obs = '';
 		if ($estado == 'linea') {

@@ -309,7 +309,7 @@
                   <label>Observación </label>  
                   <input type="text" name="observaciones" class="form-control" placeholder="Ingrese una observación">
                 </div>                                                      
-                <input type="number" name="id" id="idAprobar" class="form-control"  required="" style="display:none;">
+                <input type="number" name="idAprobar" id="idAprobar" class="form-control"  required="" style="display:none;">
                 <input type="hidden" name="url_redireccion" class="form-control" value='<?php echo $url_redireccion; ?>'> 
               </div>
         </div>

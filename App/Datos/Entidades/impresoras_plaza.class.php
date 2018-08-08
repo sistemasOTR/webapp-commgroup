@@ -306,5 +306,21 @@
 			}
 
 		}
+
+		public function selectByGestor($gestorId)
+		{			
+			try {
+				
+				$query = "SELECT * FROM impresora_plaza WHERE gestorId ='".$gestorId."' order by fechaAsig desc";
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new ImpresorasPlaza);
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
 	}
 ?>

@@ -4,7 +4,8 @@
   include_once PATH_NEGOCIO."Usuarios/handlertipousuarios.class.php"; 
   include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php";  
   include_once PATH_NEGOCIO."Usuarios/handlerperfiles.class.php";
-  include_once PATH_NEGOCIO."Sistema/handlersistema.class.php"; 
+  include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
+  include_once PATH_NEGOCIO."Modulos/handlercelulares.class.php"; 
 
   $url_update = PATH_VISTA.'Modulos/UsuariosAdmin/action_update_usuario.php';  
   $url_delete = PATH_VISTA.'Modulos/UsuariosAdmin/action_delete_usuario.php';  
@@ -21,6 +22,9 @@
   $handlerTU = new HandlerTipoUsuarios;
   $arrTipoUser = $handlerTU->selectTodos();
 
+  $handlerCel = new HandlerCelulares;
+  $arrDatosCel = $handlerCel->getEntregasByUser($id);
+
   $handlerSistema = new HandlerSistema;
   $arrEmpresa = $handlerSistema->selectAllEmpresa();
   $arrGerente = $handlerSistema->selectAllGerente();
@@ -32,7 +36,11 @@
   $arrPlaza = $handlerPlaza->selectTodas();
 
   $handlerP = new HandlerPerfiles;
-  $arrPerfiles = $handlerP->selectTodosNoAdmin();  
+  $arrPerfiles = $handlerP->selectTodosNoAdmin(); 
+
+
+  $url_impresion_celu = PATH_VISTA.'Modulos/Herramientas/Celulares/imprimir_comodato.php?'; 
+  $url_impresion_celu_baja = PATH_VISTA."Modulos/Herramientas/Celulares/imprimir_baja_comodato.php?"; 
 ?>
 
   <div class="content-wrapper">    
@@ -189,6 +197,34 @@
       <div class="box-footer">
         <a class="pull-right" href="#" data-toggle='modal' data-target='#modalEliminar'>Eliminar Usuario</a>
       </div>
+      <!-- Lineas asignadas -->
+      <div class="box box-solid">
+      	<div class="box-header with-border">
+          <h3 class="box-title">Asignaciones</h3>
+        </div>
+        <div class="box-body">
+	        <div class="nav-tabs-custom">
+				<ul class="nav nav-tabs">
+					<li class='active'><a href="#tab_1" data-toggle="tab" aria-expanded="true">Líneas</a></li>
+					<li class=''><a href="#tab_2" data-toggle="tab" aria-expanded="false">Equipos</a></li>
+					<li class=''><a href="#tab_3" data-toggle="tab" aria-expanded="false">Impresoras</a></li>
+				</ul>
+				<div class="tab-content col-xs-12">
+		          	<div class='tab-pane active' id="tab_1">
+		        		<?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/lineas_usuario.php'; ?>
+	        		</div>
+		          	<div class='tab-pane' id="tab_2">
+		        		<?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/equipos_usuario.php'; ?>
+	        		</div>
+		          	<div class='tab-pane' id="tab_3">
+		        		<?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/impresoras_usuario.php'; ?>
+	        		</div>
+        		</div>
+        	</div>
+        </div>
+      </div>
+	
+
     </section>
   </div>
 

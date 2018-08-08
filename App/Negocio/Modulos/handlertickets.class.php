@@ -443,10 +443,10 @@
 			}
 		}	
 
-		public function selecionarReintegros(){
+		public function selecionarReintegros($plaza){
 			try {
 				$handler = new Reintegro;								
-				$data = $handler->select();
+				$data = $handler->selectByPlaza($plaza);
 				
 				if(count($data)==1){
 					$data = array('' => $data );                   
@@ -491,10 +491,24 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
 			}
+		}	
+
+		public function selectByLocalidad($fecha,$localidad){
+			try {
+				$handler = new Reintegro;							
+				$data = $handler->selectByLocalidad($fecha,$localidad);
+				
+				
+					return $data;
+					
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
 		}
 
 
-	public function guardarReintegro($id,$estado,$fechaini,$codigopostal,$descripcion,$reintegro,$plaza,$aled){
+	public function guardarReintegro($id,$estado,$fechaini,$codigopostal,$descripcion,$reintegro,$plaza,$aled,$cant_op){
     try {
 		if ($estado=='nuevo') {
 			$handler= new Reintegro;
@@ -502,6 +516,7 @@
 			$handler->setCp($codigopostal);
 			$handler->setDescripcion($descripcion);	
 			$handler->setReintegro($reintegro);
+			$handler->setCantOp($cant_op);
 			$handler->setFechaini($fechaini);
 			$handler->setPlaza($plaza);
 			if ($aled == '0') {
@@ -528,6 +543,7 @@
             $handler2->setCp($codigopostal);
 			$handler2->setDescripcion($descripcion);	
 			$handler2->setReintegro($reintegro);
+			$handler2->setCantOp($cant_op);
 			$handler2->setFechaini($fechaini);
 			$handler2->setPlaza($plaza);
 			if ($aled == '0') {
