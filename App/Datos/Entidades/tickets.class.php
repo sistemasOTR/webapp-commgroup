@@ -764,11 +764,7 @@
 								domicilio='".$this->getDomicilio()."',
 								condicion_fiscal='".$this->getCondFiscal()."',
 								importe=".$this->getImporte().",
-								adjunto='".$this->getAdjunto()."',		
-								importe_reintegro=".$this->getImporteReintegro().",
-								aledanio='".$this->getAledanio()."',
-								aled_nombre='".$this->getAledNombre()."',
-								cant_operaciones=".$this->getCantOperaciones().",
+								adjunto='".$this->getAdjunto()."',
 								concepto='".$this->getConcepto()."'
 							WHERE id=".$this->getId();
 
