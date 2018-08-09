@@ -7,6 +7,7 @@
 	$handler = new HandlerLegajos;
 
     $categoria=(isset($_POST["categoria"])?$_POST["categoria"]:'');
+    $id=(isset($_POST["tipo_id"])?$_POST["tipo_id"]:'');
 
     // var_dump($categoria);
     // exit();
@@ -14,7 +15,9 @@
 
 	
 	$err = "../../../../index.php?view=legajos_categorias&err=";     		
-	$info = "../../../../index.php?view=legajos_categorias&info=";     		
+	$info = "../../../../index.php?view=legajos_categorias&info=";   
+
+	if ($accion=='nuevo') {  		
 
 	try {
 		$handler->crearCategoria($categoria);
@@ -26,6 +29,20 @@
 		header("Location: ".$err.$e->getMessage());
 	}
 
+	}
 
+ else {
+	try {
+
+   $handler->updateCategoria($id,$categoria);
+
+		$msj="Categoria Editada";
+		header("Location: ".$info.$msj);
+
+		} catch (Exception $e) {
+		header("Location: ".$err.$e->getMessage());
+		}
+
+	}
 
 ?>	

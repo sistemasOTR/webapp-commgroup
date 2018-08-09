@@ -140,7 +140,7 @@
               </div>   
               <div class="col-md-6">
                 <label>Basico</label>
-                <input type="number" name="basico" id="basico" class="form-control" required="">
+                <input type="number" step="0.01" name="basico" id="basico" class="form-control" required="">
               </div> 
               <div class="col-md-6">
                 <label>Horas Normales</label>
@@ -212,11 +212,8 @@
     document.getElementById("id").value = ide;
     document.getElementById("accion").value = estado; 
     document.getElementById("tipo_categoria").value = tipo;
-    document.getElementById("categoria_anterior").value = tipo;
     document.getElementById("basico").value = basico;
-    document.getElementById("basico_anterior").value = basico;
     document.getElementById("horas_normales").value = horasNormales;
-    document.getElementById("horas_anteriores").value = horasNormales;
     document.getElementById("fecha_desde").value = fechaDesde;
     document.getElementById("fecha_hasta").value = fechaHasta;
   }

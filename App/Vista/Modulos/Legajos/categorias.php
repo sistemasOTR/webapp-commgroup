@@ -9,7 +9,7 @@
 
   $url_action_guardar_categorias=PATH_VISTA.'Modulos/Legajos/action_guardar_categoria.php';
   // $url_action_editar_categorias = PATH_VISTA.'Modulos/Legajos/action_editar_categoria.php';  
-  // $url_action_eliminar_categorias = PATH_VISTA.'Modulos/Legajos/action_eliminar_categoria.php?id=';
+  $url_action_eliminar_categorias = PATH_VISTA.'Modulos/Legajos/action_eliminar_categoria.php?id=';
 
 
   $user = $usuarioActivoSesion;
@@ -127,7 +127,7 @@
      <div class="modal-dialog">
     <div class="modal-content">
 
-      <form action="<?php echo $url_action_eliminar_tipo ;?>" method="post" enctype="multipart/form-data">
+      <form action="<?php echo $url_action_eliminar_categorias ;?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="usuario" value="<?php echo $fusuario; ?>">
 
         <div class="modal-header">

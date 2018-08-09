@@ -187,6 +187,18 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
+
+		public function updateCategoria($id,$categoria){
+			try {
+				$legajo = new LegajosCategorias;
+				$legajo->setId($id);		
+				$legajo->setCategoria($categoria);		
+				$legajo->update(false);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
 		public function eliminarBasicos($id){
 			try {
 				$legajo = new LegajosBasicos;
