@@ -379,7 +379,23 @@
 
 			return $result;			
 		}
+         
+         public function selecTop()
+		{		
+			try {
+				
+				$query = "SELECT TOP 1 * FROM usuario WHERE estado='true' ORDER BY id DESC";
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new Usuario);
 
+				return $result;
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}					
+		}
 		public function getMultiusuario(){
 			$m = new Multiusuario;
 

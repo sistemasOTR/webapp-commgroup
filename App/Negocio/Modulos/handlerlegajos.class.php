@@ -7,6 +7,8 @@
 		
 	include_once PATH_DATOS.'BaseDatos/conexionapp.class.php';	
 	include_once PATH_DATOS.'Entidades/legajos.class.php';
+	include_once PATH_DATOS.'Entidades/legajos_basicos.class.php';
+	include_once PATH_DATOS.'Entidades/legajos_categorias.class.php';
 	/*include_once PATH_NEGOCIO.'Sistema/handlerconsultascontrol.class.php';
 	include_once PATH_NEGOCIO.'Notificaciones/handlernotificaciones.class.php';
 	include_once PATH_NEGOCIO.'Sistema/handlersistema.class.php';*/
@@ -35,6 +37,42 @@
 			}
 		}
 
+		public function seleccionarLegajosBasicos(){
+			try {
+					
+				$handler = new LegajosBasicos;
+				$data= $handler->select();	
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}										
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
+		public function selecionarTiposCategorias(){
+			try {
+					
+				$handler = new LegajosCategorias;
+				$data= $handler->select();	
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}						
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
 		public function seleccionarByFiltros($usuario){
 			try {
 					
@@ -55,6 +93,23 @@
 			}
 		}
 
+		 public function selecTop()
+		{		
+			try {
+				
+				$query = "SELECT TOP 1 * FROM legajos WHERE estado='true' ORDER BY id DESC";
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new Legajos);
+
+				return $result;
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}					
+		}
+
 		public function crearLegajo($usuario){
 			try {
 				$legajo = new Legajos;
@@ -65,7 +120,83 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
+        public function insertLegajo($usuario,$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas){
+			try {
+				$legajo = new Legajos;
+				$legajo->setUsuarioId($usuario);
+				$legajo->setNombre($nombrecompleto);
+				$legajo->setCuit($cuil);
+				$legajo->setDni($dni);
+				$legajo->setNacimiento($nacimiento);
+				$legajo->setDireccion($direccion);
+				$legajo->setFechaIngreso($ingreso);
+			    $legajo->setCategoria($categoria);								
+				$legajo->setHoras($horas);	
+				$legajo->insert(false);
 
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+        
+        public function crearCategoria($categoria){
+			try {
+				$legajo = new LegajosCategorias;
+				$legajo->setCategoria($categoria);
+				$legajo->insert(false);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+		public function eliminarCategoria($id){
+			try {
+				$legajo = new LegajosCategorias;
+				$legajo->setId($id);
+				$legajo->delete(false);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+
+		public function crearBasicos($tipoCategoria,$basico,$horasNormales,$fechaDesde,$fechaHasta){
+			try {
+				$legajo = new LegajosBasicos;
+				$legajo->setIdCategoria($tipoCategoria);
+				$legajo->setBasico($basico);
+				$legajo->setHorasNormales($horasNormales);
+				$legajo->setFechaDesde($fechaDesde);
+				$legajo->setFechaHasta($fechaHasta);
+				$legajo->insert(false);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+		public function updateBasicos($id,$fechaDesde){
+			try {
+				$legajo = new LegajosBasicos;
+				$legajo->setId($id);		
+				$legajo->setFechaDesde($fechaDesde);		
+				$legajo->updatebasico(false);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+		public function eliminarBasicos($id){
+			try {
+				$legajo = new LegajosBasicos;
+				$legajo->setId($id);
+				$legajo->delete(false);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
 		public function enviarLegajo($id){
 			try {
 				$handler = new Legajos;
@@ -86,7 +217,33 @@
 			}
 		}
 
-		public function guardarLegajosEtapa1($id, $usuario, $nombre, $cuit, $nacimiento, $direccion, $celular, $telefono, $estado_civil, $hijos){
+
+		public function updatelegajos($id,$usuario,$nombrecompleto,$dni,$cuil, $ingreso, $nacimiento, $direccion,$categoria,$horas){
+			try {
+
+				$handler = new Legajos;		
+				$handler->setId($id);				
+				// $handler = $handler->select();
+
+				// $handler->setNacimiento($handler->getNacimiento()->format('m-d-Y'));
+				// $handler->setFechaIngreso($handler->getFechaIngreso()->format('m-d-Y'));
+				$handler->setNacimiento($nacimiento);
+				$handler->setFechaIngreso($ingreso);
+				$handler->setCuit($cuil);
+				$handler->setUsuarioId($usuario);
+				$handler->setNombre($nombrecompleto);
+				$handler->setDni($dni);
+				$handler->setDireccion($direccion);								
+				$handler->setCategoria($categoria);								
+				$handler->setHoras($horas);								
+				$handler->updateUserLegajos(false);
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());					
+			}
+		}	
+
+		public function guardarLegajosEtapa1($id, $usuario, $nombre, $cuit,$dni, $ingreso, $nacimiento, $direccion, $celular, $telefono, $estado_civil, $hijos){
 			try {
 
 				$handler = new Legajos;		
@@ -95,6 +252,7 @@
 
 				$handler->setUsuarioId($usuario);
 				$handler->setNacimiento($handler->getNacimiento()->format('m-d-Y'));
+				$handler->setFechaIngreso($handler->getFechaIngreso()->format('m-d-Y'));
 				$handler->setLicenciaVto($handler->getLicenciaVto()->format('m-d-Y'));
 				$handler->setVtvVto($handler->getVtvVto()->format('m-d-Y'));
 				$handler->setHidraulicaVto($handler->getHidraulicaVto()->format('m-d-Y'));
@@ -103,7 +261,7 @@
 				
 				$handler->setNombre($nombre);
 				$handler->setCuit($cuit);
-				$handler->setNacimiento($nacimiento);
+				$handler->setDni($dni);
 				$handler->setDireccion($direccion);
 				$handler->setCelular($celular);
 				$handler->setTelefono($telefono);

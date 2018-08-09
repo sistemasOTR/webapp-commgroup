@@ -7,13 +7,15 @@
   $handler = new HandlerLegajos;
   $dFecha = new Fechas;
 
-  $legajo = $handler->seleccionarLegajos($user->getId());
+  $legajo = $handler->seleccionarLegajos(intval($user->getId()));
+  
+  // if(is_null($legajo))
+  // {
+  //   $handler->crearLegajo($user->getId());
+  //   $legajo = $handler->seleccionarLegajos($user->getId());
+  // }
 
-  if(is_null($legajo))
-  {
-    $handler->crearLegajo($user->getId());
-    $legajo = $handler->seleccionarLegajos($user->getId());
-  }
+  // $legajo= $handler->selecTop();
 
   $url_action_guardar = PATH_VISTA.'Modulos/Legajos/action_guardar.php';
   $url_action_enviar = PATH_VISTA.'Modulos/Legajos/action_enviar.php';
@@ -57,7 +59,7 @@
   <section class="content-header">
     <h1>
       Legajos
-      <small>Docuemntación propia del gestor</small>
+      <small>Documentación propia del gestor</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -103,29 +105,52 @@
                     <input type="hidden" name="id" value="<?php echo $legajo->getId(); ?>">   
                     <input type="hidden" name="usuario" value="<?php echo $user->getId(); ?>"> 
 
-                    <div class="row">   
+                    <div class="row">  
+                    <?php
+                     // var_dump($legajos->getId());
+                     // exit();
+                     if ($user->getUsuarioPerfil()->getNombre() == 'GESTOR' || $user->getUsuarioPerfil()->getNombre() == 'BACK OFFICE' ) {             
+                            $readonly='readonly';
+                           }  else {
+                             $readonly='';
+                          }
+                     ?> 
                       <div class="col-md-3">
                         <label>Nombre Completo</label>
-                        <input type="text" name="nombre" value="<?php echo trim($legajo->getNombre()); ?>" placeholder="Como figura en el DNI" class="form-control" required="">
+                        <input type="text" name="nombre" value="<?php echo trim($legajo->getNombre()); ?>" placeholder="Como figura en el DNI" class="form-control" <?php echo $readonly ; ?> required="">
                       </div>
+
+                      <div class="col-md-2">
+                        <label>N° de DNI</label>
+                        <input type="text" name="dni" value="<?php echo trim($legajo->getDni()); ?>" placeholder="EJ.: 33921549" class="form-control" <?php echo $readonly ; ?> required="">
+                      </div>   
                       
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         <label>N° de CUIL</label>
-                        <input type="text" name="cuit" value="<?php echo trim($legajo->getCuit()); ?>" placeholder="EJ.: 20-33921549-9" class="form-control" required="">
+                        <input type="text" name="cuit" value="<?php echo trim($legajo->getCuit()); ?>" placeholder="EJ.: 20-33921549-9" class="form-control" <?php echo $readonly ; ?> required="">
+                      </div> 
+
+                       <div class="col-md-2">
+                        <label>Fecha Ingreso</label>
+                        <?php if($legajo->getNacimiento()->format('Y-m-d')=='1900-01-01'){ ?>                      
+                          <input type="date"  name="fecha_ingreso" class="form-control" required="">
+                        <?php }else{ ?>
+                        <input type="date" name="fecha_ingreso" value="<?php echo trim($legajo->getFechaIngreso()->format('Y-m-d')); ?>" class="form-control" <?php echo $readonly ; ?> required="">
+                          <?php } ?>
                       </div>                  
                     
-                      <div class="col-md-3">                      
+                      <div class="col-md-2">                      
                         <label>Fecha de Nacimiento</label>
                         <?php if($legajo->getNacimiento()->format('Y-m-d')=='1900-01-01'){ ?>                      
-                          <input type="date" name="nacimiento" class="form-control" required="">
+                          <input type="date"  name="nacimiento" class="form-control" required="">
                         <?php }else{ ?>
-                          <input type="date" name="nacimiento" value="<?php echo $legajo->getNacimiento()->format('Y-m-d'); ?>" class="form-control" required="">
+                          <input type="date" name="nacimiento"  <?php echo $readonly ; ?> value="<?php echo $legajo->getNacimiento()->format('Y-m-d'); ?>" class="form-control"  required="">
                         <?php } ?>
                       </div>
                       
                       <div class="col-md-3">
                         <label>Domicilio, Localidad, Provincial, CP</label>
-                        <input type="text" value="<?php echo trim($legajo->getDireccion()); ?>" name="direccion" class="form-control" required="">
+                        <input type="text" <?php echo $readonly ; ?> value="<?php echo trim($legajo->getDireccion()); ?>" name="direccion" class="form-control" required="">
                       </div>   
                     </div>
 

@@ -3,11 +3,21 @@
 	include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";		
 	include_once PATH_NEGOCIO."Usuarios/handlertipousuarios.class.php";	
 	include_once PATH_NEGOCIO."Usuarios/handlerperfiles.class.php";			
-	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";		
+	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
+	include_once PATH_NEGOCIO."Modulos/handlerlegajos.class.php";		
 
-	$id= (isset($_POST['id'])? $_POST['id']:'');		
+	$id= (isset($_POST['id'])? $_POST['id']:'');	
 	$nombre = (isset($_POST['nombre'])? $_POST['nombre']:'');
 	$apellido = (isset($_POST['apellido'])? $_POST['apellido']:'');
+	$nombrecompleto=strtoupper($apellido.", ".$nombre);
+	$dni = (isset($_POST['dni'])? $_POST['dni']:'');
+	$cuil = (isset($_POST['cuil'])? $_POST['cuil']:'');
+	$nacimiento = (isset($_POST['fecha_nacimiento'])? $_POST['fecha_nacimiento']:'');
+	$ingreso = (isset($_POST['fecha_ingreso'])? $_POST['fecha_ingreso']:'');
+	$direccion = (isset($_POST['direccion'])? $_POST['direccion']:'');
+	$categoria = (isset($_POST['slt_categoria'])? $_POST['slt_categoria']:'');
+	$horas = (isset($_POST['horas'])? $_POST['horas']:'');
+	
 	$email = (isset($_POST['email'])? $_POST['email']:'');
 	$password = (isset($_POST['password'])? $_POST['password']:'');	
 	//$administrador = (isset($_POST['administrador'])? $_POST['administrador']:'');
@@ -85,7 +95,20 @@
 		$perfil=$handlerPerfiles->selectById($slt_perfil);	
 
 		$handler = new HandlerUsuarios;     
-        $handler->updateUsuariosAdmin($id,$nombre,$apellido,$foto,$objTU,$id_user_sistema,$alias_user_sistema,$perfil,$email,$password,$cambio_rol,$plaza);		
+        $handler->updateUsuariosAdmin($id,$nombre,$apellido,$foto,$objTU,$id_user_sistema,$alias_user_sistema,$perfil,$email,$password,$cambio_rol,$plaza);	
+
+        $handlerlegajos= new HandlerLegajos;
+        $idLegajo=$handlerlegajos->seleccionarLegajos($id);
+        // var_dump($idLegajo);
+        // exit();
+     
+     	if (is_null($idLegajo)) {
+     		$handlerlegajos->insertLegajo(intval($id),$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas);
+     	} else {
+     		$handlerlegajos->updatelegajos(intval($idLegajo->getId()),$id,$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas);
+     	}
+        
+
 
 		$msj="Se actualizo la configuracion del usuario. <b>".$nombre." ".$apellido."</b>";
 		header("Location: ".$info.$msj);

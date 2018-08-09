@@ -4,9 +4,11 @@
   include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
   include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";     
+  include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php";     
   include_once PATH_NEGOCIO."Parametros/handlerparametros.class.php";   
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";      
-  include_once PATH_NEGOCIO."Modulos/handlerlegajos.class.php";  
+  include_once PATH_NEGOCIO."Modulos/handlerlegajos.class.php"; 
+  include_once PATH_DATOS.'Entidades/legajos_categorias.class.php'; 
  
   $user = $usuarioActivoSesion;
   $url_descargar = PATH_VISTA.'Modulos/Legajos/action_descargar_lote.php?carpeta='.$user->getEmail().'&usuario='; 
@@ -16,9 +18,11 @@
   $dFecha = new Fechas;
 
   $fusuario= (isset($_GET["fusuario"])?$_GET["fusuario"]:'');
-  
+
+  $handlertipocategoria= new LegajosCategorias;
   $handlerUsuarios = new HandlerUsuarios;
   $arrUsuarios = $handlerUsuarios->selectByPerfil("GESTOR");
+  $plazausuarios=new HandlerPlazaUsuarios;
 
   $handler = new HandlerLegajos;  
   $consulta = $handler->seleccionarByFiltros($fusuario);
@@ -97,7 +101,7 @@
                     <th>CUIL</th>   
                     <th>CATEGORIA</th>                                              
                     <th>HORAS</th>                                 
-                    <th>OFICINA</th>   
+                    <th>PLAZA</th>   
                     <th>ADJUNTOS</th>                  
                     <th>ACCION</th>
                   </tr>
@@ -106,14 +110,22 @@
                     <?php
                       if(!empty($consulta)){                        
                         foreach ($consulta as $key => $value) {
+                          $categoria = $handlertipocategoria->selectById($value->getCategoria());
+                            if (count($categoria)==1) {
+                              $categoria = $categoria[""];
+                            }
+                         
+                          $plazaId=$handlerUsuarios->selectById($value->getUsuarioId()->getId());
+                          $plazaNombre=$plazausuarios->selectById($plazaId->getUserPlaza());
+    
                           echo "<tr>";
                           echo "<td>".$value->getUsuarioId()->getEmail()."</td>";
                           echo "<td>".$value->getUsuarioId()->getUsuarioPerfil()->getNombre()."</td>";
                           echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
                           echo "<td>".$value->getCuit()."</td>";                          
-                          echo "<td>".$value->getCategoria()."</td>";
+                          echo "<td>".$categoria["categoria"]."</td>";
                           echo "<td>".$value->getHoras()."</td>";
-                          echo "<td>".$value->getOficina()."</td>";
+                          echo "<td>".$plazaNombre->getNombre()."</td>";
                           echo "<td><a href='".$url_descargar.$value->getUsuarioId()->getId()."' class='btn btn-default btn-xs'><i class='fa fa-download'></i> Descargar</a></td>";                          
                           echo "<td><a href='".$url_view.$value->getUsuarioId()->getId()."' class='btn btn-primary btn-xs'>Ver y Actualizar</a></td>";
                           echo "</tr>";

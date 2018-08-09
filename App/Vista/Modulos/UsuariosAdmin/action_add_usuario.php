@@ -4,13 +4,22 @@
 	include_once PATH_NEGOCIO."Usuarios/handlertipousuarios.class.php";		
 	include_once PATH_NEGOCIO."Usuarios/handlerperfiles.class.php";		
 	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";		
+	include_once PATH_NEGOCIO."Modulos/handlerlegajos.class.php";		
 	
 	$nombre = (isset($_POST['nombre'])? $_POST['nombre']:'');
 	$apellido = (isset($_POST['apellido'])? $_POST['apellido']:'');
 	$email = (isset($_POST['email'])? $_POST['email']:'');
+	$dni = (isset($_POST['dni'])? $_POST['dni']:'');
+	$cuil = (isset($_POST['cuil'])? $_POST['cuil']:'');
+	$nacimiento = (isset($_POST['fecha_nacimiento'])? $_POST['fecha_nacimiento']:'');
+	$ingreso = (isset($_POST['fecha_ingreso'])? $_POST['fecha_ingreso']:'');
+	$direccion = (isset($_POST['direccion'])? $_POST['direccion']:'');
 	$password = (isset($_POST['password'])? $_POST['password']:'');
+	$categoria = (isset($_POST['slt_categoria'])? $_POST['slt_categoria']:'');
+	$horas = (isset($_POST['horas'])? $_POST['horas']:'');
 	//$administrador = (isset($_POST['administrador'])? $_POST['administrador']:'');
 	$foto = (isset($_FILES['foto'])? $_FILES['foto']:'');
+	$nombrecompleto=strtoupper($apellido.", ".$nombre);
 
 	$slt_perfil = (isset($_POST['slt_perfil'])? $_POST['slt_perfil']:'');
 
@@ -96,7 +105,14 @@
         if(count($existeUsuario)>0)
         	throw new Exception("Usuario ya creado con el email ".$email);        	
 
-        $handler->insertUsuariosAdmin($nombre,$apellido,$foto,$email,$password,$perfil,$objTU,$id_user_sistema,$alias_user_sistema,$cambio_rol,$plaza);		
+        $handler->insertUsuariosAdmin($nombre,$apellido,$foto,$email,$password,$perfil,$objTU,$id_user_sistema,$alias_user_sistema,$cambio_rol,$plaza);
+
+        $handlerlegajos= new HandlerLegajos;
+        $handlerusuarios= new HandlerUsuarios;
+
+        $user=$handlerusuarios->selecTop();
+        $handlerlegajos->insertLegajo($user->getId(),$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas);
+        		
 
 		$msj="Se agrego un nuevo usuario. <b>".$email."</b>";
 		header("Location: ".$info.$msj);

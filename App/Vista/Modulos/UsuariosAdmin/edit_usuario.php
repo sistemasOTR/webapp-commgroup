@@ -5,7 +5,9 @@
   include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php";  
   include_once PATH_NEGOCIO."Usuarios/handlerperfiles.class.php";
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
-  include_once PATH_NEGOCIO."Modulos/handlercelulares.class.php"; 
+  include_once PATH_NEGOCIO."Modulos/handlercelulares.class.php";
+  include_once PATH_NEGOCIO."Modulos/handlerlegajos.class.php"; 
+
 
   $url_update = PATH_VISTA.'Modulos/UsuariosAdmin/action_update_usuario.php';  
   $url_delete = PATH_VISTA.'Modulos/UsuariosAdmin/action_delete_usuario.php';  
@@ -17,6 +19,10 @@
   if(!empty($id)){
     $handler = new HandlerUsuarios;
     $user = $handler->selectById($id);
+    $handlerLegajo= new HandlerLegajos;
+    $legajo = $handlerLegajo->seleccionarLegajos($id);
+    // var_dump($legajo);
+    // exit();
   }
 
   $handlerTU = new HandlerTipoUsuarios;
@@ -34,6 +40,9 @@
 
   $handlerPlaza = new HandlerPlazaUsuarios;
   $arrPlaza = $handlerPlaza->selectTodas();
+
+  $handlerLegajos= new HandlerLegajos;
+  $arrTipoCategorias = $handlerLegajos->selecionarTiposCategorias();
 
   $handlerP = new HandlerPerfiles;
   $arrPerfiles = $handlerP->selectTodosNoAdmin(); 
@@ -74,16 +83,65 @@
 
                 
                 <div class="col-md-6">
-                  <div class="col-md-6">              
+                  <div class="col-md-4">              
                     <label for="nombre">Nombre</label>
                     <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresa tu nombre" value='<?php echo $user->getNombre(); ?>'>
                   </div>
                 
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <label for="apellido">Apellido</label>
                     <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Ingresa tu apellido" value='<?php echo $user->getApellido(); ?>'>
                   </div>
-                  
+                    <?php if(!empty($legajo)){
+                      $dni = $legajo->getDni();
+                      $cuit = $legajo->getCuit();
+                      if (is_null($legajo->getFechaIngreso())) {
+                        $f_ingreso = '';
+                      } else {
+                        $f_ingreso = $legajo->getFechaIngreso()->format('Y-m-d');
+                      }
+                      if (is_null($legajo->getNacimiento())) {
+                        $f_nac = '';
+                      } else {
+                        $f_nac = $legajo->getNacimiento()->format('Y-m-d');
+                      }
+                      $dom = $legajo->getDireccion();
+                      $cat = $legajo->getCategoria();
+                      $horas_lab = $legajo->getHoras();
+                    } else {
+                      $dni = null;
+                      $cuit = null;
+                      $f_ingreso = '';
+                      $f_nac = '';
+                      $dom = '';
+                      $cat = null;
+                      $horas_lab = null;
+                    } 
+                    ?>
+                   <div class="col-md-4">
+                    <label for="dni">N° de DNI</label>
+                    <input type="number" class="form-control" id="dni" name="dni" placeholder="EJ.: 33921549" value='<?php echo intval($dni); ?>'>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="cuil">N° de CUIL</label>
+                    <input type="text" class="form-control" id="cuil" name="cuil" placeholder="EJ.: 20-33921549-9" value='<?php echo $cuit; ?>'>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="fecha_ingreso">Fecha de Ingreso</label>
+                    <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso"  value='<?php echo $f_ingreso; ?>'>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                    <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento"  value='<?php echo $f_nac; ?>'>
+                  </div>
+
+                  <div class="col-md-12">
+                    <label for="direccion">Domicilio, Localidad, Provincia, CP</label>
+                    <input type="text" class="form-control" id="direccion" name="direccion"  value='<?php echo $dom; ?>'>
+                  </div>
                   <div class="col-md-6" style="margin-top: 20px;">
                     <label for="email">Email</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa un email" value='<?php echo $user->getEmail(); ?>'>
@@ -98,8 +156,8 @@
                 
                   <div class="col-md-8" style="margin-top: 20px;">  
                     <label>Perfil</label>                          
-                    <select id="slt_perfil" class="form-control" style="width: 100%" name="slt_perfil" required="">                    
-                      <option></option>
+                    <select id="slt_perfil" class="form-control"  style="width: 100%" name="slt_perfil" required="">                    
+                      <option ></option>
                       <?php
                         if(!empty($arrPerfiles))
                         {                        
@@ -124,6 +182,36 @@
                         <?php } ?>
                       </label>
                     </div>                    
+                  </div>
+
+                  <div class="col-md-4">
+                <label>Tipo Categoria</label>
+                <select name="slt_categoria"  id="slt_categoria" class='form-control' required="" value='' >
+                  <option></option>
+                  <?php
+                  if ($cat > 0) {
+                    if(!empty($arrTipoCategorias)){                    
+                        foreach ($arrTipoCategorias as $key => $value) {
+                          if($cat == $value->getId()){
+                          echo "<option value=".$value->getId()." selected>".$value->getCategoria()."</option>";
+                        }else{
+                            echo "<option value=".$value->getId().">".$value->getCategoria()."</option>";
+                          }
+                       }                  
+                    }     
+                  } else {
+                    if(!empty($arrTipoCategorias)){                    
+                        foreach ($arrTipoCategorias as $key => $value) {
+                            echo "<option value=".$value->getId().">".$value->getCategoria()."</option>";
+                       }
+                    }
+                  }              
+                  ?>
+                </select>
+              </div>   
+               <div class="col-md-4">
+                    <label for="apellido">Horas Laborales</label>
+                    <input type="number" class="form-control" id="horas" name="horas"  value='<?php echo $horas_lab; ?>'>
                   </div>
 
                   <div class="col-md-12" style="margin-top: 20px;">  
@@ -351,7 +439,13 @@
       $("#slt_perfil").select2({
           placeholder: "Seleccionar",                  
       });
-    });      
+    });  
+
+     $(document).ready(function() {
+      $("#slt_categoria").select2({
+          placeholder: "Seleccionar",                  
+      });  
+     });      
     $(document).ready(function() {
       $("#slt_plaza").select2({
           placeholder: "Seleccionar",                  

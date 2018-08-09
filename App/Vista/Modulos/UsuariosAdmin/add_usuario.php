@@ -5,6 +5,7 @@
   include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php"; 
   include_once PATH_NEGOCIO."Usuarios/handlerperfiles.class.php";
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";   
+  include_once PATH_NEGOCIO."Modulos/handlerlegajos.class.php";   
 
   $url_add = PATH_VISTA.'Modulos/UsuariosAdmin/action_add_usuario.php';    
 
@@ -21,8 +22,12 @@
   $handlerPlaza = new HandlerPlazaUsuarios;
   $arrPlaza = $handlerPlaza->selectTodas();
 
+  $handlerLegajos= new HandlerLegajos;
+  $arrTipoCategorias = $handlerLegajos->selecionarTiposCategorias();
+
   $handlerP = new HandlerPerfiles;
   $arrPerfiles = $handlerP->selectTodosNoAdmin();
+  
 ?>
 
   <div class="content-wrapper">    
@@ -53,14 +58,39 @@
               <div class="row">
 
                 <div class="col-md-6">
-                  <div class="col-md-6">              
+                  <div class="col-md-4">              
                     <label for="nombre">Nombre</label>
                     <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresa tu nombre" value=''>
                   </div>
                 
-                  <div class="col-md-6">
+                  <div class="col-md-4">
                     <label for="apellido">Apellido</label>
                     <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Ingresa tu apellido" value=''>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="apellido">N° de DNI</label>
+                    <input type="number" class="form-control" id="dni" name="dni" placeholder="EJ.: 33921549" value=''>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="apellido">N° de CUIL</label>
+                    <input type="text" class="form-control" id="cuil" name="cuil" placeholder="EJ.: 20-33921549-9" value=''>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="apellido">Fecha de Ingreso</label>
+                    <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso"  value=''>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="apellido">Fecha de Nacimiento</label>
+                    <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento"  value=''>
+                  </div>
+
+                  <div class="col-md-12">
+                    <label for="apellido">Domicilio, Localidad, Provincia, CP</label>
+                    <input type="text" class="form-control" id="direccion" name="direccion"  value=''>
                   </div>
 
                   <div class="col-md-6" style="margin-top: 20px;">
@@ -75,14 +105,18 @@
 
                   <div class="col-md-8" style="margin-top: 20px;">  
                     <label>Perfil</label>                          
-                    <select id="slt_perfil" class="form-control" style="width: 100%" name="slt_perfil" required="">                    
+                    <select id="slt_perfil" onchange="mostrarRequired()" class="form-control" style="width: 100%" name="slt_perfil" required="">                    
                       <option></option>
-                      <?php
-                        if(!empty($arrPerfiles))
+                      <?php 
+                       
+                        if(!empty($arrPerfiles)) 
                         {                        
                           foreach ($arrPerfiles as $key => $value) {
                             echo "<option value='".$value->getId()."'>".$value->getNombre()."</option>";
+
                           }
+
+
                         }                      
                       ?>                      
                     </select>                  
@@ -91,9 +125,29 @@
                   <div class="col-md-4" style="margin-top: 40px;">
                     <div class="checkbox">
                       <label>
-                        <input type="checkbox" name="cambio_rol"> Permitir Cambio de Rol
+                        <input type="checkbox" id="checkbox"name="cambio_rol"> Permitir Cambio de Rol
                       </label>
                     </div>                    
+                  </div>
+                 
+                     <div class="col-md-4">
+                <label>Tipo Categoria</label>
+                <select name="slt_categoria" id="slt_categoria" class='form-control' required="" value='' >
+                  <option></option>
+                  <?php  
+                  var_dump($legajo);                
+                    if(!empty($arrTipoCategorias)){                    
+                        foreach ($arrTipoCategorias as $key => $value) {
+                          echo "<option value=".$value->getId()." >".$value->getCategoria()."</option>";
+                      
+                       }                  
+                    }                  
+                  ?>
+                </select>
+              </div> 
+               <div class="col-md-4">
+                    <label for="apellido">Horas Laborales</label>
+                    <input type="number" class="form-control" id="horas" name="horas"  value=''>
                   </div>
 
                   <div class="col-md-12" style="margin-top: 20px;">  
@@ -151,6 +205,16 @@
         reader.readAsDataURL(input.files[0]);
       }
     }
+
+    function mostrarRequired() {
+       if ($("#slt_perfil").val()!=6) {  
+        $("input").prop('required',true);
+        $("#foto").attr('required',false);
+        $("#checkbox").attr('required',false);
+       } else{
+        $("input").prop('required',false);
+       }
+    }
      
     $("#foto").change(function(){
       mostrarImagen(this);
@@ -160,6 +224,8 @@
       $("#slt_tipoUsuario").select2({
           placeholder: "Seleccionar un Tipo de Usuario",                  
       });
+
+
 
       $("#slt_empresa").select2({
           placeholder: "Seleccionar Empresa",                  
@@ -237,7 +303,12 @@
       $("#slt_perfil").select2({
           placeholder: "Seleccionar",                  
       });
-    });    
+    });  
+      $(document).ready(function() {
+      $("#slt_categoria").select2({
+          placeholder: "Seleccionar",                  
+      });  
+     });  
     $(document).ready(function() {
       $("#slt_plaza").select2({
           placeholder: "Seleccionar",                  
