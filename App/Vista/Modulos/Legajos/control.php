@@ -116,7 +116,12 @@
                             }
                          
                           $plazaId=$handlerUsuarios->selectById($value->getUsuarioId()->getId());
-                          $plazaNombre=$plazausuarios->selectById($plazaId->getUserPlaza());
+                          if (is_null($plazaId->getUserPlaza())) {
+                          	$plazaNombre = '';
+                          } else {
+                          	$plazaNombre=$plazausuarios->selectById($plazaId->getUserPlaza())->getNombre();
+                          }
+                          
     
                           echo "<tr>";
                           echo "<td>".$value->getUsuarioId()->getEmail()."</td>";
@@ -125,7 +130,7 @@
                           echo "<td>".$value->getCuit()."</td>";                          
                           echo "<td>".$categoria["categoria"]."</td>";
                           echo "<td>".$value->getHoras()."</td>";
-                          echo "<td>".$plazaNombre->getNombre()."</td>";
+                          echo "<td>".$plazaNombre."</td>";
                           echo "<td><a href='".$url_descargar.$value->getUsuarioId()->getId()."' class='btn btn-default btn-xs'><i class='fa fa-download'></i> Descargar</a></td>";                          
                           echo "<td><a href='".$url_view.$value->getUsuarioId()->getId()."' class='btn btn-primary btn-xs'>Ver y Actualizar</a></td>";
                           echo "</tr>";
