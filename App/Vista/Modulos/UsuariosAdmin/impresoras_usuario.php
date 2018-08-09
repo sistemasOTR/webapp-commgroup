@@ -57,7 +57,7 @@
               echo "<td>".$fechaDev."</td>";
               echo "<td style='max-width:150px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; '><i ".$visible." class='fa fa-sort-down pull-left' data-toggle='tooltip' data-placement='bottom' title='' data-original-title='".trim(strip_tags($value->getObs()))."'></i>".trim(strip_tags($value->getObs()))."</td>";
               echo "<td style='max-width:150px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis; '><i ".$visibleDev." class='fa fa-sort-down pull-left' data-toggle='tooltip' data-placement='bottom' title='' data-original-title='".trim(strip_tags($value->getObsDev()))."'></i>".trim(strip_tags($value->getObsDev()))."</td>";
-              echo "<td style='font-size: 20px;' width='30'><a href='".$url_impresion_imp."fID=".$value->getAsigId()."' target='_blank'><i class='fa fa-file-text text-yellow' data-toggle='tooltip' title='Ver Comodato'></i></td>";
+              echo "<td style='font-size: 20px;' width='30'><a href='".$url_impresion_imp."fasigId=".$value->getAsigId()."' target='_blank'><i class='fa fa-file-text text-yellow' data-toggle='tooltip' title='Ver Comodato'></i></td>";
               echo "<td style='font-size: 20px;' width='30'>".$como_baja."</td>";
             echo "</tr>";
           }

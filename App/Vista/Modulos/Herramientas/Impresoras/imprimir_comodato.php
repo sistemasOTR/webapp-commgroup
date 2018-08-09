@@ -21,10 +21,10 @@
   $fserialNro=(isset($_GET["fserialNro"])?$_GET["fserialNro"]:'');
   $fgestor=(isset($_GET["fgestor"])?$_GET["fgestor"]:'');
   $fasigId=(isset($_GET["fasigId"])?$_GET["fasigId"]:'');
-  $gestor= $handlerUs->selectById($fgestor);
-  $impresora = $handlerimpresoras->getDatosConSerial($fserialNro);
-  $legajo_gestor = $handlerLeg->seleccionarLegajos($fgestor);
   $asignacion = $handlerimpresoras->selectById($fasigId);
+  $gestor= $handlerUs->selectById($asignacion['_gestorId']);
+  $impresora = $handlerimpresoras->getDatosConSerial($asignacion['_serialNro']);
+  $legajo_gestor = $handlerLeg->seleccionarLegajos($asignacion['_gestorId']);
   $fmes = $asignacion['_fechaAsig']->format('m');
   $fdia = $asignacion['_fechaAsig']->format('d');
   $fyear = $asignacion['_fechaAsig']->format('Y');
