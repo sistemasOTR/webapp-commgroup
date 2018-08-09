@@ -190,12 +190,10 @@
 
           <div class="box-footer">
             <a href='<?php echo $url_volver; ?>' class="pull-left btn btn-default"><i class="fa fa-chevron-left"></i> Volver</a>
-            <button type="submit" class="btn btn-success pull-right"><i class="fa fa-save"></i> Guardar</button>                        
+            <a class="btn btn-danger pull-right" href="#" data-toggle='modal' data-target='#modalEliminar'><i class="fa fa-trash-o"></i> Eliminar Usuario</a>
+            <button type="submit" style="margin-right: 15px" class="btn btn-success pull-right"><i class="fa fa-save"></i> Guardar</button>
           </div>          
         </form>
-      </div>      
-      <div class="box-footer">
-        <a class="pull-right" href="#" data-toggle='modal' data-target='#modalEliminar'>Eliminar Usuario</a>
       </div>
       <!-- Lineas asignadas -->
       <div class="box box-solid">

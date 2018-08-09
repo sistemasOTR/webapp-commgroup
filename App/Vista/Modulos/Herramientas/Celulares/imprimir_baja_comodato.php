@@ -128,7 +128,7 @@
         <p style="text-align: right; line-height: 1.5em;">COMMERCIAL GROUP SRL<br>CUIT Nº: 30-71239507-5<br>San Luis 912-Rosario<br><br></p>
 
         <h4 class="text-right">Rosario, <?php echo $fdia.' de '.$mes.' de '.$fyear; ?>.-</h4>
-        <br>
+        <br><br><br>
         <?php if ($tipo == 'linea') { ?>
           <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de una línea telefónica habilitada.<br>Los datos del bien entregado son:</p>
           <p><b>CANTIDAD</b>: 01<br>

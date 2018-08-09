@@ -122,21 +122,21 @@
         <p style="text-align: right; line-height: 1.5em;">COMMERCIAL GROUP SRL<br>CUIT Nº: 30-71239507-5<br>San Luis 912-Rosario<br><br></p>
 
         <h4 class="text-right">Rosario, <?php echo $fdia.' de '.$mes.' de '.$fyear; ?>.-</h4>
-        <br>
+        <br><br><br>
         <?php if ($tipo == 'condi') { ?>
           <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de una impresora multifunción.<br>Los datos del bien entragado son:</p>
 
-          <p><b>MARCA Y MODELO</b>: <span style="text-transform: uppercase;"><?php echo $impresora['_marca']; ?> <?php echo $impresora['_modelo']; ?></span></p>
-          <p><b>N° DE SERIE</b>: <?php echo $impresora['_serialNro']; ?>
-          <p><b>ESTADO</b>: Satisfactorio.</p>
+          <p><b>MARCA Y MODELO</b>: <span style="text-transform: uppercase;"><?php echo $impresora['_marca']; ?> <?php echo $impresora['_modelo']; ?></span><br>
+          <b>N° DE SERIE</b>: <?php echo $impresora['_serialNro']; ?><br>
+          <b>ESTADO</b>: Satisfactorio.</p>
           <p>Este bien fue oportunamente recibido en condición de comodatario conforme contrato de comodato de fecha <?php echo $ffechaAsig; ?>. En consecuencia, nada tendrán que reclamarse las partes por el vínculo contractual habido.</p>
 
         <?php } elseif ($tipo == 'roto') { ?>
           <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de una impresora multifunción.<br>Los datos del bien entragado son:</p>
 
-          <p><b>MARCA Y MODELO</b>: <span style="text-transform: uppercase;"><?php echo $impresora['_marca']; ?> <?php echo $impresora['_modelo']; ?></span></p>
-          <p><b>N° DE SERIE</b>: <?php echo $impresora['_serialNro']; ?>
-          <p><b>ESTADO</b>: <?php echo $asignacion['_obsDev'] ?>.</p>
+          <p><b>MARCA Y MODELO</b>: <span style="text-transform: uppercase;"><?php echo $impresora['_marca']; ?> <?php echo $impresora['_modelo']; ?></span><br>
+          <b>N° DE SERIE</b>: <?php echo $impresora['_serialNro']; ?><br>
+          <b>ESTADO</b>: <?php echo $asignacion['_obsDev'] ?>.</p>
           <p>Este bien fue oportunamente recibido en condición de comodatario conforme contrato de comodato de fecha <?php echo $ffechaAsig; ?>.</p>
 
         <?php } elseif ($tipo == 'robo') { ?>
