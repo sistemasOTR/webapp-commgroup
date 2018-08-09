@@ -478,7 +478,17 @@
 		case 'legajos_control':			
 			if($permiso->getModuloLegajosBoolean() && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))
 				$include = 'Modulos/Legajos/control.php';
-			break;	
+			break;
+
+	    case 'legajos_basicos':			
+			if($permiso->getModuloLegajosBoolean() && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))
+				$include = 'Modulos/Legajos/basicos.php';
+			break;				
+        
+        case 'legajos_categorias':			
+			if($permiso->getModuloLegajosBoolean() && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))
+				$include = 'Modulos/Legajos/categorias.php';
+			break;
 
 		case 'legajos_actualizar':			
 			if($permiso->getModuloLegajosBoolean() && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))

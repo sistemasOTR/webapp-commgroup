@@ -25,6 +25,8 @@
 
         $url_legajos_carga = "index.php?view=legajos_carga";
         $url_legajos_control = "index.php?view=legajos_control";
+        $url_legajos_basicos = "index.php?view=legajos_basicos";
+        $url_legajos_categorias = "index.php?view=legajos_categorias";
         $url_imprimir_credencial = PATH_VISTA.'Modulos/Legajos/imprimir_credencial.php?';
 
         $url_tickets_carga = "index.php?view=tickets_carga";
@@ -125,7 +127,17 @@
                       <a href=<?php echo $url_legajos_control; ?>> 
                         <i class="fa fa-tasks"></i> <span>Control</span> </i>
                       </a>              
+                    </li> 
+                    <li class="treeview" id="mnu_legajos_basicos">
+                      <a href=<?php echo $url_legajos_basicos; ?>> 
+                        <i class="fa fa-dollar"></i> <span>Basicos</span> </i>
+                      </a>              
                     </li>   
+                    <li class="treeview" id="mnu_legajos_categorias">
+                      <a href=<?php echo $url_legajos_categorias; ?>> 
+                        <i class="fa fa-book"></i> <span>Categorias</span> </i>
+                      </a>              
+                    </li> 
                   <?php } ?> 
                 </ul>
               </li>                 

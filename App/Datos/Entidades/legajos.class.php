@@ -30,6 +30,9 @@
 		private $_cuit;
 		public function getCuit(){ return $this->_cuit; }
 		public function setCuit($cuit){ $this->_cuit=$cuit; }
+		private $_dni;
+		public function getDni(){ return $this->_dni; }
+		public function setDni($dni){ $this->_dni=$dni; }
 		private $_nacimiento;
 		public function getNacimiento(){ return $this->_nacimiento; }
 		public function setNacimiento($nacimiento){ $this->_nacimiento=$nacimiento; }
@@ -152,7 +155,11 @@
 
 		private $_aprobado;
 		public function getAprobado(){ return var_export($this->_aprobado,true); }
-		public function setAprobado($aprobado){ $this->_aprobado=$aprobado; }					
+		public function setAprobado($aprobado){ $this->_aprobado=$aprobado; }	
+
+		private $fechaIngreso;
+		public function getFechaIngreso(){ return $this->fechaIngreso; }
+		public function setFechaIngreso($fechaIngreso){ $this->fechaIngreso=$fechaIngreso; }				
 
 		/*#############*/
 		/* CONSTRUCTOR */
@@ -164,6 +171,7 @@
 
 			$this->setNombre('');			
 			$this->setCuit('');
+			$this->setDni('');
 			$this->setNacimiento('');
 			$this->setDireccion('');
 			$this->setCelular('');
@@ -202,6 +210,7 @@
 			$this->setEstado(true);
 			$this->setAprobado(false);
 			$this->setEnviado(false);
+			$this->setFechaIngreso('');
 		}
 
 		/*###################*/
@@ -258,7 +267,9 @@
 		        						numero_legajo,
 		        						aprobado,
 		        						enviado,
-		        						estado
+		        						estado,
+		        						dni,
+		        						fecha_ingreso
 	        			) VALUES (
 	        							".$this->getUsuarioId().",   	
 	        							'".$this->getNombre()."',   
@@ -300,7 +311,10 @@
 	        							".$this->getNumeroLegajo().",
 	        							'".$this->getAprobado()."',   
 	        							'".$this->getEnviado()."',   
-	        							'".$this->getEstado()."'
+	        							'".$this->getEstado()."',
+	        							'".$this->getDni()."',
+	        							'".$this->getFechaIngreso()."'
+
 	        			)";        
 			
 	        	//echo $query;
@@ -320,16 +334,14 @@
 
 				# Validaciones 			
 				if(empty($this->getId()))
-					throw new Exception("Legajo no identificado");
-
-				if(empty($this->getUsuarioId()))
-					throw new Exception("Usuario Vacio");			
+					throw new Exception("Legajo no identificado");		
 
 				# Query 			
 				$query="UPDATE legajos SET
-								id_usuario=".$this->getUsuarioId().",								
+								id_usuario=".$this->getUsuarioId().",	
 								nombre='".$this->getNombre()."',
 								cuit='".$this->getCuit()."',
+								dni='".$this->getDni()."',
 								nacimiento='".$this->getNacimiento()."',
 								direccion='".$this->getDireccion()."',
 								celular='".$this->getCelular()."',
@@ -367,11 +379,12 @@
 								numero_legajo=".$this->getNumeroLegajo().",
 								aprobado='".$this->getAprobado()."',
 								enviado='".$this->getEnviado()."',
-								estado='".$this->getEstado()."'
+								estado='".$this->getEstado()."',
+								fecha_ingreso='".$this->getFechaIngreso()."'
 							WHERE id=".$this->getId();
 
-	        	//echo $query;
-	        	//exit();
+	        	// echo $query;
+	        	// exit();
 
 				# Ejecucion 					
 				return SQL::update($conexion,$query);	
@@ -445,6 +458,7 @@
 
 				$this->setNombre($filas['nombre']);				
 				$this->setCuit($filas['cuit']);				
+				$this->setDni($filas['dni']);				
 				$this->setNacimiento($filas['nacimiento']);	
 				$this->setDireccion($filas['direccion']);			
 				$this->setCelular($filas['celular']);				
@@ -483,6 +497,8 @@
 				$this->setAprobado($filas['aprobado']);
 				$this->setEnviado($filas['enviado']);
 				$this->setEstado($filas['estado']);
+				$this->setFechaIngreso($filas['fecha_ingreso']);
+
 			}
 		}
 
@@ -493,6 +509,7 @@
 
 			$this->setNombre('');			
 			$this->setCuit('');
+			$this->setDni('');
 			$this->setNacimiento('');
 			$this->setDireccion('');
 			$this->setCelular('');
@@ -531,6 +548,7 @@
 			$this->setEstado(true);
 			$this->setAprobado(false);
 			$this->setEnviado(false);
+			$this->setFechaIngreso('');
 		}
 
 		private function createTable()
@@ -623,7 +641,39 @@
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());						
-			}			
+			}	
+		}
+
+		public function updateUserLegajos($conexion)
+		{
+			try {
+
+				# Validaciones 			
+				if(empty($this->getId()))
+					throw new Exception("Legajo no identificado");		
+
+				# Query 			
+				$query="UPDATE legajos SET
+								id_usuario=".$this->getUsuarioId().",	
+								nombre='".$this->getNombre()."',
+								cuit='".$this->getCuit()."',
+								dni='".$this->getDni()."',
+								nacimiento='".$this->getNacimiento()."',
+								direccion='".$this->getDireccion()."',
+								fecha_ingreso='".$this->getFechaIngreso()."',
+								categoria='".$this->getCategoria()."',
+								horas='".$this->getHoras()."'
+							WHERE id=".$this->getId();
+
+	        	// echo $query;
+	        	// exit();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
 		}
 
 	}

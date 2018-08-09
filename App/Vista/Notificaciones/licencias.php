@@ -118,7 +118,7 @@ if (!empty($arrLicenciasPend)) {
     
   ?>
 
-  <?php if(($esBO || $esContabilidad || $esRRHH || $esCoordinador)  && $datos != '' || $licPendientes>0){ ?>
+  <?php if(($esBO || $esRRHH || $esCoordinador)  && ($datos != '' || $licPendientes>0)){ ?>
     <li class="dropdown notifications-menu">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
         <i class="fa fa-certificate"></i> 
@@ -143,7 +143,7 @@ if (!empty($arrLicenciasPend)) {
                   <li>
                     <?php if ($esCoordinador) { ?>
                     <a href='<?php echo $url_redireccionCord.$value["userId"] ?>' disabled><?php echo $value['Nombre']." | ".$value['Desde']." | ".$value['Hasta'] ?></a>
-                  <?php } else { ?>
+                  <?php } elseif ($esRRHH || $esBO){ ?>
 
                     <a href='<?php echo $url_redireccion.$value["userId"] ?>' disabled><?php echo $value['Nombre']." | ".$value['Desde']." | ".$value['Hasta'] ?></a>
 
@@ -160,7 +160,7 @@ if (!empty($arrLicenciasPend)) {
               <li>
                 <?php if ($esCoordinador) { ?>
                   <a href="<?php echo $url_pendientesCoord; ?>" ><b>Pendientes</b><span class="badge bg-red pull-right">
-                      <?php  echo $licPendientes; } else { ?>
+                      <?php  echo $licPendientes; } else{ ?>
                  
                 <a href="<?php echo $url_pendientes; ?>" ><b>Pendientes</b><span class="badge bg-red pull-right">
                       <?php  echo $licPendientes; }?>

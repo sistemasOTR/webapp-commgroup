@@ -9,10 +9,14 @@
 
 	$id = (isset($_POST["id"])?$_POST["id"]:'');
 	$usuario = (isset($_POST["usuario"])?$_POST["usuario"]:'');
+	// var_dump($usuario);
+	// exit();
 
 	$nombre = (isset($_POST["nombre"])?$_POST["nombre"]:'');	
 	$cuit = (isset($_POST["cuit"])?$_POST["cuit"]:'');	
+	$dni = (isset($_POST["dni"])?$_POST["dni"]:'');	
 	$nacimiento = (isset($_POST["nacimiento"])?$_POST["nacimiento"]:'');	
+	$ingreso = (isset($_POST["fecha_ingreso"])?$_POST["fecha_ingreso"]:'');	
 	$direccion = (isset($_POST["direccion"])?$_POST["direccion"]:'');	
 	$celular = (isset($_POST["celular"])?$_POST["celular"]:'');	
 	$telefono = (isset($_POST["telefono"])?$_POST["telefono"]:'');	
@@ -51,7 +55,7 @@
 				$err = "../../../../index.php?view=legajos_carga&pestania=1&err=";     		
 				$info = "../../../../index.php?view=legajos_carga&pestania=1&info=";     		
 
-				$handler->guardarLegajosEtapa1($id,$usuario,$nombre,$cuit,$nacimiento,$direccion,$celular,$telefono,$estado_civil,$hijos);
+				$handler->guardarLegajosEtapa1($id,$usuario,$nombre,$cuit,$dni,$ingreso,$nacimiento,$direccion,$celular,$telefono,$estado_civil,$hijos);
 				
 				$msj="Información Personal Guardada";
 				header("Location: ".$info.$msj);
