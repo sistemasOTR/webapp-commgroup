@@ -725,9 +725,14 @@
 				    $handler->setPtopedido($ptopedido);		
 
 					$handler->update(false);
-
+                 }
+                 if ($stock <= $ptopedido) {
+                 	$handler->updateStock($id,$stock,$apedir=1);
+                 }else{
+                 	$handler->updateStock($id,$stock,$apedir=0);
+                 }
 					
-				}
+				
 				if($estado=="nuevo")
 				{
 					$handler = new ExpedicionesItem;
