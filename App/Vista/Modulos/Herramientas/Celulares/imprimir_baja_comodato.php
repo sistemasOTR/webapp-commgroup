@@ -133,21 +133,24 @@
           <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de una línea telefónica habilitada.<br>Los datos del bien entregado son:</p>
           <p><b>CANTIDAD</b>: 01<br>
           <b>N° DE LÍNEA</b>: <?php echo $linea->getNroLinea() ?>.<br>
-          <b>ESTADO</b>: Habilitada</p>
+          <b>ESTADO</b>: Habilitada<br>
+          <b>OBSERVACIONES</b>: <?php echo $entrega->getObsDev() ?></p>
+
           <p><br>Este bien fue oportunamente recibido en condición de comodatario conforme contrato de comodato de fecha <?php echo $ffechaAsig; ?>.<br>A partir de este momento nada tendrán que recamarse las partes por el vínculo contractual habido.</p>
         
         <?php } elseif ($tipo == 'condi') { ?>
-          <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de un teléfono celular con todos sus accesorios y una línea telefónica habilitada.<br>Los datos de los bienes entregados son:</p>
+          <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de las siguientes herramientas:</p>
 
           <p><b>CANTIDAD</b>: 01 <br>
           <b>MARCA Y MODELO</b>: <?php echo $equipo->getMarca(); ?> <?php echo $equipo->getModelo(); ?><br>
           <b>Nº IMEI</b>: <?php echo $equipo->getIMEI(); ?><br>
           <b>N° DE LÍNEA</b>: <?php echo $linea->getNroLinea() ?>.<br>
-          <b>ESTADO</b>: <?php echo $entrega->getObsDev() ?>.</p>
+          <b>ESTADO</b>: Satisfactorio<br>
+          <b>OBSERVACIONES</b>: <?php echo $entrega->getObsDev() ?></p>
           <p><br>Este bien fue oportunamente recibido en condición de comodatario conforme contrato de comodato de fecha <?php echo $ffechaAsig; ?>. En consecuencia, nada tendrán que reclamarse las partes por el vínculo contractual habido.</p>
 
         <?php } elseif ($tipo == 'roto01') { ?>
-          <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de un teléfono celular con todos sus accesorios y una línea telefónica habilitada.<br>Los datos de los bienes entregados son:</p>
+          <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de las siguientes herramientas:</p>
 
           <p><b>CANTIDAD</b>: 01 <br>
           <b>MARCA Y MODELO</b>: <?php echo $equipo->getMarca(); ?> <?php echo $equipo->getModelo(); ?><br>
@@ -157,7 +160,7 @@
           <p><br>Este bien fue oportunamente recibido en condición de comodatario conforme contrato de comodato de fecha <?php echo $ffechaAsig; ?>.</p>
 
         <?php } elseif ($tipo == 'roto02') { ?>
-          <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de un teléfono celular con todos sus accesorios y una línea telefónica habilitada.<br>Los datos de los bienes entregados son:</p>
+          <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de las siguientes herramientas:</p>
 
           <p><b>CANTIDAD</b>: 01 <br>
           <b>MARCA Y MODELO</b>: <?php echo $equipo->getMarca(); ?> <?php echo $equipo->getModelo(); ?><br>
@@ -167,7 +170,7 @@
           <p><br>Este bien fue oportunamente recibido en condición de comodatario conforme contrato de comodato de fecha <?php echo $ffechaAsig; ?>.</p>
 
         <?php } elseif ($tipo == 'roto') { ?>
-          <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de un teléfono celular con todos sus accesorios y una línea telefónica habilitada.<br>Los datos de los bienes entregados son:</p>
+          <p>Por medio de la presente, Yo, <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?>, hago entrega a Commercial Group S.R.L de las siguientes herramientas:</p>
 
           <p><b>CANTIDAD</b>: 01 <br>
           <b>MARCA Y MODELO</b>: <?php echo $equipo->getMarca(); ?> <?php echo $equipo->getModelo(); ?><br>
@@ -179,10 +182,10 @@
         <?php } elseif ($tipo == 'robo') { ?>
           <p>Se deja sin efecto el comodato a nombre del Sr/a. <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?> iniciado el día <?php echo $ffechaAsig; ?> referido a tal bien: Un teléfono <?php echo $equipo->getMarca(); ?>, modelo <?php echo $equipo->getModelo(); ?> con Nº DE IMEI <?php echo $equipo->getIMEI(); ?>, con la línea habilitada nro. <?php echo $linea->getNroLinea() ?> siendo que ha sufrido un hecho de inseguridad (robo en la vía pública) mientras cumplía tareas laborales cuya denuncia en sede policial acredita la declaración del empleado y se adjunta a la presenta baja de comodato</p>
         <?php } elseif ($tipo == 'perd') { ?>
-          <p>Se deja sin efecto el comodato a nombre del Sr/a. <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?> iniciado el día <?php echo $ffechaAsig; ?> referido a tal bien: Un teléfono <?php echo $equipo->getMarca(); ?>, modelo <?php echo $equipo->getModelo(); ?> con Nº DE IMEI <?php echo $equipo->getIMEI(); ?>, con la línea habilitada nro. <?php echo $linea->getNroLinea() ?> siendo que ha extraviado dicho bien.</p>
+          <p>Se deja sin efecto el comodato a nombre del Sr/a. <?php echo $legajo_gestor->getNombre(); ?> titular del CUIL <?php echo $legajo_gestor->getCuit() ?> iniciado el día <?php echo $ffechaAsig; ?> referido a tal bien: Un teléfono <?php echo $equipo->getMarca(); ?>, modelo <?php echo $equipo->getModelo(); ?> con Nº DE IMEI <?php echo $equipo->getIMEI(); ?>, con la línea habilitada nro. <?php echo $linea->getNroLinea() ?> siendo que ha extraviado dicho bien. <br><br></p>
         <?php } ?>
         
-        <p style="line-height: 100px;">Firma:</p>
+        <p style="line-height: 100px;margin-top: 50px;">Firma:</p>
         <p>Aclaración:</p>
         <p>D.N.I.:</p>
 
