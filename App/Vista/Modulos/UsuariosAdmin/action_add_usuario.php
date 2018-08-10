@@ -108,11 +108,14 @@
 
         $handler->insertUsuariosAdmin($nombre,$apellido,$foto,$email,$password,$perfil,$objTU,$id_user_sistema,$alias_user_sistema,$cambio_rol,$plaza);
 
-        $handlerlegajos= new HandlerLegajos;
-        $handlerusuarios= new HandlerUsuarios;
+        if ($slt_perfil != 6) {	
+	        $handlerlegajos= new HandlerLegajos;
+	        $handlerusuarios= new Usuario;
 
-        $user=$handlerusuarios->selecTop();
-        $handlerlegajos->insertLegajo($user->getId(),$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas,$legajo);
+	        $user=$handlerusuarios->selecTop();
+	        $handlerlegajos->insertLegajo($user->getId(),$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas,$legajo);
+        }
+
         		
 
 		$msj="Se agrego un nuevo usuario. <b>".$email."</b>";
