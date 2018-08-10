@@ -417,7 +417,7 @@
           										echo "<td></td>";
           										echo "<td></td>";
           										if ($dia == 'Domingo') {
-          											echo "<td><b>$ <span id='".$counterId."_impo'>".number_format($impoSemana,2)."</span></b></td>";
+          											echo "<td><b>$ <span id='".$counterId."_impo'>".number_format($impoSemana,2,'.','')."</span></b></td>";
           											echo "<td><b>$ <span id='".$counterId."_sem'>".number_format($countSemana,2)."</span></b></td>";
           											echo "<td></td>";
           											echo "<td><b>$ <span id='".$counterId."_semdif'>".number_format($impoSemana - $countSemana,2)."</span></b></td>";
@@ -457,10 +457,10 @@
           								echo "<td></td>";
           								echo "<td></td>";
           								echo "<td></td>";
-          								echo "<td><b>$".number_format($impoCiclo,2)."</b></td>";
-          								echo "<td><b>$".number_format($countCiclo,2)."</b></td>";
+          								echo "<td><b>$ <span id='total_impo'>".number_format($impoCiclo,2,'.','')."</span></b></td>";
+          								echo "<td><b>$ <span id='total_reint'>".number_format($countCiclo,2,'.','')."</span></b></td>";
           								echo "<td></td>";
-          								echo "<td></td>";
+          								echo "<td><b>$ <span id='total_dif'>".number_format($impoCiclo - $countCiclo,2,'.','')."</span></b></td></td>";
           								echo "<td></td>";
           								echo "<td></td>";
           								echo "<td></td>";
@@ -588,14 +588,20 @@
     var oldReint = $(this).attr('data-old');
     var sumsem = $('#'+semana+'_sem').html();
     var imposem = $('#'+semana+'_impo').html();
+    var sumTotal = $('#total_reint').html();
+    var impoTotal = $('#total_impo').html();
 
-    total_sem_reint = parseFloat(Number(sumsem.replace(/,/g, ''))).toFixed(2) - parseFloat(oldReint).toFixed(2) + parseFloat(reintegro).toFixed(2);
-    dif = parseFloat(Number(imposem.replace(/,/g, ''))).toFixed(2) - parseFloat(total_sem_reint).toFixed(2);
+    total_sem_reint = sumsem - Number(oldReint) + Number(reintegro);
+    total_per_reint = sumTotal - Number(oldReint) + Number(reintegro);
+    dif = imposem - Number(total_sem_reint);
+    difTotal = impoTotal - Number(total_per_reint);
     
     console.log(total_sem_reint);
     console.log(dif);
     $('#'+semana+'_sem').html(parseFloat(total_sem_reint).toFixed(2));
     $('#'+semana+'_semdif').html(parseFloat(dif).toFixed(2));
+    $('#total_reint').html(parseFloat(total_per_reint).toFixed(2));
+    $('#total_dif').html(parseFloat(difTotal).toFixed(2));
     $(this).attr('data-old', reintegro);
   	$.ajax({
 			type: "POST",
