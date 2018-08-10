@@ -32,7 +32,7 @@
           <?php include_once "Widget/Efectividad/coordinador.php"; ?>
           <?php include_once "Widget/Estados/coordinador.php"; ?>
         </div>
-        <div class='col-md-8'>
+        <div class='col-md-4'>
           <?php include_once "Widget/GestionMensual/coordinador.php"; ?>
           <?php include_once "Widget/ServiciosMensual/coordinador.php"; ?>
           <?php include_once "Widget/UltimasVisitas/coordinador.php"; ?>
