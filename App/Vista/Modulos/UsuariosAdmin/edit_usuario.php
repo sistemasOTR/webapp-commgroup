@@ -108,6 +108,7 @@
                       $dom = $legajo->getDireccion();
                       $cat = $legajo->getCategoria();
                       $horas_lab = $legajo->getHoras();
+                      $num_legajo = $legajo->getNumeroLegajo();
                     } else {
                       $dni = null;
                       $cuit = null;
@@ -116,6 +117,7 @@
                       $dom = '';
                       $cat = null;
                       $horas_lab = null;
+                      $num_legajo= null;
                     } 
                     ?>
                    <div class="col-md-4">
@@ -212,6 +214,11 @@
                <div class="col-md-4">
                     <label for="apellido">Horas Laborales</label>
                     <input type="number" class="form-control" id="horas" name="horas"  value='<?php echo $horas_lab; ?>'>
+                  </div>
+
+                  <div class="col-md-4">
+                    <label for="apellido">Nº Legajo</label>
+                    <input type="number" class="form-control" id="legajo" name="legajo"  value='<?php echo $num_legajo; ?>'>
                   </div>
 
                   <div class="col-md-12" style="margin-top: 20px;">  

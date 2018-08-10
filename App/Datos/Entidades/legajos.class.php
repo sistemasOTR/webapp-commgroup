@@ -317,8 +317,8 @@
 
 	        			)";        
 			
-	        	//echo $query;
-	        	//exit();
+	        	// var_dump($query);
+	        	// exit();
 
 				# Ejecucion 					
 				return SQL::insert($conexion,$query);
@@ -662,7 +662,9 @@
 								direccion='".$this->getDireccion()."',
 								fecha_ingreso='".$this->getFechaIngreso()."',
 								categoria='".$this->getCategoria()."',
-								horas='".$this->getHoras()."'
+								horas='".$this->getHoras()."',
+								numero_legajo=".$this->getNumeroLegajo()."
+
 							WHERE id=".$this->getId();
 
 	        	// echo $query;

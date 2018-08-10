@@ -17,6 +17,7 @@
 	$direccion = (isset($_POST['direccion'])? $_POST['direccion']:'');
 	$categoria = (isset($_POST['slt_categoria'])? $_POST['slt_categoria']:'');
 	$horas = (isset($_POST['horas'])? $_POST['horas']:'');
+	$legajo = (isset($_POST['legajo'])? $_POST['legajo']:'');
 	
 	$email = (isset($_POST['email'])? $_POST['email']:'');
 	$password = (isset($_POST['password'])? $_POST['password']:'');	
@@ -99,13 +100,15 @@
 
         $handlerlegajos= new HandlerLegajos;
         $idLegajo=$handlerlegajos->seleccionarLegajos($id);
-        // var_dump($idLegajo);
-        // exit();
      
      	if (is_null($idLegajo)) {
-     		$handlerlegajos->insertLegajo(intval($id),$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas);
+     		// var_dump(intval($id),$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas,intval($legajo));
+       // 				 exit();
+
+     		$handlerlegajos->insertLegajo($id,$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas,$legajo);
      	} else {
-     		$handlerlegajos->updatelegajos(intval($idLegajo->getId()),$id,$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas);
+
+     		$handlerlegajos->updatelegajos(intval($idLegajo->getId()),$id,$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas,$legajo);
      	}
         
 

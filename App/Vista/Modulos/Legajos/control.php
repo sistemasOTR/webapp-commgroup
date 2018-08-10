@@ -99,6 +99,7 @@
                     <th>ROL</th>                          
                     <th>NOMBRE</th>                          
                     <th>CUIL</th>   
+                    <th>Nº LEGAJO</th>   
                     <th>CATEGORIA</th>                                              
                     <th>HORAS</th>                                 
                     <th>PLAZA</th>   
@@ -121,13 +122,19 @@
                           } else {
                           	$plazaNombre=$plazausuarios->selectById($plazaId->getUserPlaza())->getNombre();
                           }
-                          
+                          if ($value->getNumeroLegajo()==0) {
+                            $numeroLegajo='';
+                          }
+                          else{
+                            $numeroLegajo=$value->getNumeroLegajo();
+                          }
     
                           echo "<tr>";
                           echo "<td>".$value->getUsuarioId()->getEmail()."</td>";
                           echo "<td>".$value->getUsuarioId()->getUsuarioPerfil()->getNombre()."</td>";
                           echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
                           echo "<td>".$value->getCuit()."</td>";                          
+                          echo "<td>".$numeroLegajo."</td>";                          
                           echo "<td>".$categoria["categoria"]."</td>";
                           echo "<td>".$value->getHoras()."</td>";
                           echo "<td>".$plazaNombre."</td>";

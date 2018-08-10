@@ -8,9 +8,10 @@
 
     $categoria=(isset($_POST["categoria"])?$_POST["categoria"]:'');
     $id=(isset($_POST["tipo_id"])?$_POST["tipo_id"]:'');
+    $accion=(isset($_POST["accion"])?$_POST["accion"]:'');
 
     // var_dump($categoria);
-    // exit();
+    // exit(); 
 	
 
 	

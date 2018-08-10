@@ -108,7 +108,7 @@
                   <label>Nombre</label>
                   <input type="text" name="categoria" id="categoria" class="form-control" >
                    <input type="number" name="estado" id="estado" style="display:none;">
-                  <input type="" name="accion" id="accion" style="display:none;">
+                  <input type="" name="accion" id="accion" style="display: none;">
                   <input type="" name="tipo_id" id="tipo_id" style="display:none;">
                 </div> 
 
