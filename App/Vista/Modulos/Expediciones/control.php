@@ -221,6 +221,7 @@
                                                                              
                           if ($estado->getId()==1 || $estado->getId()==3 || $estado->getId()==9 ) {
                                         $envios='<i class="fa fa-eye text-red"></i>';
+
                                        }
                               else{
                                 $envios = "<a href='".$url_detalle_pedido."'  
@@ -254,6 +255,15 @@
                                         onclick=btnEliminar(".$value->getId().")></a>"; 
                                        } else {
                                       $recibirtruck = '<i class="fa fa-exclamation-triangle text-yellow"></i>';
+                                      $recibirclose = "<a href='#'
+                                        id='".$value->getId()."'                                             
+                                        type='button' 
+                                        class='fa fa-close' 
+                                        data-toggle='modal' 
+                                        data-target='#modal-eliminar'                                   
+                                        onclick=btnEliminar(".$value->getId().")></a>"; 
+
+
                                     }      
                               
                              }  elseif ($estado->getId()==6 || $estado->getId()==7 || $estado->getId()==5 ) {
