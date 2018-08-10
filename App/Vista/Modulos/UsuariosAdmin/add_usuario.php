@@ -150,6 +150,11 @@
                     <input type="number" class="form-control" id="horas" name="horas"  value=''>
                   </div>
 
+                  <div class="col-md-4">
+                    <label for="apellido">Nº Legajo</label>
+                    <input type="number" class="form-control" id="legajo" name="legajo"  value=''>
+                  </div>
+
                   <div class="col-md-12" style="margin-top: 20px;">  
                     <label>Plaza</label>                          
                     <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" required="">                    

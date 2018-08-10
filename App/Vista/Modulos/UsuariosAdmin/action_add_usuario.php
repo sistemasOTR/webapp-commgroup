@@ -17,6 +17,7 @@
 	$password = (isset($_POST['password'])? $_POST['password']:'');
 	$categoria = (isset($_POST['slt_categoria'])? $_POST['slt_categoria']:'');
 	$horas = (isset($_POST['horas'])? $_POST['horas']:'');
+	$legajo = (isset($_POST['legajo'])? $_POST['legajo']:0);
 	//$administrador = (isset($_POST['administrador'])? $_POST['administrador']:'');
 	$foto = (isset($_FILES['foto'])? $_FILES['foto']:'');
 	$nombrecompleto=strtoupper($apellido.", ".$nombre);
@@ -111,7 +112,7 @@
         $handlerusuarios= new HandlerUsuarios;
 
         $user=$handlerusuarios->selecTop();
-        $handlerlegajos->insertLegajo($user->getId(),$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas);
+        $handlerlegajos->insertLegajo($user->getId(),$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas,$legajo);
         		
 
 		$msj="Se agrego un nuevo usuario. <b>".$email."</b>";

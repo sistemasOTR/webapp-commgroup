@@ -120,7 +120,7 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
-        public function insertLegajo($usuario,$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas){
+        public function insertLegajo($usuario,$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas,$legajoNro){ 
 			try {
 				$legajo = new Legajos;
 				$legajo->setUsuarioId($usuario);
@@ -132,6 +132,7 @@
 				$legajo->setFechaIngreso($ingreso);
 			    $legajo->setCategoria($categoria);								
 				$legajo->setHoras($horas);	
+				$legajo->setNumeroLegajo($legajoNro);	
 				$legajo->insert(false);
 
 
@@ -230,7 +231,7 @@
 		}
 
 
-		public function updatelegajos($id,$usuario,$nombrecompleto,$dni,$cuil, $ingreso, $nacimiento, $direccion,$categoria,$horas){
+		public function updatelegajos($id,$usuario,$nombrecompleto,$dni,$cuil, $ingreso, $nacimiento, $direccion,$categoria,$horas,$legajo){
 			try {
 
 				$handler = new Legajos;		
@@ -248,6 +249,7 @@
 				$handler->setDireccion($direccion);								
 				$handler->setCategoria($categoria);								
 				$handler->setHoras($horas);								
+				$handler->setNumeroLegajo($legajo);								
 				$handler->updateUserLegajos(false);
 				
 			} catch (Exception $e) {
