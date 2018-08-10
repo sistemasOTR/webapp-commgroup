@@ -132,7 +132,7 @@
                  
                      <div class="col-md-4">
                 <label>Tipo Categoria</label>
-                <select name="slt_categoria" id="slt_categoria" class='form-control' required="" value='' >
+                <select name="slt_categoria" id="slt_categoria" class='form-control'  value='' >
                   <option></option>
                   <?php  
                   var_dump($legajo);                
