@@ -53,25 +53,20 @@
         Resumen Mensual
         <small>Resumen mensual en plaza <?php echo $user->getAliasUserSistema() ?></small>
       </h1>
-      <ol class="breadcrumb">
-        <li class="active"><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>      
-      </ol>
     </section>
     <section class="content">
       <div class="container-fluid">
       <div class="row">
-        <div class="col-md-6">
-          <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/ProgresoMensual/coordinador.php"; ?>
-        </div>
-        <div class="col-md-6">
+      
+        <div class="col-md-4">
           <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/GestionMensualEfectividad/coordinador.php"; ?>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/ServiciosMensualEfectividad/coordinador.php"; ?>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
           <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/Puntaje/coordinador.php"; ?>
         </div>  
       </div>   
