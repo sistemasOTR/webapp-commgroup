@@ -177,8 +177,8 @@
                       <th>COND.FISCAL</th>
                       <th>CONCEPTO</th>
                       <th>IMPORTE</th>                      
-                      <th width="150">REINT</th>                      
-                      <th>ALED</th>                      
+                      <th width="100">REINT</th>                      
+                      <th style="width: 100px !important">ALED</th>                      
                       <th>LOC</th>                      
                       <th>TRAS</th>                      
                       <th width="30">OPER</th>
@@ -194,7 +194,10 @@
                       	$FECHA = $dFecha->FormatearFechas($fechaDesde,"Y-m-d","Y-m-d");
                       	$HASTA = $dFecha->FormatearFechas($fechaHasta,"Y-m-d","Y-m-d");
                       	$countSemana = 0;
-                      	$countCiclo = 0;
+                      	$impoSemana = 0;
+                        $countCiclo = 0;
+                        $impoCiclo = 0;
+                      	$counterId = 1;
                       	if ($fusuario!='') {
 								        $usuarioSist = $handlerUsuarios->selectById($fusuario)->getUserSistema();
 
@@ -278,11 +281,17 @@
                       		if(!empty($consulta)) {
 		                        foreach ($consulta as $key => $value) {
 		                        	$fechaT = $value->getFechaHora()->format('Y-m-d');
+                              if ($value->getImporteReintegro()>0) {
+                                $valReint = $value->getImporteReintegro();
+                              }
+                              $countSemana = $countSemana + $valReint;
+                              $impoSemana = $impoSemana + $value->getImporte();
+                              $countCiclo = $countCiclo + $valReint;
+                              $impoCiclo = $impoCiclo + $value->getImporte();
 
               									if($value->getAprobado()){
               										$class_estilos_aprobado = "<span class='label label-success'>APROBADO</span>";
-              										$countSemana = $countSemana + $value->getImporteReintegro();
-              										$countCiclo = $countCiclo + $value->getImporteReintegro();
+              										
               										$readonly = 'readonly=""';
               									}
                                 elseif($value->getRechazado())
@@ -333,7 +342,7 @@
           									    echo "<td>".$value->getCondFiscal()."</td>";
           									    echo "<td>".$value->getConcepto()."</td>";
           									    echo "<td>$ ".$value->getImporte()."</td>";    
-          									    echo "<td><input type='number' id='".$value->getId()."' name='reintegro' step='0.01' class='form-control input-reint' ".$readonly." value='".number_format($valReint,2)."'></td>";
+          									    echo "<td><input type='number' id='".$value->getId()."' data-week='".$counterId."' data-old='".number_format($valReint,2)."' name='reintegro' step='0.01' class='form-control input-reint' ".$readonly." value='".number_format($valReint,2)."'></td>";
           									    echo "<td>".$class_estilos_aledanio."</td>";
           									    echo "<td>".$nombAledanio."</td>";
           									    echo "<td>".$class_estilos_traslado."</td>";
@@ -407,13 +416,16 @@
           										echo "<td></td>";
           										echo "<td></td>";
           										echo "<td></td>";
-          										echo "<td></td>";
           										if ($dia == 'Domingo') {
-          											echo "<td><b>$ ".number_format($countSemana,2)."</b></td>";
+          											echo "<td><b>$ <span id='".$counterId."_impo'>".number_format($impoSemana,2)."</span></b></td>";
+          											echo "<td><b>$ <span id='".$counterId."_sem'>".number_format($countSemana,2)."</span></b></td>";
+          											echo "<td></td>";
+          											echo "<td><b>$ <span id='".$counterId."_semdif'>".number_format($impoSemana - $countSemana,2)."</span></b></td>";
           											$countSemana = 0;
-          											echo "<td></td>";
-          											echo "<td></td>";
+          											$impoSemana = 0;
+                                					$counterId += 1;
           										} else {
+          											echo "<td></td>";
           											echo "<td></td>";
           										    echo "<td>".$class_estilos_aledanio."</td>";
           										    echo "<td>".$nombAledanio."</td>";
@@ -445,7 +457,7 @@
           								echo "<td></td>";
           								echo "<td></td>";
           								echo "<td></td>";
-          								echo "<td></td>";
+          								echo "<td><b>$".number_format($impoCiclo,2)."</b></td>";
           								echo "<td><b>$".number_format($countCiclo,2)."</b></td>";
           								echo "<td></td>";
           								echo "<td></td>";
@@ -572,6 +584,16 @@
   $('.input-reint').on('change',function() {
   	var id = this.id;
   	var	reintegro = $(this).val();
+    var semana = $(this).attr('data-week');
+    var oldReint = $(this).attr('data-old');
+    var sumsem = $('#'+semana+'_sem').html();
+    var imposem = $('#'+semana+'_impo').html();
+    total_sem_reint = Number(sumsem) - Number(oldReint) + Number(reintegro);
+    dif = imposem - Number(total_sem_reint);
+
+    $('#'+semana+'_sem').html(parseFloat(total_sem_reint).toFixed(2));
+    $('#'+semana+'_semdif').html(parseFloat(dif).toFixed(2));
+    $(this).attr('data-old', reintegro);
   	$.ajax({
 			type: "POST",
 			url: 'App/Vista/Modulos/Ticket/action_editar_reint.php',
