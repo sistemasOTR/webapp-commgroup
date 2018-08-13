@@ -92,7 +92,8 @@
                     <label for="apellido">Apellido</label>
                     <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Ingresa tu apellido" value='<?php echo $user->getApellido(); ?>'>
                   </div>
-                    <?php if(!empty($legajo)){
+                    <?php 
+                    if(!empty($legajo)){
                       $dni = $legajo->getDni();
                       $cuit = $legajo->getCuit();
                       if (is_null($legajo->getFechaIngreso())) {
@@ -120,27 +121,27 @@
                       $num_legajo= null;
                     } 
                     ?>
-                   <div class="col-md-4">
+                   <div class="col-md-4 Nocliente">
                     <label for="dni">N° de DNI</label>
                     <input type="number" class="form-control" id="dni" name="dni" placeholder="EJ.: 33921549" value='<?php echo intval($dni); ?>'>
                   </div>
 
-                  <div class="col-md-4">
+                  <div class="col-md-4 Nocliente">
                     <label for="cuil">N° de CUIL</label>
                     <input type="text" class="form-control" id="cuil" name="cuil" placeholder="EJ.: 20-33921549-9" value='<?php echo $cuit; ?>'>
                   </div>
 
-                  <div class="col-md-4">
+                  <div class="col-md-4 Nocliente">
                     <label for="fecha_ingreso">Fecha de Ingreso</label>
                     <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso"  value='<?php echo $f_ingreso; ?>'>
                   </div>
 
-                  <div class="col-md-4">
+                  <div class="col-md-4 Nocliente">
                     <label for="fecha_nacimiento">Fecha de Nacimiento</label>
                     <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento"  value='<?php echo $f_nac; ?>'>
                   </div>
 
-                  <div class="col-md-12">
+                  <div class="col-md-12 Nocliente">
                     <label for="direccion">Domicilio, Localidad, Provincia, CP</label>
                     <input type="text" class="form-control" id="direccion" name="direccion"  value='<?php echo $dom; ?>'>
                   </div>
@@ -186,9 +187,9 @@
                     </div>                    
                   </div>
 
-                  <div class="col-md-4">
+                  <div class="col-md-4 Nocliente">
                 <label>Tipo Categoria</label>
-                <select name="slt_categoria"  id="slt_categoria" class='form-control' required="" value='' >
+                <select name="slt_categoria"  id="slt_categoria" class='form-control' value='' >
                   <option></option>
                   <?php
                   if ($cat > 0) {
@@ -211,12 +212,12 @@
                   ?>
                 </select>
               </div>   
-               <div class="col-md-4">
-                    <label for="apellido">Horas Laborales</label>
+               <div class="col-md-4 Nocliente">
+                    <label for="apellido ">Horas Laborales</label>
                     <input type="number" class="form-control" id="horas" name="horas"  value='<?php echo $horas_lab; ?>'>
                   </div>
 
-                  <div class="col-md-4">
+                  <div class="col-md-4 Nocliente">
                     <label for="apellido">Nº Legajo</label>
                     <input type="number" class="form-control" id="legajo" name="legajo"  value='<?php echo $num_legajo; ?>'>
                   </div>
@@ -291,7 +292,7 @@
         </form>
       </div>
       <!-- Lineas asignadas -->
-      <div class="box box-solid">
+      <div class="box box-solid " id="asignaciones_user">
       	<div class="box-header with-border">
           <h3 class="box-title">Asignaciones</h3>
         </div>
@@ -446,7 +447,17 @@
       $("#slt_perfil").select2({
           placeholder: "Seleccionar",                  
       });
-    });  
+    }); 
+
+    $(document).ready(function() {
+      if($("#slt_perfil").val()==6){ 
+      $(".Nocliente").hide();                 
+      $("#asignaciones_user").hide();                 
+      }else{
+      $(".Nocliente").show();
+      $("#asignaciones_user").show();  
+      };
+    });   
 
      $(document).ready(function() {
       $("#slt_categoria").select2({

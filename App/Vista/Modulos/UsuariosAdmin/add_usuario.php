@@ -58,51 +58,6 @@
               <div class="row">
 
                 <div class="col-md-6">
-                  <div class="col-md-4">              
-                    <label for="nombre">Nombre</label>
-                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresa tu nombre" value=''>
-                  </div>
-                
-                  <div class="col-md-4">
-                    <label for="apellido">Apellido</label>
-                    <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Ingresa tu apellido" value=''>
-                  </div>
-
-                  <div class="col-md-4">
-                    <label for="apellido">N° de DNI</label>
-                    <input type="number" class="form-control" id="dni" name="dni" placeholder="EJ.: 33921549" value=''>
-                  </div>
-
-                  <div class="col-md-4">
-                    <label for="apellido">N° de CUIL</label>
-                    <input type="text" class="form-control" id="cuil" name="cuil" placeholder="EJ.: 20-33921549-9" value=''>
-                  </div>
-
-                  <div class="col-md-4">
-                    <label for="apellido">Fecha de Ingreso</label>
-                    <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso"  value=''>
-                  </div>
-
-                  <div class="col-md-4">
-                    <label for="apellido">Fecha de Nacimiento</label>
-                    <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento"  value=''>
-                  </div>
-
-                  <div class="col-md-12">
-                    <label for="apellido">Domicilio, Localidad, Provincia, CP</label>
-                    <input type="text" class="form-control" id="direccion" name="direccion"  value=''>
-                  </div>
-
-                  <div class="col-md-6" style="margin-top: 20px;">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa un email" value=''>
-                  </div>
-
-                  <div class="col-md-6" style="margin-top: 20px;">
-                    <label for="passwords">Contraseña</label>
-                    <input type="password" class="form-control" id="passwords" name="password" placeholder="Ingresa la contraseña" value=''>
-                  </div>
-
                   <div class="col-md-8" style="margin-top: 20px;">  
                     <label>Perfil</label>                          
                     <select id="slt_perfil" onchange="mostrarRequired()" class="form-control" style="width: 100%" name="slt_perfil" required="">                    
@@ -121,16 +76,64 @@
                       ?>                      
                     </select>                  
                   </div>
-
-                  <div class="col-md-4" style="margin-top: 40px;">
+                   <div class="col-md-4" style="margin-top: 40px;">
                     <div class="checkbox">
                       <label>
                         <input type="checkbox" id="checkbox"name="cambio_rol"> Permitir Cambio de Rol
                       </label>
                     </div>                    
                   </div>
+
+                  <div class="col-md-6">              
+                    <label for="nombre">Nombre</label>
+                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingresa tu nombre" value=''>
+                  </div>
+                
+                  <div class="col-md-6">
+                    <label for="apellido">Apellido</label>
+                    <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Ingresa tu apellido" value=''>
+                  </div>
+
+                   <div class="col-md-6" style="">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Ingresa un email" value=''>
+                  </div>
+
+                  <div class="col-md-6" style="">
+                    <label for="passwords">Contraseña</label>
+                    <input type="password" class="form-control" id="passwords" name="password" placeholder="Ingresa la contraseña" value=''>
+                  </div>
+
+                  <div class="col-md-4 Nocliente">
+                    <label for="apellido">N° de DNI</label>
+                    <input type="number" class="form-control" id="dni" name="dni" placeholder="EJ.: 33921549" value=''>
+                  </div>
+
+                  <div class="col-md-4 Nocliente" >
+                    <label for="apellido">N° de CUIL</label>
+                    <input type="text" class="form-control" id="cuil" name="cuil" placeholder="EJ.: 20-33921549-9" value=''>
+                  </div>
+
+                  <div class="col-md-4 Nocliente">
+                    <label for="apellido">Fecha de Ingreso</label>
+                    <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso"  value=''>
+                  </div>
+
+                  <div class="col-md-4 Nocliente">
+                    <label for="apellido">Fecha de Nacimiento</label>
+                    <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento"  value=''>
+                  </div>
+
+                  <div class="col-md-8 Nocliente">
+                    <label for="apellido">Domicilio, Localidad, Provincia, CP</label>
+                    <input type="text" class="form-control" id="direccion" name="direccion"  value=''>
+                  </div>
+
                  
-                     <div class="col-md-4">
+
+                 
+                 
+                     <div class="col-md-4 Nocliente">
                 <label>Tipo Categoria</label>
                 <select name="slt_categoria" id="slt_categoria" class='form-control'  value='' >
                   <option></option>
@@ -145,17 +148,17 @@
                   ?>
                 </select>
               </div> 
-               <div class="col-md-4">
+               <div class="col-md-4 Nocliente">
                     <label for="apellido">Horas Laborales</label>
                     <input type="number" class="form-control" id="horas" name="horas"  value=''>
                   </div>
 
-                  <div class="col-md-4">
+                  <div class="col-md-4 Nocliente">
                     <label for="apellido">Nº Legajo</label>
                     <input type="number" class="form-control" id="legajo" name="legajo"  value=''>
                   </div>
 
-                  <div class="col-md-12" style="margin-top: 20px;">  
+                  <div class="col-md-12" style="margin-top: 20px;" >  
                     <label>Plaza</label>                          
                     <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" required="">                    
                       <option></option>
@@ -216,8 +219,10 @@
         $("input").prop('required',true);
         $("#foto").attr('required',false);
         $("#checkbox").attr('required',false);
+        $(".Nocliente").show();
        } else{
         $("input").prop('required',false);
+        $(".Nocliente").hide();
        }
     }
      

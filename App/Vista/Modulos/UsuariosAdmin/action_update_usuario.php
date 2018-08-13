@@ -94,6 +94,7 @@
 		
 		$handlerPerfiles = new HandlerPerfiles;
 		$perfil=$handlerPerfiles->selectById($slt_perfil);	
+		if ($slt_perfil != 6) {	
 
 		$handler = new HandlerUsuarios;     
         $handler->updateUsuariosAdmin($id,$nombre,$apellido,$foto,$objTU,$id_user_sistema,$alias_user_sistema,$perfil,$email,$password,$cambio_rol,$plaza);	
@@ -110,6 +111,13 @@
 
      		$handlerlegajos->updatelegajos(intval($idLegajo->getId()),$id,$nombrecompleto,$dni,$cuil,$ingreso,$nacimiento,$direccion,$categoria,$horas,$legajo);
      	}
+
+     } else{
+     	$handler = new HandlerUsuarios;     
+        $handler->updateUsuariosAdmin($id,$nombre,$apellido,$foto,$objTU,$id_user_sistema,$alias_user_sistema,$perfil,$email,$password,$cambio_rol,$plaza);	
+
+
+     }
         
 
 
