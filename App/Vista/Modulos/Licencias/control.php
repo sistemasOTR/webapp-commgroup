@@ -180,7 +180,8 @@
                         // var_dump(count($arrLicencia));
                         
                         if(!empty($arrLicencia))
-                           {   
+                           { 
+                        
                                                                     
                         foreach ($arrLicencia as $key => $value) {
                             foreach ($arrayIde as $idrepeate) {

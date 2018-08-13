@@ -4,9 +4,11 @@
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
   include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";  
   include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php";         
-  include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";          
+  include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
+  include_once PATH_NEGOCIO."Modulos/handlerlicencias.class.php";           
 
   $dFecha = new Fechas;
+  $fechahoy=$dFecha->FechaActual();
 
   $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());    
@@ -15,6 +17,7 @@
   $festados= (isset($_GET["festados"])?$_GET["festados"]:'');
 
   $handler = new HandlerTickets;
+  $handlerLic= new HandlerLicencias;
   $handlerSist = new HandlerSistema;
   $arrGestor = $handlerSist->selectAllGestor($fplaza);
   $arrCoordinador = $handlerSist->selectAllPlazasArray();
@@ -205,10 +208,10 @@
                       		$dia = $dFecha->Dias(date('l',strtotime($FECHA)));
                       		$fechaOp =  date('d-m-Y',strtotime($FECHA));
                           $consulta = $handler->seleccionarByFiltrosAprobacion($FECHA,$FECHA,$fusuario,$festados);
-							
-								// var_dump($usuarioSist);
-								// exit();
-
+                          $arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($FECHA,$FECHA,intval($fusuario),2); 
+                           
+                             
+                                            
 							
             							if($fplaza != '' || $fplaza != 0){
             								foreach ($arrGestor as $gestor) {
@@ -275,9 +278,29 @@
                                     }
                                   }
                                 }
+                                $deLic='';
+                                if(!empty($arrLicencias)) {
 
-                             
+                                foreach ($arrLicencias as $key => $value) {
+                          
+                                if (!$value->getRechazado()) {
+       
+                                 if($value->getAprobado()) {
 
+                                  if ($fechahoy <= $value->getFechaFin()->format('Y-m-d') ) { 
+                                   
+                                    $deLic= "<span class='label label-success'> LICENCIA EN CURSO</span>";
+                                   
+                                   }
+                                    else{ 
+                                       $deLic="";
+                                      }
+
+                                     
+                                    }
+                                  }
+                                }
+                              }
                       		if(!empty($consulta)) {
 		                        foreach ($consulta as $key => $value) {
 		                        	$fechaT = $value->getFechaHora()->format('Y-m-d');
@@ -326,6 +349,8 @@
 		                                $class_estilos_traslado = "<span class='label label-danger'>NO</span>";
 		                                $opTras = 0;
 		                              }
+
+               
 									
           									echo "<tr>";
           									?>
@@ -398,6 +423,9 @@
           									  echo "</tr>";
           									   }
           								} else {
+
+
+                               
           									
           										if ($dia == 'Domingo') {
           											echo "<tr class='bg-navy'>";
@@ -428,8 +456,7 @@
           											echo "<td></td>";
           											echo "<td></td>";
           										    echo "<td>".$class_estilos_aledanio."</td>";
-          										    echo "<td>".$nombAledanio."</td>";
-          											// echo "<td></td>";
+          										    echo "<td>".$nombAledanio.$deLic."</td>";
           											// echo "<td></td>";
           										}
           										if ($dia == 'Domingo') {
