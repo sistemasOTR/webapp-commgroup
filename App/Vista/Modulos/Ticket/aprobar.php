@@ -287,9 +287,9 @@
        
                                  if($value->getAprobado()) {
 
-                                  if ($fechahoy <= $value->getFechaFin()->format('Y-m-d') ) { 
+                                  if ($FECHA <= $value->getFechaFin()->format('Y-m-d') ) { 
                                    
-                                    $deLic= "<span class='label label-success'> LICENCIA EN CURSO</span>";
+                                    $deLic= "<span class='label label-warning'> LICENCIA EN CURSO</span>";
                                    
                                    }
                                     else{ 

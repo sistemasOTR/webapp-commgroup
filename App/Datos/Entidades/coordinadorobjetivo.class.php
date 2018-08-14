@@ -28,7 +28,15 @@
 
 		private $_estado;
 		public function getEstado(){ return var_export($this->_estado,true); }
-		public function setEstado($estado){ $this->_estado=$estado; }		
+		public function setEstado($estado){ $this->_estado=$estado; }	
+
+		private $_fechaDesde;
+		public function getFechaDesde(){ return $this->_fechaDesde; }
+		public function setFechaDesde($fechaDesde){ $this->_fechaDesde=$fechaDesde; }
+
+		private $_fechaHasta;
+		public function getFechaHasta(){ return $this->_fechaHasta; }
+		public function setFechaHasta($fechaHasta){ $this->_fechaHasta=$fechaHasta; }		
 
 		/*#############*/
 		/* CONSTRUCTOR */
@@ -38,7 +46,9 @@
 			$this->setId(0);
 			$this->setIdCoordinadorSistema(0);			
 			$this->setObjetivo(0);
-			$this->setEstado(true);				
+			$this->setEstado(true);	
+			$this->setFechaDesde('');				
+			$this->setFechaHasta('');			
 		}
 
 		/*###################*/
@@ -60,11 +70,13 @@
 				$query="INSERT INTO coordinador_objetivo (
 		        						id_coordinador_sistema,
 		        						objetivo,
-		        						estado
+		        						estado,
+		        						fecha_desde
 	        			) VALUES (
 	        							'".$this->getIdCoordinadorSistema()."',
 	        							".$this->getObjetivo().",
-	        							'".$this->getEstado()."'
+	        							'".$this->getEstado()."',
+	        							'".$this->getFechaDesde()."'
 	        			)";   
 
 	        	//echo $query;
@@ -142,7 +154,7 @@
 					if(empty($this->getIdCoordinadorSistema()))
 						throw new Exception("No se selecciono el coordinador de referencia");		
 
-					$query = "SELECT * FROM coordinador_objetivo WHERE id_coordinador_sistema='".$this->getIdCoordinadorSistema()."' AND estado='true'";
+					$query = "SELECT * FROM coordinador_objetivo WHERE id_coordinador_sistema='".$this->getIdCoordinadorSistema()."' AND estado='true' AND fecha_hasta is NULL";
 				}
 				else{
 					if(empty($this->getId()))
@@ -176,6 +188,9 @@
 				$this->setIdCoordinadorSistema(trim($filas['id_coordinador_sistema']));
 				$this->setObjetivo(trim($filas['objetivo']));											
 				$this->setEstado($filas['estado']);
+				$this->setFechaDesde($filas['fecha_desde']);
+				$this->setFechaHasta($filas['fecha_hasta']);
+
 			}
 		}
 
@@ -184,7 +199,9 @@
 			$this->setId(0);
 			$this->setIdCoordinadorSistema(0);
 			$this->setObjetivo(0);			
-			$this->setEstado(true);				
+			$this->setEstado(true);	
+			$this->setFechaDesde('');				
+			$this->setFechaHasta('');				
 		}
 
 		private function createTable()
@@ -195,6 +212,61 @@
 		/*########################*/
 		/* METODOS PERSONALIZADOS */
 		/*########################*/	
+
+		public function deBaja($conexion,$fechaCambioVigencia)
+		{		
+			try {
+				# Query 			
+				$query="UPDATE coordinador_objetivo SET
+								fecha_hasta='".$fechaCambioVigencia."'
+							WHERE fecha_hasta is NULL";
+				
+
+				# Ejecucion
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}					
+		}
+
+		public function selectActual()
+		{			
+			try {
+				
+				# Query
+				$query = "SELECT * FROM coordinador_objetivo WHERE estado='true' AND fecha_hasta is NULL";
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new CoordinadorObjetivo);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
+
+		public function buscarPuntajeFecha($coordinador_id,$fechaOperacion)
+		{			
+			try {
+				
+				# Query
+				$query = "SELECT * FROM coordinador_objetivo WHERE id_coordinador_sistema=".$coordinador_id." AND estado='true' AND fecha_hasta >'".$fechaOperacion."' AND fecha_desde <'".$fechaOperacion."'";
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new CoordinadorObjetivo);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
 
 		public function existeObjetivo()
 		{			

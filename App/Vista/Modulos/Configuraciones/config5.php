@@ -5,7 +5,7 @@
 	$url_action = PATH_VISTA.'Modulos/Configuraciones/action_config5.php';  
 
 	$handler = new HandlerSistema;
-	$arrCoordinador = $handler->selectAllCoordinador(null);
+	$arrCoordinador = $handler->selectAllPlazas();
 ?>
 
 <div class='col-md-12'>
@@ -15,6 +15,13 @@
 				<i class="fa fa-cog"></i>
 			  	<h3 class="box-title">Objetivos por Plaza</h3>	
 			  	<div class="form-group">
+			  		<?php 
+			  		$handlerFecha = new HandlerPuntaje;
+					$fechaPuntaje = $handlerFecha->buscarFechaPuntajeCoordinador();
+					echo "<p style='padding-left:25px;'>Fecha de vigencia: <strong>".$fechaPuntaje->format('d-m-Y')."</strong></p>";
+			  	 ?>
+			  	 <label style="float: left;margin-right: 15px;padding-top: 6px;padding-left: 25px;">Nueva Vigencia</label>
+			  	 <input type="date" class="form-control" style="width: 200px; float: left;" name="txtFechaVigencia" id="txtFechaVigencia" value="<?php echo date('Y-m-d'); ?>">
 	            	<button type="submit" class="btn btn-success pull-right">Guardar</button>            
 	            </div>  
 			</div>
@@ -35,17 +42,17 @@
 
 						    	if(!empty($arrCoordinador))
 						    	{						    		
-						    		foreach ($arrCoordinador as $key => $value) {	
+						    		foreach ($arrCoordinador as $key => $value) {
 
 						    			$handlerP = new HandlerPuntaje;
-						    			$objetivo = $handlerP->buscarObjetivoCoordinador($value->CORDI11_ALIAS);
-						    			$objetivoGestores = $handlerP->obtenerPuntajeCoordinador($value->CORDI11_ALIAS);
-
+						    			$objetivo = $handlerP->buscarObjetivoCoordinador($value->PLAZA);
+						    			$objetivoGestores = $handlerP->obtenerPuntajeCoordinador($value->PLAZA);
+						    			$strReplace= str_replace(" ","_",$value->PLAZA);
 						    			echo "
 					    				<tr>
-									    	<td>".$value->CORDI11_ALIAS."</td>
+									    	<td>".$value->PLAZA."</td>
 									    	<td>".$objetivoGestores."</td>
-											<td><input type='number' step='0.01' class='form-control' name='id_".$value->CORDI11_ALIAS."' style='width: 100%;' value='".$objetivo."'></td>
+											<td><input type='number' step='0.01' class='form-control' name='id_".$strReplace."' style='width: 100%;' value='".$objetivo."'></td>
 									    </tr>";
 						    		}
 						    	}

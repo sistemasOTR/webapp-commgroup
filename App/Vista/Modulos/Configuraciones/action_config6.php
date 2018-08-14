@@ -13,6 +13,8 @@
 					  'objetivo' => $_POST["id_".$value['id']]);	
 	}
 
+	$fechaCambioVigencia = (isset($_POST["txtFechaVigencia"])?$_POST["txtFechaVigencia"]:'');
+
 	$err = "../../../../index.php?view=configuraciones&config=config6&err=";
 	$info = "../../../../index.php?view=configuraciones&config=config6&info=";	
 
@@ -21,7 +23,7 @@
 		if(!empty($datos)){
 
 			$handlerTI = new HandlerPuntaje;			
-			$handlerTI->guardarObjetivoBySupervisor($datos);					
+			$handlerTI->guardarObjetivoBySupervisor($datos,$fechaCambioVigencia);					
 
 			$msj="Se actualizaron todos los objetivos";
 			header("Location: ".$info.$msj);				
