@@ -28,7 +28,15 @@
 
 		private $_estado;
 		public function getEstado(){ return var_export($this->_estado,true); }
-		public function setEstado($estado){ $this->_estado=$estado; }		
+		public function setEstado($estado){ $this->_estado=$estado; }	
+
+		private $_fechaDesde;
+		public function getFechaDesde(){ return $this->_fechaDesde; }
+		public function setFechaDesde($fechaDesde){ $this->_fechaDesde=$fechaDesde; }
+
+		private $_fechaHasta;
+		public function getFechaHasta(){ return $this->_fechaHasta; }
+		public function setFechaHasta($fechaHasta){ $this->_fechaHasta=$fechaHasta; }	
 
 		/*#############*/
 		/* CONSTRUCTOR */
@@ -39,6 +47,8 @@
 			$this->setIdGestorSistema(0);			
 			$this->setObjetivo(0);
 			$this->setEstado(true);				
+			$this->setFechaDesde('');				
+			$this->setFechaHasta('');				
 		}
 
 		/*###################*/
@@ -60,11 +70,13 @@
 				$query="INSERT INTO gestor_objetivo (
 		        						id_gestor_sistema,
 		        						objetivo,
-		        						estado
+		        						estado,
+		        						fecha_desde
 	        			) VALUES (
 	        							".$this->getIdGestorSistema().",
 	        							".$this->getObjetivo().",
-	        							'".$this->getEstado()."'
+	        							'".$this->getEstado()."',
+	        							'".$this->getFechaDesde()."'
 	        			)";        
 				
 				# Ejecucion 	
@@ -135,7 +147,7 @@
 					if($this->getIdGestorSistema()<0)
 						throw new Exception("No se selecciono el gestor de referencia");		
 
-					$query = "SELECT * FROM gestor_objetivo WHERE id_gestor_sistema=".$this->getIdGestorSistema()." AND estado='true'";
+					$query = "SELECT * FROM gestor_objetivo WHERE id_gestor_sistema=".$this->getIdGestorSistema()." AND estado='true' AND fecha_hasta is NULL";
 				}
 				else{
 					if(empty($this->getId()))
@@ -166,6 +178,8 @@
 				$this->setIdGestorSistema(trim($filas['id_gestor_sistema']));
 				$this->setObjetivo(trim($filas['objetivo']));											
 				$this->setEstado($filas['estado']);
+				$this->setFechaDesde($filas['fecha_desde']);
+				$this->setFechaHasta($filas['fecha_hasta']);
 			}
 		}
 
@@ -175,6 +189,8 @@
 			$this->setIdGestorSistema(0);
 			$this->setObjetivo(0);			
 			$this->setEstado(true);				
+			$this->setFechaDesde('');				
+			$this->setFechaHasta('');				
 		}
 
 		private function createTable()
@@ -185,6 +201,60 @@
 		/*########################*/
 		/* METODOS PERSONALIZADOS */
 		/*########################*/	
+		public function deBaja($conexion,$fechaCambioVigencia)
+		{		
+			try {
+				# Query 			
+				$query="UPDATE gestor_objetivo SET
+								fecha_hasta='".$fechaCambioVigencia."'
+							WHERE fecha_hasta is NULL";
+				
+
+				# Ejecucion
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}					
+		}
+
+		public function selectActual()
+		{			
+			try {
+				
+				# Query
+				$query = "SELECT * FROM gestor_objetivo WHERE estado='true' AND fecha_hasta is NULL";
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new GestorObjetivo);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
+
+		public function buscarPuntajeFecha($gestor_id,$fechaOperacion)
+		{			
+			try {
+				
+				# Query
+				$query = "SELECT * FROM gestor_objetivo WHERE id_gestor_sistema=".$gestor_id." AND estado='true' AND fecha_hasta >'".$fechaOperacion."' AND fecha_desde <'".$fechaOperacion."'";
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new GestorObjetivo);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
 
 		public function existeObjetivo()
 		{			

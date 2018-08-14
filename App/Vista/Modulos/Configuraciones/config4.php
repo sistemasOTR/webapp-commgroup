@@ -15,6 +15,13 @@
 				<i class="fa fa-cog"></i>
 			  	<h3 class="box-title">Objetivos por gestores</h3>	
 			  	<div class="form-group">
+			  		 	<?php 
+			  		$handlerFecha = new HandlerPuntaje;
+					$fechaPuntaje = $handlerFecha->buscarFechaPuntajeGestor();
+					echo "<p style='padding-left:25px;'>Fecha de vigencia: <strong>".$fechaPuntaje->format('d-m-Y')."</strong></p>";
+			  	 ?>
+			  	 <label style="float: left;margin-right: 15px;padding-top: 6px;padding-left: 25px;">Nueva Vigencia</label>
+			  	 <input type="date" class="form-control" style="width: 200px; float: left;" name="txtFechaVigencia" id="txtFechaVigencia" value="<?php echo date('Y-m-d'); ?>">
 	            	<button type="submit" class="btn btn-success pull-right">Guardar</button>            
 	            </div>  
 			</div>

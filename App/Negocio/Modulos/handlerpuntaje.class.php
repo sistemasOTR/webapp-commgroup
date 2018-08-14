@@ -134,11 +134,42 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
-		public function guardarObjetivoByGestor($datos){
+		public function buscarPuntajeFechaGestor($gestor_id,$fechaOperacion){
 			try {
 
 				$handler = new GestorObjetivo;				
-				$handler->limpiarTabla(null);
+				$objPuntaje = $handler->buscarPuntajeFecha($gestor_id,$fechaOperacion);
+
+
+				if(!empty($objPuntaje))				
+					return $objPuntaje->getPuntaje();
+				else
+					return 0;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+		public function buscarFechaPuntajeGestor(){
+			try {
+
+				$handler = new GestorObjetivo;				
+				$objPuntaje = $handler->selectActual();
+				
+				if(!empty($objPuntaje))				
+					return $objPuntaje[0]->getFechaDesde();
+				else
+					return 0;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+		public function guardarObjetivoByGestor($datos,$fechaCambioVigencia){
+			try {
+
+				$handler = new GestorObjetivo;				
+				$handler->deBaja(null,$fechaCambioVigencia);
 
 				foreach ($datos as $key => $value) {
 
@@ -148,14 +179,9 @@
 
 						$handler1->setIdGestorSistema($value["gestor"]);
 						$handler1->setObjetivo($value["objetivo"]);
-				
-						if($this->existeConfiguracionObjetio($handler1->getIdGestorSistema(),$handler1->getObjetivo())){								
-							$handler1->update(null);
-						}
-						else{
-							$handler1->insert(null);
-						}	
-
+						$handler1->setFechaDesde($fechaCambioVigencia);
+						$handler1->insert(null);
+						
 					}											
 
 				}
@@ -163,7 +189,7 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
 			}
-		}			
+		}
 
 		public function existeConfiguracionObjetio($gestor_id,$objetivo){
 			try {
@@ -188,6 +214,39 @@
 		//#############
 		// COORDINADOR
 		//#############
+
+		public function buscarPuntajeFechaCoordinador($coordinador_id,$fechaOperacion){
+			try {
+
+				$handler = new CoordinadorObjetivo;				
+				$objPuntaje = $handler->buscarPuntajeFecha($coordinador_id,$fechaOperacion);
+
+
+				if(!empty($objPuntaje))				
+					return $objPuntaje->getPuntaje();
+				else
+					return 0;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+		public function buscarFechaPuntajeCoordinador(){
+			try {
+
+				$handler = new CoordinadorObjetivo;				
+				$objPuntaje = $handler->selectActual();
+				
+				
+				if(!empty($objPuntaje))				
+					return $objPuntaje[0]->getFechaDesde();
+				else
+					return 0;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
 		public function buscarObjetivoCoordinador($coordinador_alias){
 			try {
 
@@ -205,11 +264,11 @@
 			}
 		}
 
-		public function guardarObjetivoByCoordinador($datos){
+		public function guardarObjetivoByCoordinador($datos,$fechaCambioVigencia){
 			try {
 
 				$handler = new CoordinadorObjetivo;				
-				$handler->limpiarTabla(null);
+				$handler->deBaja(null,$fechaCambioVigencia);
 
 				foreach ($datos as $key => $value) {
 
@@ -219,14 +278,9 @@
 
 						$handler1->setIdCoordinadorSistema($value["coordinador"]);
 						$handler1->setObjetivo($value["objetivo"]);
-				
-						if($this->existeConfiguracionObjetioCoordinador($handler1->getIdCoordinadorSistema(),$handler1->getObjetivo())){								
-							$handler1->update(null);
-						}
-						else{
-							$handler1->insert(null);
-						}	
-
+						$handler1->setFechaDesde($fechaCambioVigencia);
+						$handler1->insert(null);
+						
 					}											
 
 				}
@@ -234,7 +288,7 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
 			}
-		}		
+		}
 
 		public function existeConfiguracionObjetioCoordinador($coordinador_id,$objetivo){
 			try {
@@ -284,6 +338,37 @@
 		//#############
 		// SUPERVISOR
 		//#############
+		public function buscarPuntajeFechaSupervisor($supervisor_id,$fechaOperacion){
+			try {
+
+				$handler = new SupervisorObjetivo;				
+				$objPuntaje = $handler->buscarPuntajeFecha($supervisor_id,$fechaOperacion);
+
+
+				if(!empty($objPuntaje))				
+					return $objPuntaje->getPuntaje();
+				else
+					return 0;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+		public function buscarFechaPuntajeSupervisor(){
+			try {
+
+				$handler = new SupervisorObjetivo;				
+				$objPuntaje = $handler->selectActual();
+				
+				if(!empty($objPuntaje))				
+					return $objPuntaje[0]->getFechaDesde();
+				else
+					return 0;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
 		public function buscarObjetivoSupervisor($supervisor_id){
 			try {
 
@@ -301,11 +386,11 @@
 			}
 		}
 
-		public function guardarObjetivoBySupervisor($datos){
+		public function guardarObjetivoBySupervisor($datos,$fechaCambioVigencia){
 			try {
 
 				$handler = new SupervisorObjetivo;				
-				$handler->limpiarTabla(null);
+				$handler->deBaja(null,$fechaCambioVigencia);
 
 				foreach ($datos as $key => $value) {
 
@@ -315,14 +400,9 @@
 
 						$handler1->setIdSupervisorSistema($value["supervisor"]);
 						$handler1->setObjetivo($value["objetivo"]);
-				
-						if($this->existeConfiguracionObjetioSupervisor($handler1->getIdSupervisorSistema(),$handler1->getObjetivo())){								
-							$handler1->update(null);
-						}
-						else{
-							$handler1->insert(null);
-						}	
-
+						$handler1->setFechaDesde($fechaCambioVigencia);
+						$handler1->insert(null);
+						
 					}											
 
 				}
@@ -330,8 +410,7 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
 			}
-		}		
-
+		}
 		public function existeConfiguracionObjetioSupervisor($supervisor_id,$objetivo){
 			try {
 				
