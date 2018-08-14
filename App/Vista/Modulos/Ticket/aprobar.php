@@ -266,18 +266,18 @@
 
                                 $valReint=0;
 
-                                if ($nombAledanio != '') {
-                                  $arrRintLocalidad = $handler->selectByLocalidad($FECHA,$nombAledanio);
-                                  if (!empty($arrRintLocalidad)) {
-                                    foreach ($arrRintLocalidad as $reintLoc) {
+                                // if ($nombAledanio != '') {
+                                //   $arrRintLocalidad = $handler->selectByLocalidad($FECHA,$nombAledanio);
+                                //   if (!empty($arrRintLocalidad)) {
+                                //     foreach ($arrRintLocalidad as $reintLoc) {
 
-                                      if ($reintLoc->getCantOp() < $cantServ[0]->CANTIDAD_SERVICIOS) {
-                                        $valReint = $reintLoc->getReintegro();
-                                        break;
-                                      }
-                                    }
-                                  }
-                                }
+                                //       if ($reintLoc->getCantOp() < $cantServ[0]->CANTIDAD_SERVICIOS) {
+                                //         $valReint = $reintLoc->getReintegro();
+                                //         break;
+                                //       }
+                                //     }
+                                //   }
+                                // }
                                 $deLic='';
                                 if(!empty($arrLicencias)) {
 
@@ -287,9 +287,9 @@
        
                                  if($value->getAprobado()) {
 
-                                  if ($fechahoy <= $value->getFechaFin()->format('Y-m-d') ) { 
+                                  if ($FECHA <= $value->getFechaFin()->format('Y-m-d') ) { 
                                    
-                                    $deLic= "<span class='label label-success'> LICENCIA EN CURSO</span>";
+                                    $deLic= "<span class='label label-warning'> LICENCIA EN CURSO</span>";
                                    
                                    }
                                     else{ 
@@ -349,7 +349,6 @@
 		                                $class_estilos_traslado = "<span class='label label-danger'>NO</span>";
 		                                $opTras = 0;
 		                              }
-
                
 									
           									echo "<tr>";
@@ -423,11 +422,15 @@
           									  echo "</tr>";
           									   }
           								} else {
+				                              if ($deLic!='') {
+				                              	$class_estilos_traslado='';
+				                              	$class_estilos_aledanio = '';
+		                                  		$clasePeaje = 'color: white !important';
+		                                  		$nombAledanio='';
+		                                  		$class_estilos_aledanio = '';
+				                              }
 
-
-                               
-          									
-          										if ($dia == 'Domingo') {
+				                              if ($dia == 'Domingo') {
           											echo "<tr class='bg-navy'>";
           											echo "<td>SUBTOTAL</td>";
           										} else {
@@ -464,7 +467,7 @@
           											echo "<td></td>";
           										} else {
           											echo "<td></td>";
-          											echo "<td>".$cantServ[0]->CANTIDAD_SERVICIOS."</td>";
+          											echo "<td style='".$clasePeaje."'>".$cantServ[0]->CANTIDAD_SERVICIOS."</td>";
           										}
           										echo "<td></td>";
           										echo "<td></td>";
