@@ -449,6 +449,11 @@
 				$include = 'Modulos/Configuraciones/index.php';
 			break;
 
+		case 'detalle':
+			if($permiso->getModuloConfiguracionBoolean())
+				$include = 'Modulos/Configuraciones/detalle_ver.php';
+			break;
+
 		  /*#######*/
 		 /* AYUDA */
 		/*#######*/

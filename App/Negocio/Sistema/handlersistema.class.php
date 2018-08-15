@@ -462,7 +462,7 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
-
+			
 		public function selectAllEmpresaArray(){
 			try {
 				
