@@ -476,11 +476,23 @@
 						
 				return $result;
 
+
+
+		public function selectCodEmpresaByNombreFa($nombre_empresa){
+			try {
+				
+				$query = "SELECT * FROM EMPRESASTT WHERE EMPTT21_NOMBREFA =  '".$nombre_empresa."'";
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
 			}
 		}
-
+		
 		public function selectAllEmpresaArray(){
 			try {
 				
