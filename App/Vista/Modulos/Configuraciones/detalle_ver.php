@@ -63,13 +63,19 @@
                             }
                        $handler = new HandlerSistema;
                         $arrCliente = $handler->selectEmpresaById($id);
+                        if (is_null($value->getFechaHasta())) {
+                         $fechaHasta='';
+
+                        }else{
+                          $fechaHasta=$value->getFechaHasta()->Format('d/m/Y');
+                        }
 
                       echo "
                       <tr>
                          <td>".$arrCliente[0]->EMPTT21_NOMBREFA."</td>
                          <td>".$value->getPuntaje()."</td>
                          <td>".$value->getFechaDesde()->Format('d/m/Y')."</td>
-                         <td>".$value->getFechaHasta()->Format('d/m/Y')."</td>
+                         <td>".$fechaHasta."</td>
                       </tr>";
                     }
                   }

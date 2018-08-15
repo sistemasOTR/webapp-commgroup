@@ -56,7 +56,7 @@
         foreach ($consulta as $key => $value) { 
 
           $handlerP = new HandlerPuntaje;
-          $objetivo = $handlerP->buscarObjetivoCoordinador($value->ALIAS_COORDINADOR);                        
+          $objetivo = $handlerP->buscarObjetivoCoordinador($value->NOM_COORDINADOR);                        
           $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
           if ($value->FECHA->format('d-m-Y')>= $fechaPuntajeActual->format('d-m-Y')) {
             $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);

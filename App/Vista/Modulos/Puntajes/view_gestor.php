@@ -69,14 +69,17 @@
                 $handlerP = new HandlerPuntaje;
                 $objetivo = $handlerP->buscarObjetivo($value->COD_GESTOR);                        
                 $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
+                    $localidad = strtoupper($value->LOCALIDAD);
+                    $localidad = str_replace('(', '', $localidad);
+                    $localidad = str_replace(')', '', $localidad);
                 if ($value->FECHA->format('d-m-Y')>= $fechaPuntajeActual->format('d-m-Y')) {
                   $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
-                  if ($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $value->CP_GEST == '2000') {
+                  if ($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $localidad == 'ROSARIO') {
                     $puntaje = 2;
                   }
                 } else {
                   $puntaje = $handlerP->buscarPuntajeFecha($value->COD_EMPRESA,$value->FECHA->format('Y-m-d'));
-                  if ($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $value->CP_GEST == '2000') {
+                  if ($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $localidad == 'ROSARIO') {
                     $puntaje = 2;
                   }
                 }
@@ -84,7 +87,7 @@
                 if(empty($objetivo))                                                  
                   $objetivo = 0;
 
-                if (($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && $value->FECHA->format('d-m-Y') <= date('d-m-Y',strtotime('31-06-2018'))) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $value->CP_GEST == '2000') {
+                if (($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && $value->FECHA->format('d-m-Y') <= date('d-m-Y',strtotime('31-06-2018'))) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $localidad == 'ROSARIO') {
 
                   if(empty($puntaje))
                     $puntaje_enviadas = 0;
