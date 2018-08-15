@@ -185,6 +185,26 @@
 
 		}
 
+		public function selectById($id)
+		{			
+			try {
+
+					$query="SELECT * FROM empresa_puntaje WHERE id_empresa_sistema=".$id;
+				
+
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new EmpresaPuntaje);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
+
+
 		public function selectActual()
 		{			
 			try {

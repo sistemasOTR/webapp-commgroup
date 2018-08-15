@@ -3,6 +3,7 @@
 	include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php";  
 
 	$url_action = PATH_VISTA.'Modulos/Configuraciones/action_config3.php';  
+ 
 
 	$handler = new HandlerSistema;
 	$arrCliente = $handler->selectAllEmpresa();
@@ -29,6 +30,7 @@
 				  	<table class="table table-striped table-condensed" id='tabla'>
 					    <thead>
 					    	<tr>
+					    		<th style='width: 5%;'>VER</th>
 						    	<th style='width: 25%;'>EMPRESA</th>
 						      	<th>PUNTAJE 
 						      		<i class="fa fa-question-circle" data-toggle="tooltip" title="" data-original-title="Valor por servicio para cálculo en puntajes del gestor"></i>
@@ -45,10 +47,12 @@
 						    			
 						    			$handlerP = new HandlerPuntaje;
 						    			$puntaje = $handlerP->buscarPuntaje($value->EMPTT11_CODIGO);
+						    				$url_detalle = 'index.php?view=detalle&id='.$value->EMPTT11_CODIGO; 
 						    			
 
 						    			echo "
 					    				<tr>
+					    				    <td><a href='".$url_detalle."'><i class='fa fa-eye'></i></td>
 									    	<td>".$value->EMPTT21_NOMBREFA."</td>
 											<td><input type='number' step='0.01' class='form-control' name='id_".$value->EMPTT11_CODIGO."' style='width: 100%;' value='".$puntaje."'></td>
 									    </tr>";

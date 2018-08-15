@@ -39,6 +39,7 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
+		
 		public function buscarPuntajeFecha($empresa_id,$fechaOperacion){
 			try {
 
