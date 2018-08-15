@@ -49,37 +49,51 @@
       $handlerP = new HandlerPuntaje;
       $objetivo = $handlerP->buscarObjetivoCoordinador($value->NOM_COORDINADOR);                        
       $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
+                    $localidad = strtoupper($value->LOCALIDAD);
+                    $localidad = str_replace('(', '', $localidad);
+                    $localidad = str_replace(')', '', $localidad);
       if ($value->FECHA->format('d-m-Y')>= $fechaPuntajeActual->format('d-m-Y')) {
-        $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
-      } else {
-        $puntaje = $handlerP->buscarPuntajeFecha($value->COD_EMPRESA,$value->FECHA->format('Y-m-d'));
-      }
+                  $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
+                  if ($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $localidad == 'ROSARIO') {
+                    $puntaje = 2;
+                  }
+                } else {
+                  $puntaje = $handlerP->buscarPuntajeFecha($value->COD_EMPRESA,$value->FECHA->format('Y-m-d'));
+                  if ($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $localidad == 'ROSARIO') {
+                    $puntaje = 2;
+                  }
+                }
+                
+                if(empty($objetivo))                                                  
+                  $objetivo = 0;
 
-      if(empty($objetivo))                                                  
-        $objetivo = 0;
+                if (($value->FECHA->format('d-m-Y') >= date('d-m-Y',strtotime('01-06-2018')) && $value->FECHA->format('d-m-Y') <= date('d-m-Y',strtotime('31-06-2018'))) && ($value->COD_EMPRESA == 39 || $value->COD_EMPRESA==41) && $localidad == 'ROSARIO') {
 
-      if(empty($puntaje))
-        $puntaje_cerrados = 0;
-      else
-        $puntaje_cerrados = round($value->CERRADO*$puntaje,2);
+                  if(empty($puntaje))
+                    $puntaje_enviadas = 0;
+                  else
+                    $puntaje_enviadas = round($value->TOTAL_SERVICIOS*$puntaje,2);
 
-      if(empty($puntaje))
-        $puntaje_enviadas = 0;
-      else
-        $puntaje_enviadas = round($value->ENVIADO*$puntaje,2);                        
+                  $total_puntajes_enviadas = $total_puntajes_enviadas + $puntaje_enviadas;
 
-      if(!empty($value->TOTAL_SERVICIOS))
-        $efectividad = round($value->CERRADO/$value->TOTAL_SERVICIOS,2) * 100;
-      else
-        $efectividad = 0;
-      
+                }else{
+                  if(empty($puntaje))
+                    $puntaje_cerrados = 0;
+                  else
+                    $puntaje_cerrados = round($value->CERRADO*$puntaje,2);
 
-      $total_servicios = $total_servicios + $value->TOTAL_SERVICIOS;
-      $total_servicios_cerrados = $total_servicios_cerrados + $value->CERRADO;
-      $total_puntajes_cerrados = $total_puntajes_cerrados + $puntaje_cerrados;                        
+                  if(empty($puntaje))
+                    $puntaje_enviadas = 0;
+                  else
+                    $puntaje_enviadas = round($value->ENVIADO*$puntaje,2);
 
-      $total_servicios_enviadas = $total_servicios_enviadas + $value->ENVIADO;
-      $total_puntajes_enviadas = $total_puntajes_enviadas + $puntaje_enviadas;                        
+                  $total_puntajes_cerrados = $total_puntajes_cerrados + $puntaje_cerrados;
+                  $total_puntajes_enviadas = $total_puntajes_enviadas + $puntaje_enviadas; 
+                }
+
+                $total_servicios = $total_servicios + $value->TOTAL_SERVICIOS;
+                $total_servicios_cerrados = $total_servicios_cerrados + $value->CERRADO;
+                $total_servicios_enviadas = $total_servicios_enviadas + $value->ENVIADO;                      
     }
   }
 
