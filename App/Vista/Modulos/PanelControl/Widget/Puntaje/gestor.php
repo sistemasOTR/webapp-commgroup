@@ -125,7 +125,7 @@
   
 ?>
 
-  <div class="box box-solid">    
+  <a href="index.php?view=puntajes_gestor"><div class="box box-solid">    
     <div class="box-header with-border">
         <h3 class="box-title"><i class="ion-calculator"></i> PUNTAJE. <span class="text-yellow"><b><?php echo strtoupper($nombreMES) ?> <?php echo $anioMES ?></b></span></h3>
     </div>    
@@ -165,3 +165,4 @@
         </div>                
       </div>
     </div>
+    </a>

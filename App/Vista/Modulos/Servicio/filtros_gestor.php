@@ -14,7 +14,7 @@
   //$arrEquipoVenta = $handler->selectAllEquipoVenta(null,null,null,null,null);
 ?>
 
-<div class="col-md-3" id='sandbox-container'>
+<div class="col-md-3" id='sandbox-container' style="display: none;">
   <label>Fecha Desde - Hasta </label>                
   <div class="input-daterange input-group" id="datepicker">
       <input type="text" class="input-sm form-control" onchange="crearHref()" id="start" name="start" value="<?php echo $dFecha->FormatearFechas($fdesde,'Y-m-d','d/m/Y'); ?>"/>
@@ -23,7 +23,7 @@
   </div>  
 </div>
 
-<div class="col-md-3">
+<div class="col-md-6">
   <label>Estados </label>                
   <select id="slt_estados" class="form-control" style="width: 100%" name="slt_estados" onchange="crearHref()">                    
     <option value=''></option>

@@ -5,6 +5,10 @@
     include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
     
     $dFecha = new Fechas;
+    $fhoy= $dFecha->FechaActual();
+
+    if(!PRODUCCION)
+      $fhoy = "2018-07-10";
 
     $handler = new HandlerSistema;
     $user = $usuarioActivoSesion;
@@ -24,6 +28,11 @@
     $fdoc=(isset($_GET["fdoc"])?$_GET["fdoc"]:'');
 
     $f_dd_dni = (isset($_GET["f_dd_dni"])?$_GET["f_dd_dni"]:'');
+
+    if ($user->getUsuarioPerfil()->getNombre() == 'GESTOR') {
+      $fdesde = $fhoy;
+      $fhasta = $fhoy;
+    }
 
     $url_detalle = "index.php?view=detalle_servicio";     
     $url_upload = "index.php?view=upload_file"; 
@@ -164,7 +173,7 @@
                     break;
                 
                 case 'GESTOR':
-                    $arrDatos = $handler->selectServicios($fdesde,$fhasta,$festado,$fcliente,$user->getUserSistema(),null,null,$foperador,$fequipoventa);
+                    $arrDatos = $handler->selectServicios($fhoy,$fhoy,$festado,$fcliente,$user->getUserSistema(),null,null,$foperador,$fequipoventa);
                     include_once "vista_gestor.php";
 
                   break;
@@ -187,7 +196,6 @@
 
       </div>
     </div>
-    <a onclick="javascript:window.imprimirDIV('ID_DIV');">Print </a>
 <script>
     function imprimirDIV(contenido) {
         var ficha = document.getElementById(contenido);
@@ -274,18 +282,24 @@
   $(document).ready(function() {
     $("#slt_estados").select2({
         placeholder: "Seleccionar",                  
+    }).on('change', function (e) { 
+      filtrarReporte();                  
     });
   });
 
   $(document).ready(function() {
     $("#slt_equipoventa").select2({
         placeholder: "Seleccionar",                  
+    }).on('change', function (e) { 
+      filtrarReporte();                  
     });
   });
 
   $(document).ready(function() {
     $("#slt_cliente").select2({
         placeholder: "Seleccionar",                  
+    }).on('change', function (e) { 
+      filtrarReporte();                  
     });
   });
 

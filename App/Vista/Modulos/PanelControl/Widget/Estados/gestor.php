@@ -1,32 +1,35 @@
 <?php
-  	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
-  	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";  
+	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
+	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";  
 	include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
-  	
-  	$dFecha = new Fechas;    
-  	$handler = new HandlerSistema;
-  
- 	$user = $usuarioActivoSesion;
 
-    /*-------------------------*/
-    /* --- gestion de fechas --*/
-    $fHOY = $dFecha->FechaActual();
-    $fHOY = $dFecha->FormatearFechas($fHOY,"Y-m-d","Y-m-d"); 
+	$dFecha = new Fechas;    
+	$handler = new HandlerSistema;
 
-    $f = new DateTime();
-    $f->modify('first day of this month');
-    $fMES = $f->format('Y-m-d'); 
+	$user = $usuarioActivoSesion;
 
-    setlocale(LC_TIME, 'spanish');  
-    $nombreMES = strftime("%B",mktime(0, 0, 0, $f->format('m'), 1, 2000));      
-    $anioMES = $f->format('Y'); 
-    /*-------------------------*/
+	/*-------------------------*/
+	/* --- gestion de fechas --*/
+	$fHOY = $dFecha->FechaActual();
+	$fHOY = $dFecha->FormatearFechas($fHOY,"Y-m-d","Y-m-d"); 
 
-    //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
-    if(!PRODUCCION)
-      $fHOY = "2016-08-12";
+	$f = new DateTime();
+	$f->modify('first day of this month');
+	$fMES = $f->format('Y-m-d'); 
 
-  	$arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,null,$user->getUserSistema(),null,null,null);     
+	setlocale(LC_TIME, 'spanish');  
+	$nombreMES = strftime("%B",mktime(0, 0, 0, $f->format('m'), 1, 2000));      
+	$anioMES = $f->format('Y'); 
+	/*-------------------------*/
+
+	//PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
+	if(!PRODUCCION)
+		$fHOY = "2018-07-10";
+
+	// Link para servicios
+	$url_servicio = 'index.php?view=servicio&fdesde='.$fHOY.'&fhasta='.$fHOY;
+
+	$arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,null,$user->getUserSistema(),null,null,null);     
 	$allEstados = $handler->selectAllEstados();
 ?>
 
@@ -73,7 +76,7 @@
 			              		if(!($value->ESTADOS_DESCCI=="Liquidar C. Parcial") || !($value->ESTADOS_DESCCI=="No Efectivas"))
 			              		{
 			                		echo "                	
-				                		<li><a href='#'>".$value->ESTADOS_DESCCI." <span class='pull-right badge ".$class_estado."'>
+				                		<li><a href='".$url_servicio."&festado=".$value->SERTT91_ESTADO."'>".$value->ESTADOS_DESCCI." <span class='pull-right badge ".$class_estado."'>
 				                		".round($value->CANTIDAD_SERVICIOS,2)."
 				                		</span></a></li>";
 			              		}
