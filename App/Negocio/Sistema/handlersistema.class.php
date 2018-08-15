@@ -466,9 +466,9 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
-<<<<<<< HEAD
+
 			
-=======
+
 
 		public function selectCodEmpresaByNombreFa($nombre_empresa){
 			try {
@@ -479,12 +479,24 @@
 						
 				return $result;
 
+
+
+		public function selectCodEmpresaByNombreFa($nombre_empresa){
+			try {
+				
+				$query = "SELECT * FROM EMPRESASTT WHERE EMPTT21_NOMBREFA =  '".$nombre_empresa."'";
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
 			}
 		}
 
->>>>>>> 861d36d5e7c6967b8356aba54059b605472c78b2
+
 		public function selectAllEmpresaArray(){
 			try {
 				
