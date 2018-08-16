@@ -301,6 +301,7 @@
                                   }
                                 }
                               }
+                              $clasePeaje = '';
                       		if(!empty($consulta)) {
 		                        foreach ($consulta as $key => $value) {
 		                        	$fechaT = $value->getFechaHora()->format('Y-m-d');
@@ -333,7 +334,7 @@
               										$class_estilos_aledanio = "<span class='label label-danger'>NO</span>";
               									}
               									
-              									
+              									$clasePeaje = '';
               									if (trim($value->getConcepto()) == 'PEAJES') {
               										$class_estilos_aledanio = '';
                                   $clasePeaje = 'color: white !important';

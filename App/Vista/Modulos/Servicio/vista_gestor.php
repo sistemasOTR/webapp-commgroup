@@ -1,19 +1,28 @@
+<style>
+	td {display: block;}
+	td::before {content: attr(data-th);font-weight: bold; color: #a1a1a1;display: block;font-size: 12px;text-transform: uppercase;}
+
+	@media (min-width:768px){
+		td::before{display: none;}
+		td {display: table-cell;}
+	}
+</style>
 <table class="table table-striped table-condensed" id="tabla" cellspacing="0" width="100%">
-  <thead>        
+  <thead class="hidden-xs">        
     <tr>       
-      <th class='text-center'>Fecha</th>
-      <th class='text-center'>Nro</th>
+      <!-- <th class='text-center'>Fecha</th> -->
+      <!-- <th class='text-center'>Nro</th> -->
       <!-- <th class='text-left'>ID.Oport.</th>  -->
       <!-- <th class='text-left'>E.Vtas</th>  -->
-      <th class='text-left'>DNI</th>            
-      <th class='text-left'>Nombre</th>      
-      <th class='text-left'>Tel</th>      
-      <th class='text-left'>Loc</th>      
-      <th class='text-left'>Estado</th>  
-      <th class='text-left'>Empr</th>                
+      <th class='text-left bg-black'>DNI</th>            
+      <th class='text-left bg-black'>NOMBRE</th>      
+      <th class='text-left bg-black'>TELEFONO</th>      
+      <th class='text-left bg-black'>DIRECCION</th>      
+      <th class='text-left bg-black' width="150">LOCALIDAD</th>      
+      <th class='text-left bg-black'>ESTADO</th>  
+      <th class='text-left bg-black'>EMPRESA</th>                
       <!-- <th class='text-left'>Oper</th> -->
-      <th class='text-left'>Obser</th>   
-      <th style="width: 5%;" class='text-center'></th>
+      <th class='text-left bg-black' width="300">OBS</th>
     </tr>
   </thead>
 
@@ -35,10 +44,10 @@
           echo "<tr>";
 
               //FECHA
-              echo "<td class='text-center'>".$value->SERTT11_FECSER->format('d/m/Y')."</td>";              
+              // echo "<td class='text-center'>".$value->SERTT11_FECSER->format('d/m/Y')."</td>";              
 
               //NUMERO
-              echo "<td class='text-center'>".$value->SERTT12_NUMEING."</td>";
+              // echo "<td class='text-center'>".$value->SERTT12_NUMEING."</td>";
 
               //ID OPORTUNIDAD
               //echo "<td class='text-left'>".$value->SERTT91_IDOPORT."</td>";                          
@@ -56,43 +65,62 @@
               */
 
               //DNI              
-              echo "<td class='text-left'>".$value->SERTT31_PERNUMDOC."</td>";              
+              echo "<td class='text-left' data-th='DNI: '>".$value->SERTT31_PERNUMDOC."</td>";              
 
               //NOMBRE
-              if(!empty(trim(strip_tags($value->SERTT91_NOMBRE))))
-                if(strlen(trim(strip_tags($value->SERTT91_NOMBRE)))>20)
-                  echo "<td class='text-left'>".substr(trim(strip_tags($value->SERTT91_NOMBRE)),0,20)."... <i class='fa fa-search-plus pull-right' data-toggle='tooltip' title='' data-original-title='".trim(strip_tags($value->SERTT91_NOMBRE))."'></i></td>";
-                else
-                  echo "<td class='text-left'>".trim(strip_tags($value->SERTT91_NOMBRE))."</td>";
-              else
-                echo "<td class='text-left'></td>";
+              if(!empty(trim(strip_tags($value->SERTT91_NOMBRE)))){
+                $apeNom = str_replace(',', '<br>', $value->SERTT91_NOMBRE);
+                  echo "<td class='text-left' data-th='NOMBRE: '>".$apeNom."</td>";
+              }
+              else{
+                echo "<td class='text-left' data-th='NOMBRE: '></td>";
+              }
 
               //TELEFONO              
-              if(!empty(trim(strip_tags($value->SERTT91_TELEFONO))))
-                if(strlen(trim(strip_tags($value->SERTT91_TELEFONO)))>20)
-                  echo "<td class='text-left'>".substr(trim(strip_tags($value->SERTT91_TELEFONO)),0,20)."... <i class='fa fa-search-plus pull-right' data-toggle='tooltip' title='' data-original-title='".trim(strip_tags($value->SERTT91_TELEFONO))."'></i></td>";
-                else
-                  echo "<td class='text-left'>".trim(strip_tags($value->SERTT91_TELEFONO))."</td>";
-              else
-                echo "<td class='text-left'></td>";
+              if(!empty(trim(strip_tags($value->SERTT91_TELEFONO)))){
+                $telnros = str_replace(';', '<br>', $value->SERTT91_TELEFONO);
+                $telnros = str_replace(',', '<br>', $telnros);
+                $telnros = str_replace(' P', '', $telnros);
+                $telnros = str_replace(' C', '', $telnros);
+                $tels = explode('<br>', $telnros);
+                if (!empty($tels[1])) {
+                  echo "<td class='text-left' data-th='TEL: '><a href='tel:".$tels[0]."'>".$tels[0]."</a><br><a href='tel:".$tels[1]."'>".$tels[1]."</a></td>";
+                }else{
+                  echo "<td class='text-left' data-th='TEL: '><a href='tel:".$tels[0]."'>".$tels[0]."</a></td>";
+                }
+
+                  
+              }
+              else{
+                echo "<td class='text-left' data-th='TEL: '></td>";
+              }
+
+              //DOMICILIO
+              if(!empty(trim(strip_tags($value->SERTT91_DOMICILIO)))){
+                  echo "<td class='text-left' data-th='DOM: '>".trim(strip_tags($value->SERTT91_DOMICILIO))."</td>";
+              }
+              else{
+                echo "<td class='text-left' data-th='DOM: '></td>";
+              }
 
               //LOCALIDAD
-              if(!empty(trim(strip_tags($value->SERTT91_LOCALIDAD))))
-                if(strlen(trim(strip_tags($value->SERTT91_LOCALIDAD)))>20)
-                  echo "<td class='text-left'>".substr(trim(strip_tags($value->SERTT91_LOCALIDAD)),0,20)."... <i class='fa fa-search-plus pull-right' data-toggle='tooltip' title='' data-original-title='".trim(strip_tags($value->SERTT91_LOCALIDAD))."'></i></td>";
-                else
-                  echo "<td class='text-left'>".trim(strip_tags($value->SERTT91_LOCALIDAD))."</td>";
-              else
-                echo "<td class='text-left'></td>";
+              if(!empty(trim(strip_tags($value->SERTT91_LOCALIDAD)))){
+                $localidad = str_replace('(', '', $value->SERTT91_LOCALIDAD);
+                $localidad = str_replace(')', '', $localidad);
+                echo "<td class='text-left' data-th='LOC: '>".$localidad."</td>";
+              }
+              else{
+                echo "<td class='text-left' data-th='LOC: '></td>";
+              }
 
 
               //ESTADOS
               $f_array = new FuncionesArray;
               $class_estado = $f_array->buscarValor($allEstados,"1",$value->ESTADOS_DESCCI,"3");
-              echo "<td class='text-left'><span class='".$class_estado."'>".$value->ESTADOS_DESCCI."</span></td>";
+              echo "<td class='text-left' data-th='EST: '><span class='".$class_estado."'>".$value->ESTADOS_DESCCI."</span></td>";
 
               //EMPRESA
-              echo "<td class='text-left'>".$value->EMPTT21_ABREV."</td>";              
+              echo "<td class='text-left' data-th='EST: '>".$value->EMPTT21_ABREV."</td>";              
               
               
               //OPERADOR  
@@ -108,15 +136,9 @@
 
               //OBSERVACIONES
               if(!empty(trim(strip_tags($observaciones))))
-                if(strlen(trim(strip_tags($observaciones)))>25)
-                  echo "<td class='text-left'>".substr(trim(strip_tags($observaciones)),0,25)."... <i class='fa fa-search-plus pull-right' data-toggle='tooltip' title='' data-original-title='".trim(strip_tags($observaciones))."'></i></td>";
-                else 
-                  echo "<td class='text-left'>".trim(strip_tags($observaciones))."</td>";
+              	echo "<td class='text-left' data-th='OBS: '>".trim(strip_tags($observaciones))."</td>";
               else
-                echo "<td class='text-left'></td>";         
-
-
-              echo "<td class='text-center'><a href='".$url_hist."' class='btn btn-default btn-xs'><b>Detalle</b></a></td>";              
+                echo "<td class='text-left' data-th='OBS: '></td>";
 
             echo "</tr>";
         }
