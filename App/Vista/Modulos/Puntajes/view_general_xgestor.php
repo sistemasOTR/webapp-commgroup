@@ -17,6 +17,7 @@
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());      
   $fgestor = (isset($_GET["fgestor"])?$_GET["fgestor"]:'');      
   $fnomgestor = (isset($_GET["fnomgestor"])?$_GET["fnomgestor"]:''); 
+  $oobjetivo = (isset($_GET["objetivo"])?$_GET["objetivo"]:''); 
   $url_servicios = "index.php?view=servicio&fgestor=".$fgestor."&fdesde=".$fdesde."&fhasta=".$fhasta."&festado=";     
   // $fcoordinador= $user->getAliasUserSistema();
 
@@ -196,6 +197,8 @@
             <div class="box box-solid">
               <div class="box-header with-border">
                 <h3 class="box-title" style="text-transform: uppercase;">Por empresa</h3>
+                <h3 class="box-title bg-yellow pull-right">OBJETIVO: <?php echo $oobjetivo ?></h3>
+
               </div>    
               <div class="box-body table-responsive">
                 <table class="table table-striped table-condensed" id="tablaXEmpresa" style="text-align: center;">

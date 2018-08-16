@@ -1,10 +1,11 @@
 <?php
 	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";  
-	include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php";  
+	include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php"; 
+	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php";  
 
 	$url_action = PATH_VISTA.'Modulos/Configuraciones/action_config3.php';  
  
-
+    $fecha= new Fechas;
 	$handler = new HandlerSistema;
 	$arrCliente = $handler->selectAllEmpresa();
 ?>
@@ -21,7 +22,7 @@
 					echo "<p style='padding-left:25px;'>Fecha de vigencia: <strong>".$fechaPuntaje->format('d-m-Y')."</strong></p>";
 			  	 ?>
 			  	 <label style="float: left;margin-right: 15px;padding-top: 6px;padding-left: 25px;">Nueva Vigencia</label>
-			  	 <input type="date" class="form-control" style="width: 200px; float: left;" name="txtFechaVigencia" id="txtFechaVigencia" value="<?php echo date('Y-m-d'); ?>">
+			  	 <input type="date" class="form-control" style="width: 200px; float: left;" name="txtFechaVigencia" id="txtFechaVigencia" value="<?php echo date('Y-m-d'); ?>" data-fecha="<?php echo $fecha->FechaActual() ; ?>" onchange="validarFecha(<?php echo "'".$fechaPuntaje->format('Y-m-d')."'"; ?>)">
 			  	<a href="index.php?view=configuraciones" class="btn btn-default pull-right"><i class="ion-chevron-left"></i> Volver</a>            
 	            
 			</div>
@@ -47,12 +48,18 @@
 						    			
 						    			$handlerP = new HandlerPuntaje;
 						    			$puntaje = $handlerP->buscarPuntaje($value->EMPTT11_CODIGO);
-						    				$url_detalle = 'index.php?view=detalle&id='.$value->EMPTT11_CODIGO; 
+						    			$url_detalle = 'index.php?view=detalle&id='.$value->EMPTT11_CODIGO; 
+						    			if ($puntaje==0) {	
+						    				$vista="<i class='fa fa-eye text-gray'></i>";
+						    			} else{
+						    				$vista="<a href='".$url_detalle."'><i class='fa fa-eye'></i>";
+						    			}
+						    			
 						    			
 
 						    			echo "
 					    				<tr>
-					    				    <td><a href='".$url_detalle."'><i class='fa fa-eye'></i></td>
+					    				    <td>".$vista."</td>
 									    	<td>".$value->EMPTT21_NOMBREFA."</td>
 											<td><input type='number' step='0.01' class='form-control' name='id_".$value->EMPTT11_CODIGO."' style='width: 100%;' value='".$puntaje."'></td>
 									    </tr>";
@@ -71,3 +78,21 @@
 		</div>
 	</form>
 </div>
+
+<script>
+
+	function validarFecha(anterior_vigencia){
+        var anteriorvigencia = anterior_vigencia ;
+        var today = document.getElementById("txtFechaVigencia").getAttribute('data-fecha');
+        var fechaValue=document.getElementById("txtFechaVigencia").value;
+       
+        if (fechaValue <= anteriorvigencia) {
+        	alert("error fecha ya ingresada");
+        	document.getElementById("txtFechaVigencia").value = today;	
+        }
+
+	}
+
+ 
+	
+</script>

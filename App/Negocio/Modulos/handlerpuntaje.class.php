@@ -124,7 +124,7 @@
 
 				$handler = new GestorObjetivo;				
 				$handler->setIdGestorSistema($gestor_id);
-				$objObjetivo = $handler->select();																
+				$objObjetivo = $handler->select();														
 
 				if(!empty($objObjetivo))				
 					return $objObjetivo->getObjetivo();
@@ -138,12 +138,15 @@
 		public function buscarPuntajeFechaGestor($gestor_id,$fechaOperacion){
 			try {
 
-				$handler = new GestorObjetivo;				
-				$objPuntaje = $handler->buscarPuntajeFecha($gestor_id,$fechaOperacion);
+				$handler = new GestorObjetivo;	
+				$handler->setIdGestorSistema($gestor_id);			
+				$objPuntaje = $handler->buscarPuntajeFecha2($fechaOperacion);
+				// var_dump($objPuntaje->getObjetivo());
+				// exit();
 
 
 				if(!empty($objPuntaje))				
-					return $objPuntaje->getPuntaje();
+					return $objPuntaje->getObjetivo();
 				else
 					return 0;
 
@@ -248,12 +251,14 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
+
 		public function buscarObjetivoCoordinador($coordinador_alias){
 			try {
 
 				$handler = new CoordinadorObjetivo;				
 				$handler->setIdCoordinadorSistema($coordinador_alias);
-				$objObjetivo = $handler->select();																				
+				$objObjetivo = $handler->select();	
+				// var_dump($objObjetivo);																				
 
 				if(!empty($objObjetivo))				
 					return $objObjetivo->getObjetivo();
@@ -264,6 +269,23 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
+
+		public function buscarObjetivoCoordinadorFecha($coordinador_alias,$fecha){
+					try {
+
+						$handler = new CoordinadorObjetivo;				
+						$handler->setIdCoordinadorSistema($coordinador_alias);
+						$objObjetivo = $handler->buscarPuntajeFecha2($fecha);																				
+
+						if(!empty($objObjetivo))				
+							return $objObjetivo->getObjetivo();
+						else
+							return 0;
+
+					} catch (Exception $e) {
+						throw new Exception($e->getMessage());	
+					}
+				}
 
 		public function guardarObjetivoByCoordinador($datos,$fechaCambioVigencia){
 			try {
@@ -345,7 +367,6 @@
 				$handler = new SupervisorObjetivo;				
 				$objPuntaje = $handler->buscarPuntajeFecha($supervisor_id,$fechaOperacion);
 
-
 				if(!empty($objPuntaje))				
 					return $objPuntaje->getPuntaje();
 				else
@@ -375,7 +396,27 @@
 
 				$handler = new SupervisorObjetivo;				
 				$handler->setIdSupervisorSistema($supervisor_id);
-				$objObjetivo = $handler->select();																				
+				$objObjetivo = $handler->select();	
+				// var_dump($objObjetivo);	
+				// exit();																	
+
+				if(!empty($objObjetivo))				
+					return $objObjetivo->getObjetivo();
+				else
+					return 0;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+
+		public function buscarObjetivoSupervisor2($supervisor_id,$fecha){
+			try {
+
+				$handler = new SupervisorObjetivo;				
+				$handler->setIdSupervisorSistema($supervisor_id);
+				$objObjetivo = $handler->buscarPuntajeFecha2($fecha);	
+			;																			
 
 				if(!empty($objObjetivo))				
 					return $objObjetivo->getObjetivo();
