@@ -155,7 +155,7 @@
 
 					$query="SELECT * FROM gestor_objetivo WHERE id=".$this->getId();
 				}
-
+         
 				# Ejecucion 				
 				$result = SQL::selectObject($query, new GestorObjetivo);
 						
@@ -243,6 +243,27 @@
 				
 				# Query
 				$query = "SELECT * FROM gestor_objetivo WHERE id_gestor_sistema=".$gestor_id." AND estado='true' AND fecha_hasta >'".$fechaOperacion."' AND fecha_desde <'".$fechaOperacion."'";
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new GestorObjetivo);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
+
+		public function buscarPuntajeFecha2($fechaOperacion)
+		{			
+			try {
+				
+				# Query
+				$query = "SELECT * FROM gestor_objetivo WHERE id_gestor_sistema='".$this->getIdGestorSistema()."' AND estado='true' AND fecha_hasta >='".$fechaOperacion."' AND fecha_desde <='".$fechaOperacion."'";
+				// var_dump($query);
+				// exit();
 				
 				# Ejecucion 				
 				$result = SQL::selectObject($query, new GestorObjetivo);

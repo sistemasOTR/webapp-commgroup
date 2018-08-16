@@ -262,6 +262,27 @@
 
 		}
 
+		public function buscarPuntajeFecha2($fechaOperacion)
+		{			
+			try {
+				
+				# Query
+				$query = "SELECT * FROM supervisor_objetivo WHERE id_supervisor_sistema='".$this->getIdSupervisorSistema()."' AND estado='true' AND fecha_hasta >='".$fechaOperacion."' AND fecha_desde <='".$fechaOperacion."'";
+				// var_dump($query);
+				// exit();
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new SupervisorObjetivo);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
+
 
 		public function existeObjetivo()
 		{			

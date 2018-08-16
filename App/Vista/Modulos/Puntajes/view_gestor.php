@@ -67,8 +67,17 @@
               foreach ($consulta as $key => $value) { 
 
                 $handlerP = new HandlerPuntaje;
-                $objetivo = $handlerP->buscarObjetivo($value->COD_GESTOR);                        
                 $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
+
+                if ($fechaPuntajeActual->format('Y-m-d') <= $value->FECHA->format('Y-m-d')) {
+                $objetivo = $handlerP->buscarObjetivo($value->COD_GESTOR); 
+              }else{
+                  $objetivo = $handlerP->buscarPuntajeFechaGestor($value->COD_GESTOR,$fhasta);                        
+                  }
+
+
+                // $objetivo = $handlerP->buscarObjetivo($value->COD_GESTOR);                        
+                
                     $localidad = strtoupper($value->LOCALIDAD);
                     $localidad = str_replace('(', '', $localidad);
                     $localidad = str_replace(')', '', $localidad);
@@ -151,7 +160,7 @@
             <div class="box box-solid">
               <div class="box-header with-border">
                 <h3 class="box-title" style="text-transform: uppercase;"><?php echo $nombreMES ?> <?php echo $anioMES ?></h3>
-                <a class="text-navy pull-right" href="<?php echo $url_detalle_xgestor.$fgestor."&fnomgestor=".$value->NOM_GESTOR."&fdesde=".$fdesde."&fhasta=".$fhasta; ?>"><i class="fa fa-search"></i></a>
+                <a class="text-navy pull-right" href="<?php echo $url_detalle_xgestor.$fgestor."&fnomgestor=".$value->NOM_GESTOR."&fdesde=".$fdesde."&fhasta=".$fhasta."&objetivo=".$objetivo; ?>"><i class="fa fa-search"></i></a>
               </div>    
               <div class="box-body no-padding">
 

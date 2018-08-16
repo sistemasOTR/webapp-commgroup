@@ -189,7 +189,7 @@
 		{			
 			try {
 
-					$query="SELECT * FROM empresa_puntaje WHERE id_empresa_sistema=".$id;
+					$query="SELECT * FROM empresa_puntaje WHERE id_empresa_sistema=".$id." ORDER BY fechaDesde DESC";
 				
 
 				# Ejecucion 				

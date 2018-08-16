@@ -16,7 +16,8 @@
   //$arrCoordinador = $handler->selectAllCoordinadorFiltro(null,null,null,null,null);  
 
   $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
-  $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());      
+  $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual()); 
+      
 
   $handler =  new HandlerConsultas;
   
@@ -85,6 +86,7 @@
          for ($i=0; $i <= 5 ; $i++) {
             $fdesde = date('Y-m-01', mktime(0,0,0,date('m')-$i,1,date('Y')));
             $fhasta = date('Y-m-t', mktime(0,0,0,date('m')-$i,1,date('Y')));
+            
             setlocale(LC_TIME, 'spanish');  
             $nombreMES = strftime("%B",mktime(0, 0, 0, date('m')-$i, 1, 2000));      
             $anioMES = date('Y',mktime(0,0,0,date('m')-$i,1,date('Y')));
@@ -97,15 +99,30 @@
             $total_puntajes_enviadas = 0;
 
             $objetivo=0;
+            $handlerP = new HandlerPuntaje;
+                $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
+                // var_dump($fechaPuntajeActual);
+                // exit();
+                  if ($fechaPuntajeActual->format('Y-m-d') <= $fdesde) {  
+                    $objetivo = $puntos;
+              }else{
+         
+                 $objetivo=$p_handler->buscarObjetivoSupervisor2(1,$fhasta) + $p_handler->buscarObjetivoSupervisor2(2,$fhasta) ;
+                
+              }
+
             $consulta = $handler->consultaPuntajesGeneral($fdesde, $fhasta);
 
             if(!empty($consulta))
+
             {
               foreach ($consulta as $key => $value) { 
+                 // var_dump($value->FECHA->format('Y-m-d'));
 
-                $handlerP = new HandlerPuntaje;
-                $objetivo = $puntos;
-                $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
+
+                // $objetivo = $puntos;
+                 // var_dump($fdesde,$fhasta);
+                
                 if ($value->FECHA->format('d-m-Y')>= $fechaPuntajeActual->format('d-m-Y')) {
                   $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
                 } else {

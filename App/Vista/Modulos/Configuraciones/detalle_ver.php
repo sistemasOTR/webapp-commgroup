@@ -64,7 +64,7 @@
                        $handler = new HandlerSistema;
                         $arrCliente = $handler->selectEmpresaById($id);
                         if (is_null($value->getFechaHasta())) {
-                         $fechaHasta='';
+                         $fechaHasta="<span class='label label-success'>ACTUALIDAD</span>";
 
                         }else{
                           $fechaHasta=$value->getFechaHasta()->Format('d/m/Y');

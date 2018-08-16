@@ -62,8 +62,15 @@
               foreach ($consulta as $key => $value) { 
 
                 $handlerP = new HandlerPuntaje;
-                $objetivo = $handlerP->buscarObjetivoCoordinador($coordinador["alias"]);                        
                 $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
+                 if ($fechaPuntajeActual->format('Y-m-d') <= $value->FECHA->format('Y-m-d')) {
+                    $objetivo = $handlerP->buscarObjetivoCoordinador($coordinador["alias"]);
+                    }else{
+
+                    $objetivo = $handlerP->buscarObjetivoCoordinadorFecha($coordinador["alias"],$fhasta);
+                    }
+                // $objetivo = $handlerP->buscarObjetivoCoordinador($coordinador["alias"]);                        
+                
                 if ($value->FECHA->format('d-m-Y')>= $fechaPuntajeActual->format('d-m-Y')) {
                   $puntaje = $handlerP->buscarPuntaje($value->COD_EMPRESA);
                 } else {
