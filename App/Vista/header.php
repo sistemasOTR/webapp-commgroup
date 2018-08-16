@@ -67,6 +67,9 @@
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
 
+              <!-- CERRADAS PROBLEMAS -->
+              <?php include_once PATH_VISTA.'Notificaciones/cerr_problemas.php'; ?>
+              <!-- FIN CERRADAS PROBLEMAS -->
               <!-- IMPORTACIONES -->
               <?php include_once PATH_VISTA.'Notificaciones/importaciones.php'; ?>
               <!-- FIN IMPORTACIONES -->

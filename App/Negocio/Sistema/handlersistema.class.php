@@ -2265,6 +2265,55 @@
 			}
 		}
 
+
+
+		public function getCerrProb($fdesde,$fHoy,$plaza){
+			try {
+
+				$f = new Fechas;
+				$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");
+
+				$filtro_fdesde="";
+				if(!empty($fdesde)){					
+					$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+					$filtro_fdesde = "SERTT11_FECSER >= '".$tmp."' AND ";
+				}
+
+				$filtro_fhasta="";
+				if(!empty($fHoy)){					
+					$tmp = $f->FormatearFechas($fHoy,"Y-m-d","Y-m-d");				
+					$filtro_fhasta = "SERTT11_FECSER <=  '".$tmp."' AND ";
+				}
+
+				$filtro_plaza="";
+				if(!empty($plaza))								
+					$filtro_plaza = "SERTT91_COOALIAS = '".$plaza."' AND ";
+				
+				$query = " SELECT CODEMP, EMP, COUNT(EMP) AS CANT FROM
+					(SELECT SERTT91_CODEMPRE AS CODEMP, EMPTT21_NOMBREFA AS EMP, SERTT31_PERNUMDOC AS DNI, COUNT(EMPTT21_NOMBREFA) AS CANT  
+					FROM SERVTT
+					INNER JOIN EMPRESASTT ON
+  					SERTT91_CODEMPRE = EMPTT11_CODIGO
+					WHERE
+						".$filtro_fdesde." 
+						".$filtro_fhasta." 
+						".$filtro_plaza."
+						SERTT91_ESTADO = 8 
+						GROUP BY SERTT91_CODEMPRE,EMPTT21_NOMBREFA, SERTT31_PERNUMDOC) AS CONSULTA
+						GROUP BY CODEMP, EMP" ;
+				
+				//echo $query;				
+				//exit;
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+
 		public function cpAtendidos($fecha, $idGestor){
 			try {
 
