@@ -652,14 +652,16 @@
                   <?php
                     if(!empty($arrPerfiles))
                     {                        
-                      foreach ($arrPerfiles as $rol) { ?>
+                      foreach ($arrPerfiles as $rol) { 
+                        if($usuarioActivoSesion->getUsuarioPerfil()->getId()!=$rol->getId()){ ?>
                         
-                        <li id="mnu_cambiorol">
+                        <li class="mnu_cambiorol">
                           <a href=<?php echo $url_cambiar_side.$usuarioActivoSesion->getId()."&rol=".$rol->getId(); ?>> 
                             <?php echo $rol->getNombre() ?>
                           </a>
                         </li>
-                    <?php  }
+                    <?php } 
+                     }
                     }                      
                   ?> 
                 </ul>              

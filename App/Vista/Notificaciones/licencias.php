@@ -29,34 +29,37 @@
       $arrUsuarios = '';
       $arrGestoresSist = $handlerSist->selectAllGestor($usuarioActivoSesion->getAliasUserSistema());
       $arrGestoresPort = $handlerUs->selectGestores();
-      foreach ($arrGestoresPort as $gestPort) {
-        foreach ($arrGestoresSist as $gestSist) {
-          if ($gestPort->getUserSistema() == $gestSist->GESTOR11_CODIGO){
-            $arrUsuarios[] = $gestPort;
-          }
-        }
+      if (!empty($arrGestoresPort) && !empty($arrGestoresSist)) {
+      	foreach ($arrGestoresPort as $gestPort) {
+	        foreach ($arrGestoresSist as $gestSist) {
+	          if ($gestPort->getUserSistema() == $gestSist->GESTOR11_CODIGO){
+	            $arrUsuarios[] = $gestPort;
+	          }
+	        }
+	      }
       }
+      
     }
 
     $datos='';
 
-
-    foreach ($arrUsuarios as $key => $value) {
-      $arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($fdesde,$fhasta,$value->getId(),2);
-        if(!empty($arrLicencias)){
-          foreach ($arrLicencias as $licencia) {
-            if ($licencia->getAprobado() && $licencia->getFechaFin()->format('Y-m-d') >= $dFechas->FechaActual() ) {
-              $datos[]= array('userId' => $licencia->getUsuarioId()->getId(),
-                              'Nombre' => $licencia->getUsuarioId()->getNombre()." ".$licencia->getUsuarioId()->getApellido(),
-                              'Desde' => $licencia->getFechaInicio()->format('d-m-Y'),
-                              'Hasta' => $licencia->getFechaFin()->format('d-m-Y'));
-            }
-            
-          }
-        }
-
-        
+    if (!empty($arrUsuarios)) {
+    	foreach ($arrUsuarios as $key => $value) {
+	    	$arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($fdesde,$fhasta,$value->getId(),2);
+	        if(!empty($arrLicencias)){
+	          foreach ($arrLicencias as $licencia) {
+	            if ($licencia->getAprobado() && $licencia->getFechaFin()->format('Y-m-d') >= $dFechas->FechaActual() ) {
+	              $datos[]= array('userId' => $licencia->getUsuarioId()->getId(),
+	                              'Nombre' => $licencia->getUsuarioId()->getNombre()." ".$licencia->getUsuarioId()->getApellido(),
+	                              'Desde' => $licencia->getFechaInicio()->format('d-m-Y'),
+	                              'Hasta' => $licencia->getFechaFin()->format('d-m-Y'));
+	            }
+	            
+	          }
+	        }
+	    }
     }
+    
 
 
    $arrLicenciasPend = $handlerLic->seleccionarByFiltros($fdesde,$fhasta,null,1);
@@ -65,7 +68,7 @@
 if ($esCoordinador) {
 
   $licPendientes='';
-if (!empty($arrLicenciasPend)) {
+if (!empty($arrLicenciasPend) && !empty($arrGestoresSist)) {
 
   foreach ($arrLicenciasPend as $key => $value) {
      foreach ($arrGestoresSist as $gestor) {
