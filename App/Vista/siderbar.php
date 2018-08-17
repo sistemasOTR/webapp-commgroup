@@ -641,7 +641,7 @@
               </li>  
             <?php 
               }
-            ?>     
+            ?><!--      
 
             <?php
               if($usuarioActivoSesion->getCambioRol()){               
@@ -668,7 +668,7 @@
               </li>
             <?php 
               }
-            ?>
+            ?> -->
 
             <?php              
               if($permiso->getModuloUsuariosBoolean() ||
