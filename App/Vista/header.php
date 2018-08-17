@@ -90,10 +90,10 @@
 		                    			$tipoUser = 1;
 		                    			break;
 		                    		case 'GESTOR':
-		                    			$tipoUser = 2;
+		                    			$tipoUser = 3;
 		                    			break;
 		                    		case 'SUPERVISOR':
-		                    			$tipoUser = 3;
+		                    			$tipoUser = 6;
 		                    			break;
 		                    		case 'COORDINADOR':
 		                    			$tipoUser = 4;
