@@ -44,14 +44,22 @@
 
 						    	if(!empty($arrSupervisor))
 						    	{						    		
-						    		foreach ($arrSupervisor as $key => $value) {	
+						    		foreach ($arrSupervisor as $key => $value) {
+
 
 						    			$handlerP = new HandlerPuntaje;
 						    			$objetivo = $handlerP->buscarObjetivoSupervisor($value['id']);
 						    			$objetivoPlazas = $handlerP->obtenerPuntajeSupervisor($value['id']);
+						    			$url_detalle = 'index.php?view=detalle&id='.$value['id'].'&admin=supervisor';
+						    			if (intval($objetivo)==0) {	
+						    				$vista="<i class='fa fa-eye text-gray'></i>";
+						    			} else{
+						    				$vista="<a href='".$url_detalle."'><i class='fa fa-eye'></i>";
+						    			}
 
 						    			echo "
 					    				<tr>
+					    					<td>".$vista."</td>
 									    	<td>".$value['nombre']."</td>
 									    	<td>".$objetivoPlazas."</td>
 											<td><input type='number' step='0.01' class='form-control' name='id_".$value['id']."' style='width: 100%;' value='".$objetivo."'></td>

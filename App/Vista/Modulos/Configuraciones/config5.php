@@ -32,6 +32,7 @@
                       
 					    <thead>
 					    	<tr>
+					    		<th style='width: 5%;'>VER</th>
 						    	<th style='width: 25%;'>Plazas</th>
 						    	<th>Objetivo Suma Gestores</th>
 						      	<th>OBJETIVO
@@ -50,8 +51,18 @@
 						    			$objetivo = $handlerP->buscarObjetivoCoordinador($value->PLAZA);
 						    			$objetivoGestores = $handlerP->obtenerPuntajeCoordinador($value->PLAZA);
 						    			$strReplace= str_replace(" ","_",$value->PLAZA);
+						    			$url_detalle = 'index.php?view=detalle&id='.$value->PLAZA.'&admin=coordinador'; 
+						    			if ($objetivo!=0) {	
+						    				$vista="<a href='".$url_detalle."'><i class='fa fa-eye'></i>";
+						    			
+						    			} else{
+						    					$vista="<i class='fa fa-eye text-gray'></i>";
+						    				
+						    			}
+
 						    			echo "
 					    				<tr>
+					    				    <td>".$vista."</td>
 									    	<td>".$value->PLAZA."</td>
 									    	<td>".$objetivoGestores."</td>
 											<td><input type='number' step='0.01' class='form-control' name='id_".$strReplace."' style='width: 100%;' value='".$objetivo."'></td>

@@ -283,6 +283,29 @@
 
 		}
 
+       public function selectById($id)
+		{			
+			try {
+
+					$query="SELECT * FROM supervisor_objetivo WHERE id_supervisor_sistema=".$id." ORDER BY fecha_desde DESC";
+				
+
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new SupervisorObjetivo);
+				
+				if (count($result)==1) {
+					$result= array('' => $result ); 
+					return $result;
+				}else{
+				  return $result;
+				}
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
 
 		public function existeObjetivo()
 		{			

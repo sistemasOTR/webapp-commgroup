@@ -249,6 +249,32 @@
 
 		}
 
+		public function selectById($id)
+		{			
+			try {
+
+					$query="SELECT * FROM coordinador_objetivo WHERE id_coordinador_sistema='".$id."' ORDER BY fecha_desde DESC";
+				
+                  
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new CoordinadorObjetivo);
+
+              
+						
+		if (count($result)==1) {
+					$result= array('' => $result ); 
+					return $result;
+				}else{
+				  return $result;
+				}
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
+
 		public function buscarPuntajeFecha($coordinador_id,$fechaOperacion)
 		{			
 			try {

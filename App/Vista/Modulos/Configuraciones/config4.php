@@ -31,6 +31,7 @@
 				  	<table class="table table-striped table-condensed" id='tabla'>
 					    <thead>
 					    	<tr>
+					    		<th style='width: 5%;'>VER</th>
 						    	<th style='width: 25%;'>GESTORES</th>
 						      	<th>OBJETIVO
 						      		<i class="fa fa-question-circle" data-toggle="tooltip" title="" data-original-title="Objetivo para cálculo en puntajes del gestor"></i>
@@ -41,13 +42,21 @@
 							<?php
 						    	if(!empty($arrGestores))
 						    	{						    		
-						    		foreach ($arrGestores as $key => $value) {	
+						    		foreach ($arrGestores as $key => $value) {
+						    		// var_dump($arrGestores);	
 
 						    			$handlerP = new HandlerPuntaje;
 						    			$objetivo = $handlerP->buscarObjetivo($value->GESTOR11_CODIGO);
+						    			$url_detalle = 'index.php?view=detalle&id='.$value->GESTOR11_CODIGO.'&admin=gestor'; 
+						    			if ($objetivo==0) {	
+						    				$vista="<i class='fa fa-eye text-gray'></i>";
+						    			} else{
+						    				$vista="<a href='".$url_detalle."'><i class='fa fa-eye'></i>";
+						    			}
 
 						    			echo "
 					    				<tr>
+					    				    <td>".$vista."</td>
 									    	<td>".$value->GESTOR21_ALIAS."</td>
 											<td><input type='number' step='0.01' class='form-control' name='id_".$value->GESTOR11_CODIGO."' style='width: 100%;' value='".$objetivo."'></td>
 									    </tr>";

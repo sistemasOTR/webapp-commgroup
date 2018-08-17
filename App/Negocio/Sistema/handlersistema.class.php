@@ -439,6 +439,20 @@
 			}
 		}
 
+		// public function selectSupervisorById($id){
+		// 	try {
+				
+		// 		$query = "SELECT * FROM GESTORESTT WHERE GESTOR11_CODIGO=".$id;
+
+		// 		$result = SQLsistema::selectObject($query);
+						
+		// 		return $result;
+
+		// 	} catch (Exception $e) {
+		// 		throw new Exception($e->getMessage());	
+		// 	}
+		// }
+
 		public function selectAllEmpresaReturnArray(){
 			try {
 				

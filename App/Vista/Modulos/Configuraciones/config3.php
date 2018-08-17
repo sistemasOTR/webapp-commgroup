@@ -48,7 +48,7 @@
 						    			
 						    			$handlerP = new HandlerPuntaje;
 						    			$puntaje = $handlerP->buscarPuntaje($value->EMPTT11_CODIGO);
-						    			$url_detalle = 'index.php?view=detalle&id='.$value->EMPTT11_CODIGO; 
+						    			$url_detalle = 'index.php?view=detalle&id='.$value->EMPTT11_CODIGO.'&admin=empresa'; 
 						    			if ($puntaje==0) {	
 						    				$vista="<i class='fa fa-eye text-gray'></i>";
 						    			} else{
