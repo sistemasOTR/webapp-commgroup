@@ -85,13 +85,30 @@
 		                  if(!empty($multi))
 		                  {
 		                    foreach ($multi as $uType) {
-		                     ?>
-                        <li>
-                          <a href='<?php echo $url_activar_header."usuario=".$usuarioActivoSesion->getId()."&tipo_usuario=".$uType->getTipoUsuario()->getId()."&id_usuario_sistema=".$uType->getUserSistema()."&alias_usuario_sistema=".$uType->getAliasUserSistema(); ?>'>
-                            <?php echo trim($uType->getTipoUsuario()->getNombre())." - ".trim($uType->getAliasUserSistema()) ?>
-                          </a>
-                        </li>
-                      <?php }
+		                    	switch ($usuarioActivoSesion->getUsuarioPerfil()->getNombre()) {
+		                    		case 'CLIENTE':
+		                    			$tipoUser = 1;
+		                    			break;
+		                    		case 'GESTOR':
+		                    			$tipoUser = 2;
+		                    			break;
+		                    		case 'SUPERVISOR':
+		                    			$tipoUser = 3;
+		                    			break;
+		                    		case 'COORDINADOR':
+		                    			$tipoUser = 4;
+		                    			break;
+		                    	}
+
+		                    	if ($uType->getTipoUsuario()->getId() == $tipoUser) { ?>
+		                    		
+			                        <li>
+			                          <a href='<?php echo $url_activar_header."usuario=".$usuarioActivoSesion->getId()."&tipo_usuario=".$uType->getTipoUsuario()->getId()."&id_usuario_sistema=".$uType->getUserSistema()."&alias_usuario_sistema=".$uType->getAliasUserSistema(); ?>'>
+			                            <?php echo trim($uType->getTipoUsuario()->getNombre())." - ".trim($uType->getAliasUserSistema()) ?>
+			                          </a>
+			                        </li>
+		                    	<?php }
+                       }
                       }
                       ?>
                     </ul>
