@@ -333,6 +333,14 @@
                   </li>
                 </ul>
               </li>
+              <?php
+		          if($usuarioActivoSesion->getCambioRol()){               
+		        ?>
+		          <!-- Control Sidebar Toggle Button -->
+		          <li>
+		            <a href="#" data-toggle="control-sidebar"><i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" title="Cambio de Rol"></i></a>
+		          </li>
+		      <?php } ?>
             </ul>
           </div>
         </nav>

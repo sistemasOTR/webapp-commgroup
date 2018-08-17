@@ -119,6 +119,7 @@
 	include_once "head.php";
 	include_once "header.php";
 	include_once "siderbar.php";
+	include_once 'siderbar_right.php';
 
 	switch ($view) {
 
@@ -761,7 +762,7 @@
 	if(empty($include))
 		include_once 'errorpermisos.php';
 	else		
-		include_once $include;	
+		include_once $include;
 
 	include_once "footer.php";
 ?>
