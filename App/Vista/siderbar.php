@@ -1,5 +1,6 @@
       <?php
         include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";
+        include_once PATH_NEGOCIO."Usuarios/handlerperfiles.class.php";
         
         $url_panelcontrol = "index.php?view=panelcontrol";
 
@@ -76,6 +77,10 @@
         $url_agenda_rubros = "index.php?view=agenda_rubros";
       
         $perfil =$usuarioActivoSesion->getUsuarioPerfil()->getId();
+        $url_cambiar_side=PATH_VISTA.'Modulos/UsuariosAdmin/action_cambiar_rol_usuario_side.php?id=';
+
+        $handlerP = new HandlerPerfiles;
+        $arrPerfiles = $handlerP->selectTodosNoAdmin();
 
 
       ?>
@@ -642,10 +647,23 @@
               if($usuarioActivoSesion->getCambioRol()){               
             ?>
               <li class="treeview" id="mnu_cambiorol">
-                <a href=<?php echo $url_cambiorol; ?>> 
-                  <i class="fa fa-refresh"></i> <span>Cambiar Perfil</span> </i>
-                </a>              
-              </li>  
+                <a href="#"><i class="fa fa-refresh"></i> <span>Cambiar Perfil</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <?php
+                    if(!empty($arrPerfiles))
+                    {                        
+                      foreach ($arrPerfiles as $rol) { ?>
+                        
+                        <li id="mnu_cambiorol">
+                          <a href=<?php echo $url_cambiar_side.$usuarioActivoSesion->getId()."&rol=".$rol->getId(); ?>> 
+                            <?php echo $rol->getNombre() ?>
+                          </a>
+                        </li>
+                    <?php  }
+                    }                      
+                  ?> 
+                </ul>              
+              </li>
             <?php 
               }
             ?>
