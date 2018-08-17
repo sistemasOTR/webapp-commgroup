@@ -2,8 +2,10 @@
   include_once PATH_NEGOCIO."Funciones/String/string.class.php";
   include_once PATH_NEGOCIO.'Notificaciones/handlernotificaciones.class.php';
 
+
   $url_perfil= "index.php?view=perfil_usuario";
   $url_logout= PATH_VISTA."Login/action_logout.php";
+  $url_activar_header=PATH_VISTA.'Modulos/UsuariosAdmin/action_activar_tipo_usuario_header.php?';
 
   $handler = new HandlerNotificaciones;
   $arrNotificaiones = $handler->seleccionarTodo();
@@ -22,7 +24,13 @@
   $i_contador_admin=0;
   $i_contador_empresa=0;
 ?>
-      
+      <style>
+        .header-change li:hover {background: orange;}
+        .header-change li:hover > a {color:white;}
+        .header-change li {list-style: none;width: 100%;line-height: 30px;padding: 5px}
+        .header-change li a {color: #555; display: block;}
+        .label-warning a {color: white;}
+      </style>
       <header class="main-header">
         <!-- Logo -->
         <a href="index.php" class="logo">          
@@ -56,7 +64,44 @@
           ?>
           <label style="margin-top: 2px; margin-left: 15px;">                                  
             <span>Login como</span><br>
-            <span class="label-warning" style="padding: 3px;"><?php echo $strTipoLogin; ?></span>
+            <?php if($usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="GESTOR" ||
+                $usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="CLIENTE" ||
+                $usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="COORDINADOR" || 
+                $usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="SUPERVISOR" ){ ?>
+            <li class="dropdown notifications-menu label-warning" style="list-style: none;">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                <span class="" style="padding: 5px;"><?php echo $strTipoLogin; ?> <i class="fa fa-caret-down"></i> </span>
+              </a>
+              <ul class="dropdown-menu">
+                
+                <li>
+                  <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: 300px; height: auto;">
+                    <ul class="menu header-change" style="overflow: auto; width: 100%; height: auto; padding: 0px;">
+                      <?php $multi = $usuarioActivoSesion->getMultiusuario();
+                  
+		                  if(count($multi)==1)
+		                    $multi = array($multi);
+
+		                  if(!empty($multi))
+		                  {
+		                    foreach ($multi as $uType) {
+		                     ?>
+                        <li>
+                          <a href='<?php echo $url_activar_header."usuario=".$usuarioActivoSesion->getId()."&tipo_usuario=".$uType->getTipoUsuario()->getId()."&id_usuario_sistema=".$uType->getUserSistema()."&alias_usuario_sistema=".$uType->getAliasUserSistema(); ?>'>
+                            <?php echo trim($uType->getTipoUsuario()->getNombre())." - ".trim($uType->getAliasUserSistema()) ?>
+                          </a>
+                        </li>
+                      <?php }
+                      }
+                      ?>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <?php } else{ ?>
+	          	<span class="label-warning" style="padding: 3px;"><?php echo $strTipoLogin; ?></span>
+	          <?php } ?>
           </label>
 
           <?php

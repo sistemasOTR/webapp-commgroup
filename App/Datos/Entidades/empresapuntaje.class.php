@@ -194,8 +194,14 @@
 
 				# Ejecucion 				
 				$result = SQL::selectObject($query, new EmpresaPuntaje);
-						
-				return $result;
+
+				if(count($result)==1){
+					$result = array('' => $result );                   
+					return $result;
+				}				
+				else{
+					return $result;
+				}
 				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
