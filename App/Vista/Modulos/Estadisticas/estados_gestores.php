@@ -27,12 +27,6 @@
       $fHOY = "2018-08-21";
 
   $arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,null,$user->getUserSistema(),null,null,null); 
-  var_dump($arrEstados);
- 
- 
-
-
-
 	$allEstados = $handler->selectAllEstados();
 ?>
 
