@@ -140,27 +140,38 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
    
     });
 
-  $(document).ready(function(){
-
-      
-        var ctx_est = $("#budget_estados_chart").get(0).getContext("2d");
-        var chartestados = new Chart(ctx_est,config_est);
-        var est= [ <?php echo implode(",",$est);?> ]; 
-    for (var i = 0; i < est.length; i++) {
-        // Add properties in here like this
-        est[i].filter = (i); 
-
-    }
  
-        $("#budget_estados_chart").click(
-            function(evt){
-                var activePoints = chartestados.getElementAtEvent(evt);
-                var url = "index.php?view=servicio&fdesde=<?php echo $today;?>&fhasta=<?php echo $today;?>&festado="+est[activePoints[0]['_index']]; 
-                location.href=url;
-            }
-        );
-   
-    });
  
 setTimeout('document.location.reload()',300000);
 </script>
+
+<?php 
+   if (!empty($arrEstados)) {  ?>
+    
+    <script>
+     $(document).ready(function(){
+
+          
+            var ctx_est = $("#budget_estados_chart").get(0).getContext("2d");
+            var chartestados = new Chart(ctx_est,config_est);
+            var est= [ <?php echo implode(",",$est);?> ]; 
+        for (var i = 0; i < est.length; i++) {
+            // Add properties in here like this
+            est[i].filter = (i); 
+
+        }
+     
+            $("#budget_estados_chart").click(
+                function(evt){
+                    var activePoints = chartestados.getElementAtEvent(evt);
+                    var url = "index.php?view=servicio&fdesde=<?php echo $today;?>&fhasta=<?php echo $today;?>&festado="+est[activePoints[0]['_index']]; 
+                    location.href=url;
+                }
+            );
+       
+        });
+
+     </script>
+  <?php
+  } 
+  ?>
