@@ -24,7 +24,7 @@
 
     //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
     if(!PRODUCCION)
-      $fHOY = "2018-07-10";
+      $fHOY = "2018-07-23";
 
   $arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,null,$user->getUserSistema(),null,null,null); 
  

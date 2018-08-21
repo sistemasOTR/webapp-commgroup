@@ -7,7 +7,7 @@
     $est_plaza='';
     $dFecha = new Fechas;
     if(!PRODUCCION){
-      $today = "2018-07-10";
+      $today = "2018-07-23";
     }else{
       $today=$dFecha->FechaActual();
     }
