@@ -58,7 +58,7 @@
       <div class="container-fluid">
       <div class="row">
 
-           <div class="col-md-6">
+         <div class="col-md-6">
           <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/ProgresoMensual/coordinador.php"; ?>
         </div>
       

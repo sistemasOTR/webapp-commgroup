@@ -24,12 +24,14 @@
 
     //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
     if(!PRODUCCION)
-      $fHOY = "2018-08-11";
+      $fHOY = "2018-07-10";
 
-  $arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,null,null,null,$est_plaza,null);   
+  $arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,null,$user->getUserSistema(),null,null,null); 
+ 
+
+
 
 	$allEstados = $handler->selectAllEstados();
-  $today=$dFecha->FechaActual();
 ?>
 
 <div class="col-md-12 nopadding">
@@ -57,9 +59,9 @@
 
 			              		if(!($value->ESTADOS_DESCCI=="Liquidar C. Parcial") || !($value->ESTADOS_DESCCI=="No Efectivas"))
 			              		{
-			                			$dataEstados[] = array('estados' => $value->ESTADOS_DESCCI,
+			                			$dataEstados_gestor[] = array('estados' => $value->ESTADOS_DESCCI,
                       							               'EFICIENCIA' => $value->CANTIDAD_SERVICIOS);
-                            $est[]=intval($value->SERTT91_ESTADO);
+                            $est_gestor[]=intval($value->SERTT91_ESTADO);
 				                		
 			              		}
                                
@@ -76,12 +78,12 @@
 			          	
                     
 
-      			        $labels5 = '';
-          					$data5 = '' ;
+      			        $labels6 = '';
+          					$data6 = '' ;
 
-        				    foreach ($dataEstados as $key => $valor) {
-        				      $labels5 = $labels5."'".$valor['estados']."', ";
-        				      $data5 = $data5.$valor['EFICIENCIA'].", "; 
+        				    foreach ($dataEstados_gestor as $key => $valor) {
+        				      $labels6 = $labels6."'".$valor['estados']."', ";
+        				      $data6 = $data6.$valor['EFICIENCIA'].", "; 
     
         				    }     
                  } 
@@ -91,19 +93,19 @@
 
 			        ?>
                
-               <canvas id="budget_estados_chart" class="col-xs-12 chart"></canvas> 
+               <canvas id="budget_estados_gestor_chart" class="col-xs-12 chart"></canvas> 
           	</div>
         </div>
     </div>
 
 <script type="text/javascript">
-	 var config_est = {
+	 var config_est_gestor = {
     type: 'pie',
     data: {
-      labels: [<?php echo $labels5 ?>],
+      labels: [<?php echo $labels6 ?>],
       datasets: [{ 
         label: 'Efectividad',
-        data: [<?php echo $data5 ?>],
+        data: [<?php echo $data6 ?>],
         fill: false,
         borderColor: 'white',
         backgroundColor:['#229954','#2874A6','#85C1E9','#D2B4DE','#f56954','#C0392B','#B7950B','#979A9A','#A04000','#F1C40F','#D2B4DE']

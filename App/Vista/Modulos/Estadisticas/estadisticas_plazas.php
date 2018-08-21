@@ -3,7 +3,7 @@
     include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
     include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php";  
     include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php"; 
-
+    
     $est_plaza=(isset($_GET['plaza'])?$_GET['plaza']:'');
     $handlerPlaza = new HandlerPlazaUsuarios;
     $arrPlaza = $handlerPlaza->selectTodas();

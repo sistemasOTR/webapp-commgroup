@@ -16,7 +16,6 @@
   $handler = new HandlerSistema;
   $arrCoordinador = $handler->selectAllCoordinadorFiltro(null,null,null,null,null); 
   $arrEmpresas=$handler->selectAllEmpresaFiltroArray(null,null,null,$est_plaza,null);
-  $admin='';
 
   // var_dump($arrEmpresas);
   // exit();
@@ -35,18 +34,21 @@
     $anioMES = $f->format('Y'); 
     /*-------------------------*/
      if(!PRODUCCION)
-      $fHOY = "2018-08-12";
+      $fHOY = "2018-08-11";
 
-    $countServiciosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,null,null,null,null,$est_plaza,null);
+    $countServiciosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,null,null,$user->getUserSistema(),null,null,null);
        
-    $countDiasMesCurso = $handler->selectCountFechasServicios($fMES,$fHOY,null,null,null,null,$est_plaza,null);
+    $countDiasMesCurso = $handler->selectCountFechasServicios($fMES,$fHOY,null,null,$user->getUserSistema(),null,null,null);
+
+    // var_dump($countServiciosMesCursoGestion,$countDiasMesCurso);
+    // exit();
   
     if(!empty($countDiasMesCurso[0]->CANTIDAD_DIAS))
       $countServiciosTotalGestion = round((intval($countServiciosMesCursoGestion[0]->CANTIDAD_SERVICIOS) / intval($countDiasMesCurso[0]->CANTIDAD_DIAS)),0);
     else
       $countServiciosTotalGestion = round(0,2);   
 
-    $countServiciosCerradosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,200,null,null,null,$est_plaza,null); 
+    $countServiciosCerradosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,200,null,$user->getUserSistema(),null,null,null); 
 
          
 
@@ -77,16 +79,16 @@
            }
     foreach ($arrEmpresas as $key => $value) {
 
-    $cerrados = 0;
-    $totales = 0;
+    $cerrados9 = 0;
+    $totales9 = 0;
     for ($i=$fdesde; $i <= $fhasta; $i++) { 
       list($año, $mes, $dia) = split('[/.-]', $i);
-      $servCerrados = $handler->selectCountServiciosGestion($i,$i,200,$value["EMPTT11_CODIGO"],null,null,$est_plaza,null);
-      $cerrados += $servCerrados[0]->CANTIDAD_SERVICIOS;
-      $servTotales = $handler->selectCountServiciosGestion($i,$i,null,$value["EMPTT11_CODIGO"],null,null,$est_plaza,null);
-      $totales += $servTotales[0]->CANTIDAD_SERVICIOS;
+      $servCerrados = $handler->selectCountServiciosGestion($i,$i,200,$value["EMPTT11_CODIGO"],$user->getUserSistema(),null,null,null);
+      $cerrados9 += $servCerrados[0]->CANTIDAD_SERVICIOS;
+      $servTotales = $handler->selectCountServiciosGestion($i,$i,null,$value["EMPTT11_CODIGO"],$user->getUserSistema(),null,null,null);
+      $totales9 += $servTotales[0]->CANTIDAD_SERVICIOS;
       if ($servTotales[0]->CANTIDAD_SERVICIOS != 0) {
-        $dataGraff[] = array('dia' => $dia.'-'.$mes,
+        $dataGraf_emp[] = array('dia' => $dia.'-'.$mes,
                 'EFICIENCIA' => number_format($servCerrados[0]->CANTIDAD_SERVICIOS*100/$servTotales[0]->CANTIDAD_SERVICIOS,2),
                 'EMPRESA'=>$value["EMPTT21_NOMBREFA"] );
       }
@@ -94,18 +96,18 @@
   
   // var_dump($dataGraff);
     // Construccion de labels y datos para representacion //
-    $labels = '';
-    $data = '' ;
-    if(!empty($dataGraff)){
-      foreach ($dataGraff as $dgf) {
-        $labels = $labels."'".$dgf['dia']."', ";
-        $data = $data.$dgf['EFICIENCIA'].", "; 
-        $empresa=$dgf['EMPRESA'];
+    $labels9 = '';
+    $data9 = '' ;
+    if(!empty($dataGraf_emp)){
+      foreach ($dataGraf_emp as $dgf) {
+        $labels9 = $labels9."'".$dgf['dia']."', ";
+        $data9 = $data9.$dgf['EFICIENCIA'].", "; 
+        $empresa_gestor=$dgf['EMPRESA'];
         $eficienciaDiaria[] = floatval($dgf['EFICIENCIA']);
       }
      // var_dump($empresa);
      //   exit();
-    unset($dataGraff);
+    unset($dataGraf_emp);
 
       // Valores representativos //
       $maxEf = max($eficienciaDiaria);
@@ -120,7 +122,7 @@
 <div class="col-lg-3 col-md-4 col-sm-6">
   <div class="box box-solid">
   <div class="box-header with-border">
-    <h3 class="box-title"><i class="ion-stats-bars"></i> <?php echo $empresa; ?> <?php echo $mes.'-'.$año ?></h3>
+    <h3 class="box-title"><i class="ion-stats-bars"></i> <?php echo $empresa_gestor; ?> <?php echo $mes.'-'.$año ?></h3>
     <div class="box-tools pull-right">
       <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
       <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -139,35 +141,35 @@
       <h5>Mínimo</h5>
       <h4 class="text-red"><?php echo $minEf ?>%</h4>
     </div>
-    <canvas id="<?php echo $value["EMPTT11_CODIGO"];?>" class="col-xs-12 chart"></canvas>
+    <canvas id="gestor_<?php echo $value["EMPTT11_CODIGO"];?>" class="col-xs-12 chart"></canvas>
     <div class="col-xs-4 border-right">
       <h5>Cerradas</h5>
-      <h4 class="text-light-blue"><?php echo $cerrados; ?></h4>
+      <h4 class="text-light-blue"><?php echo $cerrados9; ?></h4>
     </div>
     <div class="col-xs-4 border-right">
       <h5>Total</h5>
-      <h4 class="text-blue"><?php echo $totales; ?></h4>
+      <h4 class="text-blue"><?php echo $totales9; ?></h4>
     </div>
     <div class="col-xs-4">
       <h5>Eficiencia</h5>
-      <h4 class="text-blue"><?php echo number_format($cerrados*100/$totales,2); ?> %</h4>
+      <h4 class="text-blue"><?php echo number_format($cerrados9*100/$totales9,2); ?> %</h4>
     </div>
   </div>
 </div>
 </div>
 <?php 
-  $cod_emp[]= array('EMPRESA'=>$value["EMPTT11_CODIGO"] );
+  $cod_empresa_gestor[]= array('EMPRESA'=>$value["EMPTT11_CODIGO"] );
  ?>
 <!-- SCRIPTS PARA GRAFICAR -->
 
 <script>
-  var config_empresas<?php echo $value["EMPTT11_CODIGO"] ?> = {  
+  var config_empresas_gestor<?php echo $value["EMPTT11_CODIGO"] ?> = { 
     type: 'line',
     data: {
-      labels: [<?php echo $labels ?>],
+      labels: [<?php echo $labels9 ?>],
       datasets: [{ 
         label: 'Efectividad',
-        data: [<?php echo $data ?>],
+        data: [<?php echo $data9 ?>],
         fill: false,
         borderColor: 'cornflowerblue',
         backgroundColor: 'cornflowerblue',
