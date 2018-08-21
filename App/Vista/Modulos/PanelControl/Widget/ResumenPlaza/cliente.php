@@ -103,15 +103,21 @@
       $class_semaforo = "bg-green";   
   //FIN EFECTIVIDAD MENSUAL
 
-  
-
     $url_redireccion_plaza='index.php?view=estadisticas_plaza&plaza='.$plaza->PLAZA;
+
+    if ($sum_estados_gestionados > 0) {
+
+                      $strReplace= str_replace(" ","_",$plaza->PLAZA);
+     
 ?>
-<div class='col-sm-6 col-md-4 col-lg-3'>
+<div class='col-sm-6 col-md-4'>
 <div class="box box-solid">
-  <div class="box-header with-border"><h3 class="box-title"><i class="ion-arrow-graph-up-right"> </i> <?php echo $plaza->PLAZA ?></h3><!--<a href="<?php echo $url_redireccion_plaza ; ?>"  class="fa fa-bar-chart-o  pull-right"></a>--></div>
+  <div class="box-header with-border"><h3 class="box-title"><i class="ion-arrow-graph-up-right"> </i> <?php echo $plaza->PLAZA ?></h3><!--<a href="<?php echo $url_redireccion_plaza ; ?>"  class="fa fa-bar-chart-o  pull-right"></a>-->
+    <a href="#" class="pull-right text-navy" data-toggle='modal' data-target='<?php echo "#modal_".$strReplace ?>'>
+        <i class="fa fa-search"  data-toggle='tooltip' title='Detalle de gestiones'></i>
+    </a>
+  </div>
   <div class="box-body">
-    <h4>DIARIO</h4>
     <div class="info-box bg-aqua">
       <span class="info-box-icon"><i class="ion-ios-paperplane"></i></span>
 
@@ -182,3 +188,57 @@
   </div>
 </div>
 </div>
+<?php } ?>
+
+<div class="modal fade in" id='<?php echo "modal_".$strReplace ?>'>
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Detalle <?php echo $plaza->PLAZA ?></h4>
+          </div>
+          <div class="modal-body">
+            <div class="no-padding">
+                <ul class="nav nav-stacked">
+              <?php
+
+                $sum_total_estados=0; 
+                  $sum_estados_gestionados=0;
+                  $porc_estados_gestionados=0;
+
+                  if(!empty($arrEstados))
+                  {                   
+                    foreach ($arrEstados as $key => $value) {
+                        $url_estados = "?view=servicio&fdesde=".$fHOY."&fhasta=".$fHOY."&fcoordinador=".$plaza->PLAZA."&festado=".$value->SERTT91_ESTADO;
+
+                      $f_array = new FuncionesArray;
+                      $class_estado = $f_array->buscarValor($allEstados,"1",$value->ESTADOS_DESCCI,"2");
+
+                        if(!($value->ESTADOS_DESCCI=="Liquidar C. Parcial") || !($value->ESTADOS_DESCCI=="No Efectivas"))
+                        {
+                          echo "                  
+                            <li><a href='".$url_estados."'>".$value->ESTADOS_DESCCI." <span class='pull-right badge ".$class_estado."'>
+                            ".round($value->CANTIDAD_SERVICIOS,2)."
+                            </span></a></li>";
+                        }
+
+                        // totales
+                        $sum_total_estados = $sum_total_estados + $value->CANTIDAD_SERVICIOS;
+                        if($value->SERTT91_ESTADO>2)
+                          $sum_estados_gestionados=$sum_estados_gestionados+$value->CANTIDAD_SERVICIOS;
+                    }
+
+                    if(empty($sum_total_estados))
+                      $porc_estados_gestionados = 0;
+                    else  
+                      $porc_estados_gestionados = ($sum_estados_gestionados / $sum_total_estados) *100;
+                  }                  
+              ?>
+                </ul>
+            </div>
+          </div>
+
+      </div>
+    </div>
+  </div>
