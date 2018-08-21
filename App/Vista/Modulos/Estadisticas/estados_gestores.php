@@ -24,9 +24,11 @@
 
     //PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
     if(!PRODUCCION)
-      $fHOY = "2018-07-10";
+      $fHOY = "2018-08-21";
 
   $arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,null,$user->getUserSistema(),null,null,null); 
+  var_dump($arrEstados);
+ 
  
 
 
@@ -86,17 +88,11 @@
         				      $data6 = $data6.$valor['EFICIENCIA'].", "; 
     
         				    }     
-                 } 
-                else{
-                  echo "Aun No hay datos  cargados";
-                } 
-
-			        ?>
+                
+			       ?>
                
                <canvas id="budget_estados_gestor_chart" class="col-xs-12 chart"></canvas> 
-          	</div>
-        </div>
-    </div>
+   
 
 <script type="text/javascript">
 	 var config_est_gestor = {
@@ -122,3 +118,12 @@
 
 </script>
 
+<?php
+  }  elseif(is_null($arrEstados)){
+                     echo "Aun No hay datos  cargados";    
+                  } 
+
+    ?>
+          </div>
+        </div>
+    </div>   

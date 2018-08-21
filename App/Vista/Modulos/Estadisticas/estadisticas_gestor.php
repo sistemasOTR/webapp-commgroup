@@ -7,7 +7,7 @@
     $est_plaza='';
     $dFecha = new Fechas;
     if(!PRODUCCION){
-      $today = "2018-07-10";
+      $today = "2018-08-21";
     }else{
       $today=$dFecha->FechaActual();
     }
@@ -114,7 +114,17 @@
 
     
   };
+ 
+setTimeout('document.location.reload()',300000);
+</script>
 
+<?php
+
+   if (!empty($arrEstados)) { ?>
+    
+   
+
+<script>
   $(document).ready(function(){
 
       
@@ -136,6 +146,11 @@
         );
    
     });
+  </script>
+
+  <?php
+  } 
+  ?>
+
+
  
-setTimeout('document.location.reload()',300000);
-</script>

@@ -22,10 +22,12 @@
     $anioMES = $f->format('Y'); 
     /*-------------------------*/
      if(!PRODUCCION)
-      $fHOY = "2018-08-12";
+      $fHOY = "2018-08-17";
 
     //ESTADO = 300 --> Cerrado Parcial, Re pactado, Re llamar, Cerrado, Negativo (los 5 estados que se toman como operacion en la calle)
     $countServiciosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,null,null,$user->getUserSistema(),null,null,null);
+
+    // exit();
        
 
 
@@ -71,7 +73,7 @@
     $totales = 0;
     for ($i=$fdesde; $i <= $fhasta; $i++) { 
     	list($año, $mes, $dia) = split('[/.-]', $i);
-    	$servCerrados = $handler->selectCountServiciosGestion($i,$i,200,null,$user->getUserSistema(),null,null,null);
+    	$servCerrados = $handler->selectCountServiciosGestion($i,$i,200,null,$user->getUserSistema(),null,null,null);  	
     	$cerrados += $servCerrados[0]->CANTIDAD_SERVICIOS;
     	$servTotales = $handler->selectCountServiciosGestion($i,$i,null,null,$user->getUserSistema(),null,null,null);
     	$totales += $servTotales[0]->CANTIDAD_SERVICIOS;
@@ -79,6 +81,7 @@
     		$dataGestor[] = array('dia' => $dia.'-'.$mes,
     						'EFICIENCIA' => number_format($servCerrados[0]->CANTIDAD_SERVICIOS*100/$servTotales[0]->CANTIDAD_SERVICIOS,2) );
     	}
+
     }
 
 
