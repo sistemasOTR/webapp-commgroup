@@ -435,6 +435,11 @@
 			if($permiso->getModuloMetricasBoolean() && $esGerencia)
 				$include = 'Modulos/Estadisticas/estadisticas_global.php';
 			break;
+
+		case 'estadisticas_gestor':
+			if($permiso->getModuloMetricasBoolean() && $esGestor)
+				$include = 'Modulos/Estadisticas/estadisticas_gestor.php';
+			break;
 			
 		case 'estadisticas_coordinador':
 			if($permiso->getModuloMetricasBoolean() && $esCoordinador)

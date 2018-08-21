@@ -25,11 +25,11 @@
       $fHOY = "2018-08-12";
 
     //ESTADO = 300 --> Cerrado Parcial, Re pactado, Re llamar, Cerrado, Negativo (los 5 estados que se toman como operacion en la calle)
-    $countServiciosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,null,null,null,null,$user->getAliasUserSistema(),null);
+    $countServiciosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,null,null,$user->getUserSistema(),null,null,null);
        
 
 
-    $countDiasMesCurso = $handler->selectCountFechasServicios($fMES,$fHOY,null,null,null,null,$user->getAliasUserSistema(),null);
+    $countDiasMesCurso = $handler->selectCountFechasServicios($fMES,$fHOY,null,null,$user->getUserSistema(),null,null,null);
 
    
     if(!empty($countDiasMesCurso[0]->CANTIDAD_DIAS))
@@ -41,7 +41,7 @@
 
 
     //ESTADO = 200 --> Cerrado, Enviado y Liquidar (los 3 estados que se toman como operacion cerrada)
-    $countServiciosCerradosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,200,null,null,null,$user->getAliasUserSistema(),null); 
+    $countServiciosCerradosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,200,null,$user->getUserSistema(),null,null,null); 
 
          
 
@@ -52,7 +52,7 @@
 
 	 
   	// Gestion graficos //
-	list($año, $mes, $dia) = split('[/.-]', $dFecha->FechaActual());
+    list($año, $mes, $dia) = split('[/.-]', $dFecha->FechaActual());
 	if ( $dia == '1') {
 		$fechaAux = $dFecha->RestarDiasFechaActual(1);
 		$fdesde = date('Y-m-01',strtotime($fechaAux));
@@ -63,30 +63,32 @@
 		$fhasta = $dFecha->RestarDiasFechaActual(1);
 		$fhasta = $dFecha->FormatearFechas($fhasta,"Y-m-d","Y-m-d");
 	}
+	
+ 
     // Construccion de array para graficos //
 
     $cerrados = 0;
     $totales = 0;
     for ($i=$fdesde; $i <= $fhasta; $i++) { 
     	list($año, $mes, $dia) = split('[/.-]', $i);
-    	$servCerrados = $handler->selectCountServiciosGestion($i,$i,200,null,null,null,$user->getAliasUserSistema(),null);
+    	$servCerrados = $handler->selectCountServiciosGestion($i,$i,200,null,$user->getUserSistema(),null,null,null);
     	$cerrados += $servCerrados[0]->CANTIDAD_SERVICIOS;
-    	$servTotales = $handler->selectCountServiciosGestion($i,$i,null,null,null,null,$user->getAliasUserSistema(),null);
+    	$servTotales = $handler->selectCountServiciosGestion($i,$i,null,null,$user->getUserSistema(),null,null,null);
     	$totales += $servTotales[0]->CANTIDAD_SERVICIOS;
     	if ($servTotales[0]->CANTIDAD_SERVICIOS != 0 && $servCerrados[0]->CANTIDAD_SERVICIOS != 0) {
-    		$dataGraf[] = array('dia' => $dia.'-'.$mes,
+    		$dataGestor[] = array('dia' => $dia.'-'.$mes,
     						'EFICIENCIA' => number_format($servCerrados[0]->CANTIDAD_SERVICIOS*100/$servTotales[0]->CANTIDAD_SERVICIOS,2) );
     	}
     }
 
 
     // Construccion de labels y datos para representacion //
-    $labels = '';
-    $data = '' ;
-if(!empty($dataGraf)){
-    foreach ($dataGraf as $key => $value) {
-    	$labels = $labels."'".$value['dia']."', ";
-    	$data = $data.$value['EFICIENCIA'].", "; 
+    $labels8 = '';
+    $data8 = '' ;
+
+    foreach ($dataGestor as $key => $value) {
+    	$labels8 = $labels8."'".$value['dia']."', ";
+    	$data8 = $data8.$value['EFICIENCIA'].", "; 
     	$eficienciaDiaria[] = floatval($value['EFICIENCIA']);
     }
    // var_dump($labels);
@@ -96,23 +98,15 @@ if(!empty($dataGraf)){
     $maxEf = max($eficienciaDiaria);
     $minEf = min($eficienciaDiaria);
     $promEf = number_format(array_sum($eficienciaDiaria)/count($eficienciaDiaria),2);
-    // url ver detalle //
-} else {
-     $maxEf =0;
-    $minEf = 0;
-    $promEf = 0;
-    $dia = '';
-    $mes = '';
-    $año = '';
-}
-	$url_ver_detalle='index.php?view=estadisticas_coordinador&plaza='.$user->getAliasUserSistema().'&active=panel';
+    unset($eficienciaDiaria);
 ?>
 
 <div class="box box-solid">
 	<div class="box-header with-border">
 		<h3 class="box-title"><i class="ion-stats-bars"></i> Progreso Mensual hasta el <?php echo $dia."-".$mes."-".$año ?></h3>
 		<div class="box-tools pull-right">
-			<a href="<?php echo $url_ver_detalle ; ?>" class="btn btn-primary"><i class="fa fa-file-o"></i> Ver Detalle</a>
+			<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+			<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
 		</div>
 	</div>
 	<div class="box-body text-center">
@@ -128,30 +122,32 @@ if(!empty($dataGraf)){
 			<h5>Mínimo</h5>
 			<h3 class="text-red"><?php echo $minEf ?>%</h3>
 		</div>
-		<canvas id="budget_month_chart" class="col-xs-12 chart"></canvas>
-		<div class="col-xs-6 border-right">
+		<canvas id="budget_month_gestor_chart" class="col-xs-12 chart"></canvas>
+		<div class="col-xs-4 border-right">
 			<h5>Cerradas</h5>
 			<h3 class="text-light-blue"><?php echo $cerrados; ?></h3>
 		</div>
-		<div class="col-xs-6">
+		<div class="col-xs-4 border-right">
 			<h5>Total</h5>
 			<h3 class="text-blue"><?php echo $totales; ?></h3>
 		</div>
+	    <div class="col-xs-4">
+	      <h5>Eficiencia</h5>
+	      <h3 class="text-blue"><?php echo number_format($cerrados*100/$totales,2); ?> %</h3>
+	    </div>
 	</div>
 </div>
 
 <!-- SCRIPTS PARA GRAFICAR -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
-<script src="https://rawgit.com/chartjs/chartjs-plugin-annotation/master/chartjs-plugin-annotation.js"></script>
 <script>
-	var config_BSF = {
+	var config_BSF_gestor = {
 		type: 'line',
 		data: {
-			labels: [<?php echo $labels ?>],
+			labels: [<?php echo $labels8 ?>],
 			datasets: [{ 
 				label: 'Efectividad',
-				data: [<?php echo $data ?>],
+				data: [<?php echo $data8 ?>],
 				fill: false,
 				borderColor: 'cornflowerblue',
 				backgroundColor: 'cornflowerblue',
@@ -216,11 +212,5 @@ if(!empty($dataGraf)){
 				],
 			},
 		}
-	};
-
-	window.onload = function() {
-		var ctx_BSF = document.getElementById('budget_month_chart').getContext('2d');
-		window.myLine_BSF = new Chart(ctx_BSF, config_BSF);
-		
 	};
 </script>

@@ -28,6 +28,7 @@
 
 	// Link para servicios
 	$url_servicio = 'index.php?view=servicio&fdesde='.$fHOY.'&fhasta='.$fHOY;
+	$url_estadisticas = 'index.php?view=estadisticas_gestor';
 
 	$arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,null,$user->getUserSistema(),null,null,null);     
 	$allEstados = $handler->selectAllEstados();
@@ -38,6 +39,7 @@
 	  	<div class="box-header with-border">
 	    	<i class="ion-arrow-graph-up-right"></i>
 	    	<h3 class="box-title">Gestiones. <span class='text-yellow'><b><?php echo $dFecha->FormatearFechas($fHOY,'Y-m-d','d/m/Y - h:i'); ?></b></span></h3>
+	    	<a href="<?php echo $url_estadisticas ?>" class="pull-right"><i class="fa fa-bar-chart"></i></a>
 	  	</div>
 	  	<div class="box-body no-padding">
 
