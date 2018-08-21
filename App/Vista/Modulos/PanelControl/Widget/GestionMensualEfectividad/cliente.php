@@ -61,14 +61,14 @@
     <div class="box box-solid">
       <div class="box-header with-border">
         <h3 class="box-title">
-          <i class="ion-arrow-graph-up-right"></i> 
+          <i class="fa fa-percent"></i> 
           GESTIÓN. <span class='text-yellow'><b><?php echo strtoupper($nombreMES)." ".$anioMES; ?></b></span>
         </h3>
       </div>
 
       <div class="box-body no-padding">
         <div class="info-box <?php echo $class_semaforo; ?>">
-          <span class="info-box-icon"><i class="ion-arrow-graph-up-right"></i></span>
+          <span class="info-box-icon"><i class="fa fa-percent"></i></span>
 
           <div class="info-box-content">
             <span class="info-box-text">Efectividad</span>
