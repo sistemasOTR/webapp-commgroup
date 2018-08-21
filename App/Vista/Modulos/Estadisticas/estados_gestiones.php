@@ -84,18 +84,11 @@
         				      $data5 = $data5.$valor['EFICIENCIA'].", "; 
     
         				    }     
-                 } 
-                else{
-                  echo "Aun No hay datos  cargados";
-                } 
 
 			        ?>
                
                <canvas id="budget_estados_chart" class="col-xs-12 chart"></canvas> 
-          	</div>
-        </div>
-    </div>
-
+    
 <script type="text/javascript">
 	 var config_est = {
     type: 'pie',
@@ -120,3 +113,13 @@
 
 </script>
 
+<?php
+  }  elseif(is_null($arrEstados)){
+        echo "Aun No hay datos  cargados";    
+     } 
+
+  ?>
+    
+    </div>
+   </div>
+  </div>   
