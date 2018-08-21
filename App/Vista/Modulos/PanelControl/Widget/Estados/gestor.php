@@ -24,7 +24,7 @@
 
 	//PARA TRABAJAR MAS COMODOS EN MODO DESARROLLO
 	if(!PRODUCCION)
-		$fHOY = "2018-07-10";
+		$fHOY = "2018-08-21";
 
 	// Link para servicios
 	$url_servicio = 'index.php?view=servicio&fdesde='.$fHOY.'&fhasta='.$fHOY;
