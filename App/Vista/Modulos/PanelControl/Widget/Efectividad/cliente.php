@@ -26,8 +26,8 @@
     $fHOY = '2018-07-11';
     
 
-    $cerrados_efec =  $handler->selectCountServicios($fHOY,$fHOY, 6, $user->getUserSistema(), null, null, null, null);
-    $despachados_efec = $handler->selectCountServicios($fHOY,$fHOY, 400, $user->getUserSistema(), null, null, null, null);
+    $cerrados_efec =  $handler->selectCountServicios($fHOY,$fHOY, 6, $user->getUserSistema(), null, null, $plaza->PLAZA, null);
+    $despachados_efec = $handler->selectCountServicios($fHOY,$fHOY, 400, $user->getUserSistema(), null, null, $plaza->PLAZA, null);
     //$total_efec = $handler->selectCountServicios($fHOY,$fHOY, null, $user->getUserSistema(), null, null, null, null);    
 
     if($despachados_efec[0]->CANTIDAD_SERVICIOS>0){        
@@ -37,7 +37,7 @@
       $efectividad_dia = 0;
     }
 
-    $arrEstados = $handler->selectServiciosByEstados($fHOY,$fHOY, null, $user->getUserSistema(), null, null, null, null, null);
+    $arrEstados = $handler->selectServiciosByEstados($fHOY,$fHOY, null, $user->getUserSistema(), null, null, null, $plaza->PLAZA, null);
 
     $class_semaforo = "bg-red";
     if($efectividad_dia>=0 && $efectividad_dia<60)
@@ -47,16 +47,17 @@
       $class_semaforo = "bg-yellow";
 
     if($efectividad_dia>=70 && $efectividad_dia<=100)
-      $class_semaforo = "bg-green";       
+      $class_semaforo = "bg-green";
+
+      if(!empty($arrEstados)){       
 ?>
 
-<div class="col-md-12 nopadding">
+<div class="col-md-6">
   <div class="box box-solid">
     
     <div class="box-header">
       <h3 class="box-title">
-        <i class="ion-speedometer"> </i> Performance
-        <span class='text-yellow'><b><?php echo $dFecha->FormatearFechas($fHOY,'Y-m-d','d/m/Y  - h:i'); ?></b></span>
+        <i class="ion-speedometer"> </i> Performance en <?php echo $plaza->PLAZA; ?>
       </h3>
     </div>
 
@@ -123,3 +124,4 @@
    
   </div>
 </div>
+<?php } ?>

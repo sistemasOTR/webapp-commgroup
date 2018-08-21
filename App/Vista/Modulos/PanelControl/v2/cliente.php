@@ -3,7 +3,10 @@
     include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
     include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
 
-    $dFecha = new Fechas;
+    $dFecha = new Fechas;    
+    $handler = new HandlerSistema;
+
+    $allPlazas = $handler->selectAllPlazas(null);
 
     $fHOY = $dFecha->FechaActual();
     $fHOY = $dFecha->FormatearFechas($fHOY,"Y-m-d","Y-m-d"); 
@@ -35,14 +38,24 @@
     <?php include_once PATH_VISTA."info.php"; ?>
                   
     <div class="content-fluid">
-      <div class="row">
       
-        <div class="col-md-4 col-lg-3">
-          <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/Estados/cliente.php"; ?>
-          <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/Efectividad/cliente.php"; ?>
-        </div>
+       
+        <div class="row">
 
-        <div class="col-md-8 col-lg-9">              
+          <?php
+            if(!empty($allPlazas))
+            {                   
+              foreach ($allPlazas as $plaza) {
+
+                include PATH_VISTA."Modulos/PanelControl/Widget/ResumenPlaza/cliente.php";
+
+              }
+            }
+          ?>
+       </div>  
+    
+    <div class="row">
+        <div class="col-xs-12">              
           <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/ServiciosHoyDetalle/cliente.php"; ?>
         </div>
 
