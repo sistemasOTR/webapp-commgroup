@@ -57,7 +57,7 @@
     
     <div class="box-header">
       <h3 class="box-title">
-        <i class="ion-speedometer"> </i> Performance general
+        <i class="ion-speedometer"> </i> Performance Diaria
       </h3>
     </div>
 

@@ -57,7 +57,7 @@
 	<div class="box box-solid">
 	  	<div class="box-header with-border">
 	    	<i class="ion-arrow-graph-up-right"></i>
-	    	<h3 class="box-title">Actividad General.</h3>
+	    	<h3 class="box-title">Actividad Diaria.</h3>
 	    	<a href="#" class="pull-right text-navy" data-toggle='modal' data-target='#modal_todos'>
         		<i class="fa fa-search"  data-toggle='tooltip' title='Detalle de gestiones'></i>
         	</a>
