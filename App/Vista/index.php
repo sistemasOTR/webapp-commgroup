@@ -344,6 +344,11 @@
 				$include = 'Modulos/UsuariosAdmin/multiusuario.php';
 			break;
 
+		case 'plazas':
+			if($permiso->getModuloUsuariosBoolean())
+				$include = 'Modulos/UsuariosAdmin/plazas.php';
+			break;
+
 		  /*#############*/
 		 /* IMPORTACION */
 		/*#############*/

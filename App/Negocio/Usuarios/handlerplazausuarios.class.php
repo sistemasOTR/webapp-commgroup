@@ -6,7 +6,8 @@
 		include_once "../../Config/config.ini.php";
 		
 	include_once PATH_DATOS.'BaseDatos/conexionapp.class.php';
-	include_once PATH_DATOS.'Entidades/usuario_plaza.class.php';
+	include_once PATH_DATOS.'Entidades/usuario_plaza.class.php';       
+  	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
 	
 	class HandlerPlazaUsuarios{		
 
@@ -14,6 +15,17 @@
 			try{			
 				$u = new PlazaUsuario;
 				return $u->select();				
+			}
+			catch(Exception $e)
+			{
+				throw new Exception($e->getMessage());	
+			}
+		}		
+
+		public function selectAll(){
+			try{			
+				$u = new PlazaUsuario;
+				return $u->selectAll();				
 			}
 			catch(Exception $e)
 			{
@@ -39,11 +51,14 @@
 			}
 		}
 
-		public function insert ($nombre){
+		public function insert($nombre,$tipo,$fecha){
 			try {
 
 				$p = new PlazaUsuario;
 				$p->setNombre($nombre);			
+				$p->setTipo($tipo);			
+				$p->setFechaAlta($fecha);			
+				$p->setEstado(true);			
 
 				$p->insert(null);
 				
@@ -52,14 +67,15 @@
 			}
 		}
 
-		public function update ($id,$nombre){
+		public function update ($id,$nombre,$tipo){
 			try {
 
 				$p = new PlazaUsuario;
 				$p->setId($id);
-				$p = $u->select();
+				$p = $p->select();
 
-				$p->setNombre($nombre);
+				$p->setNombre($nombre);			
+				$p->setTipo($tipo);		
 
 				$p->update(null);
 				
@@ -68,13 +84,29 @@
 			}
 		}
 
-		public function delete ($id){
+		public function delete($id,$fecha){
 			try {
 				
 				$p = new PlazaUsuario;
 				$p->setId($id);
+				$p->setFechaBaja($fecha);
 
 				$p->delete(null);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());			
+			}
+		}
+
+		public function reactivar($id,$fecha){
+			try {
+				
+				$p = new PlazaUsuario;
+				$p->setId($id);
+				$p->setFechaAlta($fecha);
+				// var_dump($p);
+				// exit();
+				$p->reactivar(null);
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());			

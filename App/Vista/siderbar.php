@@ -7,7 +7,8 @@
         $url_servicio = "index.php?view=servicio";
         $url_servicio_resumen = "index.php?view=servicio_resumen";
         $url_inbox = "index.php?view=inbox";
-        $url_usuariosABM = "index.php?view=usuarioABM";  
+        $url_usuariosABM = "index.php?view=usuarioABM";
+        $url_plazaABM = "index.php?view=plazas";  
         $url_cambiarUsuario = "index.php?view=cambiarUsuario";  
         $url_cambiorol = "index.php?view=cambioRol";  
         $url_estadisticas = "index.php?view=estadisticas";
@@ -682,12 +683,22 @@
 
             <?php              
               if($permiso->getModuloUsuariosBoolean()){  
-            ?>             
-              <li class="treeview" id="mnu_usuariosABM">
-                <a href=<?php echo $url_usuariosABM; ?>>
-                  <i class="fa fa-users"></i> <span>Usuarios</span> </i>
-                </a>              
-              </li>       
+            ?> 
+             <li class="treeview" id="mnu_usuariosyplazas">
+                <a href="#"><i class="fa fa-users "></i> <span>Usuarios</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li class="treeview" id="mnu_usuariosABM">
+                    <a href=<?php echo $url_usuariosABM; ?>>
+                      <i class="fa fa-users"></i> <span>Usuarios</span> </i>
+                    </a>
+                  </li>
+                  <li class="treeview" id="mnu_plazaABM">
+                    <a href=<?php echo $url_plazaABM; ?>>
+                      <i class="fa fa-map-signs"></i> <span>Plazas</span> </i>
+                    </a>
+                  </li>
+                </ul>
+              </li>
             <?php 
               }
             ?>

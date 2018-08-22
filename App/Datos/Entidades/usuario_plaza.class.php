@@ -22,6 +22,18 @@
 		public function getNombre(){ return $this->_nombre; }
 		public function setNombre($nombre){ $this->_nombre=$nombre; }
 
+		private $_fechaAlta;
+		public function getFechaAlta(){ return $this->_fechaAlta; }
+		public function setFechaAlta($fechaAlta){ $this->_fechaAlta=$fechaAlta; }
+
+		private $_fechaBaja;
+		public function getFechaBaja(){ return $this->_fechaBaja; }
+		public function setFechaBaja($fechaBaja){ $this->_fechaBaja=$fechaBaja; }
+
+		private $_tipo;
+		public function getTipo(){ return $this->_tipo; }
+		public function setTipo($tipo){ $this->_tipo=$tipo; }
+
 		private $_estado;
 		public function getEstado(){ return var_export($this->_estado,true); }
 		public function setEstado($estado){ $this->_estado=$estado; }	
@@ -33,6 +45,9 @@
 		function __construct(){
 			$this->setId(0);
 			$this->setNombre('');
+			$this->setFechaAlta('');
+			$this->setFechaBaja('');
+			$this->setTipo(0);
 			$this->setEstado(true);
 		}
 
@@ -47,9 +62,13 @@
 				# Query 			
 				$query="INSERT INTO plazas_otr (
 		        						nombre,
+		        						fecha_alta,
+		        						tipo,
 		        						estado
 	        			) VALUES (
 	        							'".$this->getNombre()."',       							
+	        							'".$this->getFechaAlta()."',       							
+	        							".$this->getTipo().",       							
 	        							'".$this->getEstado()."'
 	        			)";        
 				
@@ -72,6 +91,7 @@
 				# Query 			
 				$query="UPDATE plazas_otr SET
 								nombre='".$this->getNombre()."',
+								tipo=".$this->getTipo().",
 								estado='".$this->getEstado()."'
 							WHERE id=".$this->getId();
 
@@ -93,8 +113,12 @@
 
 				# Query 			
 				$query="UPDATE plazas_otr SET							
-								estado='false'
+								estado='false',
+								fecha_baja='".$this->getFechaBaja()."'
 							WHERE id=".$this->getId();
+
+							// var_dump($query);
+							// exit();
 		
 				# Ejecucion 	
 				return SQL::delete($conexion,$query);
@@ -139,6 +163,9 @@
 			else{
 				$this->setId($filas['id']);
 				$this->setNombre(trim($filas['nombre']));
+				$this->setFechaAlta($filas['fecha_alta']);
+				$this->setFechaBaja($filas['fecha_baja']);
+				$this->setTipo($filas['tipo']);
 				$this->setEstado($filas['estado']);
 			}
 		}
@@ -147,6 +174,9 @@
 		{
 			$this->setId(0);
 			$this->setNombre('');
+			$this->setFechaAlta('');
+			$this->setFechaBaja('');
+			$this->setTipo(0);
 			$this->setEstado(true);
 		}
 
@@ -154,7 +184,7 @@
 		{
 			return 'CREATE TABLE IF NOT EXISTS';
 			/*
-			USE [Prueba_AppWeb]
+			USE [AppWeb]
 			GO
 
 			SET ANSI_NULLS ON
@@ -170,6 +200,9 @@
 				[id] [int] IDENTITY(1,1) NOT NULL,
 				[nombre] [varchar](50) NOT NULL,
 				[estado] [bit] NOT NULL,
+				[tipo] [int] NOT NULL,
+				[fecha_alta] [date] NOT NULL,
+				[fecha_baja] [date] NULL,
 			 CONSTRAINT [PK_plazas_otr] PRIMARY KEY CLUSTERED 
 			(
 				[id] ASC
@@ -181,6 +214,8 @@
 			SET ANSI_PADDING OFF
 			GO
 
+
+
 			*/
 		}
 
@@ -189,8 +224,48 @@
 		/*########################*/
 
 
-		
 
+		public function selectAll()
+		{			
+			try {
+				
+				# Query
+				$query = "SELECT * FROM plazas_otr order by nombre";
+				
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new PlazaUsuario);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
+
+		public function reactivar($conexion)
+		{
+			try {
+			
+				# Validaciones			
+				if(empty($this->getId()))
+					throw new Exception("Plaza no identificada");
+
+				# Query 			
+				$query="UPDATE plazas_otr SET							
+								estado='true',
+								fecha_alta='".$this->getFechaAlta()."',
+								fecha_baja=NULL
+							WHERE id=".$this->getId();
+
+				# Ejecucion 	
+				return SQL::delete($conexion,$query);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}					
+		}
 
 	}
 ?>

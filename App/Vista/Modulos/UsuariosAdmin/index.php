@@ -120,6 +120,9 @@
 
       <script type="text/javascript">        
         $(document).ready(function(){                
+          $("#mnu_usuariosyplazas").addClass("active");
+        });        
+        $(document).ready(function(){                
           $("#mnu_usuariosABM").addClass("active");
         });
 
