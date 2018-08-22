@@ -74,7 +74,7 @@
             <div class="progress-bar" style="width: <?php echo round($efectividad_dia,2); ?>%"></div>
           </div>
           <span class="progress-description">
-
+            <?php echo $cerrados_efec[0]->CANTIDAD_SERVICIOS; ?> <small>Cerrados</small><span class="pull-right"><?php echo $despachados_efec[0]->CANTIDAD_SERVICIOS; ?> <small>Servicios</small> </span>
           </span>
 
         </div>
