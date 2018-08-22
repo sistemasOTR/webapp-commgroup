@@ -24,7 +24,7 @@
   	if(!PRODUCCION)
   	$fHOY = '2018-07-11';
 
-  	$arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,$user->getUserSistema(),null,null,$plaza->PLAZA,null);
+  	$arrEstados = $handler->selectGroupServiciosByEstados($fHOY,$fHOY,null,$user->getUserSistema(),null,null,null,null);
   	$allEstados = $handler->selectAllEstados();
 
   	if (!empty($arrEstados)) {
@@ -53,16 +53,19 @@
 		}                  
 ?>
 
-<div class="col-md-6">
+<div class="col-xs-12">
 	<div class="box box-solid">
 	  	<div class="box-header with-border">
 	    	<i class="ion-arrow-graph-up-right"></i>
-	    	<h3 class="box-title">Gestiones en <?php echo $plaza->PLAZA ?>.</h3>
+	    	<h3 class="box-title">Actividad General.</h3>
+	    	<a href="#" class="pull-right text-navy" data-toggle='modal' data-target='#modal_todos'>
+        		<i class="fa fa-search"  data-toggle='tooltip' title='Detalle de gestiones'></i>
+        	</a>
 	  	</div>
 	  	<div class="box-body no-padding">
 
   	       	<div class="info-box bg-aqua">
-                <span class="info-box-icon"><i class="ion-ios-paperplane"></i></span>
+                <span class="info-box-icon"><i class="fa fa-truck"></i></span>
 
                 <div class="info-box-content">
                   	<span class="info-box-text">GESTIONES</span>
@@ -77,9 +80,22 @@
 
                 </div>
             </div>
-          	<div class="col-xs-12 no-padding">
+        </div>
+    </div>
+</div>
+
+<div class="modal fade in" id='modal_todos'>
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span></button>
+            <h4 class="modal-title">Detalle General</h4>
+          </div>
+          <div class="modal-body">
+            <div class="no-padding">
                 <ul class="nav nav-stacked">
-			        <?php
+              <?php
 
 			        	$sum_total_estados=0; 
 			          	$sum_estados_gestionados=0;
@@ -114,16 +130,11 @@
 			          	}                  
 			        ?>
                 </ul>
-          	</div>
+            </div>
+          </div>
 
-        </div>
+      </div>
     </div>
-</div>
-
-<script type="text/javascript">
-	// $("#widget-estado-total-gestiones").text("<?php echo $sum_total_estados; ?>");
-	// $("#widget-estado-porcentaje-gestionados").append("<?php echo round($porc_estados_gestionados,2); ?> % <small>Gestionadas</small>");
-	// $("#widget-estado-progreso").css( "width", "<?php echo round($porc_estados_gestionados,2); ?>%" )
-</script>
+  </div>
 <?php } ?>
 	        

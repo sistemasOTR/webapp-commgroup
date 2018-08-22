@@ -115,7 +115,7 @@
   .box-body .info-box:nth-child(2) {margin-top: 15px !important;}
   .info-box-icon {font-size: 24px !important;}
 </style>
-<div class='col-sm-6 col-md-4 col-lg-3'>
+<div class='col-sm-6 col-md-4'>
 <div class="box box-solid">
   <div class="box-header with-border"><h3 class="box-title"><i class="ion-arrow-graph-up-right"> </i> <?php echo $plaza->PLAZA ?></h3><!--<a href="<?php echo $url_redireccion_plaza ; ?>"  class="fa fa-bar-chart-o  pull-right"></a>-->
     <a href="#" class="pull-right text-navy" data-toggle='modal' data-target='<?php echo "#modal_".$strReplace ?>'>

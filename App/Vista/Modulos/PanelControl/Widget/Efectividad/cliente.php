@@ -26,8 +26,8 @@
     $fHOY = '2018-07-11';
     
 
-    $cerrados_efec =  $handler->selectCountServicios($fHOY,$fHOY, 6, $user->getUserSistema(), null, null, $plaza->PLAZA, null);
-    $despachados_efec = $handler->selectCountServicios($fHOY,$fHOY, 400, $user->getUserSistema(), null, null, $plaza->PLAZA, null);
+    $cerrados_efec =  $handler->selectCountServicios($fHOY,$fHOY, 6, $user->getUserSistema(), null, null, null, null);
+    $despachados_efec = $handler->selectCountServicios($fHOY,$fHOY, 400, $user->getUserSistema(), null, null, null, null);
     //$total_efec = $handler->selectCountServicios($fHOY,$fHOY, null, $user->getUserSistema(), null, null, null, null);    
 
     if($despachados_efec[0]->CANTIDAD_SERVICIOS>0){        
@@ -37,7 +37,7 @@
       $efectividad_dia = 0;
     }
 
-    $arrEstados = $handler->selectServiciosByEstados($fHOY,$fHOY, null, $user->getUserSistema(), null, null, null, $plaza->PLAZA, null);
+    $arrEstados = $handler->selectServiciosByEstados($fHOY,$fHOY, null, $user->getUserSistema(), null, null, null, null, null);
 
     $class_semaforo = "bg-red";
     if($efectividad_dia>=0 && $efectividad_dia<60)
@@ -52,19 +52,19 @@
       if(!empty($arrEstados)){       
 ?>
 
-<div class="col-md-6">
+<div class="col-xs-12">
   <div class="box box-solid">
     
     <div class="box-header">
       <h3 class="box-title">
-        <i class="ion-speedometer"> </i> Performance en <?php echo $plaza->PLAZA; ?>
+        <i class="ion-speedometer"> </i> Performance general
       </h3>
     </div>
 
     <div class="box-body no-padding">
 
       <div class="info-box <?php echo $class_semaforo; ?>">
-        <span class="info-box-icon"><i class="ion-arrow-graph-up-right"></i></span>
+        <span class="info-box-icon"><i class="fa fa-percent"></i></span>
 
         <div class="info-box-content">
           <span class="info-box-text">Efectividad</span>
@@ -79,46 +79,6 @@
 
         </div>
 
-      </div>
-
-      <div class="col-xs-12 no-padding">
-        <ul class="nav nav-stacked">
-          <?php 
-            if( !empty($arrEstados)) {
-              $total = 0;
-              foreach ($arrEstados as $key => $value) {
-                if ($value->ESTADOS_DESCCI != 'Cancelado' && $value->ESTADOS_DESCCI != 'Despachado' ) {
-                  $total += $value->DESPACHADO;
-                }
-                
-              }
-
-              foreach ($arrEstados as $key => $value) {
-    
-                if($value->DESPACHADO>0){        
-                  $efec_gestor = 100 * $value->DESPACHADO / $total;
-                }
-                else{
-                  $efec_gestor = 0;
-                }                
-
-              $class_semaforo_gestor = "bg-red";
-              if($efec_gestor>=0 && $efec_gestor<60)
-                $class_semaforo_gestor = "bg-red";
-
-              if($efec_gestor>=60 && $efec_gestor<70)
-                $class_semaforo_gestor = "bg-yellow";
-
-              if($efec_gestor>=70 && $efec_gestor<=100)
-                $class_semaforo_gestor = "bg-green";
-              if ($value->ESTADOS_DESCCI != 'Cancelado' && $value->ESTADOS_DESCCI != 'Despachado' ) {
-                echo "<li><a href='#'>".$value->ESTADOS_DESCCI." <span class='pull-right badge ".$class_semaforo_gestor."'>".round($efec_gestor,2)."%</span></a></li>";
-              }
-            }
-
-            }
-          ?>
-        </ul>
       </div>
     </div>
    
