@@ -105,7 +105,7 @@
 
     $url_redireccion_plaza='index.php?view=estadisticas_plaza&plaza='.$plaza->PLAZA;
 
-    if ($sum_estados_gestionados > 0) {
+    if ($sum_total_estados > 0) {
 
                       $strReplace= str_replace(" ","_",$plaza->PLAZA);
      
