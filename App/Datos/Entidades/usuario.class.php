@@ -504,7 +504,7 @@
 		{		
 			try {
 				if (!empty($id_plaza)) {
-					$query = "SELECT * FROM usuario WHERE estado = 'true' AND (id_tipo_usuario = 3 or id_tipo_usuario = 4)and id_plaza = ".$id_plaza." order by apellido";
+					$query = "SELECT * FROM usuario WHERE estado = 'true' AND (id_tipo_usuario = 3 or id_tipo_usuario = 4) and id_plaza = ".$id_plaza." order by apellido";
 				}else{
 					$query = "SELECT * FROM usuario WHERE estado = 'true' AND (id_tipo_usuario = 3 or id_tipo_usuario = 4) order by apellido";
 				}
