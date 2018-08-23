@@ -24,11 +24,15 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
       $act_3 = '';
       break;
     }
+
+    $empresa = $handler->getEmpresaByCodigo($usuarioActivoSesion->getUserSistema());
+
+    $name = $empresa[0]->NOMBRE
 ?>
 <div class="content-wrapper">  
   <section class="content-header">
     <h1>
-      Estadisticas <?php echo $usuarioActivoSesion->getAliasUserSistema();?>
+      Estadisticas <?php echo $name;?>
       <small>Resumen general de toda la actividad</small>
     </h1>
     <ol class="breadcrumb">
