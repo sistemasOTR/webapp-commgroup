@@ -15,6 +15,7 @@
         $url_estadisticas_plaza = "index.php?view=estadisticas_plaza&plaza=CABA";
         $url_estadisticas_global = "index.php?view=estadisticas_global&global=si";
         $url_estadisticas_empresas = "index.php?view=estadisticas_empresas&empresa=2";
+        $url_estadisticas_clientes = "index.php?view=estadisticas_clientes";
         $url_configuraciones = "index.php?view=configuraciones";
         $url_importacion = "index.php?view=importacion";
         $url_importacion_manual = "index.php?view=importacion_manual";
@@ -569,7 +570,7 @@
                   <i class="fa fa-area-chart"></i> <span>Estadisticas</span> </i>
                 </a>              
               </li>
-             <?php
+             <?php              
               if($esGerencia){  
             ?>              
               <li id="mnu_estadisticas_plaza">
@@ -593,6 +594,16 @@
             ?>
             </ul>
           </li>
+            <?php 
+              }
+            ?>
+             <?php  if($esCliente){
+            ?>
+              <li class="treeview" id="mnu_estadisticas_clientes">
+                <a href=<?php echo $url_estadisticas_clientes; ?>>
+                  <i class="fa fa-bar-chart"></i> <span>Estadisticas</span> </i>
+                </a>
+              </li>
             <?php 
               }
             ?>
