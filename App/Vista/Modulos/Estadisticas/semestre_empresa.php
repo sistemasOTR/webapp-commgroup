@@ -70,6 +70,7 @@ if ($seguir) {
     $maxEf = max($eficienciaMes);
     $minEf = min($eficienciaMes);
     $promEf = number_format(array_sum($eficienciaMes)/count($eficienciaMes),2);
+     unset($eficienciaMes);
      
 ?>
 

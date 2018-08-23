@@ -33,8 +33,10 @@
     foreach ($arrPlaza as $key => $value) {
       // var_dump($value->getNombre());
       // exit();
-
+        $cerradosp = 0;
+        $totalesp = 0;
         for ($i=6; $i >= 1 ; $i--) { 
+          
 
            
             
@@ -80,7 +82,8 @@
     $maxEf = max($eficienciaMes);
     $minEf = min($eficienciaMes);
     $promEf = number_format(array_sum($eficienciaMes)/count($eficienciaMes),2);
-     
+
+     unset($eficienciaMes);
 ?>
 <style>
   .col-xs-4 {padding-left: 5px;padding-right: 5px;}
