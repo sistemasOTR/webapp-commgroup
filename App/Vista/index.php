@@ -437,6 +437,11 @@
 				$include = 'Modulos/Estadisticas/estadisticas_plazas.php';
 			break;
 
+		case 'estadisticas_empresas':
+			if($permiso->getModuloMetricasBoolean() && $esGerencia)
+				$include = 'Modulos/Estadisticas/estadisticas_empresas.php';
+			break;
+
         case 'estadisticas_global':
 			if($permiso->getModuloMetricasBoolean() && $esGerencia)
 				$include = 'Modulos/Estadisticas/estadisticas_global.php';
