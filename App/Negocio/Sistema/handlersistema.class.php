@@ -2644,7 +2644,22 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
 			}
-		}	
+		}
+
+		public function getEmpresaByCodigo($codEmp)
+		{
+			try {
+				
+				$query = "SELECT EMPTT21_NOMBREFA AS NOMBRE FROM EMPRESASTT
+						WHERE EMPTT11_CODIGO = ".$codEmp;
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
 	}
 	
 ?>

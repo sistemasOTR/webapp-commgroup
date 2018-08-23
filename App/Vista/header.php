@@ -1,6 +1,7 @@
 <?php
   include_once PATH_NEGOCIO."Funciones/String/string.class.php";
   include_once PATH_NEGOCIO.'Notificaciones/handlernotificaciones.class.php';
+    include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
 
 
   $url_perfil= "index.php?view=perfil_usuario";
@@ -8,6 +9,7 @@
   $url_activar_header=PATH_VISTA.'Modulos/UsuariosAdmin/action_activar_tipo_usuario_header.php?';
 
   $handler = new HandlerNotificaciones;
+  $handlerSist = new HandlerSistema;
   $arrNotificaiones = $handler->seleccionarTodo();
   $arrNotificaionesUsuario = $handler->seleccionarByUsuario($usuarioActivoSesion->getId());
 
@@ -100,11 +102,21 @@
 		                    			break;
 		                    	}
 
-		                    	if ($uType->getTipoUsuario()->getId() == $tipoUser) { ?>
+		                    	if ($uType->getTipoUsuario()->getId() == $tipoUser) { 
+                            if ($tipoUser == 1) {
+                              $empresa = $handlerSist->getEmpresaByCodigo($uType->getUserSistema());
+
+                              $name = $empresa[0]->NOMBRE;
+                            } else {
+                              $name = trim($uType->getAliasUserSistema());
+                            }
+                            ?>
 		                    		
 			                        <li>
+
 			                          <a href='<?php echo $url_activar_header."usuario=".$usuarioActivoSesion->getId()."&tipo_usuario=".$uType->getTipoUsuario()->getId()."&id_usuario_sistema=".$uType->getUserSistema()."&alias_usuario_sistema=".$uType->getAliasUserSistema(); ?>'>
-			                            <?php echo trim($uType->getTipoUsuario()->getNombre())." - ".trim($uType->getAliasUserSistema()) ?>
+			                            <?php echo trim($name) ?>
+                                  
 			                          </a>
 			                        </li>
 		                    	<?php }
