@@ -5,6 +5,7 @@
     include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php"; 
 
     $est_plaza='';
+    $global=true;
 
 
 $activo = (isset($_GET["active"])?$_GET["active"]:'');
@@ -13,12 +14,14 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
       $act_1 = '';
       $act_2 = ' active';
       $act_3 = '';
+      $act_4 = '';
       break;
     
     default:
       $act_1 = ' active';
       $act_2 = '';
       $act_3 = '';
+      $act_4 = '';
       break;
     }
 
@@ -49,7 +52,8 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
           <ul class="nav nav-tabs">
             <li class='<?php echo $act_1 ?>'><a href="#tab_1" data-toggle="tab" aria-expanded="true">Diario</a></li>
             <li class='<?php echo $act_2 ?>'><a href="#tab_2" data-toggle="tab" aria-expanded="false">Historico</a></li>
-            <li class='<?php echo $act_3 ?>'><a href="#tab_3" data-toggle="tab" aria-expanded="false">Hist.Empresa</a></li>
+            <li class='<?php echo $act_3 ?>'><a href="#tab_3" data-toggle="tab" aria-expanded="false">Empresa Mensual</a></li>
+          <li class='<?php echo $act_3 ?>'><a href="#tab_4" data-toggle="tab" aria-expanded="false">Empresa Semestral</a></li>
           </ul>
           <div class="tab-content col-xs-12">
             <div class='tab-pane <?php echo $act_1 ?>' id="tab_1">
@@ -62,10 +66,10 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
             </div>         
            <div class='tab-pane <?php echo $act_2 ?>' id="tab_2">
            
-             <div class='col-md-4'>
+             <div class='col-md-6'>
                   <?php include_once"mensual.php"; ?>
                 </div>  
-                <div class='col-md-4'>
+                <div class='col-md-6'>
                    <?php include_once"ultimo_semestre.php"; ?> 
                  </div> 
                  <div class='col-md-4' style="display: none;">
@@ -77,6 +81,12 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
                 <?php include_once"empresas_plaza.php"; ?>
               </div>
              <!--  -->
+            </div>
+            <div class='tab-pane <?php echo $act_4 ?>' id="tab_4">
+              <div class='row'>
+                <?php include_once"plaza_semestral_empresa.php"; ?>
+              </div>
+          
             </div>
 
           </div>
@@ -110,6 +120,12 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
         var ctx_<?php echo $value["EMPRESA"] ?> = document.getElementById('<?php echo $value["EMPRESA"] ?>').getContext('2d');
         window.myLine_BSF = new Chart(ctx_<?php echo $value["EMPRESA"] ?>, config_empresas<?php echo $value["EMPRESA"];?>);
       <?php } ?>
+      <?php
+          if (!empty($cod_emp_plaza)) { 
+      foreach ($cod_emp_plaza as $key => $value) { ?>
+        var ctx_empresa<?php echo $value["EMPRESA"] ?> = document.getElementById('plaza_<?php echo $value["EMPRESA"] ?>').getContext('2d');
+        window.myLine_BSF = new Chart(ctx_empresa<?php echo $value["EMPRESA"] ?>, config_empresas_plaza<?php echo $value["EMPRESA"];?>);
+      <?php } } ?>
 
     
   };
