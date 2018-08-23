@@ -63,9 +63,9 @@
     }
 
 
-
+$eficienciaMes[]=0; 
       
-
+unset($eficienciaMes);
 
 
     $labelsEmp = '';
@@ -86,7 +86,7 @@
     $maxEf = max($eficienciaMes);
     $minEf = min($eficienciaMes);
     $promEf = number_format(array_sum($eficienciaMes)/count($eficienciaMes),2);
-     
+      
 ?>
 <style>
   .col-xs-4 {padding-left: 5px;padding-right: 5px;}

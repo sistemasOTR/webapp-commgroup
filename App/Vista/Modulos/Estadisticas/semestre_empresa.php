@@ -53,7 +53,9 @@
   
 if ($seguir) {
 
-
+$eficienciaMes[]=0; 
+      
+unset($eficienciaMes);
     $labels2 = '';
     $data2 = '' ;
     $Axes=30;

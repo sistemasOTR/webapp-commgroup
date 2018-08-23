@@ -48,6 +48,9 @@
 
     $labels8 = '';
     $data8 = '' ;
+    $eficienciaMes[]=0; 
+      
+unset($eficienciaMes);
 
     foreach ($dataGest as $key => $value) {
       $labels8 = $labels8."'".$value['mes']."', ";
@@ -66,10 +69,6 @@
   <div class="box box-solid">
   <div class="box-header with-border">
     <h3 class="box-title"><i class="ion-stats-bars"></i> Últimos 6 meses</h3>
-    <div class="box-tools pull-right">
-      <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-      <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-    </div>
   </div>
   <div class="box-body text-center">
     <div class="col-xs-4 border-right">
