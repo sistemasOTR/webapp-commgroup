@@ -46,6 +46,8 @@
          
 
     if(!empty($countServiciosMesCursoGestion[0]->CANTIDAD_SERVICIOS))
+    // if($countServiciosMesCursoGestion[0]->CANTIDAD_SERVICIOS)
+
       $efectividadMesCursoGestion = round(($countServiciosCerradosMesCursoGestion[0]->CANTIDAD_SERVICIOS) / intval(intval($countServiciosMesCursoGestion[0]->CANTIDAD_SERVICIOS))*100,0);
     else
       $efectividadMesCursoGestion = round(0,2);

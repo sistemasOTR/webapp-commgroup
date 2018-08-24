@@ -5,6 +5,9 @@
     include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php"; 
 
     $est_plaza='';
+    $gestor=true;
+    $global=false;
+    // $plaza=$usuarioActivoSesion->getAliasUserSistema();
     $dFecha = new Fechas;
     if(!PRODUCCION){
       $today = "2018-08-21";
@@ -19,12 +22,14 @@
           $act_1 = '';
           $act_2 = ' active';
           $act_3 = '';
+          $act_4 = '';
           break;
         
         default:
           $act_1 = ' active';
           $act_2 = '';
           $act_3 = '';
+          $act_4 = '';
           break;
         }
 
@@ -55,7 +60,8 @@
           <ul class="nav nav-tabs">
             <li class='<?php echo $act_1 ?>'><a href="#tab_1" data-toggle="tab" aria-expanded="true">Diario</a></li>
             <li class='<?php echo $act_2 ?>'><a href="#tab_2" data-toggle="tab" aria-expanded="false">Historico</a></li>
-            <li class='<?php echo $act_3 ?>'><a href="#tab_3" data-toggle="tab" aria-expanded="false">Hist.Empresa</a></li>
+            <li class='<?php echo $act_3 ?>'><a href="#tab_3" data-toggle="tab" aria-expanded="false">Empresa Mensual</a></li>
+            <li class='<?php echo $act_4 ?>'><a href="#tab_4" data-toggle="tab" aria-expanded="false">Empresa Semestral</a></li>
           </ul>
           <div class="tab-content col-xs-12">
             <div class='tab-pane <?php echo $act_1 ?>' id="tab_1">
@@ -68,16 +74,21 @@
             </div>         
             <div class='tab-pane <?php echo $act_2 ?>' id="tab_2"> 
            
-             <div class='col-md-4'>
+             <div class='col-md-6'>
                   <?php include_once"mensual_gestor.php"; ?> 
                 </div>  
-                <div class='col-md-4'>
+                <div class='col-md-6'>
                     <?php include_once"ultimo_semestre_gestor.php"; ?>  
                  </div> 
             </div>
             <div class='tab-pane <?php echo $act_3 ?>' id="tab_3">
               <div class="row">
                 <?php include_once"empresas_plaza_gestor.php"; ?> 
+              </div>
+               </div>
+            <div class='tab-pane <?php echo $act_4 ?>' id="tab_4">
+              <div class="row">
+                <?php include_once"plaza_semestral_empresa.php"; ?> 
               </div>
              <!--  -->
             </div>
@@ -107,10 +118,18 @@
     var ctx_sem_gestor = document.getElementById('sem_gestor_chart').getContext('2d');
     window.myLine_BSF = new Chart(ctx_sem_gestor, config_sem_gestor);
     <?php 
+          if (!empty($cod_empresa_gestor)) {
       foreach ($cod_empresa_gestor as $key => $value) { ?>
         var ctx_gestor_<?php echo $value["EMPRESA"] ?> = document.getElementById('gestor_<?php echo $value["EMPRESA"] ?>').getContext('2d');
         window.myLine_BSF = new Chart(ctx_gestor_<?php echo $value["EMPRESA"] ?>, config_empresas_gestor<?php echo $value["EMPRESA"];?>);
-      <?php } ?>
+      <?php } } ?>
+
+       <?php
+          if (!empty($cod_emp_plaza)) { 
+      foreach ($cod_emp_plaza as $key => $value) { ?>
+        var ctx_empresa<?php echo $value["EMPRESA"] ?> = document.getElementById('plaza_<?php echo $value["EMPRESA"] ?>').getContext('2d');
+        window.myLine_BSF = new Chart(ctx_empresa<?php echo $value["EMPRESA"] ?>, config_empresas_plaza<?php echo $value["EMPRESA"];?>);
+      <?php } } ?>
 
     
   };

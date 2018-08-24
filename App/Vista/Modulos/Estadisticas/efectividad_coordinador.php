@@ -29,8 +29,11 @@
 
     $cerrados_efec =  $handler->selectCountServicios($fHOY,$fHOY, 6, null, null, null, $est_plaza, null);
     $despachados_efec = $handler->selectCountServicios($fHOY,$fHOY, 400, null, null, null, $est_plaza, null);
-        
 
+    // var_dump($cerrados_efec,$despachados_efec);
+         // exit();
+        
+     if($despachados_efec[0]->CANTIDAD_SERVICIOS>0){
     if($despachados_efec[0]->CANTIDAD_SERVICIOS>0){        
       $efectividad_dia = 100 * $cerrados_efec[0]->CANTIDAD_SERVICIOS / $despachados_efec[0]->CANTIDAD_SERVICIOS;
     }
@@ -172,4 +175,10 @@ type: 'bar',
 
 
 </script>      
+<?php
+}else{
+  echo "<span class='label label-warning' style='font-size:15px;'>Los servicios estan Despachados </span>";
+}
+
+?>
 

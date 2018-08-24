@@ -6,6 +6,7 @@
     
     $est_plaza=(isset($_GET['plaza'])?$_GET['plaza']:'');
     $global=false;
+    $gestor=false;
     $handlerPlaza = new HandlerPlazaUsuarios;
     $arrPlaza = $handlerPlaza->selectTodas();
 $activo = (isset($_GET["active"])?$_GET["active"]:'');
@@ -170,7 +171,10 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
 
     
   };
-
+  setTimeout('document.location.reload()',300000);
+</script>
+<?php if ($despachados_efec[0]->CANTIDAD_SERVICIOS>0) {?>
+<script>
   $(document).ready(function(){
 
       
@@ -195,6 +199,10 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
         );
    
     });
+  setTimeout('document.location.reload()',300000);
+  </script>
+<?php } ?>
+  <script>
 
   $(document).ready(function(){
 
