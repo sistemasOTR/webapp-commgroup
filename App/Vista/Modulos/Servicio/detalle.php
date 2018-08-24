@@ -75,8 +75,7 @@
                 if($user->getUsuarioPerfil()->getNombre()!="CLIENTE"){
                   echo "
                     <br><br>
-                    <b>Cliente:</b> ".$servicio[0]->EMPTT21_ABREV."<br>                
-                    <b>Coordinador:</b> ".$servicio[0]->SERTT91_COOALIAS."<br>             
+                    <b>Cliente:</b> ".$servicio[0]->EMPTT21_ABREV."<br>          
                     <b>Gestor:</b> ".$servicio[0]->GESTOR21_ALIAS."<br>";
 
                 
