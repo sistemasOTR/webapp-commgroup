@@ -30,7 +30,7 @@
           $observaciones = $observaciones."<br>".$value->SERTT91_OBSEENT ;
 
           $filtros_listado = "&fdoc=".$fdoc."&fdesde=".$fdesde."&fhasta=".$fhasta."&festado=".$festado."&fequipoventa=".$fequipoventa."&fcliente=".$fcliente."&fgerente=".$fgerente."&fcoordinador=".$fcoordinador."&fgestor=".$fgestor."&foperador=".$foperador;      
-          $url_hist = $url_detalle."&fechaing=".$value->SERTT11_FECSER->format('Y-m-d')."&nroing=".$value->SERTT12_NUMEING.$filtros_listado;        
+          $url_hist = $url_detalle."&fechaing=".$value->SERTT11_FECSER->format('Y-m-d')."&nroing=".$value->SERTT12_NUMEING."&nrodoc=".$value->SERTT31_PERNUMDOC.$filtros_listado;        
 
           echo "<tr>";
 

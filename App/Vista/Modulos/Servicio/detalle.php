@@ -15,19 +15,19 @@
   $fgestor=(isset($_GET["fgestor"])?$_GET["fgestor"]:'');
   $foperador=(isset($_GET["foperador"])?$_GET["foperador"]:'');
   $fdoc=(isset($_GET["fdoc"])?$_GET["fdoc"]:'');
+  $nrodoc=(isset($_GET["nrodoc"])?$_GET["nrodoc"]:'');
 
   $filtros_listado = "&fdoc=".$fdoc."&fdesde=".$fdesde."&fhasta=".$fhasta."&festado=".$festado."&fequipoventa=".$fequipoventa."&fcliente=".$fcliente."&fgerente=".$fgerente."&fcoordinador=".$fcoordinador."&fgestor=".$fgestor."&foperador=".$foperador;      
 
 	$handler = new HandlerSistema;
   $user = $usuarioActivoSesion;
-  $servicio = $handler->selectUnServicio($fechaing,$nroing);
-	$arrDatos = $handler->selectServiciosHistorico($fechaing,$nroing);
+  $servicio = $handler->selectLastServicio($nrodoc);
+	$arrDatos = $handler->selectHistoricoServicio($nrodoc);
   $allEstados = $handler->selectAllEstados();
-
-  if(empty($servicio)){
-    echo "<script>javascript:history.back(1)</script>";
-    return;
-  }    
+  // if(empty($servicio)){
+  //   echo "<script>javascript:history.back(1)</script>";
+  //   return;
+  // }    
     
 ?>
 
@@ -59,17 +59,18 @@
           <div class="box-body">
             <p>
               <?php 
+
                 $f_array = new FuncionesArray;
                 $class_estado = $f_array->buscarValor($allEstados,"1",$servicio[0]->ESTADOS_DESCCI,"2");
 
                 echo "
-                <b>Estado:</b> <span class='".$class_estado."' style='font-size:11px;'>".$servicio[0]->ESTADOS_DESCCI."</span><br><br>
-                <b>Fecha:</b> ".$servicio[0]->SERTT11_FECSER->format('d/m/Y')."<br>
-                <b>Numero:</b> ".$servicio[0]->SERTT12_NUMEING."<br>
-                <b>Nombre:</b> ".$servicio[0]->SERTT91_NOMBRE."<br>
-                <b>DNI:</b> ".$servicio[0]->SERTT31_PERNUMDOC."<br>
-                <b>Telefono:</b> ".$servicio[0]->SERTT91_TELEFONO."<br> 
-                <b>Localidad:</b> ".$servicio[0]->SERTT91_LOCALIDAD."<br>";
+                <b>Estado Actual:</b> <span class='".$class_estado."' style='font-size:11px;'>".$servicio[0]->ESTADOS_DESCCI."</span><br><br>
+                <b>Fecha:</b> ".$servicio[0]->HSETT12_FECSER->format('d/m/Y')."<br>
+                <b>Numero:</b> ".$servicio[0]->HSETT13_NUMEING."<br>
+                <b>Nombre:</b> ".$servicio[0]->HSETT91_NOMBRE."<br>
+                <b>DNI:</b> ".$servicio[0]->HSETT31_PERNUMDOC."<br>
+                <b>Telefono:</b> ".$servicio[0]->HSETT91_TELEFONO."<br> 
+                <b>Localidad:</b> ".$servicio[0]->HSETT91_LOCALIDAD."<br>";
                 
                 if($user->getUsuarioPerfil()->getNombre()!="CLIENTE"){
                   echo "
@@ -79,12 +80,12 @@
                     <b>Gestor:</b> ".$servicio[0]->GESTOR21_ALIAS."<br>";
 
                 
-                    if($servicio[0]->SERTT91_OBSERV == $servicio[0]->SERTT91_OBRESPU)
-                      $observaciones = $servicio[0]->SERTT91_OBSERV;
+                    if($servicio[0]->HSETT91_OBSERV == $servicio[0]->HSETT91_OBRESPU)
+                      $observaciones = $servicio[0]->HSETT91_OBSERV;
                     else
-                      $observaciones = $servicio[0]->SERTT91_OBSERV."<br>".$servicio[0]->SERTT91_OBRESPU; 
+                      $observaciones = $servicio[0]->HSETT91_OBSERV."<br>".$servicio[0]->HSETT91_OBRESPU; 
 
-                    $observaciones = $observaciones."<br>".$servicio[0]->SERTT91_OBSEENT;
+                    $observaciones = $observaciones."<br>".$servicio[0]->HSETT91_OBSEENT;
               
                     echo "<br>";
                     echo "<b>Observaciones:</b> ".$observaciones;

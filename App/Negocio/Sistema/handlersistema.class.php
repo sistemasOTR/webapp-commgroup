@@ -2660,6 +2660,102 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
+
+		public function selectHistoricoServicio($nrodoc){
+			try {
+
+				$filtro_nrodoc="";
+				if(!empty($nrodoc))								
+					$filtro_nrodoc = "HSETT31_PERNUMDOC = ".$nrodoc;
+
+				$query = "SELECT 
+							HSETT11_FECEST, HSETT12_FECSER, HSETT13_NUMEING, HSETT31_PERTIPDOC, 
+							HSETT31_PERNUMDOC, HSETT91_NOMBRE, HSETT91_DOMICILIO, HSETT91_LOCALIDAD, 
+							HSETT91_HORARIO, HSETT91_TELEFONO, HSETT91_CODGESTOR, HSETT91_CODEMPRE, 							
+							CASE HSETT91_ESTADO
+							  	WHEN 1 THEN 'Pendiente' 
+							  	WHEN 2 THEN 'Despachado'  
+							  	WHEN 3 THEN 'Cerrado Parcial' 
+							  	WHEN 4 THEN 'Re Pactado' 
+							  	WHEN 5 THEN 'Re Llamar' 
+							  	WHEN 6 THEN 'Cerrado' 
+							  	WHEN 7 THEN 'Negativo' 
+							  	WHEN 8 THEN 'Cerrado en Problemas' 
+							  	WHEN 9 THEN 'Enviado' 
+							  	WHEN 10 THEN 'A Liquidar' 
+							  	WHEN 11 THEN 'Negativo B.O.' 
+					  			WHEN 12 THEN 'Cancelado' 
+					  			WHEN 13 THEN 'Problemas B.O.'
+								WHEN 14 THEN 'Liquidar C. Parcial' 
+								WHEN 15 THEN 'No Efectivas'					  					  			
+							END as ESTADOS_DESCCI,
+							HSETT41_FECEST, HSETT91_OBSERV, HSETT91_OBSEENT, 
+							HSETT91_VALSERV, HSETT91_CARGCLIE, HSETT91_CARSERV, HSETT91_COBROCLI, 
+							HSETT91_OPERAD, HSETT91_LIQSN, HSETT91_AUDITADO, HSETT91_OBRESPU 
+						FROM HISTSERVTT 
+						WHERE 
+							".$filtro_nrodoc." 
+						ORDER BY HSETT11_FECEST DESC";
+				
+				//echo $query;
+				//exit;
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;						
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}
+		}
+
+		public function selectLastServicio($nrodoc){
+			try {
+
+				$filtro_nrodoc="";
+				if(!empty($nrodoc))								
+					$filtro_nrodoc = "HSETT31_PERNUMDOC = ".$nrodoc;
+
+				$query = "SELECT TOP 1
+							HSETT11_FECEST, HSETT12_FECSER, HSETT13_NUMEING, HSETT31_PERTIPDOC, 
+							HSETT31_PERNUMDOC, HSETT91_NOMBRE, HSETT91_DOMICILIO, HSETT91_LOCALIDAD, 
+							HSETT91_HORARIO, HSETT91_TELEFONO, HSETT91_CODGESTOR, HSETT91_CODEMPRE, 							
+							CASE HSETT91_ESTADO
+							  	WHEN 1 THEN 'Pendiente' 
+							  	WHEN 2 THEN 'Despachado'  
+							  	WHEN 3 THEN 'Cerrado Parcial' 
+							  	WHEN 4 THEN 'Re Pactado' 
+							  	WHEN 5 THEN 'Re Llamar' 
+							  	WHEN 6 THEN 'Cerrado' 
+							  	WHEN 7 THEN 'Negativo' 
+							  	WHEN 8 THEN 'Cerrado en Problemas' 
+							  	WHEN 9 THEN 'Enviado' 
+							  	WHEN 10 THEN 'A Liquidar' 
+							  	WHEN 11 THEN 'Negativo B.O.' 
+					  			WHEN 12 THEN 'Cancelado' 
+					  			WHEN 13 THEN 'Problemas B.O.'
+								WHEN 14 THEN 'Liquidar C. Parcial' 
+								WHEN 15 THEN 'No Efectivas'					  					  			
+							END as ESTADOS_DESCCI,
+							HSETT41_FECEST, HSETT91_OBSERV, HSETT91_OBSEENT, 
+							HSETT91_VALSERV, HSETT91_CARGCLIE, HSETT91_CARSERV, HSETT91_COBROCLI, 
+							HSETT91_OPERAD, HSETT91_LIQSN, HSETT91_AUDITADO, HSETT91_OBRESPU 
+						FROM HISTSERVTT 
+						WHERE 
+							".$filtro_nrodoc." 
+						ORDER BY HSETT11_FECEST DESC";
+				
+				//echo $query;
+				//exit;
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;						
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}
+		}
 	}
 	
 ?>
