@@ -6,7 +6,7 @@
 
     $est_plaza='';
     $global=true;
-
+    $gestor=false;
 
 $activo = (isset($_GET["active"])?$_GET["active"]:'');
   switch ($activo) { 
@@ -130,7 +130,11 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
     
   };
 
-  
+  setTimeout('document.location.reload()',300000);
+</script>
+
+<?php if ($despachados_efec[0]->CANTIDAD_SERVICIOS>0) {?>
+<script>
   $(document).ready(function(){
 
       
@@ -158,6 +162,7 @@ $activo = (isset($_GET["active"])?$_GET["active"]:'');
  
 setTimeout('document.location.reload()',300000);
 </script>
+<?php } ?>
 
 <?php 
    if (!empty($arrEstados)) {  ?>

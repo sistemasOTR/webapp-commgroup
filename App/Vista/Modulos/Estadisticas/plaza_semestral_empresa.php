@@ -9,13 +9,20 @@
   $view_detalle= "index.php?view=puntajes_coordinador_detalle";
    $handlerPlaza = new HandlerPlazaUsuarios;
   $arrPlaza = $handlerPlaza->selectTodas();
-  $handler = new HandlerSistema;
-  $arrEmpresas=$handler->selectAllEmpresaFiltroArray(null,null,null,null,null);
   // var_dump($arrEmpresas);
   // exit();
-  if ($global) {
+  if ($global){
     $est_plaza=null;
+    $gestorCod=null;
+  } elseif ($gestor){
+   $gestorCod=$usuarioActivoSesion->getUserSistema();
   }
+  else{
+    $gestorCod=null;
+  }
+
+   $handler = new HandlerSistema;
+  $arrEmpresas=$handler->selectAllEmpresaFiltroArray(null,null,null,null,null);
 
   $user = $usuarioActivoSesion;
 
@@ -50,9 +57,9 @@
             $nombreMES = strftime("%B",mktime(0, 0, 0, date('m')-$i, 1, 2000));      
             $anioMES = date('Y',mktime(0,0,0,date('m')-$i,1,date('Y')));
            
-             $servCerrados = $handler->selectCountServicios($fdesde,$fhasta,200,$value["EMPTT11_CODIGO"],null,null,$est_plaza,null);
+             $servCerrados = $handler->selectCountServicios($fdesde,$fhasta,200,$value["EMPTT11_CODIGO"],$gestorCod,null,$est_plaza,null);
              $cerradosEmp += $servCerrados[0]->CANTIDAD_SERVICIOS;
-             $servTotales = $handler->selectCountServicios($fdesde,$fhasta,null,$value["EMPTT11_CODIGO"],null,null,$est_plaza,null);
+             $servTotales = $handler->selectCountServicios($fdesde,$fhasta,null,$value["EMPTT11_CODIGO"],$gestorCod,null,$est_plaza,null);
              $totalesEmp += $servTotales[0]->CANTIDAD_SERVICIOS;
 
               if ($servTotales[0]->CANTIDAD_SERVICIOS >1 && $servCerrados[0]->CANTIDAD_SERVICIOS >1) {
