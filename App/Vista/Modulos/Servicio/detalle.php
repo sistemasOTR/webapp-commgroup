@@ -113,12 +113,13 @@
           </div>
           <div class="box-body table-responsive">
             
-            <table class="table table-striped table-bordered table-condensed" cellspacing="0" width="100%">
+            <table class="table table-striped table-condensed" cellspacing="0" width="100%">
               <thead>        
                 <tr>                   
-                  <th style="width: 20%;">Fecha</th>              
+                  <th style="width: 20%;">Actualización</th>              
+                  <th style="width: 10%;">Fecha Servicio</th>              
                   <th style="width: 10%;">Estado</th> 
-                  <th style="width: 70%;">Observaciones</th>
+                  <th style="width: 60%;">Observaciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -132,7 +133,9 @@
                       
                       echo "
                         <tr>                         
-                          <td style=''>".$value->HSETT11_FECEST->format('d/m/Y H:i:s')."</td>";                                                                         
+                          <td style=''>".$value->HSETT11_FECEST->format('d-m-Y H:i:s')."</td>
+                          <td style=''>".$value->HSETT12_FECSER->format('d-m-Y')."</td>
+                          ";                                                                         
                         echo 
                           "<td class='text-left'><span class='".$class_estado."'>".$value->ESTADOS_DESCCI."</span></td>";
 
