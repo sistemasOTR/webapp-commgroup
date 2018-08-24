@@ -41,7 +41,7 @@
       
        
         <div class="row">
-          <div class="col-md-4 no-padding">
+          <div class="col-xs-12 col-md-4 no-padding">
             <?php 
               include_once PATH_VISTA."Modulos/PanelControl/Widget/Estados/cliente.php";
               include_once PATH_VISTA."Modulos/PanelControl/Widget/Efectividad/cliente.php";
@@ -50,7 +50,7 @@
             
 
           </div>
-          <div class="col-md-8 no-padding">
+          <div class="col-xs-12 col-md-8 no-padding">
 
           <?php
             if(!empty($allPlazas))

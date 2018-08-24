@@ -193,7 +193,7 @@
   </div>
 </div>
 </div>
-<?php } ?>
+
 
 <div class="modal fade in" id='<?php echo "modal_".$strReplace ?>'>
     <div class="modal-dialog">
@@ -247,3 +247,5 @@
       </div>
     </div>
   </div>
+
+  <?php } ?>
