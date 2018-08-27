@@ -16,13 +16,14 @@
   $foperador=(isset($_GET["foperador"])?$_GET["foperador"]:'');
   $fdoc=(isset($_GET["fdoc"])?$_GET["fdoc"]:'');
   $nrodoc=(isset($_GET["nrodoc"])?$_GET["nrodoc"]:'');
+  $empresa=(isset($_GET["empresa"])?$_GET["empresa"]:'');
 
   $filtros_listado = "&fdoc=".$fdoc."&fdesde=".$fdesde."&fhasta=".$fhasta."&festado=".$festado."&fequipoventa=".$fequipoventa."&fcliente=".$fcliente."&fgerente=".$fgerente."&fcoordinador=".$fcoordinador."&fgestor=".$fgestor."&foperador=".$foperador;      
 
 	$handler = new HandlerSistema;
   $user = $usuarioActivoSesion;
   $servicio = $handler->selectLastServicio($nrodoc);
-	$arrDatos = $handler->selectHistoricoServicio($nrodoc);
+	$arrDatos = $handler->selectHistoricoServicio($nrodoc,$empresa);
   $allEstados = $handler->selectAllEstados();
   // if(empty($servicio)){
   //   echo "<script>javascript:history.back(1)</script>";

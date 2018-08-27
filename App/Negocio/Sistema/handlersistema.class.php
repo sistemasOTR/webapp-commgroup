@@ -2661,8 +2661,12 @@
 			}
 		}
 
-		public function selectHistoricoServicio($nrodoc){
+		public function selectHistoricoServicio($nrodoc,$empresa){
 			try {
+
+				$filtro_empresa="";
+				if(!empty($empresa))								
+					$filtro_empresa = "HSETT91_CODEMPRE = ".$empresa." AND ";
 
 				$filtro_nrodoc="";
 				if(!empty($nrodoc))								
@@ -2694,6 +2698,7 @@
 							HSETT91_OPERAD, HSETT91_LIQSN, HSETT91_AUDITADO, HSETT91_OBRESPU 
 						FROM HISTSERVTT 
 						WHERE 
+							".$filtro_empresa." 
 							".$filtro_nrodoc." 
 						ORDER BY HSETT11_FECEST DESC";
 				
