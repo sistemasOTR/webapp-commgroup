@@ -70,7 +70,7 @@
 
                 $observaciones = $observaciones."<br>".$value->SERTT91_OBSEENT ;
 
-                $url_hist = $url_detalle."&fechaing=".$value->SERTT11_FECSER->format('Y-m-d')."&nroing=".$value->SERTT12_NUMEING;        
+                $url_hist = $url_detalle."&fechaing=".$value->SERTT11_FECSER->format('Y-m-d')."&nroing=".$value->SERTT12_NUMEING."&nrodoc=".$value->SERTT31_PERNUMDOC;
 
                 echo "<tr>";
 
