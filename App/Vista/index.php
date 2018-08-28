@@ -452,6 +452,11 @@
 				$include = 'Modulos/Estadisticas/estadisticas_global.php';
 			break;
 
+		case 'estadisticas_tickets':
+			if($permiso->getModuloMetricasBoolean() && ($esGerencia || $esBO))
+				$include = 'Modulos/Estadisticas/estadisticas_tickets.php';
+			break;
+
 		case 'estadisticas_gestor':
 			if($permiso->getModuloMetricasBoolean() && $esGestor)
 				$include = 'Modulos/Estadisticas/estadisticas_gestor.php';

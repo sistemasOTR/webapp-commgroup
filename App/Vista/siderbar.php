@@ -16,6 +16,7 @@
         $url_estadisticas_global = "index.php?view=estadisticas_global&global=si";
         $url_estadisticas_empresas = "index.php?view=estadisticas_empresas&empresa=2";
         $url_estadisticas_clientes = "index.php?view=estadisticas_clientes";
+        $url_estadisticas_tickets = "index.php?view=estadisticas_tickets&fplaza=1";
         $url_configuraciones = "index.php?view=configuraciones";
         $url_importacion = "index.php?view=importacion";
         $url_importacion_manual = "index.php?view=importacion_manual";
@@ -592,10 +593,18 @@
               <?php 
               }
             ?>
+             <?php              
+              if($esGerencia || $esBO){  
+            ?>              
+              <li id="mnu_estadisticas_tickets">
+                <a href=<?php echo $url_estadisticas_tickets; ?>>
+                  <i class="fa fa-bar-chart"></i> <span>Est.Tickets</span> </i>
+                </a>              
+              </li>
             </ul>
           </li>
             <?php 
-              }
+              } }
             ?>
              <?php  if($esCliente){
             ?>
