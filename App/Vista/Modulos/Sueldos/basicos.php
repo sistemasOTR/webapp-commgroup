@@ -7,8 +7,8 @@
   include_once PATH_DATOS.'Entidades/legajos_basicos.class.php';  
   include_once PATH_DATOS.'Entidades/legajos_categorias.class.php';  
 
-  $url_action_guardar_basicos=PATH_VISTA.'Modulos/Legajos/action_guardar_basico.php';
-  $url_action_eliminar_basicos=PATH_VISTA.'Modulos/Legajos/action_eliminar_basico.php';
+  $url_action_guardar_basicos=PATH_VISTA.'Modulos/Sueldos/action_guardar_basico.php';
+  $url_action_eliminar_basicos=PATH_VISTA.'Modulos/Sueldos/action_eliminar_basico.php';
   // $url_action_editar_categorias = PATH_VISTA.'Modulos/Legajos/action_editar_categoria.php';  
   // $url_action_eliminar_categorias = PATH_VISTA.'Modulos/Legajos/action_eliminar_categoria.php?id=';
 

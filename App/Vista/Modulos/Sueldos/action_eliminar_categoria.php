@@ -8,8 +8,8 @@
     
     $id=(isset($_POST["id_eliminar"])?$_POST["id_eliminar"]:'');
 		
-	$err = "../../../../index.php?view=legajos_categorias&err=";     		
-	$info = "../../../../index.php?view=legajos_categorias&info=";     		
+	$err = "../../../../index.php?view=sueldos_categorias&err=";     		
+	$info = "../../../../index.php?view=sueldos_categorias&info=";     		
 
 
 	try {

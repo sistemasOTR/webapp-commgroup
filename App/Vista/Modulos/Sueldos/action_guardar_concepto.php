@@ -2,9 +2,9 @@
 
     include_once "../../../Config/config.ini.php";	
 
-	include_once PATH_NEGOCIO."Modulos/handlerlegajos.class.php"; 
+	include_once PATH_NEGOCIO."Modulos/handlersueldos.class.php"; 
 	
-	$handler = new HandlerLegajos;
+	$handler = new HandlerSueldos;
 
     $categoria=(isset($_POST["categoria"])?$_POST["categoria"]:'');
     $id=(isset($_POST["tipo_id"])?$_POST["tipo_id"]:'');
@@ -15,15 +15,15 @@
 	
 
 	
-	$err = "../../../../index.php?view=legajos_categorias&err=";     		
-	$info = "../../../../index.php?view=legajos_categorias&info=";   
+	$err = "../../../../index.php?view=sueldos_conceptos&err=";     		
+	$info = "../../../../index.php?view=sueldos_conceptos&info=";   
 
 	if ($accion=='nuevo') {  		
 
 	try {
-		$handler->crearCategoria($categoria);
+		$handler->newConcepto($categoria);
 
-		$msj="Categoria Cargada";
+		$msj="Concepto creado con éxito";
 		header("Location: ".$info.$msj);
 
 	} catch (Exception $e) {
@@ -35,9 +35,9 @@
  else {
 	try {
 
-   $handler->updateCategoria($id,$categoria);
+   $handler->updateConcepto($id,$categoria);
 
-		$msj="Categoria Editada";
+		$msj="Concepto editado con éxtio";
 		header("Location: ".$info.$msj);
 
 		} catch (Exception $e) {

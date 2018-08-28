@@ -1,4 +1,4 @@
- <?php 
+<?php 
 
  	include_once "../../../Config/config.ini.php";	
 
@@ -8,14 +8,14 @@
     
     $id=(isset($_POST["id_eliminar"])?$_POST["id_eliminar"]:'');
 		
-	$err = "../../../../index.php?view=legajos_basicos&err=";     		
-	$info = "../../../../index.php?view=legajos_basicos&info=";     		
+	$err = "../../../../index.php?view=sueldos_conceptos&err=";     		
+	$info = "../../../../index.php?view=sueldos_conceptos&info=";     		
 
 
 	try {
-		$handler->eliminarBasicos($id);
+		$handler->eliminarCategoria($id);
 
-		$msj="Basico Eliminado";
+		$msj="Categoria Eliminada";
 		header("Location: ".$info.$msj);
 
 	} catch (Exception $e) {

@@ -126,9 +126,9 @@
 		  /*###############*/
 		 /* PANEL CONTROL */
 		/*###############*/		
-		case 'panelcontrol':			
+		case 'panelcontrol':
 			if($permiso->getModuloPanelBoolean() && $esCliente)
-				$include = 'Modulos/PanelControl/v2/cliente.php';			
+				$include = 'Modulos/PanelControl/v2/cliente.php';
 			elseif ($permiso->getModuloPanelBoolean() && $esGestor)
 				$include = 'Modulos/PanelControl/v2/gestor.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esCoordinador)	
@@ -136,9 +136,9 @@
 			elseif ($permiso->getModuloPanelBoolean() && $esGerencia)
 				$include = 'Modulos/PanelControl/v2/gerencia.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esBO)
-				$include = 'Modulos/PanelControl/bo.php';				
+				$include = 'Modulos/PanelControl/bo.php';	
 			elseif ($permiso->getModuloPanelBoolean() && $esRRHH)
-				$include = 'Modulos/PanelControl/rrhh.php';				
+				$include = 'Modulos/PanelControl/rrhh.php';	
 			elseif ($permiso->getModuloPanelBoolean() && $esContabilidad)
 				$include = 'Modulos/PanelControl/contab.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esIngresante)
@@ -146,52 +146,52 @@
 			elseif ($permiso->getModuloPanelBoolean() && $esDesarrollo)
 				$include = 'Modulos/PanelControl/desarrollo.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esSupervisor)
-				$include = 'Modulos/PanelControl/v2/supervisor.php';				
-			break;		
+				$include = 'Modulos/PanelControl/v2/supervisor.php';	
+			break;
 
 		// *****************************
 		// FALTAN DESARROLLAR
 		// *****************************
-		case 'panel-cliente':			
-			$include = 'Modulos/PanelControl/_revisar/clientes.php';			
+		case 'panel-cliente':
+			$include = 'Modulos/PanelControl/_revisar/clientes.php';
 			break;
 
-		case 'panel-gestor':			
-			$include = 'Modulos/PanelControl/_revisar/gestor.php';			
+		case 'panel-gestor':
+			$include = 'Modulos/PanelControl/_revisar/gestor.php';
 			break;
 
-		case 'panel-gerencia':			
-			$include = 'Modulos/PanelControl/_revisar/gerencia.php';			
+		case 'panel-gerencia':
+			$include = 'Modulos/PanelControl/_revisar/gerencia.php';
 			break;
 
-		case 'panel-supervisor':			
-			$include = 'Modulos/PanelControl/_revisar/supervisor.php';						
+		case 'panel-supervisor':
+			$include = 'Modulos/PanelControl/_revisar/supervisor.php';			
 			break;
 
-		case 'metrica-rosario':			
-			$include = 'Modulos/PanelControl/_revisar/metrica_rosario.php';						
+		case 'metrica-rosario':
+			$include = 'Modulos/PanelControl/_revisar/metrica_rosario.php';			
 			break;
 
-		case 'metrica-servicio':			
-			$include = 'Modulos/PanelControl/_revisar/metrica_servicios.php';						
+		case 'metrica-servicio':
+			$include = 'Modulos/PanelControl/_revisar/metrica_servicios.php';			
 			break;	
 
 		  /*###########*/
 		 /* SERVICIOS */
 		/*###########*/
-		case 'servicio':				
+		case 'servicio':	
 			if($permiso->getModuloServiciosBoolean())
-				$include = 'Modulos/Servicio/index.php';			
+				$include = 'Modulos/Servicio/index.php';
 			break;
 
-		case 'servicio_resumen':				
+		case 'servicio_resumen':	
 			if($permiso->getModuloServiciosBoolean())
-				$include = 'Modulos/Servicio/resumen.php';			
+				$include = 'Modulos/Servicio/resumen.php';
 			break;
 
-		case 'detalle_servicio':				
+		case 'detalle_servicio':	
 			if($permiso->getModuloServiciosBoolean())
-				$include = 'Modulos/Servicio/detalle.php';			
+				$include = 'Modulos/Servicio/detalle.php';
 			break;
 
 		case 'upload_file':	
@@ -203,94 +203,94 @@
 		  /*#######*/
 		 /* INBOX */
 		/*#######*/
-		case 'inbox':				
+		case 'inbox':	
 			if($permiso->getModuloInboxBoolean())
-				$include = 'Modulos/Inbox/index.php';			
+				$include = 'Modulos/Inbox/index.php';
 			break;
 
 		  /*############*/
 		 /* INVENTARIO */
 		/*############*/
-		case 'exp_control':				
+		case 'exp_control':	
 			if($permiso->getModuloInventariosBoolean() && ($esBO || $esContabilidad))
-				$include = 'Modulos/Expediciones/control.php';			
+				$include = 'Modulos/Expediciones/control.php';
 			break;
 
-		case 'exp_remito':				
+		case 'exp_remito':	
 			if($permiso->getModuloInventariosBoolean() && ($esContabilidad || $esBO))
 				$include = 'Modulos/Expediciones/remitos.php';		
 			break;
 
-		case 'exp_detalle_remito':				
+		case 'exp_detalle_remito':	
 			if($permiso->getModuloInventariosBoolean() && ($esContabilidad || $esBO))
 	            $include = 'Modulos/Expediciones/detalle_remitos.php';		
 			break;	
 
-		case 'exp_control_coordinador':				
+		case 'exp_control_coordinador':	
 			if($permiso->getModuloInventariosBoolean() && ($usuarioActivoSesion->getId()==10164))
-				$include = 'Modulos/Expediciones/control_coordinador.php';			
+				$include = 'Modulos/Expediciones/control_coordinador.php';
 			break;	
 
-		case 'exp_tipo_abm':				
+		case 'exp_tipo_abm':	
 			if($permiso->getModuloInventariosBoolean() && ($esBO || $esContabilidad))
-				$include = 'Modulos/Expediciones/tipo_abm.php';			
+				$include = 'Modulos/Expediciones/tipo_abm.php';
 			break;
-		case 'exp_item_abm':				
+		case 'exp_item_abm':	
 			if($permiso->getModuloInventariosBoolean() && ($esBO || $esContabilidad))
-				$include = 'Modulos/Expediciones/item_abm.php';			
+				$include = 'Modulos/Expediciones/item_abm.php';
 			break;	
 
-		case 'exp_solicitud':				
+		case 'exp_solicitud':	
 			if($permiso->getModuloInventariosBoolean() && ($esBO || $esCoordinador|| $esContabilidad || $esRRHH))
 				$include = 'Modulos/Expediciones/solicitud.php';
 			break;
-		case 'exp_seguimiento_remito':				
+		case 'exp_seguimiento_remito':	
 			if($permiso->getModuloInventariosBoolean() && $esCoordinador)
 				$include = 'Modulos/Expediciones/seguimiento_remito.php';
 			break;
 
-		case 'exp_recibir_remito':				
+		case 'exp_recibir_remito':	
 			if($permiso->getModuloInventariosBoolean() && $esCoordinador)
 				$include = 'Modulos/Expediciones/recibir_remito.php';
 			break;	
 
-		case 'exp_detalle':				
+		case 'exp_detalle':	
 			if($permiso->getModuloInventariosBoolean() && ($esCoordinador || ($esBO || $esContabilidad || $esRRHH)))
-				$include = 'Modulos/Expediciones/detalle_pedido.php';			
+				$include = 'Modulos/Expediciones/detalle_pedido.php';
 			break;
 
-		case 'exp_seguimiento':				
+		case 'exp_seguimiento':	
 			if($permiso->getModuloInventariosBoolean() && ($esCoordinador || $esBO || $esContabilidad || $esRRHH))
-				$include = 'Modulos/Expediciones/seguimiento.php';			
+				$include = 'Modulos/Expediciones/seguimiento.php';
 			break;
 
-			case 'exp_compra':				
+			case 'exp_compra':	
 			if($permiso->getModuloInventariosBoolean() && (($esBO || $esContabilidad)))
-				$include = 'Modulos/Expediciones/compra.php';			
-			break;		
+				$include = 'Modulos/Expediciones/compra.php';
+			break;
 
 		  /*#######*/
 		 /* GUIAS */
 		/*#######*/
-		case 'guias_control':				
+		case 'guias_control':	
 			if($permiso->getModuloGuiasBoolean() && ($esBO || $esContabilidad || $esRRHH))
-				$include = 'Modulos/Guias/control.php';			
+				$include = 'Modulos/Guias/control.php';
 			break;
 
-		case 'guias_control_empresa':				
+		case 'guias_control_empresa':	
 			if($permiso->getModuloGuiasBoolean() && $esCliente)
-				$include = 'Modulos/Guias/control_empresa.php';			
+				$include = 'Modulos/Guias/control_empresa.php';
 			break;
 
-		case 'guias_envios':				
+		case 'guias_envios':	
 			if($permiso->getModuloGuiasBoolean() && $esCoordinador)
-				$include = 'Modulos/Guias/envios.php';			
+				$include = 'Modulos/Guias/envios.php';
 			break;
 
-		case 'guias_seguimiento':				
+		case 'guias_seguimiento':	
 			if($permiso->getModuloGuiasBoolean() && $esCoordinador)
-				$include = 'Modulos/Guias/seguimiento.php';			
-			break;		
+				$include = 'Modulos/Guias/seguimiento.php';
+			break;
 
 		  /*########*/
 		 /* PERFIL */
@@ -308,15 +308,15 @@
 		  /*##############*/
 		 /* MULTIUSUARIO */
 		/*##############*/
-		case 'cambiarUsuario':			
+		case 'cambiarUsuario':
 			if($permiso->getModuloMultiusuarioBoolean())
 				$include = 'Modulos/UsuariosAdmin/activar_tipo_usuario.php';
-			break;			
+			break;
 
 		  /*##############*/
 		 /* ROL USUARIO */
 		/*##############*/
-		case 'cambioRol':			
+		case 'cambioRol':
 			if($usuarioActivoSesion->getCambioRol())
 				$include = 'Modulos/UsuariosAdmin/cambiar_rol_usuario.php';
 			break;	
@@ -408,19 +408,19 @@
 
 		case 'cp_plaza':
 			if($permiso->getModuloImportacionBoolean() && ($esGerencia || $esBO || $esContabilidad || $esRRHH || $esCoordinador || $esSupervisor)){								
-				$include = 'Modulos/Importacion/cp_abm.php';				
+				$include = 'Modulos/Importacion/cp_abm.php';	
 			}
 			break;
 
 		case 'importaciones_sin_plaza':
 			if($permiso->getModuloImportacionBoolean() && ($esGerencia || $esBO || $esContabilidad || $esRRHH || $esCoordinador || $esSupervisor)){								
-				$include = 'Modulos/Importacion/importacion_sin_plaza.php';				
+				$include = 'Modulos/Importacion/importacion_sin_plaza.php';	
 			}
 			break;
 
 		case 'importaciones_sin_importar':
 			if($permiso->getModuloImportacionBoolean() && ($esGerencia || $esBO || $esContabilidad || $esRRHH || $esCoordinador || $esSupervisor)){								
-				$include = 'Modulos/Importacion/importacion_sin_importar.php';				
+				$include = 'Modulos/Importacion/importacion_sin_importar.php';	
 			}
 			break;
 
@@ -478,88 +478,107 @@
 		  /*#######*/
 		 /* AYUDA */
 		/*#######*/
-		case 'ayuda':			
+		case 'ayuda':
 			if($permiso->getModuloAyudaBoolean())
 				$include = 'Modulos/Ayuda/index.php';
 			break;
 
-		case 'grupo_ayuda':				
+		case 'grupo_ayuda':	
 			if($permiso->getModuloAyudaBoolean() && $esGerencia)
-				$include = 'Modulos/Ayuda/grupo.php';			
+				$include = 'Modulos/Ayuda/grupo.php';
 			break;
 
 		case 'documento_ayuda':		
 			if($permiso->getModuloAyudaBoolean() && $esGerencia)
-				$include = 'Modulos/Ayuda/documentos.php';			
+				$include = 'Modulos/Ayuda/documentos.php';
 			break;
 
 		  /*#########*/
 		 /* LEGAJOS */
 		/*#########*/
-		case 'legajos_carga':			
+		case 'legajos_carga':
 			if($permiso->getModuloLegajosBoolean()  && ($esGestor || $esGerencia || $esBO || $esContabilidad || $esRRHH || $esCoordinador || $esIngresante || $esSupervisor))
 				$include = 'Modulos/Legajos/carga.php';
-			break;		
+			break;
 
-		case 'legajos_control':			
+		case 'legajos_control':
 			if($permiso->getModuloLegajosBoolean() && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))
 				$include = 'Modulos/Legajos/control.php';
 			break;
 
-	    case 'legajos_basicos':			
-			if($permiso->getModuloLegajosBoolean() && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))
-				$include = 'Modulos/Legajos/basicos.php';
-			break;				
-        
-        case 'legajos_categorias':			
-			if($permiso->getModuloLegajosBoolean() && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))
-				$include = 'Modulos/Legajos/categorias.php';
-			break;
-
-		case 'legajos_actualizar':			
+		case 'legajos_actualizar':
 			if($permiso->getModuloLegajosBoolean() && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))
 				$include = 'Modulos/Legajos/actualizar.php';
 			break;	
 
+		  /*#########*/
+		 /* SUELDOS */
+		/*#########*/
+
+	    case 'sueldos_basicos':
+			if($permiso->getModuloLegajosBoolean() && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))
+				$include = 'Modulos/Sueldos/basicos.php';
+			break;	
+        
+        case 'sueldos_categorias':
+			if($permiso->getModuloLegajosBoolean() && (($esBO || $esContabilidad || $esRRHH) || $esCoordinador))
+				$include = 'Modulos/Sueldos/categorias.php';
+			break;
+
+		case 'sueldos_conceptos':
+			if($permiso->getModuloLegajosBoolean()  && ($esGerencia || $esBO || $esContabilidad || $esRRHH ))
+				$include = 'Modulos/Sueldos/conceptos_abm.php';
+			break;
+
+		case 'sueldos_remun':
+			if($permiso->getModuloLegajosBoolean()  && ($esGerencia || $esBO || $esContabilidad || $esRRHH ))
+				$include = 'Modulos/Sueldos/remuneracion.php';
+			break;
+
+		case 'sueldos_nuevo':
+			if($permiso->getModuloLegajosBoolean()  && ($esGerencia || $esBO || $esContabilidad || $esRRHH ))
+				$include = 'Modulos/Sueldos/nuevo_sueldo.php';
+			break;
+
 		  /*########*/
 		 /* TICKET */
 		/*########*/
-		case 'tickets_carga':			
+		case 'tickets_carga':
 			if($permiso->getModuloTicketsBoolean() && ($esGestor || $esGerencia || ($esBO || $esContabilidad || $esRRHH) || $esCoordinador || $esIngresante || $esSupervisor))
 				$include = 'Modulos/Ticket/index.php';
-			break;		
+			break;
 
-		case 'tickets_detalle':			
+		case 'tickets_detalle':
 			if($permiso->getModuloTicketsBoolean() && ($esGestor || $esGerencia || ($esBO||$esRRHH||$esContabilidad) || $esCoordinador || $esIngresante || $esSupervisor))
 				$include = 'Modulos/Ticket/ticket_detalle.php';
 			break;	
 
-		case 'tickets_control':			
+		case 'tickets_control':
 			if($permiso->getModuloTicketsBoolean() && $esCoordinador)
 				$include = 'Modulos/Ticket/control.php';
 			break;	
 
-		case 'tickets_aprobar':			
+		case 'tickets_aprobar':
 			if($permiso->getModuloTicketsBoolean() && ($esBO || $esContabilidad || $esRRHH))
 				$include = 'Modulos/Ticket/aprobar.php';
 			break;	
 
-		case 'tickets_conceptos':			
+		case 'tickets_conceptos':
 			if($permiso->getModuloTicketsBoolean() && ($esGerencia || ($esBO || $esContabilidad || $esRRHH) || $esCoordinador || $esSupervisor))
 				$include = 'Modulos/Ticket/conceptos_abm.php';
 			break;	
 		
-		case 'tickets_reintegros':			
+		case 'tickets_reintegros':
 			if($permiso->getModuloTicketsBoolean() && ($esBO || $esContabilidad || $esRRHH))
 				$include = 'Modulos/Ticket/operacion_reintegro.php';
 			break;	
 		
-		case 'tickets_resumen':			
+		case 'tickets_resumen':
 			if($permiso->getModuloTicketsBoolean() && ($esBO || $esContabilidad || $esRRHH))
 				$include = 'Modulos/Ticket/resumen.php';
 			break;	
 
-		case 'tickets_fechas_inhabilitadas':			
+		case 'tickets_fechas_inhabilitadas':
 			if($permiso->getModuloTicketsBoolean() && ($esGerencia || ($esBO || $esContabilidad || $esRRHH) || $esCoordinador || $esSupervisor))
 				$include = 'Modulos/Ticket/fechasinhabilitadas_abm.php';
 			break;	
@@ -567,35 +586,35 @@
 		  /*###########*/
 		 /* LICENCIAS */
 		/*###########*/
-		case 'licencias_carga':			
+		case 'licencias_carga':
 			if($permiso->getModuloLicenciasBoolean() && ($esGestor || $esGerencia || ($esBO || $esContabilidad || $esRRHH) || $esCoordinador || $esIngresante || $esSupervisor))
 				$include = 'Modulos/Licencias/generar.php';
 			break;	
 
-		case 'licencias_control':			
+		case 'licencias_control':
 			if($permiso->getModuloLicenciasBoolean() && (($esBO || $esRRHH) || $esCoordinador))
 				$include = 'Modulos/Licencias/control.php';
 			break;	
 
-		case 'licencias_controlcoord':			
+		case 'licencias_controlcoord':
 			if($permiso->getModuloLicenciasBoolean() && (($esCoordinador)))
 				$include = 'Modulos/Licencias/control_cord.php';
 			break;
 
-		case 'licencias_imprimir':			
+		case 'licencias_imprimir':
 			if($permiso->getModuloLicenciasBoolean() && (($esBO || $esRRHH) || $esCoordinador))
 				$include = 'Modulos/Licencias/imprimir.php';
 			break;	
 
-		case 'tipo_licencias':				
+		case 'tipo_licencias':	
 			if($permiso->getModuloLicenciasBoolean()  && (($esBO || $esRRHH) || $esCoordinador))
-				$include = 'Modulos/Licencias/tipo_licencias.php';			
+				$include = 'Modulos/Licencias/tipo_licencias.php';
 			break;
 
 		  /*################*/
 		 /* CAPACITACIONES */
 		/*################*/
-		case 'capacitaciones':			
+		case 'capacitaciones':
 			if($permiso->getModuloCapacitacionesBoolean())
 				$include = 'Modulos/Capacitaciones/index.php';
 			break;	
@@ -603,7 +622,7 @@
 		  /*################*/
 		 /* PUNTAJES */
 		/*################*/
-		case 'puntajes_gestor':			
+		case 'puntajes_gestor':
 			if($permiso->getModuloPuntajesBoolean() && $esGestor)
 				$include = 'Modulos/Puntajes/view_gestor.php';
 			break;	
@@ -613,7 +632,7 @@
 				$include = 'Modulos/Puntajes/view_gestor_detalle.php';
 			break;	
 
-		case 'puntajes_coordinador':			
+		case 'puntajes_coordinador':
 			if($permiso->getModuloPuntajesBoolean() && $esCoordinador)
 				$include = 'Modulos/Puntajes/view_coordinador.php';
 			break;	
@@ -623,22 +642,22 @@
 				$include = 'Modulos/Puntajes/view_coordinador_detalle.php';
 			break;	
 
-		case 'puntajes_general':			
+		case 'puntajes_general':
 			if($permiso->getModuloPuntajesBoolean() && $esGerencia)
 				$include = 'Modulos/Puntajes/view_general.php';
 			break;	
 
-		case 'puntajes_general_detalle':			
+		case 'puntajes_general_detalle':
 			if($permiso->getModuloPuntajesBoolean() && $esGerencia)
 				$include = 'Modulos/Puntajes/view_general_detalle.php';
 			break;	
 
-		case 'puntajes_general_gestores':			
+		case 'puntajes_general_gestores':
 			if($permiso->getModuloPuntajesBoolean() && $esGerencia)
 				$include = 'Modulos/Puntajes/view_general_gestores.php';
 			break;	
 
-		case 'puntajes_general_xgestor':			
+		case 'puntajes_general_xgestor':
 			if($permiso->getModuloPuntajesBoolean() && ($esGerencia || $esCoordinador || $esGestor))
 				$include = 'Modulos/Puntajes/view_general_xgestor.php';
 			break;
@@ -646,52 +665,52 @@
 		  /*##############*/
 		 /* HERRAMIENTAS */
 		/*##############*/
-		case 'herramientas':			
+		case 'herramientas':
 			if($permiso->getModuloHerramientasBoolean())
 				$include = 'Modulos/Herramientas/index.php';		
 			break;
 
-		case 'impresorasxplaza':			
+		case 'impresorasxplaza':
 			if($permiso->getModuloHerramientasBoolean())
 				$include = 'Modulos/Herramientas/Impresoras/index.php';		
 			break;
 		
-		case 'impresora_detalle':			
+		case 'impresora_detalle':
 			if($permiso->getModuloHerramientasBoolean())
 				$include = 'Modulos/Herramientas/Impresoras/detalle.php';		
 			break;
 		
-		case 'consumo_impresora':			
+		case 'consumo_impresora':
 			if($permiso->getModuloHerramientasBoolean())
 				$include = 'Modulos/Herramientas/Impresoras/detalle_consumo.php';		
 			break;
 		
-		case 'asignar_imp':			
+		case 'asignar_imp':
 			if($permiso->getModuloHerramientasBoolean())
 				$include = 'Modulos/Herramientas/Impresoras/asignar_imp.php';		
 			break;
 
-		case 'imprimir_comodato':			
+		case 'imprimir_comodato':
 			if($permiso->getModuloHerramientasBoolean())
 				$include = 'Modulos/Herramientas/Impresoras/imprimir_comodato.php';		
 			break;
 
-		case 'celulares':			
+		case 'celulares':
 			if($permiso->getModuloHerramientasBoolean())
 				$include = 'Modulos/Herramientas/Celulares/index.php';		
 			break;
 
-		case 'detalle_linea':			
+		case 'detalle_linea':
 			if($permiso->getModuloHerramientasBoolean())
 				$include = 'Modulos/Herramientas/Celulares/detalle_linea.php';		
 			break;
 
-		case 'detalle_equipo':			
+		case 'detalle_equipo':
 			if($permiso->getModuloHerramientasBoolean())
 				$include = 'Modulos/Herramientas/Celulares/detalle_equipo.php';		
 			break;
 			
-		case 'insumos':			
+		case 'insumos':
 			if($permiso->getModuloHerramientasBoolean())
 				$include = 'Modulos/Herramientas/Insumos/index.php';		
 			break;
@@ -700,7 +719,7 @@
 	      /*########*/
 		 /* UPLOAD */
 		/*########*/
-		case 'upload_file':			
+		case 'upload_file':
 			if($permiso->getModuloUploadBoolean())
 				$include = 'Modulos/UploadFile/uploadfile.php';		
 			break;
@@ -709,15 +728,15 @@
 	      /*########*/
 		 /* AGENDA */
 		/*########*/
-		case 'agenda':			
+		case 'agenda':
 			$include = 'Modulos/Agenda/index.php';		
 			break;
 
-		case 'agenda_detalle':			
+		case 'agenda_detalle':
 			$include = 'Modulos/Agenda/detalle.php';		
 			break;
 
-		case 'agenda_rubros':			
+		case 'agenda_rubros':
 			$include = 'Modulos/Agenda/rubros.php';		
 			break;
 
@@ -725,7 +744,7 @@
 	      /*#######*/
 		 /* STOCK */
 		/*#######*/
-		case 'stock':			
+		case 'stock':
 			if($permiso->getModuloStockBoolean())
 				$include = 'Modulos/Stock/index.php';		
 			break;
@@ -733,7 +752,7 @@
 	      /*##########*/
 		 /* ENVIADAS */
 		/*##########*/
-		case 'enviadas':			
+		case 'enviadas':
 			if($permiso->getModuloEnviadasBoolean())
 				$include = 'Modulos/Enviadas/index.php';		
 			break;
@@ -741,7 +760,7 @@
 	      /*##########*/
 		 /* ROLES */
 		/*##########*/
-		case 'roles':			
+		case 'roles':
 			if($permiso->getModuloRolesBoolean())
 				$include = 'Modulos/Roles/index.php';		
 			break;
@@ -749,11 +768,11 @@
 		case 'roles_edit':
 			if($permiso->getModuloRolesBoolean())
 				$include = 'Modulos/Roles/edit_roles.php';		
-			break;		
+			break;
 
 		default:
 			if($permiso->getModuloPanelBoolean() && $esCliente)	
-				$include = 'Modulos/PanelControl/v2/cliente.php';			
+				$include = 'Modulos/PanelControl/v2/cliente.php';
 			elseif ($permiso->getModuloPanelBoolean() && $esGestor)
 				$include = 'Modulos/PanelControl/v2/gestor.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esCoordinador)	
@@ -761,16 +780,16 @@
 			elseif ($permiso->getModuloPanelBoolean() && $esGerencia)
 				$include = 'Modulos/PanelControl/v2/gerencia.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esBO)
-				$include = 'Modulos/PanelControl/bo.php';				
+				$include = 'Modulos/PanelControl/bo.php';	
 			elseif ($permiso->getModuloPanelBoolean() && $esRRHH)
-				$include = 'Modulos/PanelControl/rrhh.php';				
+				$include = 'Modulos/PanelControl/rrhh.php';	
 			elseif ($permiso->getModuloPanelBoolean() && $esContabilidad)
 				$include = 'Modulos/PanelControl/contab.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esIngresante)
 				$include = 'Modulos/PanelControl/ingresante.php';		
 			elseif ($permiso->getModuloPanelBoolean() && $esDesarrollo)
 				$include = 'Modulos/PanelControl/desarrollo.php';		
-			break;		
+			break;
 	}	
 
 	if($usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="GESTOR" || 
