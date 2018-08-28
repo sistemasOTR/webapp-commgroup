@@ -66,6 +66,26 @@
 				throw new Exception($e->getMessage());				
 			}
 		}
+
+		public function seleccionarByConcepto($fdesde,$fhasta,$usuario){
+			try {
+					
+				$handler = new Tickets;
+
+				$data = $handler->seleccionarByConcepto($fdesde,$fhasta,$usuario);
+
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
 		public function seleccionarByFiltrosAprobacion($fdesde,$fhasta,$usuario,$festados){
 			try {
 					

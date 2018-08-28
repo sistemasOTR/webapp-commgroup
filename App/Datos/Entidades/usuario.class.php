@@ -500,6 +500,7 @@
 			}					
 		}
 
+
 		public function selectGestoresByPlaza($id_plaza)
 		{		
 			try {

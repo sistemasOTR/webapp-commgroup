@@ -683,6 +683,75 @@
 			}			
 		}
 
+		public function seleccionarByConcepto($fdesde,$fhasta,$usuario){
+			try {
+				
+				$f = new Fechas;
+
+				if($fdesde==$fhasta)
+				{
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "CAST (tickets.fecha_hora AS DATE) = '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "CAST (tickets.fecha_hora AS DATE) =  '".$tmp."' AND ";
+					}
+				}
+				else
+				{					
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "CAST (tickets.fecha_hora AS DATE) >= '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "CAST (tickets.fecha_hora AS DATE) <=  '".$tmp."' AND ";
+					}
+				}
+
+				$filtro_usuario="";
+				if(!empty($usuario))								
+					$filtro_usuario = "tickets.id_usuario = ".$usuario." AND ";
+											
+				// $filtro_concepto="";
+				// if(!empty($concepto))						
+					$filtro_concepto = "(tickets.concepto = 'NAFTA' OR tickets.concepto = 'GASOIL' OR tickets.concepto = 'GNC') AND ";
+				
+				$filtro_estados="";
+				if(!empty($festados))
+				   	      $filtro_estados = "tickets.aprobado = 'true' AND ";
+
+				$filtro_estado = "tickets.estado = 'true'";
+
+
+				$query="SELECT * FROM tickets 
+								WHERE
+									".$filtro_fdesde." 
+									".$filtro_fhasta." 										
+									".$filtro_concepto."
+									".$filtro_usuario."
+									".$filtro_estados."
+									".$filtro_estado;
+				# Ejecucion 	
+				// var_dump($query);
+				// exit();				
+				$result = SQL::selectObject($query, new Tickets);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}			
+		}
+
 		public function resumenGestor($idGestor, $fdesde, $fhasta){
 			try {
 				
