@@ -725,8 +725,8 @@
 				// if(!empty($concepto))						
 					$filtro_concepto = "(tickets.concepto = 'NAFTA' OR tickets.concepto = 'GASOIL' OR tickets.concepto = 'GNC') AND ";
 				
-				$filtro_estados="";
-				if(!empty($festados))
+				// $filtro_estados="";
+				// if(!empty($festados))
 				   	      $filtro_estados = "tickets.aprobado = 'true' AND ";
 
 				$filtro_estado = "tickets.estado = 'true'";

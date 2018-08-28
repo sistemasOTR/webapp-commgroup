@@ -12,8 +12,6 @@
   include_once PATH_DATOS.'Entidades/legajos_categorias.class.php'; 
  
   $user = $usuarioActivoSesion;
-  $url_descargar = PATH_VISTA.'Modulos/Sueldos/action_descargar_lote.php?carpeta='.$user->getEmail().'&usuario='; 
-  $url_descargar_excel = PATH_VISTA.'Modulos/Sueldos/action_descargar_excel.php?usuario_email='.$user->getEmail(); 
 
   $dFecha = new Fechas;
 
@@ -106,7 +104,7 @@
             <div class="box-header with-border">
               <i class="fa fa-dollar"></i>
               <h3 class="box-title">Sueldos</h3>
-              <button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Nuevo</button>
+              <a href="index.php?view=sueldos_nuevo"><button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Nuevo</button></a>
             </div>
           <div class="box-body table-responsive">                          
               <table class="table table-striped" id='tabla'>

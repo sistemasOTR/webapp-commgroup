@@ -8,16 +8,16 @@
   include_once PATH_NEGOCIO."Parametros/handlerparametros.class.php";   
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";      
   include_once PATH_NEGOCIO."Modulos/handlerlegajos.class.php"; 
+  include_once PATH_NEGOCIO."Modulos/handlersueldos.class.php"; 
   include_once PATH_DATOS.'Entidades/legajos_categorias.class.php'; 
  
   $user = $usuarioActivoSesion;
-  $url_descargar = PATH_VISTA.'Modulos/Sueldos/action_descargar_lote.php?carpeta='.$user->getEmail().'&usuario='; 
-  $url_descargar_excel = PATH_VISTA.'Modulos/Sueldos/action_descargar_excel.php?usuario_email='.$user->getEmail(); 
-  $url_view = "?view=legajos_actualizar&usuario=";
 
   $dFecha = new Fechas;
 
   $fusuario= (isset($_GET["fusuario"])?$_GET["fusuario"]:'');
+  $ftipo= (isset($_GET["ftipo"])?$_GET["ftipo"]:'');
+  $ffecha= (isset($_GET["ffecha"])?$_GET["ffecha"]:'');
 
   $handlertipocategoria= new LegajosCategorias;
   $handlerUsuarios = new HandlerUsuarios;
@@ -38,7 +38,7 @@
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
       <li class="active">Sueldos</li>
     </ol>
-  </section>        
+  </section>    
   
   <section class="content">
     <div class="row">
@@ -53,31 +53,39 @@
               <div class='row'>  
                 
                 <div class="col-md-3">
-                  <label>Gestores </label>                
+                  <label>Período</label>
+                  <input type="month" name="periodo" id="periodo" class="form-control">
+                </div>
+                <div class="col-md-3">
+                  <label>Gestores </label>            
                   <select id="slt_usuario" class="form-control" style="width: 100%" name="slt_usuario" onchange="crearHref()">
                     <option value=''></option>
                     <option value='0'>TODOS</option>
                     <?php
-                      if(!empty($arrUsuarios))
-                      {                     
-                                        
-                        foreach ($arrUsuarios as $key => $value) {                      
-
+                      if(!empty($arrUsuarios)){
+                        foreach ($arrUsuarios as $key => $value) {
                           if($fusuario == $value->getId())
                             echo "<option value='".$value->getId()."' selected>".$value->getApellido()." ".$value->getNombre()."</option>";
                           else
-                            echo "<option value='".$value->getId()."'>".$value->getApellido()." ".$value->getNombre()."</option>";                  
-                            
+                            echo "<option value='".$value->getId()."'>".$value->getApellido()." ".$value->getNombre()."</option>";
                         }
-                        
                       }
                     ?>
                   </select>
-                </div>    
+                </div>
+                <div class="col-md-3">
+                  <label>Tipo</label>            
+                  <select id="slt_tipo" class="form-control" style="width: 100%" name="slt_tipo" onchange="crearHref()">
+                    <option value='0'>Seleccione un tipo</option>
+                    <option value='A'>LIQUIDACIÓN AGUINALDO</option>
+                    <option value='S'>LIQUIDACIÓN SUELDO</option>
+                    <option value='F'>LIQUIDACIÓN FINAL</option>
+                  </select>
+                </div>
                          
-                <div class='col-md-2 pull-right'>                
-                  <label></label>                
-                  <a class="btn btn-block btn-success" id="filtro_reporte" onclick="crearHref()"><i class='fa fa-filter'></i> Filtrar</a>
+                <div class='col-md-2 pull-right'>            
+                  <label></label>            
+                  <a class="btn btn-block btn-success" id="filtro_reporte" onclick="crearHref()"><i class='fa fa-plus'></i> Generar</a>
                 </div>
               </div>
             </div>
@@ -91,19 +99,19 @@
       </div>
       <div class='col-md-12'>
         <div class="box">
-          <div class="box-body table-responsive">                          
+          <div class="box-body table-responsive">                      
               <table class="table table-striped" id='tabla'>
                 <thead>
                   <tr>
-                    <th>USUARIO</th>                          
-                    <th>ROL</th>                          
-                    <th>NOMBRE</th>                          
+                    <th>USUARIO</th>                      
+                    <th>ROL</th>                      
+                    <th>NOMBRE</th>                      
                     <th>CUIL</th>   
                     <th>Nº LEGAJO</th>   
-                    <th>CATEGORIA</th>                                              
-                    <th>HORAS</th>                                 
+                    <th>CATEGORIA</th>                                          
+                    <th>HORAS</th>                             
                     <th>PLAZA</th>   
-                    <th>ADJUNTOS</th>                  
+                    <th>ADJUNTOS</th>              
                     <th>ACCION</th>
                   </tr>
                 </thead>
@@ -111,38 +119,8 @@
                     <?php
                       if(!empty($consulta)){                        
                         foreach ($consulta as $key => $value) {
-                          $categoria = $handlertipocategoria->selectById($value->getCategoria());
-                            if (count($categoria)==1) {
-                              $categoria = $categoria[""];
-                            }
-                         
-                          $plazaId=$handlerUsuarios->selectById($value->getUsuarioId()->getId());
-                          if (is_null($plazaId->getUserPlaza())) {
-                          	$plazaNombre = '';
-                          } else {
-                          	$plazaNombre=$plazausuarios->selectById($plazaId->getUserPlaza())->getNombre();
-                          }
-                          if ($value->getNumeroLegajo()==0) {
-                            $numeroLegajo='';
-                          }
-                          else{
-                            $numeroLegajo=$value->getNumeroLegajo();
-                          }
-    
-                          echo "<tr>";
-                          echo "<td>".$value->getUsuarioId()->getEmail()."</td>";
-                          echo "<td>".$value->getUsuarioId()->getUsuarioPerfil()->getNombre()."</td>";
-                          echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
-                          echo "<td>".$value->getCuit()."</td>";                          
-                          echo "<td>".$numeroLegajo."</td>";                          
-                          echo "<td>".$categoria["categoria"]."</td>";
-                          echo "<td>".$value->getHoras()."</td>";
-                          echo "<td>".$plazaNombre."</td>";
-                          echo "<td><a href='".$url_descargar.$value->getUsuarioId()->getId()."' class='btn btn-default btn-xs'><i class='fa fa-download'></i> Descargar</a></td>";                          
-                          echo "<td><a href='".$url_view.$value->getUsuarioId()->getId()."' class='btn btn-primary btn-xs'>Ver y Actualizar</a></td>";
-                          echo "</tr>";
+
                         }
-                        
                       }
                        
                     ?>
@@ -150,7 +128,7 @@
               </table>
           </div>
         </div>
-      </div>    
+      </div>
     </div>
   </section>
 </div>
@@ -202,18 +180,35 @@
         placeholder: "Seleccionar un Usuario",                  
     });
   });
-  
-  
+
+  $(document).ready(function() {
+    $("#slt_tipo").select2({
+        placeholder: "Seleccionar un Usuario",                  
+    });
+  });
+
   crearHref();
   function crearHref()
   {
       f_usuario = $("#slt_usuario").val();   
+      f_tipo = $("#slt_tipo").val();   
+      f_fecha = $("#periodo").val();
+
+      console.log(f_fecha,f_usuario,f_tipo);
       
-      url_filtro_reporte="index.php?view=legajos_control";
+      url_filtro_reporte="index.php?view=sueldos_nuevo";
 
       if(f_usuario!=undefined)
         if(f_usuario>0)
           url_filtro_reporte= url_filtro_reporte + "&fusuario="+f_usuario;
+
+      if(f_fecha!=undefined)
+        if(f_fecha!='')
+          url_filtro_reporte= url_filtro_reporte + "&ffecha="+f_fecha;
+
+      if(f_tipo!=undefined)
+        if(f_tipo!='0')
+          url_filtro_reporte= url_filtro_reporte + "&ftipo="+f_tipo;
 
       $("#filtro_reporte").attr("href", url_filtro_reporte);
   } 

@@ -75,6 +75,9 @@
 		public function getCambioRol(){ return $this->_cambioRol; }
 		public function setCambioRol($cambioRol){ $this->_cambioRol = $cambioRol; }
 
+		private $_enviadasMultiusuario;
+		public function getEnviadasMultiusuario(){ return $this->_enviadasMultiusuario; }
+		public function setEnviadasMultiusuario($enviadasMultiusuario){ $this->_enviadasMultiusuario = $enviadasMultiusuario; }
 
 		/*#############*/
 		/* CONSTRUCTOR */
@@ -95,6 +98,7 @@
 			$this->setEstado(true);		
 			$this->setPasswordAux('');		
 			$this->setCambioRol(false);
+			$this->setEnviadasMultiusuario(false);
 		}
 
 		/*###################*/
@@ -120,7 +124,8 @@
 		        						id_plaza,
 		        						estado,
 		        						password_aux,
-		        						cambio_rol
+		        						cambio_rol,
+		        						enviadas_multiusuario
 	        			) VALUES (
 	        							'".$this->getNombre()."',
 	        							'".$this->getApellido()."',
@@ -131,7 +136,8 @@
 	        							".$this->getUserPlaza().",	        							
 	        							'".$this->getEstado()."',
 	        							'".$this->getPasswordAux()."',
-	        							'".$this->getCambioRol()."'
+	        							'".$this->getCambioRol()."',
+	        							'".$this->getEnviadasMultiusuario()."'
 	        			)";        
 				
 				# Ejecucion 	
@@ -165,8 +171,12 @@
 								estado='".$this->getEstado()."',
 								password='".$this->getPassword()."', 	
 								password_aux='".$this->getPasswordAux()."',
-								cambio_rol='".$this->getCambioRol()."'
+								cambio_rol='".$this->getCambioRol()."',
+								enviadas_multiusuario='".$this->getEnviadasMultiusuario()."'
 							WHERE id=".$this->getId();
+
+				//echo $query;
+				//exit();
 
 				# Ejecucion
 				return SQL::update($conexion,$query);	
@@ -277,6 +287,7 @@
 				$this->setEstado($filas['estado']);
 
 				$this->setCambioRol($filas['cambio_rol']);
+				$this->setEnviadasMultiusuario($filas['enviadas_multiusuario']);
 			}
 		}
 
@@ -296,6 +307,7 @@
 			$this->setEstado(true);	
 			$this->setPasswordAux('');				
 			$this->setCambioRol(false);
+			$this->setEnviadasMultiusuario(false);
 		}
 
 		private function createTable()
@@ -500,12 +512,11 @@
 			}					
 		}
 
-
 		public function selectGestoresByPlaza($id_plaza)
 		{		
 			try {
 				if (!empty($id_plaza)) {
-					$query = "SELECT * FROM usuario WHERE estado = 'true' AND (id_tipo_usuario = 3 or id_tipo_usuario = 4) and id_plaza = ".$id_plaza." order by apellido";
+					$query = "SELECT * FROM usuario WHERE estado = 'true' AND (id_tipo_usuario = 3 or id_tipo_usuario = 4)  and id_plaza = ".$id_plaza." order by apellido";
 				}else{
 					$query = "SELECT * FROM usuario WHERE estado = 'true' AND (id_tipo_usuario = 3 or id_tipo_usuario = 4) order by apellido";
 				}
@@ -524,6 +535,7 @@
 		}		
 	}
 ?>
+
 
 
 
