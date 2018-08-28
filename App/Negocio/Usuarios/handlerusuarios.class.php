@@ -52,7 +52,7 @@
 				if(count($data)==1){
 					$data = array('' => $data );                   
 					return $data;
-				}				
+				}		
 				else{
 					return $data;
 				}	
@@ -85,10 +85,10 @@
 				// if(count($data)==1){
 				// 	$data = array('' => $data );                   
 				// 	return $data;
-				// }				
+				// }		
 				// else{
 				// 	return $data;
-				// }				
+				// }		
 			}
 			catch(Exception $e)
 			{
@@ -216,7 +216,7 @@
 			{
 				throw new Exception($e->getMessage());				
 			}
-		}		
+		}
 
 		public function updateUsuariosAdmin($id,$nombre,$apellido,$foto,$tipousuario,$idusersistema,$aliasusersistema,$perfil,$email,$password,$cambio_rol,$plaza){
 			try{
@@ -296,7 +296,7 @@
 			{
 				throw new Exception($e->getMessage());				
 			}
-		}		
+		}
 
 		public function insertUsuariosAdmin($nombre,$apellido,$foto,$email,$password,$perfil,$tipousuario,$idusersistema,$aliasusersistema,$cambio_rol,$plaza){
 			try {
@@ -421,7 +421,7 @@
 				if(count($data)==1){
 					$data = array('' => $data );                   
 					return $data;
-				}				
+				}		
 				else{
 					return $data;
 				}
@@ -431,7 +431,7 @@
 			{
 				throw new Exception($e->getMessage());				
 			}
-		}		
+		}
 
 		public function selectGestoresByPlaza($id_plaza){
 			try{
@@ -441,7 +441,7 @@
 				if(count($data)==1){
 					$data = array('' => $data );                   
 					return $data;
-				}				
+				}		
 				else{
 					return $data;
 				}
@@ -451,7 +451,7 @@
 			{
 				throw new Exception($e->getMessage());				
 			}
-		}		
+		}
 
 		public function selectEmpleados(){
 			try{
@@ -461,7 +461,7 @@
 				if(count($data)==1){
 					$data = array('' => $data );                   
 					return $data;
-				}				
+				}		
 				else{
 					return $data;
 				}
@@ -471,6 +471,26 @@
 			{
 				throw new Exception($e->getMessage());				
 			}
-		}		
+		}
+
+		public function selectByPlaza($id_plaza){
+			try{
+				$u = new Usuario;
+				$data = $u->selectByPlaza($id_plaza);				
+	
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}		
+				else{
+					return $data;
+				}
+
+			}
+			catch(Exception $e)
+			{
+				throw new Exception($e->getMessage());				
+			}
+		}
 	}
 ?>		

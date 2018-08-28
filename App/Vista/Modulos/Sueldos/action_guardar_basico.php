@@ -20,8 +20,8 @@
     // var_dump($accion);
     // exit();
 		
-	$err = "../../../../index.php?view=legajos_basicos&err=";     		
-	$info = "../../../../index.php?view=legajos_basicos&info=";     		
+	$err = "../../../../index.php?view=sueldos_basicos&err=";     		
+	$info = "../../../../index.php?view=sueldos_basicos&info=";     		
 
 if ($accion=='nuevo') {
 
