@@ -147,7 +147,7 @@
             ?>  
 
             <?php
-              if($permiso->getModuloLegajosBoolean()){  
+              if($permiso->getModuloLegajosBoolean() && !$esCoordinador){  
             ?>          
               <li class="treeview" id="mnu_sueldos">
                 <a href="#"><i class="fa fa-money"></i> <span>Salarios</span> <i class="fa fa-angle-left pull-right"></i></a>
@@ -587,7 +587,7 @@
             ?>        
 
             <?php
-              if($permiso->getModuloMetricasBoolean()){  
+              if($permiso->getModuloMetricasBoolean() && !$esCoordinador){  
             ?>   
               <li class="treeview" id="mnu_estadisticas">
                 <a href="#"><i class="fa fa-area-chart"></i> <span>Estadisticas</span> </i></a>       
@@ -627,10 +627,11 @@
                   <i class="fa fa-bar-chart"></i> <span>Est.Tickets</span> </i>
                 </a>              
               </li>
+            <?php } ?>
             </ul>
           </li>
             <?php 
-              } }
+              }
             ?>
              <?php  if($esCliente){
             ?>

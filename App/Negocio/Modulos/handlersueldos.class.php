@@ -10,6 +10,7 @@
 	include_once PATH_DATOS.'Entidades/legajos_basicos.class.php';
 	include_once PATH_DATOS.'Entidades/legajos_categorias.class.php';
 	include_once PATH_DATOS.'Entidades/sueldos_conceptos.class.php';
+	include_once PATH_DATOS.'Entidades/sueldos.class.php';
 	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
 	include_once PATH_NEGOCIO."Funciones/Archivo/archivo.class.php"; 
 	

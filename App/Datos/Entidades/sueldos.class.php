@@ -89,16 +89,26 @@
 				# Validaciones 				
 				
 				# Query 			
-				$query="INSERT INTO sueldos_conceptos (
-		        						concepto,
-		        						estado
-		        						
-		        						
+				$query="INSERT INTO sueldos (
+							id_usuario,
+							id_plaza,
+							tipo,
+							periodo,
+							fecha,
+							rem,
+							descuento,
+							no_rem,
+							estado 
 	        			) VALUES (
-	        							'".$this->getConcepto()."',   	   
-										'".$this->getEstado()."'  
-										  
-										
+	        				".$this->getIdUsuario().", 
+							".$this->getIdPlaza().", 
+							'".$this->getTipo()."',
+							'".$this->getPeriodo()."', 
+							'".$this->getFecha()."',
+							".$this->getRemuneracion().",
+							".$this->getDescuento().",
+							".$this->getNoRemunerativo().",
+							'".$this->getEstado()."'
 	        			)";        
 			
 	        	//echo $query;
@@ -121,9 +131,16 @@
 					throw new Exception("Concepto no identificado");
 
 				# Query 			
-				$query="UPDATE sueldos_conceptos SET
-								concepto='".$this->getConcepto()."',								
-								estado='".$this->getEstado()."'
+				$query="UPDATE sueldos SET
+							fecha='".$this->getFecha()."',
+							periodo='".$this->getPeriodo()."',
+							id_usuario=".$this->getIdUsuario().",
+							id_plaza=".$this->getIdPlaza().",
+							rem=".$this->getRemuneracion().",
+							descuento=".$this->getDescuento().",
+							no_rem=".$this->getNoRemunerativo().",
+							tipo='".$this->getTipo()."',
+							estado='".$this->getEstado()."'
 								
 							WHERE id=".$this->getId();
 
@@ -147,7 +164,7 @@
 					throw new Exception(" concepto no identificado");
 			
 				# Query 			
-				$query="UPDATE sueldos_conceptos SET							
+				$query="UPDATE sueldos SET							
 								estado='false'
 							WHERE id=".$this->getId();
 
@@ -166,18 +183,18 @@
 				# Query
 				if(empty($this->getId()))
 				{
-					$query = "SELECT * FROM sueldos_conceptos WHERE estado='true'";
+					$query = "SELECT * FROM sueldos WHERE estado='true'";
 				}
 				else
 				{
 					if(empty($this->getId()))
 						throw new Exception("No se selecciono el Id de Concepto");	
 
-					$query="SELECT * FROM sueldos_conceptos WHERE id=".$this->getId();
+					$query="SELECT * FROM sueldos WHERE id=".$this->getId();
 				}
 				
 				# Ejecucion 					
-				$result = SQL::selectObject($query, new SueldosConceptos);
+				$result = SQL::selectObject($query, new Sueldos);
 						
 				return $result;
 
@@ -193,15 +210,16 @@
 				$this->cleanClass();
 			}
 			else{
-				// $u = new Usuario;
-				// $u->setId($filas['id_usuario']);
-				// $u = $u->select();
-				// $this->setUsuarioId($u);	
                 $this->setId($filas['id']);
-				$this->setConcepto($filas['concepto']);
-				$this->setEstado($filas['estado']);
-										
-				
+				$this->setIdUsuario($filas['id_usuario']);
+				$this->setIdPlaza($filas['id_plaza']);
+				$this->setTipo($filas['tipo']);
+				$this->setPeriodo($filas['periodo']);
+				$this->setFecha($filas['fecha']);
+				$this->setRemuneracion($filas['rem']);
+				$this->setDescuento($filas['descuento']);
+				$this->setNoRemunerativo($filas['no_rem']);
+				$this->setEstado($filas['estado']);	
 			}
 		}
 
@@ -235,10 +253,41 @@
 				if(empty($id))
 					throw new Exception("No se selecciono el Usuario");	
 
-				$query="SELECT * FROM sueldos_conceptos WHERE id=".$id;
+				$query="SELECT * FROM sueldos WHERE id=".$id;
 				
 				# Ejecucion 					
-				$result = SQL::selectArray($query, new SueldosConceptos);
+				$result = SQL::selectArray($query, new Sueldos);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}
+
+		}
+	
+		public function selectSueldos($id_plaza,$id_usuario)
+		{			
+			try {
+
+				$filtro_plaza = '';
+				if(!empty($id_plaza))
+					$filtro_plaza = ' id_plaza = '.$id_plaza.' AND ';
+
+				$filtro_usuario = '';
+				if(!empty($id_usuario))
+					$filtro_usuario = ' id_usuario = '.$id_usuario.' AND ';
+
+				$filtro_estado = "estado = 'true' " ;
+
+				$query="SELECT * FROM sueldos 
+						WHERE 
+						".$filtro_plaza."
+						".$filtro_usuario."
+						".$filtro_estado;
+
+				# Ejecucion 					
+				$result = SQL::selectArray($query, new Sueldos);
 						
 				return $result;
 

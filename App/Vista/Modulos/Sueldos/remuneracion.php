@@ -18,10 +18,10 @@
   $dFecha = new Fechas;
 
   $fusuario= (isset($_GET["fusuario"])?$_GET["fusuario"]:'');
-  $fplaza= (isset($_GET["fplaza"])?$_GET["fplaza"]:0);
+  $fplaza= (isset($_GET["fplaza"])?$_GET["fplaza"]:'');
 
   $handlerUsuarios = new HandlerUsuarios;
-  if ($fplaza == '0') {
+  if ($fplaza == '') {
     $arrEmpleados = $handlerUsuarios->selectEmpleados();
   } else {
     $arrEmpleados = $handlerUsuarios->selectByPlaza(intval($fplaza));
