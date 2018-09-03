@@ -51,7 +51,7 @@
                 <div class="col-md-3">
                   <label>Plazas </label>      
 
-                  <select id="slt_plazas" class="form-control" style="width: 100%" name="slt_plazas" onchange="crearHref()"">            
+                  <select id="slt_plazas" class="form-control" style="width: 100%" name="slt_plazas" onchange="crearHref()">            
                     <option value=''></option>
                     <option value='0'>TODAS</option>
                     <?php
@@ -108,7 +108,7 @@
                           echo "<tr>";
                             echo "<td>".$value->getCP()."</td>";
                             echo "<td>".$value->getCPNombre()."</td>";
-                            echo "<td>".$handlerSist->getPlazaByCordinador($value->getPlaza())[0]->ALIAS."</td>";
+                            echo "<td>".$value->getPlaza()."</td>";
                             echo "<td class='text-center'>
                                     <a href='#' id='".$value->getId()."_editar' data-cp='".$value->getCP()."' data-cpnombre='".$value->getCPNombre()."' data-plaza='".$value->getPlaza()."' class='btn btn-default btn-xs' data-toggle='modal' data-target='#modal-editar' onclick='cargarDatos(".$value->getId().")'>
                                       <i class='fa fa-edit' data-toggle='tooltip' data-original-title='Editar registro'></i>

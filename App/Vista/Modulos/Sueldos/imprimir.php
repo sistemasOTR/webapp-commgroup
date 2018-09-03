@@ -272,7 +272,7 @@
                         $desc = '$ '.$value->getDescuento();
                       }
                       ?>
-                    <tr style="height: 1em;">
+                    <tr style="height: .75em;">
                       <td width="33.3%" style="text-align: left;border: none;font-size: 10px;"><?php echo $value->getConcepto() ?></td>
                       <td width="16.7%" style="text-align: center;border: none;font-size: 10px;"><?php echo $value->getUnidad() ?></td>
                       <td width="16.7%" style="text-align: center;border: none;font-size: 10px;"><?php echo $remu ?></td>
