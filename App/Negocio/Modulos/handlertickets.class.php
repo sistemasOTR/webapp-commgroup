@@ -310,8 +310,13 @@
 		public function guardarTicketsEnviados($usuario,$fecha_hora,$tipo,$punto_venta,$numero,$razon_social,$cuit,$iibb,$domicilio,$condicion_fiscal,$importe,$adjunto,$concepto){
 			try {
 
+
 				$dFecha = new Fechas();
-				$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(1);
+				if (date('N',strtotime($dFecha->FechaActual())) == 1) {
+					$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(3);
+				} else {
+					$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(1);
+				}
 				$fecha_ticket = $dFecha->FormatearFechas(substr($fecha_hora,0,10),'Y-m-d','Y-m-d');
 				
 				if($fecha_ticket < $fecha_hoy_menos_tres )

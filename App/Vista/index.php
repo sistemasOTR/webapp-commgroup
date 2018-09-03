@@ -537,12 +537,17 @@
 
 		case 'sueldos_remun':
 			if($permiso->getModuloLegajosBoolean()  && ($esGerencia || $esBO || $esContabilidad || $esRRHH ))
-				$include = 'Modulos/Sueldos/remuneracion.php';
+				$include = 'Modulos/Sueldos/sueldos.php';
 			break;
 
 		case 'sueldos_nuevo':
 			if($permiso->getModuloLegajosBoolean()  && ($esGerencia || $esBO || $esContabilidad || $esRRHH ))
 				$include = 'Modulos/Sueldos/nuevo_sueldo.php';
+			break;
+
+		case 'sueldos_form':
+			if($permiso->getModuloLegajosBoolean()  && ($esGerencia || $esBO || $esContabilidad || $esRRHH ))
+				$include = 'Modulos/Sueldos/form_sueldo.php';
 			break;
 
 		  /*########*/

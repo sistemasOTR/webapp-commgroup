@@ -18,6 +18,7 @@
   $fusuario= (isset($_GET["fusuario"])?$_GET["fusuario"]:'');
   $ftipo= (isset($_GET["ftipo"])?$_GET["ftipo"]:'');
   $ffecha= (isset($_GET["ffecha"])?$_GET["ffecha"]:'');
+  $url_action_generar_sueldo=PATH_VISTA.'Modulos/Sueldos/action_generar_sueldo.php';
 
   $handlertipocategoria= new LegajosCategorias;
   $handlerUsuarios = new HandlerUsuarios;
@@ -46,18 +47,22 @@
         <div class="box box-solid">
             <div class="box-header with-border">
               <i class="fa fa-filter"></i>
-              <h3 class="box-title">Filtros Disponibles</h3>
-              <button type="button" class="btn btn-box-tool pull-right bg-red" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <h3 class="box-title">Generar nuevo sueldo</h3>
             </div>
             <div class="box-body">
+              <form action="<?php echo $url_action_generar_sueldo; ?>"  method="post">
               <div class='row'>  
                 
-                <div class="col-md-3">
+                <div class="col-md-2">
+                  <label>Fecha</label>
+                  <input type="date" name="fecha" id="fecha" class="form-control">
+                </div>
+                <div class="col-md-2">
                   <label>Período</label>
                   <input type="month" name="periodo" id="periodo" class="form-control">
                 </div>
                 <div class="col-md-3">
-                  <label>Gestores </label>            
+                  <label>Empleado</label>            
                   <select id="slt_usuario" class="form-control" style="width: 100%" name="slt_usuario" onchange="crearHref()">
                     <option value=''></option>
                     <option value='0'>TODOS</option>
@@ -76,57 +81,20 @@
                 <div class="col-md-3">
                   <label>Tipo</label>            
                   <select id="slt_tipo" class="form-control" style="width: 100%" name="slt_tipo" onchange="crearHref()">
-                    <option value='0'>Seleccione un tipo</option>
+                    <option value=''>Seleccione un tipo</option>
                     <option value='A'>LIQUIDACIÓN AGUINALDO</option>
                     <option value='S'>LIQUIDACIÓN SUELDO</option>
                     <option value='F'>LIQUIDACIÓN FINAL</option>
                   </select>
                 </div>
                          
-                <div class='col-md-2 pull-right'>            
-                  <label></label>            
-                  <a class="btn btn-block btn-success" id="filtro_reporte" onclick="crearHref()"><i class='fa fa-plus'></i> Generar</a>
+                <div class='col-md-2 pull-right'>
+                  <label></label>   
+                  <button type="submit" class="btn btn-block btn-success"><i class='fa fa-plus'></i> Generar</button>
                 </div>
               </div>
+              </form>
             </div>
-        </div>
-      </div>
-
-      <div class="col-md-12">
-        <a href="<?php echo $url_descargar_excel;?>" class="pull-right btn btn-warning btn-xs"> 
-          <i class="fa fa-download"></i> Descargar toda la información 
-        </a>
-      </div>
-      <div class='col-md-12'>
-        <div class="box">
-          <div class="box-body table-responsive">                      
-              <table class="table table-striped" id='tabla'>
-                <thead>
-                  <tr>
-                    <th>USUARIO</th>                      
-                    <th>ROL</th>                      
-                    <th>NOMBRE</th>                      
-                    <th>CUIL</th>   
-                    <th>Nº LEGAJO</th>   
-                    <th>CATEGORIA</th>                                          
-                    <th>HORAS</th>                             
-                    <th>PLAZA</th>   
-                    <th>ADJUNTOS</th>              
-                    <th>ACCION</th>
-                  </tr>
-                </thead>
-                <tbody>
-                    <?php
-                      if(!empty($consulta)){                        
-                        foreach ($consulta as $key => $value) {
-
-                        }
-                      }
-                       
-                    ?>
-                </tbody>
-              </table>
-          </div>
         </div>
       </div>
     </div>
@@ -192,9 +160,10 @@
   {
       f_usuario = $("#slt_usuario").val();   
       f_tipo = $("#slt_tipo").val();   
-      f_fecha = $("#periodo").val();
+      f_fecha = $("#fecha").val();
+      f_periodo = $("#periodo").val();
 
-      console.log(f_fecha,f_usuario,f_tipo);
+      console.log(f_fecha,f_periodo,f_usuario,f_tipo);
       
       url_filtro_reporte="index.php?view=sueldos_nuevo";
 
@@ -205,6 +174,10 @@
       if(f_fecha!=undefined)
         if(f_fecha!='')
           url_filtro_reporte= url_filtro_reporte + "&ffecha="+f_fecha;
+
+      if(f_periodo!=undefined)
+        if(f_periodo!='')
+          url_filtro_reporte= url_filtro_reporte + "&fperiodo="+f_periodo;
 
       if(f_tipo!=undefined)
         if(f_tipo!='0')

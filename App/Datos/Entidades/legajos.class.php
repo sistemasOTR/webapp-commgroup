@@ -632,7 +632,7 @@
 				if(empty($usuario))
 					$query="SELECT * FROM legajos WHERE enviado=1";
 				else
-					$query="SELECT * FROM legajos WHERE enviado=1 AND id_usuario=".$usuario;
+					$query="SELECT * FROM legajos WHERE id_usuario=".$usuario;
 				
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new Legajos);

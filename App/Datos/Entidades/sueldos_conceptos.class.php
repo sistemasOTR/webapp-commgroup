@@ -18,11 +18,19 @@
 
 		private $_id;
 		public function getId(){ return $this->_id; }
-		public function setId($id){ $this->_id =$id; }		
+		public function setId($id){ $this->_id =$id; }
 		
 		private $_concepto;
 		public function getConcepto(){ return $this->_concepto; }
-		public function setConcepto($concepto){ $this->_concepto=$concepto; }		
+		public function setConcepto($concepto){ $this->_concepto=$concepto; }
+		
+		private $_valor;
+		public function getValor(){ return $this->_valor; }
+		public function setValor($valor){ $this->_valor=$valor; }
+		
+		private $_base;
+		public function getBase(){ return $this->_base; }
+		public function setBase($base){ $this->_base=$base; }
 
 		private $_estado;
 		public function getEstado(){ return var_export($this->_estado,true); }
@@ -39,6 +47,8 @@
 		function __construct(){
 			$this->setId(0);			
 			$this->setConcepto('');			
+			$this->setValor(0);			
+			$this->setBase(0);			
 			$this->setEstado(true);
 			
 		}
@@ -56,11 +66,15 @@
 				# Query 			
 				$query="INSERT INTO sueldos_conceptos (
 		        						concepto,		    
+		        						valor,		    
+		        						base,		    
 		        						estado
 		        						
 		        						
 	        			) VALUES (
 	        							'".$this->getConcepto()."',   	   
+	        							".$this->getValor().",   	   
+	        							".$this->getBase().",   	   
 										'".$this->getEstado()."'  
 										  
 										
@@ -74,7 +88,7 @@
 			
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
-			}		
+			}
 		}
 
 		public function update($conexion)
@@ -88,6 +102,8 @@
 				# Query 			
 				$query="UPDATE sueldos_conceptos SET
 								concepto='".$this->getConcepto()."',								
+								valor=".$this->getValor().",								
+								base=".$this->getBase().",								
 								estado='".$this->getEstado()."'
 								
 							WHERE id=".$this->getId();
@@ -100,7 +116,7 @@
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
-			}		
+			}
 		}
 
 		public function delete($conexion)
@@ -164,6 +180,8 @@
 				// $this->setUsuarioId($u);					
                 $this->setId($filas['id']);				
 				$this->setConcepto($filas['concepto']);				
+				$this->setValor($filas['valor']);				
+				$this->setBase($filas['base']);				
 				$this->setEstado($filas['estado']);	
 										
 				
@@ -174,6 +192,8 @@
 		{
 			$this->setId(0);			
 			$this->setConcepto('');			
+			$this->setValor(0);			
+			$this->setBase(0);			
 			$this->setEstado(true);
 		}
 

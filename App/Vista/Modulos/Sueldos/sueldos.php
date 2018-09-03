@@ -30,6 +30,8 @@
 
   $handlerSueldos = new HandlerSueldos;  
   $consulta = $handlerSueldos->selectSueldos($fplaza,$fusuario);
+
+  $url_imprimir = PATH_VISTA.'Modulos/Sueldos/imprimir.php?idsueldo=';
 ?>
 
 <div class="content-wrapper">  
@@ -46,59 +48,7 @@
   
   <section class="content">
     <div class="row">
-      <div class='col-md-12'>
-        <div class="box box-solid">
-            <div class="box-header with-border">
-              <i class="fa fa-filter"></i>
-              <h3 class="box-title">Filtros Disponibles</h3>
-              <button type="button" class="btn btn-box-tool pull-right bg-red" data-widget="collapse"><i class="fa fa-minus"></i></button>
-            </div>
-            <div class="box-body">
-              <div class='row'>  
-                
-                <div class="col-md-3">
-                  <label>Plazas</label>                
-                  <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" onchange="crearHref()">
-                    <option value=''></option>
-                    <option value='0'>TODOS</option>
-                    <?php
-                      if(!empty($arrPlazas)){
-                        foreach ($arrPlazas as $plaza) { 
-                          if($fplaza == $plaza->getId())
-                            echo "<option value='".$plaza->getId()."' selected>".$plaza->getNombre()."</option>";
-                          else
-                            echo "<option value='".$plaza->getId()."'>".$plaza->getNombre()."</option>";
-                        }
-                      }
-                    ?>
-                  </select>
-                </div>
-                <div class="col-md-3">
-                  <label>Empleados</label>                
-                  <select id="slt_usuario" class="form-control" style="width: 100%" name="slt_usuario" onchange="crearHref()">
-                    <option value=''></option>
-                    <option value='0'>TODOS</option>
-                    <?php
-                      if(!empty($arrEmpleados)){
-                        foreach ($arrEmpleados as $key => $value) { 
-                          if($fusuario == $value->getId())
-                            echo "<option value='".$value->getId()."' selected>".$value->getApellido()." ".$value->getNombre()."</option>";
-                          else
-                            echo "<option value='".$value->getId()."'>".$value->getApellido()." ".$value->getNombre()."</option>";
-                        }
-                      }
-                    ?>
-                  </select>
-                </div>    
-                         
-                <div class='col-md-2 pull-right'>                
-                  <label></label>                
-                  <a class="btn btn-block btn-success" id="filtro_reporte" onclick="crearHref()"><i class='fa fa-filter'></i> Filtrar</a>
-                </div>
-              </div>
-            </div>
-        </div>
-      </div>
+      <?php include_once 'filtros.php'; ?>
       <div class='col-md-12'>
         <div class="box box-solid">
             <div class="box-header with-border">
@@ -107,25 +57,70 @@
               <a href="index.php?view=sueldos_nuevo"><button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Nuevo</button></a>
             </div>
           <div class="box-body table-responsive">                          
-              <table class="table table-striped" id='tabla'>
+              <table class="table table-striped" id='tabla-sueldos'>
                 <thead>
-                  <tr>
-                    <th>USUARIO</th>                          
+                  <tr class="bg-black">
+                    <th>USUARIO</th>
+                    <th>PLAZA</th>                          
+                    <th style="display: none;">PERIODO</th>                          
                     <th>PERIODO</th>                          
                     <th>FECHA</th>                          
                     <th>TIPO</th>   
-                    <th>REMUNERACION</th>   
+                    <th>REMUNERATIVO</th>   
                     <th>DESCUENTO</th>                                              
                     <th>NO REMUNERATIVO</th>                                 
-                    <th>TOTAL</th>                  
+                    <th>TOTAL</th>
                     <th>ACCIONES</th>
                   </tr>
                 </thead>
                 <tbody>
                     <?php
-                      if(!empty($consulta)){                        
+                      if(!empty($consulta)){ 
                         foreach ($consulta as $key => $value) {
 
+                          # Empleado #
+                          $empleado = $handlerUsuarios->selectById($value->getIdUsuario());
+
+                          # Plaza #
+                          $plazaEmp = $handlerPlaza->selectById($empleado->getUserPlaza());
+
+                          # Tipo #
+                          switch ($value->getTipo()) {
+                            case 'S':
+                              $tipoSueldo = 'SUELDO';
+                              break;
+                            case 'A':
+                              $tipoSueldo = 'AGUINALDO';
+                              break;
+                            case 'F':
+                              $tipoSueldo = 'LIQ. FINAL';
+                              break;
+                            
+                            default:
+                              $tipoSueldo = '';
+                              break;
+                          }
+
+                          # Total #
+                          $totalSueldo= $value->getNoRemunerativo()-$value->getDescuento()+$value->getRemunerativo();
+
+                          # Botones #
+                          $impr = "<a href='".$url_imprimir.$value->getId()."' target='_blank' class='btn btn-warning'><i class='fa fa-print'></i></a>";
+
+                          
+                          echo "<tr>";
+                            echo "<td>".$empleado->getApellido()." ".$empleado->getNombre()."</td>";
+                            echo "<td>".$plazaEmp->getNombre()."</td>";
+                            echo "<td style='display: none;'>".$value->getPeriodo()->format('Y-m')."</td>";
+                            echo "<td>".$value->getPeriodo()->format('m-Y')."</td>";
+                            echo "<td>".$value->getFecha()->format('d-m-Y')."</td>";
+                            echo "<td>".$tipoSueldo."</td>";
+                            echo "<td>$ ".$value->getRemunerativo()."</td>";
+                            echo "<td>$ ".$value->getDescuento()."</td>";
+                            echo "<td>$ ".$value->getNoRemunerativo()."</td>";
+                            echo "<td>$ ".$totalSueldo."</td>";
+                            echo "<td>".$impr."</td>";
+                          echo "</tr>";
                         }
                       }
                        
@@ -150,10 +145,11 @@
   });
 
   $(document).ready(function() {
-      $('#tabla').DataTable({
+      $('#tabla-sueldos').DataTable({
         "dom": 'Bfrtip',
         "buttons": ['copy', 'csv', 'excel', 'print'],
         "iDisplayLength":100,
+        "order": [[ 2, "desc" ]],
         "language": {
             "sProcessing":    "Procesando...",
             "sLengthMenu":    "Mostrar _MENU_ registros",

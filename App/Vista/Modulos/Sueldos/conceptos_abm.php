@@ -52,7 +52,8 @@
                   <thead>
                     <tr class="bg-black">
                       <th style="width: 10%;" class='text-center'>ID</th>
-                      <th style="width: 70%">CONCEPTO</th>
+                      <th style="width: 50%">CONCEPTO</th>
+                      <th style="width: 20%">VALOR</th>
                       <th style="width: 20%;" class='text-center'>ACCIONES</th>
                     </tr>
                   </thead>
@@ -61,17 +62,28 @@
                        // var_dump($arrSueldos);
                        //     exit();
                       if (!empty($arrSueldos)) {
-                        
-                      foreach ($arrSueldos as $key => $value) 
-                       
+                        $tipo_concepto = '';
+                      foreach ($arrSueldos as $key => $value){ 
+                        switch ($value->getBase()) {
+                          case 1:
+                            $percent = '';
+                            break;
+                          case 100:
+                            $percent = ' %';
+                            break;
 
-                        { ?>
+                          default:
+                            $percent = '';
+                            break;
+                        }
+                        ?>
                        
 
                         <tr>
                           <td class="text-center"> <?php echo $value->getId();?> </td>
                           <td> <?php echo $value->getConcepto();?> </td>
-                          <td class="text-center"><a href="#" id='<?php echo $value->getId() ?>' data-id='<?php echo $value->getId() ?>' data-categoria='<?php echo $value->getConcepto() ?>' data-accion='editar'class="btn btn-warning" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId() ?>)'><i class='fa fa-pencil'></i></a>   <a href="#" class='btn btn-danger' id='<?php echo $value->getId() ?>_elim' data-action="eliminar" onclick='eliminarDatos(<?php echo $value->getId() ?>)' data-id='<?php echo $value->getId() ?>' data-toggle='modal' data-target='#modal-eliminar'><i class="fa fa-trash"></i></a></td>
+                          <td> <?php echo number_format($value->getValor(),2).$percent;?> </td>
+                          <td class="text-center"><a href="#" id='<?php echo $value->getId() ?>' data-id='<?php echo $value->getId() ?>' data-categoria='<?php echo $value->getConcepto() ?>' data-valor='<?php echo $value->getValor() ?>' data-base='<?php echo $value->getBase() ?>' data-accion='editar'class="btn btn-warning" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId() ?>)'><i class='fa fa-pencil'></i></a>   <a href="#" class='btn btn-danger' id='<?php echo $value->getId() ?>_elim' data-action="eliminar" onclick='eliminarDatos(<?php echo $value->getId() ?>)' data-id='<?php echo $value->getId() ?>' data-toggle='modal' data-target='#modal-eliminar'><i class="fa fa-trash"></i></a></td>
                         </tr>
                         <?php 
                         }
@@ -99,9 +111,17 @@
                 <div class="col-md-12">
                   <label>Concepto</label>
                   <input type="text" name="categoria" id="categoria" class="form-control" >
+                </div>
+                <div class="col-md-12">
+                  <label>Valor</label>
+                  <input type="number" name="valor" id="valor" class="form-control" step="0.01" >
                    <input type="number" name="estado" id="estado" style="display:none;">
                   <input type="" name="accion" id="accion" style="display: none;">
                   <input type="" name="tipo_id" id="tipo_id" style="display:none;">
+                </div> 
+                <div class="col-md-12">
+                  <label>Base</label>
+                  <input type="number" name="base" id="base" class="form-control" >
                 </div> 
 
             </div>
@@ -158,14 +178,16 @@
   });
 
  function cargarDatos(id){
-
-    
     categoria = document.getElementById(id).getAttribute('data-categoria');
     tipo_id = document.getElementById(id).getAttribute('data-id');
     estado= document.getElementById(id).getAttribute('data-accion');
+    valor= document.getElementById(id).getAttribute('data-valor');
+    base= document.getElementById(id).getAttribute('data-base');
    
    
     document.getElementById("categoria").value = categoria;
+    document.getElementById("valor").value = valor;
+    document.getElementById("base").value = base;
     document.getElementById("tipo_id").value = tipo_id;
     document.getElementById("accion").value = estado;
     
@@ -176,6 +198,8 @@
    
     document.getElementById("accion").value = estado;
      document.getElementById("categoria").value = '';
+     document.getElementById("valor").value = 0;
+     document.getElementById("base").value = 0;
 
     
   }

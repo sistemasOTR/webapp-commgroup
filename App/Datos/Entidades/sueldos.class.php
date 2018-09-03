@@ -40,9 +40,21 @@
 		public function getPeriodo(){ return $this->_periodo; }
 		public function setPeriodo($periodo){ $this->_periodo =$periodo; }
 		
-		private $_remuneracion;
-		public function getRemuneracion(){ return $this->_remuneracion; }
-		public function setRemuneracion($remuneracion){ $this->_remuneracion=$remuneracion; }
+		private $_remunerativo;
+		public function getRemunerativo(){ return $this->_remunerativo; }
+		public function setRemunerativo($remunerativo){ $this->_remunerativo=$remunerativo; }
+		
+		private $_basico;
+		public function getBasico(){ return $this->_basico; }
+		public function setBasico($basico){ $this->_basico=$basico; }
+		
+		private $_jornada;
+		public function getJornada(){ return $this->_jornada; }
+		public function setJornada($jornada){ $this->_jornada=$jornada; }
+		
+		private $_categoria;
+		public function getCategoria(){ return $this->_categoria; }
+		public function setCategoria($categoria){ $this->_categoria=$categoria; }
 		
 		private $_descuento;
 		public function getDescuento(){ return $this->_descuento; }
@@ -71,8 +83,11 @@
 			$this->setTipo('');
 			$this->setPeriodo('');
 			$this->setFecha('');
-			$this->setRemuneracion(0);
+			$this->setRemunerativo(0);
 			$this->setDescuento(0);
+			$this->setJornada('');
+			$this->setBasico(0);
+			$this->setCategoria(0);
 			$this->setNoRemunerativo(0);
 			$this->setEstado(true);
 			
@@ -97,6 +112,9 @@
 							fecha,
 							rem,
 							descuento,
+							jornada,
+							basico,
+							categoria,
 							no_rem,
 							estado 
 	        			) VALUES (
@@ -105,15 +123,16 @@
 							'".$this->getTipo()."',
 							'".$this->getPeriodo()."', 
 							'".$this->getFecha()."',
-							".$this->getRemuneracion().",
-							".$this->getDescuento().",
+							".$this->getRemunerativo().",
+							".$this->getDescuento().", 
+							'".$this->getJornada()."',
+							".$this->getBasico().",
+							".$this->getCategoria().",
 							".$this->getNoRemunerativo().",
 							'".$this->getEstado()."'
-	        			)";        
-			
-	        	//echo $query;
-	        	//exit();
-
+	        			)";
+	        	// var_dump($query);
+	        	// exit();
 				# Ejecucion 					
 				return SQL::insert($conexion,$query);
 			
@@ -136,10 +155,13 @@
 							periodo='".$this->getPeriodo()."',
 							id_usuario=".$this->getIdUsuario().",
 							id_plaza=".$this->getIdPlaza().",
-							rem=".$this->getRemuneracion().",
+							rem=".$this->getRemunerativo().",
 							descuento=".$this->getDescuento().",
 							no_rem=".$this->getNoRemunerativo().",
 							tipo='".$this->getTipo()."',
+							categoria=".$this->getCategoria().",
+							basico=".$this->getBasico().",
+							jornada='".$this->getJornada()."',
 							estado='".$this->getEstado()."'
 								
 							WHERE id=".$this->getId();
@@ -216,8 +238,11 @@
 				$this->setTipo($filas['tipo']);
 				$this->setPeriodo($filas['periodo']);
 				$this->setFecha($filas['fecha']);
-				$this->setRemuneracion($filas['rem']);
+				$this->setRemunerativo($filas['rem']);
 				$this->setDescuento($filas['descuento']);
+				$this->setJornada($filas['jornada']);
+				$this->setBasico($filas['basico']);
+				$this->setCategoria($filas['categoria']);
 				$this->setNoRemunerativo($filas['no_rem']);
 				$this->setEstado($filas['estado']);	
 			}
@@ -231,8 +256,11 @@
 			$this->setTipo('');
 			$this->setPeriodo('');
 			$this->setFecha('');
-			$this->setRemuneracion(0);
+			$this->setRemunerativo(0);
 			$this->setDescuento(0);
+			$this->setJornada('');
+			$this->setCategoria(0);
+			$this->setBasico(0);
 			$this->setNoRemunerativo(0);
 			$this->setEstado(true);
 		}
@@ -287,7 +315,7 @@
 						".$filtro_estado;
 
 				# Ejecucion 					
-				$result = SQL::selectArray($query, new Sueldos);
+				$result = SQL::selectObject($query, new Sueldos);
 						
 				return $result;
 
@@ -295,6 +323,76 @@
 				throw new Exception($e->getMessage());		
 			}
 
+		}
+	
+		public function selectLastSueldo()
+		{			
+			try {
+
+				#query
+				$query="SELECT TOP 1 * FROM sueldos 
+						WHERE estado = 'true' order by id desc";
+
+				
+				# Ejecucion 					
+				$result = SQL::selectArray($query, new Sueldos);
+				// var_dump($result);
+				// exit;
+		
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}
+
+		}
+	
+		public function selectLast2SueldosByUsuario($id_usuario,$periodo)
+		{			
+			try {
+
+				#query
+				$query="SELECT TOP 2 * FROM sueldos 
+						WHERE estado = 'true' AND id_usuario = ".$id_usuario." AND periodo <= '".$periodo."' order by periodo desc";
+
+				// var_dump($query);
+				// exit;
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new Sueldos);
+				
+		
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}
+
+		}
+
+		public function actualizarSueldo($idsueldo,$basico,$jornada,$categoria,$remu_totales,$desc_totales,$no_remu_totales)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE sueldos SET 
+							rem=".$remu_totales.",
+							descuento=".$desc_totales.",
+							no_rem=".$no_remu_totales.",
+							categoria=".$categoria.",
+							basico=".$basico.",
+							jornada='".$jornada."'
+								
+							WHERE id=".$idsueldo;
+
+	        	// var_dump($query);
+	        	// exit();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
 		}
 	}
 ?>

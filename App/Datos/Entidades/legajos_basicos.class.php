@@ -246,90 +246,23 @@
 				throw new Exception($e->getMessage());
 			}		
 		}
-	
-		// public function selectByCategoria($categoria)
-		// {			
-		// 	try {
-
-		// 		if(empty($usuario))
-		// 			throw new Exception("No se selecciono el Usuario");		
-
-		// 		$query="SELECT TOP 1 * FROM legajos_basicos WHERE id_categoria=".$categoria;
+		public function seleccionarLegajosBasicosByCat($idCat)
+		{			
+			try {
+											
+				# Query
+				$query="SELECT * FROM legajos_basicos WHERE id_categoria=".$idCat." order by fecha_desde desc";
 				
-		// 		# Ejecucion 					
-		// 		$result = SQL::selectObject($query, new Legajos);
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new LegajosBasicos);
 						
-		// 		return $result;
+				return $result;
 
-		// 	} catch (Exception $e) {
-		// 		throw new Exception($e->getMessage());						
-		// 	}
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
 
-		// }
-
-		// public function enviarLegajo($id){
-		// 	try {
-
-		// 		# Validaciones 			
-		// 		if(empty($id))
-		// 			throw new Exception("Legajo no identificado");
-
-		// 		# Query 			
-		// 		$query="UPDATE legajos SET								
-		// 						enviado=1
-		// 					WHERE id=".$id;
-
-	 //        	//echo $query;
-	 //        	//exit();
-
-		// 		# Ejecucion 					
-		// 		return SQL::update($conexion,$query);					
-
-		// 	} catch (Exception $e) {
-		// 		throw new Exception($e->getMessage());
-		// 	}
-		// }
-
-		// public function rechazarLegajo($id){
-		// 	try {
-
-		// 		# Validaciones 			
-		// 		if(empty($id))
-		// 			throw new Exception("Legajo no identificado");
-
-		// 		# Query 			
-		// 		$query="UPDATE legajos SET								
-		// 						enviado=0
-		// 					WHERE id=".$id;
-
-	 //        	//echo $query;
-	 //        	//exit();
-
-		// 		# Ejecucion 					
-		// 		return SQL::update($conexion,$query);					
-
-		// 	} catch (Exception $e) {
-		// 		throw new Exception($e->getMessage());
-		// 	}
-		// }
-
-		// public function seleccionarByFiltros($usuario){
-		// 	try {
-
-		// 		if(empty($usuario))
-		// 			$query="SELECT * FROM legajos WHERE enviado=1";
-		// 		else
-		// 			$query="SELECT * FROM legajos WHERE enviado=1 AND id_usuario=".$usuario;
-				
-		// 		# Ejecucion 					
-		// 		$result = SQL::selectObject($query, new Legajos);
-						
-		// 		return $result;
-
-		// 	} catch (Exception $e) {
-		// 		throw new Exception($e->getMessage());						
-		// 	}			
-		// }
+		}
 
 	}
 ?>

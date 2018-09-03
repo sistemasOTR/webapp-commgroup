@@ -55,6 +55,24 @@
 			}
 		}
 
+		public function seleccionarLegajosBasicosByCat($categoria){
+			try {
+					
+				$handler = new LegajosBasicos;
+				$data= $handler->seleccionarLegajosBasicosByCat($categoria);	
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}										
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
 		public function selecionarTiposCategorias(){
 			try {
 					
@@ -68,6 +86,20 @@
 					return $data;
 				}						
 				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
+		public function selecionarCategoriaById($id){
+			try {
+					
+				$handler = new LegajosCategorias;
+				$handler->setId($id);
+				$data= $handler->select();	
+				
+				return $data;
+					
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
 			}

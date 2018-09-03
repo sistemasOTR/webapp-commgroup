@@ -9,6 +9,8 @@
     $categoria=(isset($_POST["categoria"])?$_POST["categoria"]:'');
     $id=(isset($_POST["tipo_id"])?$_POST["tipo_id"]:'');
     $accion=(isset($_POST["accion"])?$_POST["accion"]:'');
+    $valor=(isset($_POST["valor"])?$_POST["valor"]:'');
+    $base=(isset($_POST["base"])?$_POST["base"]:'');
 
     // var_dump($categoria);
     // exit(); 
@@ -21,7 +23,7 @@
 	if ($accion=='nuevo') {  		
 
 	try {
-		$handler->newConcepto($categoria);
+		$handler->newConcepto($categoria,$valor,$base);
 
 		$msj="Concepto creado con éxito";
 		header("Location: ".$info.$msj);
@@ -35,7 +37,7 @@
  else {
 	try {
 
-   $handler->updateConcepto($id,$categoria);
+   $handler->updateConcepto($id,$categoria,$valor,$base);
 
 		$msj="Concepto editado con éxtio";
 		header("Location: ".$info.$msj);
