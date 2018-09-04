@@ -550,6 +550,11 @@
 				$include = 'Modulos/Sueldos/form_sueldo.php';
 			break;
 
+		case 'sueldos_edit_form':
+			if($permiso->getModuloLegajosBoolean()  && ($esGerencia || $esBO || $esContabilidad || $esRRHH ))
+				$include = 'Modulos/Sueldos/form_edit_sueldo.php';
+			break;
+
 		  /*########*/
 		 /* TICKET */
 		/*########*/

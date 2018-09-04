@@ -32,6 +32,10 @@
   $consulta = $handlerSueldos->selectSueldos($fplaza,$fusuario);
 
   $url_imprimir = PATH_VISTA.'Modulos/Sueldos/imprimir.php?idsueldo=';
+  $url_borrar = PATH_VISTA.'Modulos/Sueldos/action_borrar_sueldo.php?idsueldo=';
+  $url_editar = "index.php?view=sueldos_edit_form&fusuario=".$fusuario."&fplaza=".$fplaza."&idsueldo=";
+  $url_nuevo = "index.php?view=sueldos_nuevo&fusuariofiltro=".$fusuario."&fplaza=".$fplaza;
+
 ?>
 
 <div class="content-wrapper">  
@@ -47,6 +51,8 @@
   </section>        
   
   <section class="content">
+    <?php include_once PATH_VISTA."error.php"; ?>
+    <?php include_once PATH_VISTA."info.php"; ?>
     <div class="row">
       <?php include_once 'filtros.php'; ?>
       <div class='col-md-12'>
@@ -54,13 +60,13 @@
             <div class="box-header with-border">
               <i class="fa fa-dollar"></i>
               <h3 class="box-title">Sueldos</h3>
-              <a href="index.php?view=sueldos_nuevo"><button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Nuevo</button></a>
+              <a href='<?php echo $url_nuevo ?>'><button type="button" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Nuevo</button></a>
             </div>
           <div class="box-body table-responsive">                          
               <table class="table table-striped" id='tabla-sueldos'>
                 <thead>
                   <tr class="bg-black">
-                    <th>USUARIO</th>
+                    <th>EMPLEADO</th>
                     <th>PLAZA</th>                          
                     <th style="display: none;">PERIODO</th>                          
                     <th>PERIODO</th>                          
@@ -70,7 +76,7 @@
                     <th>DESCUENTO</th>                                              
                     <th>NO REMUNERATIVO</th>                                 
                     <th>TOTAL</th>
-                    <th>ACCIONES</th>
+                    <th class="text-right">ACCIONES</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -106,6 +112,8 @@
 
                           # Botones #
                           $impr = "<a href='".$url_imprimir.$value->getId()."' target='_blank' class='btn btn-warning'><i class='fa fa-print'></i></a>";
+                          $editar = "<a href='".$url_editar.$value->getId()."' class='btn btn-info'><i class='fa fa-edit'></i></a>";
+                          $borrar = "<a href='".$url_borrar.$value->getId()."' class='btn btn-danger'><i class='fa fa-trash'></i></a>";
 
                           
                           echo "<tr>";
@@ -119,7 +127,7 @@
                             echo "<td>$ ".$value->getDescuento()."</td>";
                             echo "<td>$ ".$value->getNoRemunerativo()."</td>";
                             echo "<td>$ ".$totalSueldo."</td>";
-                            echo "<td>".$impr."</td>";
+                            echo "<td class='text-right'>".$impr." ".$editar." ".$borrar."</td>";
                           echo "</tr>";
                         }
                       }

@@ -260,5 +260,24 @@
 				throw new Exception($e->getMessage());		
 			}
 		}
+
+		public function deleteItemsBySueldo($id_sueldo)
+		{			
+			try {
+				
+				$conexion=null;						
+				# Query
+				$query="UPDATE sueldos_items SET
+							estado = 'false' 
+						 WHERE id_sueldo=".$id_sueldo;
+				// var_dump($query);
+				// exit();
+				# Ejecucion 					
+				return SQL::delete($conexion,$query);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}
+		}
 	}
 ?>

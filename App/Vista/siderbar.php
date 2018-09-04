@@ -147,7 +147,7 @@
             ?>  
 
             <?php
-              if($permiso->getModuloLegajosBoolean() && !$esCoordinador){  
+              if($permiso->getModuloLegajosBoolean() && (!$esCoordinador && !$esGestor )){  
             ?>          
               <li class="treeview" id="mnu_sueldos">
                 <a href="#"><i class="fa fa-money"></i> <span>Salarios</span> <i class="fa fa-angle-left pull-right"></i></a>

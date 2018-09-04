@@ -115,6 +115,20 @@
 				throw new Exception($e->getMessage());
 			}
 		}
+		
+
+		public function cancelarSueldo($idsueldo){
+			try {
+					
+				$handler = new Sueldos;
+				$handler->setId($idsueldo);
+
+				$handler->delete(null);
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
 
 		// Conceptos //
 
@@ -199,6 +213,18 @@
 				else{
 					return $data;
 				}
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
+		public function deleteItemsBySueldo($id_sueldo){
+			try {
+					
+				$handler = new SueldosItems;
+
+				$handler->deleteItemsBySueldo($id_sueldo);
 				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());

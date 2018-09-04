@@ -25,10 +25,20 @@
 						'no_remunerativo' => $_POST['no_remu_'.$i] );
 	}
 
-	$err = "../../../../index.php?view=sueldos_form&idsueldo=".$idsueldo."&err=";
-	$info = "../../../../index.php?view=sueldos_remun&info=";
+	if ($_POST["accion"] == 'editar') {
+		$err = "../../../../index.php?view=sueldos_edit_form&idsueldo=".$idsueldo."&err=";
+	} else {
+		$err = "../../../../index.php?view=sueldos_form&idsueldo=".$idsueldo."&err=";
+	}
+
+	
+	$info = "../../../../".$_POST['url_retorno']."&info=";
 
 	try {
+
+		if ($_POST["accion"] == 'editar') {
+			$handler->deleteItemsBySueldo($idsueldo);
+		}
 
 		if (!empty($datos)) {
 			foreach ($datos as $key => $value) {

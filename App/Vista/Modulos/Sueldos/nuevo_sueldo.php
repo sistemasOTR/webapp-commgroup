@@ -15,10 +15,14 @@
 
   $dFecha = new Fechas;
 
+  $fusuariofiltro= (isset($_GET["fusuariofiltro"])?$_GET["fusuariofiltro"]:'');
+  $fplaza= (isset($_GET["fplaza"])?$_GET["fplaza"]:'');
+
   $fusuario= (isset($_GET["fusuario"])?$_GET["fusuario"]:'');
   $ftipo= (isset($_GET["ftipo"])?$_GET["ftipo"]:'');
   $ffecha= (isset($_GET["ffecha"])?$_GET["ffecha"]:'');
   $url_action_generar_sueldo=PATH_VISTA.'Modulos/Sueldos/action_generar_sueldo.php';
+  $url_retorno = "index.php?view=sueldos_remun&fusuario=".$fusuariofiltro."&fplaza=".$fplaza;
 
   $handlertipocategoria= new LegajosCategorias;
   $handlerUsuarios = new HandlerUsuarios;
@@ -43,7 +47,7 @@
   
   <section class="content">
     <div class="row">
-      <div class='col-md-12'>
+      <div class='col-md-10 col-md-offset-1'>
         <div class="box box-solid">
             <div class="box-header with-border">
               <i class="fa fa-filter"></i>
@@ -53,11 +57,11 @@
               <form action="<?php echo $url_action_generar_sueldo; ?>"  method="post">
               <div class='row'>  
                 
-                <div class="col-md-2">
+                <div class="col-md-3">
                   <label>Fecha</label>
                   <input type="date" name="fecha" id="fecha" class="form-control">
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                   <label>Período</label>
                   <input type="month" name="periodo" id="periodo" class="form-control">
                 </div>
@@ -87,14 +91,15 @@
                     <option value='F'>LIQUIDACIÓN FINAL</option>
                   </select>
                 </div>
-                         
-                <div class='col-md-2 pull-right'>
-                  <label></label>   
-                  <button type="submit" class="btn btn-block btn-success"><i class='fa fa-plus'></i> Generar</button>
-                </div>
               </div>
+                         
+                <div class='box-footer'>
+                  <a href='<?php echo $url_retorno ?>' class="btn btn-danger pull-right" style='margin-left: 10px;'><i class="fa fa-times"> Cancelar</i></a>   
+                  <button type="submit" class="btn btn-success pull-right"><i class='fa fa-check'></i> Generar</button>
+                </div>
               </form>
             </div>
+
         </div>
       </div>
     </div>
@@ -105,10 +110,10 @@
 <script type="text/javascript"> 
 
   $(document).ready(function(){                
-    $("#mnu_sueldos").addClass("active");
+    $("#mnu_sueldos_remun").addClass("active");
   });
   $(document).ready(function(){                
-    $("#mnu_legajos_remun").addClass("active");
+    $("#mnu_sueldos").addClass("active");
   });
 
   $(document).ready(function() {
@@ -165,7 +170,7 @@
 
       console.log(f_fecha,f_periodo,f_usuario,f_tipo);
       
-      url_filtro_reporte="index.php?view=sueldos_nuevo";
+      url_filtro_reporte=$(".btn-success").val();
 
       if(f_usuario!=undefined)
         if(f_usuario>0)

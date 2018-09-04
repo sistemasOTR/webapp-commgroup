@@ -6,7 +6,7 @@ $(document).ready(function(){
 });
 
 function add_fields() {
-	ind = cant = document.getElementById('cant_totales').value;
+	ind = document.getElementById('cant_totales').value;
 	ind++;
 	var objTo = document.getElementById('form_conceptos')
 	var divtest = document.createElement("div");
@@ -20,8 +20,10 @@ function add_fields() {
 function actualizaTotal(){
 	cant = document.getElementById('cant_totales').value;
 	total = 0;
+	console.log(cant);
 
 	for (var i = 1; i <= cant; i++) {
+		console.log(document.getElementById('remu_'+i).value);
 		total = Number(total) + Number(document.getElementById('remu_'+i).value);
 	}
 
