@@ -296,6 +296,18 @@
 			}
 		}
 		
+		public function baja($NroLinea){
+			try {
+				$handlerLinea = new Lineas;
+				$handlerLinea->setNroLinea($NroLinea);
+				$handlerLinea->baja(false);
+
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		
 		public function nuevaLinea($fechaAlta,$nroLinea,$empresa,$plan,$costo,$consumo,$obs){
 			try {
 				$handlerLinea = new Lineas;

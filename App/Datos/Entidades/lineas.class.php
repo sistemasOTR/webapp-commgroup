@@ -347,5 +347,22 @@
 				throw new Exception($e->getMessage());
 			}		
 		}
+
+		public function baja($conexion)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE lineas SET
+								estado = 2
+							WHERE nroLinea=".$this->getNroLinea();
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
 	}
 ?>

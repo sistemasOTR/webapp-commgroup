@@ -3,12 +3,16 @@
 
 	include_once PATH_NEGOCIO."Modulos/handlercelulares.class.php";
 	
-	$hanlder = new HandlerCelulares();
+	$handler = new HandlerCelulares();
 
-	$id = (isset($_POST["id"])?$_POST["id"]:'');
+	$id = (isset($_GET["id"])?$_GET["id"]:'');
+
+	$err = "../../../../../index.php?view=celulares&active=ll&err=";     		
+	$info = "../../../../../index.php?view=celulares&active=ll&info=";     		
 
 	try {
 		$handler->baja($id);
+		header("Location: ".$err."Línea ".$id." dada de baja");
 
 		
 	} catch (Exception $e) {

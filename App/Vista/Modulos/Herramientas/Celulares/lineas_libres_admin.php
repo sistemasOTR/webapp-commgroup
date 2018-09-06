@@ -2,6 +2,7 @@
   $url_action_nueva_linea = PATH_VISTA.'Modulos/Herramientas/Celulares/action_nueva_linea.php';
   $url_action_suspender = PATH_VISTA.'Modulos/Herramientas/Celulares/action_susp.php';
   $url_action_activar = PATH_VISTA.'Modulos/Herramientas/Celulares/action_activar.php';
+  $url_action_baja = PATH_VISTA.'Modulos/Herramientas/Celulares/action_baja.php';
   $url_action_nueva_linea = PATH_VISTA.'Modulos/Herramientas/Celulares/action_nueva_linea.php';
 
 ?>
@@ -25,7 +26,7 @@
           <th class='text-center' width="30%">NRO LÍNEA</th>
           <th class='text-center' width="30%">PLAN</th>
           <th class='text-center' width="30%">ESTADO</th>
-          <th class='text-center' width="10%">ACCION</th>
+          <th class='text-center' width="10%">ACCIONES</th>
         </tr>
       </thead>
 
@@ -37,21 +38,32 @@
               case '0':
                 $estado = '<span class="text-green"><b>Disponible</b></span>';
                 $icon_1 = "<a href='".$url_action_suspender."?id=".$nroLinea->getNroLinea()."' ><i class = 'fa fa-exclamation-triangle text-yellow ' data-toggle='tooltip' title='Suspender línea'></i></a>";
+                $icon_2 = "<a href='".$url_action_baja."?id=".$nroLinea->getNroLinea()."' ><i class = 'fa fa-times text-red ' data-toggle='tooltip' title='Dar de baja línea'></i></a>";
+                $icon_3 = "<a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."&active=ll'><i class='fa fa-eye text-blue'></i></a></td>";
                 break;
               case '1':
                 $estado = '<span class="text-yellow"><b>Suspendida</b></span>';
                 $icon_1 = "<a href='".$url_action_activar."?id=".$nroLinea->getNroLinea()."' ><i class = 'fa fa-bolt text-green ' data-toggle='tooltip' title='Activar línea'></i></a>";
+                $icon_2 = "<a href='".$url_action_baja."?id=".$nroLinea->getNroLinea()."' ><i class = 'fa fa-times text-red ' data-toggle='tooltip' title='Dar de baja línea'></i></a>";
+                $icon_3 = "<a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."&active=ll'><i class='fa fa-eye text-blue'></i></a></td>";
+                break;
+              case '2':
+                $estado = '<span class="text-red"><b>Baja</b></span>';
+                $icon_1 = "";
+                $icon_2 = "<a href='".$url_action_baja."?id=".$nroLinea->getNroLinea()."' ><i class = 'fa fa-times text-red ' data-toggle='tooltip' title='Dar de baja línea'></i></a>";
+                $icon_3 = "<a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."&active=ll'><i class='fa fa-eye text-blue'></i></a></td>";
                 break;
               
               default:
                 $estado = 'Disponible';
                 break;
             }
+
             echo "<tr>";
               echo "<td>".$nroLinea->getNroLinea()."</td>";
               echo "<td>".$nroLinea->getNombrePlan()."</td>";
               echo "<td>".$estado."</td>";
-              echo "<td style='font-size: 18px'>".$icon_1."<a  class='baja-linea' id='".$nroLinea->getNroLinea()."'><i class = 'fa fa-times text-red'></i></a><a href='".$url_detalle_linea."&fNroLinea=".$nroLinea->getNroLinea()."&active=ll'><i class='fa fa-eye text-blue'></i></a></td>";
+              echo "<td style='font-size: 18px; text-align: right;'>".$icon_1.$icon_2.$icon_3."</td>";
              echo "</tr>";
           }
         }
