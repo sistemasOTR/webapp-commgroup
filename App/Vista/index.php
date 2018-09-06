@@ -592,6 +592,11 @@
 			if($permiso->getModuloTicketsBoolean() && ($esBO || $esContabilidad || $esRRHH))
 				$include = 'Modulos/Ticket/resumen.php';
 			break;	
+		
+		case 'tickets_resumen_gestor':
+			if($permiso->getModuloTicketsBoolean() && ($esBO || $esContabilidad || $esRRHH))
+				$include = 'Modulos/Ticket/resumen_gestor.php';
+			break;	
 
 		case 'tickets_fechas_inhabilitadas':
 			if($permiso->getModuloTicketsBoolean() && ($esGerencia || ($esBO || $esContabilidad || $esRRHH) || $esCoordinador || $esSupervisor))

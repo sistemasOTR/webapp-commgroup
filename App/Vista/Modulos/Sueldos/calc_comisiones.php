@@ -12,8 +12,11 @@
     $total_servicios_enviadas = 0;
     $total_puntajes_enviadas = 0;
 
+    $fDesdeCom = date('Y-m-01',strtotime($fDesde.' -1 days'));
+    $fHastaCom = date('Y-m-t',strtotime($fDesde.' -1 days'));
+
     $objetivo=0;
-    $consulta = $handlerConsultas->consultaPuntajes($fDesdeInv, $fHastaInv, $userPuntaje->getUserSistema());
+    $consulta = $handlerConsultas->consultaPuntajes($fDesdeCom, $fHastaCom, $userPuntaje->getUserSistema());
 
     if(!empty($consulta))
     {
