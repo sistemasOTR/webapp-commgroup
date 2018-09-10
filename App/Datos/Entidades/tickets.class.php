@@ -825,6 +825,7 @@
 				# Query 			
 				$query="UPDATE tickets SET
 								tipo='".$this->getTipo()."',
+								fecha_hora='".$this->getFechaHora()."',
 								punto_vta='".$this->getPuntoVenta()."',
 								numero='".$this->getNumero()."',
 								razon_social='".$this->getRazonSocial()."',
@@ -837,8 +838,8 @@
 								concepto='".$this->getConcepto()."'
 							WHERE id=".$this->getId();
 
-	        	//echo $query;
-	        	//exit();
+	        	// echo $query;
+	        	// exit();
 
 				# Ejecucion 					
 				return SQL::update($conexion,$query);	

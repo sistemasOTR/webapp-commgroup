@@ -223,27 +223,27 @@
 		public function guardarTickets($usuario,$fecha_hora,$tipo,$punto_venta,$numero,$razon_social,$cuit,$iibb,$domicilio,$condicion_fiscal,$importe,$adjunto,$concepto){
 			try {
 
-				$dFecha = new Fechas();
-				if (date('N',strtotime($dFecha->FechaActual())) == 1) {
-					$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(3);
-				} else {
-					$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(1);
-				}
-				$fecha_ticket = $dFecha->FormatearFechas(substr($fecha_hora,0,10),'Y-m-d','Y-m-d');
+				// $dFecha = new Fechas();
+				// if (date('N',strtotime($dFecha->FechaActual())) == 1) {
+				// 	$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(3);
+				// } else {
+				// 	$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(1);
+				// }
+				// $fecha_ticket = $dFecha->FormatearFechas(substr($fecha_hora,0,10),'Y-m-d','Y-m-d');
 				
-				if($fecha_ticket < $fecha_hoy_menos_tres )
-					throw new Exception("No se puede cargar un ticket de mas de 1 días");	
+				// if($fecha_ticket < $fecha_hoy_menos_tres )
+				// 	throw new Exception("No se puede cargar un ticket de mas de 1 días");	
 
-				$handlerLicencias = new HandlerLicencias;
+				// $handlerLicencias = new HandlerLicencias;
 
-				if($handlerLicencias->huboLicencias($usuario,$fecha_ticket))
-					throw new Exception("Ese día estuvo de licencia");
+				// if($handlerLicencias->huboLicencias($usuario,$fecha_ticket))
+				// 	throw new Exception("Ese día estuvo de licencia");
 
-				$handlerFInhab = new TicketsFechasInhabilitadas;
-				$result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fecha_ticket); 
-				$estado_result = (!empty($result)?true:false);
-				if($estado_result)
-					throw new Exception("No se puede cargar ticket en un día '".$result[0]["motivo"]."'");
+				// $handlerFInhab = new TicketsFechasInhabilitadas;
+				// $result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fecha_ticket); 
+				// $estado_result = (!empty($result)?true:false);
+				// if($estado_result)
+				// 	throw new Exception("No se puede cargar ticket en un día '".$result[0]["motivo"]."'");
 
 				
 				$fecha=substr($fecha_hora,0,10);
@@ -275,7 +275,7 @@
 			}
 		}
 
-		public function updateTickets($id,$tipo,$punto_venta,$numero,$razon_social,$cuit,$iibb,$domicilio,$condicion_fiscal,$importe,$adjunto,$concepto,$adjActual){
+		public function updateTickets($id,$tipo,$fecha_hora,$punto_venta,$numero,$razon_social,$cuit,$iibb,$domicilio,$condicion_fiscal,$importe,$adjunto,$concepto,$adjActual){
 			try {
 				$fecha=substr($fecha_hora,0,10);
 				$hora =substr($fecha_hora,11,5);
@@ -284,6 +284,7 @@
 				$t = new Tickets;
 				$t->setId($id);
 				$t->setTipo($tipo);
+				$t->setFechaHora($fecha_hora);
 				$t->setPuntoVenta($punto_venta);
 				$t->setNumero($numero);
 				$t->setRazonSocial($razon_social);
@@ -311,27 +312,27 @@
 			try {
 
 
-				$dFecha = new Fechas();
-				if (date('N',strtotime($dFecha->FechaActual())) == 1) {
-					$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(3);
-				} else {
-					$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(1);
-				}
-				$fecha_ticket = $dFecha->FormatearFechas(substr($fecha_hora,0,10),'Y-m-d','Y-m-d');
+				// $dFecha = new Fechas();
+				// if (date('N',strtotime($dFecha->FechaActual())) == 1) {
+				// 	$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(3);
+				// } else {
+				// 	$fecha_hoy_menos_tres = $dFecha->RestarDiasFechaActual(1);
+				// }
+				// $fecha_ticket = $dFecha->FormatearFechas(substr($fecha_hora,0,10),'Y-m-d','Y-m-d');
 				
-				if($fecha_ticket < $fecha_hoy_menos_tres )
-					throw new Exception("No se puede cargar un ticket de mas de 1 días");	
+				// if($fecha_ticket < $fecha_hoy_menos_tres )
+				// 	throw new Exception("No se puede cargar un ticket de mas de 1 días");	
 
-				$handlerLicencias = new HandlerLicencias;
+				// $handlerLicencias = new HandlerLicencias;
 
-				if($handlerLicencias->huboLicencias($usuario,$fecha_ticket))
-					throw new Exception("Ese día estuvo de licencia");
+				// if($handlerLicencias->huboLicencias($usuario,$fecha_ticket))
+				// 	throw new Exception("Ese día estuvo de licencia");
 
-				$handlerFInhab = new TicketsFechasInhabilitadas;
-				$result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fecha_ticket); 
-				$estado_result = (!empty($result)?true:false);
-				if($estado_result)
-					throw new Exception("No se puede cargar ticket en un día '".$result[0]["motivo"]."'");
+				// $handlerFInhab = new TicketsFechasInhabilitadas;
+				// $result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fecha_ticket); 
+				// $estado_result = (!empty($result)?true:false);
+				// if($estado_result)
+				// 	throw new Exception("No se puede cargar ticket en un día '".$result[0]["motivo"]."'");
 
 
 				

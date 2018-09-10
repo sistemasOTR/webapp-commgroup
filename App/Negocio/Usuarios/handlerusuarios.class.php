@@ -20,6 +20,17 @@
 			{
 				throw new Exception($e->getMessage());	
 			}
+		}			
+
+		public function selectAll(){
+			try{			
+				$u = new Usuario;
+				return $u->selectAll();				
+			}
+			catch(Exception $e)
+			{
+				throw new Exception($e->getMessage());	
+			}
 		}	
 
 		public function selectById($id){

@@ -465,6 +465,10 @@
 		case 'estadisticas_coordinador':
 			if($permiso->getModuloMetricasBoolean() && $esCoordinador)
 				$include = 'Modulos/Estadisticas/estadisticas_coordinador.php';
+			break;
+			
+		case 'metricas_empresa':
+				$include = 'Modulos/Estadisticas/metricas_empresa.php';
 			break;	
 
 		  /*###############*/

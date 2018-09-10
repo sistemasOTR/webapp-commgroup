@@ -653,6 +653,64 @@
 
 		public function getDireccion(){
 			return $this->getCalle()." ".$this->getNumero()." ".$this->getPiso()." ".$this->getDpto();
+		}		
+
+		public function selectImportacionesByCliente($fdesde,$fhasta,$fcliente){
+			try {
+
+				$f = new Fechas;
+
+				if($fdesde==$fhasta)
+				{
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "CAST (fecha_tt AS DATE) = '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "CAST (fecha_tt AS DATE) =  '".$tmp."' AND ";
+					}
+				}
+				else
+				{					
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "CAST (fecha_tt AS DATE) >= '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "CAST (fecha_tt AS DATE) <=  '".$tmp."' AND ";
+					}
+				}				
+
+				$filtro_cliente="";
+				if(!empty($fcliente))								
+					$filtro_cliente = "cliente_tt = ".$fcliente." AND ";				
+																	
+				$filtro_estado = "estado = 'true'";
+
+				$query="SELECT *
+								FROM importacion_tipo1												
+								WHERE
+									".$filtro_fdesde."
+									".$filtro_fhasta."
+									".$filtro_cliente."
+									".$filtro_estado;
+
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new ImportacionTipo1);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
 		}
 	}
 ?>

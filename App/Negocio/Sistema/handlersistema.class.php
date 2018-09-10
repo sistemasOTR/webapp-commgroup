@@ -2768,6 +2768,31 @@
 				throw new Exception($e->getMessage());		
 			}
 		}
+
+		public function selectLastEstadoServicio($nrodoc){
+			try {
+
+				$filtro_nrodoc="";
+				if(!empty($nrodoc))								
+					$filtro_nrodoc = "SERTT31_PERNUMDOC = ".$nrodoc;
+
+				$query = "SELECT SERTT91_ESTADO as ESTADO
+						FROM SERVTT
+						WHERE 
+							".$filtro_nrodoc." AND SERTT91_ESTADO <> 12
+						ORDER BY SERTT41_FECEST DESC";
+				
+				//echo $query;
+				//exit;
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;						
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());		
+			}
+		}
 	}
 	
 ?>

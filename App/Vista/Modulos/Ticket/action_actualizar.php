@@ -6,7 +6,8 @@
 	$handler = new HandlerTickets();
 	
 
-	$id = (isset($_POST["idTicket"])?$_POST["idTicket"]:'');	
+	$id = (isset($_POST["idTicket"])?$_POST["idTicket"]:'');
+	$fecha_hora = (isset($_POST["fecha_hora"])?$_POST["fecha_hora"]:'');	
 	$tipo = (isset($_POST["tipo"])?$_POST["tipo"]:'');	
 	$punto_venta = (isset($_POST["punto_venta"])?$_POST["punto_venta"]:'');	
 	$numero = (isset($_POST["numero"])?$_POST["numero"]:'');	
@@ -19,24 +20,26 @@
 	$adjunto = (isset($_FILES["adjunto"])?$_FILES["adjunto"]:'');	
 	$concepto = (isset($_POST["concepto"])?$_POST["concepto"]:'');	
 	$tipo_usuario = (isset($_POST["tipo_usuario"])?$_POST["tipo_usuario"]:'');	
-	$adjActual = (isset($_POST["adjActual"])?$_POST["adjActual"]:'');	
+	$adjActual = (isset($_POST["adjActual"])?$_POST["adjActual"]:'');
+
+	if ($tipo_usuario == 'COORDINADOR') {
+			$err = "../../../../index.php?view=tickets_control&err=";     		
+		$info = "../../../../index.php?view=tickets_control&info=";
+		} elseif ($tipo_usuario == 'BACK OFFICE' || $tipo_usuario == 'CONTABILIDAD' || $tipo_usuario == 'RRHH') {
+			
+			$err = "../../../../".$_POST['url_retorno']."&err=";
+		$info = "../../../../".$_POST['url_retorno']."&info=";
+		} else {
+			$err = "../../../../index.php?view=tickets_carga&err=";
+		$info = "../../../../index.php?view=tickets_carga&info=";
+	}	
 	
 	try {
 
 		
-   		$handler->updateTickets($id,$tipo,$punto_venta,$numero,$razon_social,$cuit,$iibb,$domicilio,$condicion_fiscal,$importe,$adjunto,$concepto,$adjActual);
+   		$handler->updateTickets($id,$tipo,$fecha_hora,$punto_venta,$numero,$razon_social,$cuit,$iibb,$domicilio,$condicion_fiscal,$importe,$adjunto,$concepto,$adjActual);
 
-   		if ($tipo_usuario == 'COORDINADOR') {
-   			$err = "../../../../index.php?view=tickets_control&err=";     		
-			$info = "../../../../index.php?view=tickets_control&info=";
-   		} elseif ($tipo_usuario == 'BACK OFFICE') {
-   			
-   			$err = "../../../../".$_POST['url_retorno']."&err=";
-			$info = "../../../../".$_POST['url_retorno']."&info=";
-   		} else {
-   			$err = "../../../../index.php?view=tickets_carga&err=";
-			$info = "../../../../index.php?view=tickets_carga&info=";
-   		}
+   		
    		
 		
 		

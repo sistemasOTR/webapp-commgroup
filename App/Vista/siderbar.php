@@ -16,6 +16,7 @@
         $url_estadisticas_global = "index.php?view=estadisticas_global&global=si";
         $url_estadisticas_empresas = "index.php?view=estadisticas_empresas&empresa=2";
         $url_estadisticas_clientes = "index.php?view=estadisticas_clientes";
+        $url_metricas_empresa = "index.php?view=metricas_empresa";
         $url_estadisticas_tickets = "index.php?view=estadisticas_tickets&fplaza=1";
         $url_configuraciones = "index.php?view=configuraciones";
         $url_importacion = "index.php?view=importacion";
@@ -641,10 +642,20 @@
             ?>
              <?php  if($esCliente){
             ?>
-              <li class="treeview" id="mnu_estadisticas_clientes">
-                <a href=<?php echo $url_estadisticas_clientes; ?>>
-                  <i class="fa fa-bar-chart"></i> <span>Estadisticas</span> </i>
-                </a>
+              <li class="treeview" id="mnu_est_cliente">
+                <a href="#"><i class="fa fa-bar-chart "></i> <span>Estadísticas</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li class="treeview" id="mnu_estadisticas_clientes">
+                    <a href=<?php echo $url_estadisticas_clientes; ?>>
+                      <i class="fa fa-bar-chart"></i> <span>Gráficos</span> </i>
+                    </a>
+                  </li>
+                  <li class="treeview" id="mnu_metricas_empresa">
+                    <a href=<?php echo $url_metricas_empresa; ?>>
+                      <i class="fa fa-line-chart"></i> <span>Métricas</span> </i>
+                    </a>
+                  </li>
+                </ul>
               </li>
             <?php 
               }

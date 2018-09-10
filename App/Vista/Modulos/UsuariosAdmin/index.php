@@ -9,7 +9,7 @@
 
         $handler = new HandlerUsuarios;
         $handlerPlaza = new HandlerPlazaUsuarios;
-        $arrUsuarios = $handler->selectTodos();
+        $arrUsuarios = $handler->selectAll();
       ?>
       
       <div class="content-wrapper">      
@@ -45,14 +45,14 @@
                     <thead>        
                       <tr> 
                         <th style="width: 5%;">ID</th>
-                        <th style="width: 10%;">Foto de Perfil</th>
+                        <th style="width: 10%;">Foto</th>
                         <th style="width: 10%;">Nombre</th>
-                        <th style="width: 10%;">Apellido</th>
-                        <th style="width: 15%;">Email</th>                        
-                        <th style="width: 10%;">Tipo Usuario</th> 
-                        <th style="width: 10%;">Usuario Asociado</th>                        
+                        <th style="width: 10%;">Email</th>                        
+                        <th style="width: 10%;">Tipo</th> 
+                        <th style="width: 10%;">En Sistema</th>                        
                         <th style="width: 10%;">Perfil</th>
                         <th style="width: 10%;">Plaza</th>
+                        <th style="width: 5%;">Estado</th>
 
                         <th style="width: 10%;">Edición</th>                        
                       </tr>
@@ -77,13 +77,17 @@
                               $id_plaza = $value->getUserPlaza();
                               $plaza = $handlerPlaza->selectById($id_plaza)->getNombre(); 
                             }
+                            if ($usuario->getEstado()) {
+                              $estado = '<span class="label label-success">ACTIVO</span>';
+                            } else {
+                              $estado = '<span class="label label-danger">INACTIVO</span>';
+                            }
 
                             echo "
                               <tr>
                                 <td style='text-align: center;'>".$usuario->getId()."</td>
                                 <td style='text-align: center;'><img src='".$foto_perfil."' style='width: 50px;'></td>                                
-                                <td>".$usuario->getNombre()."</td>
-                                <td>".$usuario->getApellido()."</td>
+                                <td>".$usuario->getNombre()." ".$usuario->getApellido()."</td>
                                 <td>".$usuario->getEmail()."</td>";
 
                                 if(is_object($usuario->getTipoUsuario())){
@@ -100,6 +104,7 @@
                             echo "
                                 <td>".$usuario->getUsuarioPerfil()->getNombre()."</td>
                                 <td>".$plaza."</td>
+                                <td>".$estado."</td>
                                 <td>
                                   <a href='".$url_edit.$usuario->getId()."' class='btn btn-default'><i class='fa fa-edit'></i></a>                                  
                                   <a href='".$url_multiuser.$usuario->getId()."' class='btn btn-info'><i class='fa fa-users'></i></a>                                  
@@ -129,6 +134,7 @@
         $(document).ready(function() {
             $('#tabla').DataTable({
               "lengthMenu": [[-1], ["Todos"]],
+              "order":[],
               "language": {
                   "sProcessing":    "Procesando...",
                   "sLengthMenu":    "Mostrar _MENU_ registros",

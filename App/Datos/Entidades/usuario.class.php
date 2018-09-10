@@ -532,7 +532,34 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());		
 			}					
-		}		
+		}
+
+		public function selectAll()
+		{			
+			try {
+				
+				# Query
+				if(empty($this->getId())){
+					$query = "SELECT * FROM usuario ORDER BY estado DESC, id";
+				}
+				else{
+					if(empty($this->getId()))
+						throw new Exception("No se selecciono el Id del usuario");		
+
+					$query="SELECT * FROM usuario WHERE id=".$this->getId();
+				}
+
+				# Ejecucion 				
+				$result = SQL::selectObject($query, new Usuario);
+						
+				return $result;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+						
+			}
+
+		}
 	}
 ?>
 
