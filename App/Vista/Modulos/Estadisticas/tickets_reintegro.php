@@ -55,10 +55,11 @@
 <div class="col-md-12 nopadding">
   <div class="box box-solid">    
     <div class="box-header">
-      <h3 class="box-title">
-        <i class="ion-speedometer"> </i> Reintegro
-        <span class='text-yellow'><b><?php echo $dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y  - h:i'); ?></b></span>
+      <h3 class="box-title" style="width: 100%;">
+        <i class="ion-speedometer"> </i> Reintegro <span><b></b></span>
+        <small class="pull-right" style="font-size: 15px;"><span class='text-yellow '><b><?php echo $dFecha->FormatearFechas($fdesde,'Y-m-d','d/m/Y');echo "-".$dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y'); ?></b></span></small>
       </h3>
+    </div>
     </div>
     <div class="box-body text-center">
    <canvas id="budget_reintegro_<?php echo $valor->getId(); ?>" class="col-xs-12 chart"></canvas>

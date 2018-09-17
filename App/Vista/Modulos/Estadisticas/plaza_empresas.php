@@ -38,7 +38,7 @@
     $anioMES = $f->format('Y'); 
     /*-------------------------*/
      if(!PRODUCCION)
-      $fHOY = "2018-08-12";
+       $fHOY = "2018-09-07";
 
     $countServiciosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,null,$est_empresa,null,null,null,null);
        

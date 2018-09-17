@@ -58,7 +58,7 @@
         <div class="col-md-12 col-lg-12">
             
           <div class="col-md-6">
-            <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/ProgresoMensual/gestor.php"; ?>
+            <?php //include_once PATH_VISTA."Modulos/PanelControl/Widget/ProgresoMensual/gestor.php"; ?>
           </div> 
           <div class="col-md-6">
           <div class="col-md-12">

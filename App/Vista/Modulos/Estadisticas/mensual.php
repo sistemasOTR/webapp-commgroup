@@ -22,7 +22,7 @@
     $anioMES = $f->format('Y'); 
     /*-------------------------*/
      if(!PRODUCCION)
-      $fHOY = "2018-08-12";
+      $fHOY = "2018-08-31";
 
     //ESTADO = 300 --> Cerrado Parcial, Re pactado, Re llamar, Cerrado, Negativo (los 5 estados que se toman como operacion en la calle)
     $countServiciosMesCursoGestion = $handler->selectCountServiciosGestion($fMES,$fHOY,null,null,null,null,$est_plaza,null);

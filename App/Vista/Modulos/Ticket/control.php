@@ -51,7 +51,7 @@
     <?php include_once PATH_VISTA."error.php"; ?>
     <?php include_once PATH_VISTA."info.php"; ?>
 
-
+     <div class='container-fluid'>
     <div class="row">
 
       <div class='col-md-12'>
@@ -100,6 +100,7 @@
                 </div>
               </div>
             </div>
+          </div>
         </div>
       </div>      
       <div class='col-md-12'>

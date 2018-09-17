@@ -118,6 +118,26 @@
 			}
 		}
 
+		public function seleccionarByFiltroTipoRRHH($fdesde,$fhasta,$usuario,$festados,$tipos){
+			try {
+					
+				$handler = new Licencias;
+
+				$data = $handler->seleccionarByFiltroTipoRRHH($fdesde,$fhasta,$usuario,$festados,$tipos);
+
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
 		public function seleccionarLicencias($usuario){
 			try {					
 				$handler = new licencias;

@@ -6,6 +6,7 @@
  
   $url_action_cambiar = PATH_VISTA.'Modulos/Expediciones/action_cambiar_estado.php';
   $url_action_recibido = PATH_VISTA.'Modulos/Expediciones/action_recibido.php';
+  $url_action_eliminar = PATH_VISTA.'Modulos/Expediciones/action_eliminar.php?id=';
 
   $dFecha = new Fechas;
 
@@ -170,9 +171,17 @@
                           $estado = $handler->selectEstado($value->getEstadosExpediciones());    
                           $url_recibido= PATH_VISTA.'Modulos/Expediciones/action_recibido.php?id='.$value->getId().'&estado='.$estado->getId().'&fdesde='.$fdesde.'&fhasta='.$fhasta.'&festados='.$festados.'&ftipo='.$ftipo; 
 
-                           if ($estado->getId()==1 || $estado->getId()==3 || $estado->getId()==9) {
+                          
+
+                           if ($estado->getId()==3 || $estado->getId()==9) {
                                         $envios='<i class="fa fa-eye text-red"></i>';
                                        }
+                           elseif ($estado->getId()==1 ){
+                            $envios="<form action='".$url_action_eliminar."' method='post'>
+                                    <input type='hidden' name='id' value='".$value->getId()."'>
+                                    <button type='submit' class='btn btn-danger btn-xs'>Eliminar</button>
+                                  </form>";
+                           }
                               else{
                                 $envios = "<a href='".$url_detalle_pedido."'  
                                         type='button' 

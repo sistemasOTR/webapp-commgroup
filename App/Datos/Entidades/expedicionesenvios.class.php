@@ -56,6 +56,10 @@
 		private $_estado;
 		public function getEstado(){ return var_export($this->_estado,true); }
 		public function setEstado($estado){ $this->_estado=$estado; }
+        
+
+
+
 		
 		/*#############*/
 		/* CONSTRUCTOR */
@@ -113,7 +117,7 @@
 	        							".$this->getNroEnvio().",   	
 	        							".$this->getSinEnviar().",   	
 	        							'".$this->getEstado()."',
-	        							".$this->getCantidadFaltante()."  	
+	        							".$this->getCantidadFaltante()." 	
 	        							
 	        			)";
 	        		// var_dump($query);
@@ -161,7 +165,7 @@
 			}		
 		}
 
-		 public function updateEstadoNro($idped,$ultimaId,$fecha)
+		 public function updateEstadoNro($idped,$ultimaId)
 		{
 			try {
 
@@ -169,8 +173,7 @@
 				$conexion=false;		
 				$query="UPDATE expediciones_envios SET								
 								sin_enviar=2,
-								nro_envio=".$ultimaId.",
-								fecha_envio='".$fecha."'
+								nro_envio=".$ultimaId."
 
 							WHERE id=".$idped;
 	        		// var_dump($query);

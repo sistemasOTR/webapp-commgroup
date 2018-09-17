@@ -38,7 +38,7 @@
        	if(!empty($datos)){
 			foreach ($datos as $key => $value) {
 				$handlerenvios= new ExpedicionesEnvios;
-                $handlerenvios->updateEstadoNro($value->getId(),$ultimaId,$ultimaFecha);
+                $handlerenvios->updateEstadoNro($value->getId(),$ultimaId);
                 $handlerxp= new Expediciones;
                 $exp=$handlerxp->selectById($value->getIdPedido());	
 
