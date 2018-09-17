@@ -96,7 +96,7 @@
                                     <td></td>
                                     <td></td>";                                  
                                 }
-
+                                     
                             echo "
                                 <td>".$usuario->getUsuarioPerfil()->getNombre()."</td>
                                 <td>".$plaza."</td>
@@ -106,6 +106,8 @@
                                 </td>
                               </tr>                      
                             ";
+                            // var_dump($usuario);
+                            //    exit();
                           }
                         }
                       ?>                        

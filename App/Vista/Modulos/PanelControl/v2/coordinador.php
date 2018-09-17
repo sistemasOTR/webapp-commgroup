@@ -59,7 +59,7 @@
       <div class="row">
 
          <div class="col-md-6">
-          <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/ProgresoMensual/coordinador.php"; ?>
+          <?php // include_once PATH_VISTA."Modulos/PanelControl/Widget/ProgresoMensual/coordinador.php"; ?>
         </div>
       
         <div class="col-md-6">

@@ -159,7 +159,11 @@
 
 		private $fechaIngreso;
 		public function getFechaIngreso(){ return $this->fechaIngreso; }
-		public function setFechaIngreso($fechaIngreso){ $this->fechaIngreso=$fechaIngreso; }				
+		public function setFechaIngreso($fechaIngreso){ $this->fechaIngreso=$fechaIngreso; }	
+
+		 private $_fechaBaja;
+		public function getFechaBaja(){ return $this->_fechaBaja; }
+		public function setFechaBaja($fechaBaja){ $this->_fechaBaja = $fechaBaja; }			
 
 		/*#############*/
 		/* CONSTRUCTOR */
@@ -211,6 +215,7 @@
 			$this->setAprobado(false);
 			$this->setEnviado(false);
 			$this->setFechaIngreso('');
+			$this->setFechaBaja('');
 		}
 
 		/*###################*/
@@ -269,7 +274,8 @@
 		        						enviado,
 		        						estado,
 		        						dni,
-		        						fecha_ingreso
+		        						fecha_ingreso,
+		        						fecha_baja
 	        			) VALUES (
 	        							".$this->getUsuarioId().",   	
 	        							'".$this->getNombre()."',   
@@ -313,7 +319,8 @@
 	        							'".$this->getEnviado()."',   
 	        							'".$this->getEstado()."',
 	        							'".$this->getDni()."',
-	        							'".$this->getFechaIngreso()."'
+	        							'".$this->getFechaIngreso()."',
+	        							'".$this->getFechaBaja()."'
 
 	        			)";        
 			
@@ -380,7 +387,8 @@
 								aprobado='".$this->getAprobado()."',
 								enviado='".$this->getEnviado()."',
 								estado='".$this->getEstado()."',
-								fecha_ingreso='".$this->getFechaIngreso()."'
+								fecha_ingreso='".$this->getFechaIngreso()."',
+								fecha_baja='".$this->getFechaBaja()."'
 							WHERE id=".$this->getId();
 
 	        	// echo $query;
@@ -403,8 +411,9 @@
 					throw new Exception("Legajo no identificado");
 			
 				# Query 			
-				$query="UPDATE legajos SET							
-								estado='false'
+				$query="UPDATE legajos SET
+				                estado='true',	
+								fecha_baja='".$this->getFechaBaja()."'
 							WHERE id=".$this->getId();
 
 				# Ejecucion 	
@@ -498,6 +507,7 @@
 				$this->setEnviado($filas['enviado']);
 				$this->setEstado($filas['estado']);
 				$this->setFechaIngreso($filas['fecha_ingreso']);
+				$this->setFechaBaja($filas['fecha_baja']);
 
 			}
 		}
@@ -549,6 +559,7 @@
 			$this->setAprobado(false);
 			$this->setEnviado(false);
 			$this->setFechaIngreso('');
+			$this->setFechaBaja('');
 		}
 
 		private function createTable()
@@ -663,7 +674,8 @@
 								fecha_ingreso='".$this->getFechaIngreso()."',
 								categoria='".$this->getCategoria()."',
 								horas='".$this->getHoras()."',
-								numero_legajo=".$this->getNumeroLegajo()."
+								numero_legajo=".$this->getNumeroLegajo().",
+								fecha_baja='".$this->getFechaBaja()."'
 
 							WHERE id=".$this->getId();
 

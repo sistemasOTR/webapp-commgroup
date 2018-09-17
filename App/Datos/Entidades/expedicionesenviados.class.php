@@ -238,7 +238,28 @@
 		/*########################*/
 		/* METODOS PERSONALIZADOS */
 		/*########################*/
-	
+
+	public function selectByIdEnviado($id_nroenvio)
+		{			
+			try {
+											
+				# Query
+					$query="SELECT * FROM expediciones_enviados WHERE id=".$id_nroenvio;
+				
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new ExpedicionesEnviados);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+
+
+
 
 	}
 ?>

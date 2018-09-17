@@ -457,6 +457,21 @@
 				$include = 'Modulos/Estadisticas/estadisticas_tickets.php';
 			break;
 
+		case 'estadisticas_licencias':
+			if($permiso->getModuloMetricasBoolean() && ($esGerencia || $esBO))
+				$include = 'Modulos/Estadisticas/estadisticas_licencias.php';
+			break;
+
+		case 'estadisticas_expediciones':
+			if($permiso->getModuloMetricasBoolean() && ($esGerencia || $esBO))
+				$include = 'Modulos/Estadisticas/estadisticas_expediciones.php';
+			break;
+
+	    case 'estadisticas_compras':
+			if($permiso->getModuloMetricasBoolean() && ($esGerencia || $esBO))
+				$include = 'Modulos/Estadisticas/estadisticas_compras.php';
+			break;
+
 		case 'estadisticas_gestor':
 			if($permiso->getModuloMetricasBoolean() && $esGestor)
 				$include = 'Modulos/Estadisticas/estadisticas_gestor.php';
@@ -615,6 +630,15 @@
 			if($permiso->getModuloLicenciasBoolean()  && (($esBO || $esRRHH) || $esCoordinador))
 				$include = 'Modulos/Licencias/tipo_licencias.php';
 			break;
+
+          /*###########*/
+		 /* ASISTENCIA */
+		/*###########*/
+
+		case 'asistencias':
+			if($permiso->getModuloLicenciasBoolean()  && (($esBO || $esRRHH) || $esCoordinador))
+				$include = 'Modulos/Asistencia/presentismo.php';
+			break;	
 
 		  /*################*/
 		 /* CAPACITACIONES */

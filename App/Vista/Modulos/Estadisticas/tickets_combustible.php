@@ -60,9 +60,9 @@
 <div class="col-md-12 nopadding">
 	<div class="box box-solid">    
     <div class="box-header">
-      <h3 class="box-title">
+      <h3 class="box-title" style="width: 100%;">
         <i class="ion-speedometer"> </i> Tickets <span><b><?php echo $valor->getNombre();?></b></span>
-        <span class='text-yellow'><b><?php echo $dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y  - h:i'); ?></b></span>
+        <small class="pull-right" style="font-size: 15px;"><span class='text-yellow '><b><?php echo $dFecha->FormatearFechas($fdesde,'Y-m-d','d/m/Y');echo "-".$dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y'); ?></b></span></small>
       </h3>
     </div>
     <div class="box-body text-center">

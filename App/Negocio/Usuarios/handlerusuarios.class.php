@@ -144,6 +144,19 @@
 			}
 		}
 
+		public function activarUsuario ($id){
+			try {
+				
+				$u = new Usuario;
+				// $u->setId($id);
+			    // $u=$u->select();
+				$u->updateUserEstado($id);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());			
+			}
+		}
+
 
 		public function selectPerfil($id)
 		{

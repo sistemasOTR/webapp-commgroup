@@ -26,8 +26,7 @@
   
   $arrUsuarios = $handlerUsuarios->selectTodos();
   //$arrGestor = $handlerSistema->selectAllGestor($user->getAliasUserSistema());
-  // var_dump($arrGestor);
-  // exit();
+  
   // $usuarr=$handlerUsuarios->selectByTipo(3,$user->getAliasUserSistema());
   // var_dump($user->getTipoUsuario());
   // exit();
@@ -83,6 +82,9 @@
                     </div>
                 </div>
                 <?php
+                // var_dump($arrUsuarios);
+                //   exit();
+
                 // if(!empty($arrUsuarios))
                 //       {                     
                                         
@@ -91,7 +93,7 @@
                 //         }
                 //       }
                 //       ?>
-                <div class="col-md-3">
+            <div class="col-md-3">
                   <label>Usuarios </label>                
                   <select id="slt_usuario" class="form-control" style="width: 100%" name="slt_usuario" onchange="crearHref()">
                     <option value=''></option>
@@ -123,7 +125,7 @@
                       }           
                     ?>
                   </select>
-                </div>    
+                </div>       
                 <div class="col-md-2">
                   <label>Estados </label>                
                   <select id="slt_estados" class="form-control" style="width: 100%" name="slt_estados" onchange="crearHref()">

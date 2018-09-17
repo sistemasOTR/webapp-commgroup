@@ -79,6 +79,8 @@
 		public function getEnviadasMultiusuario(){ return $this->_enviadasMultiusuario; }
 		public function setEnviadasMultiusuario($enviadasMultiusuario){ $this->_enviadasMultiusuario = $enviadasMultiusuario; }
 
+		
+
 		/*#############*/
 		/* CONSTRUCTOR */
 		/*#############*/
@@ -99,6 +101,7 @@
 			$this->setPasswordAux('');		
 			$this->setCambioRol(false);
 			$this->setEnviadasMultiusuario(false);
+			
 		}
 
 		/*###################*/
@@ -288,6 +291,7 @@
 
 				$this->setCambioRol($filas['cambio_rol']);
 				$this->setEnviadasMultiusuario($filas['enviadas_multiusuario']);
+				
 			}
 		}
 
@@ -308,6 +312,7 @@
 			$this->setPasswordAux('');				
 			$this->setCambioRol(false);
 			$this->setEnviadasMultiusuario(false);
+			
 		}
 
 		private function createTable()
@@ -436,6 +441,23 @@
 				throw new Exception($e->getMessage());		
 			}					
 		}
+
+			public function updateUserEstado($id)
+			{		
+				try {
+					
+					# Query 			
+					$query="UPDATE usuario SET
+									estado='true'							
+								WHERE id=".$id;
+
+					# Ejecucion
+					return SQL::update(false,$query);	
+
+				} catch (Exception $e) {
+					throw new Exception($e->getMessage());		
+				}					
+			}
 
 		public function updatePerfilUsuario($id,$perfil)
 		{		

@@ -156,6 +156,9 @@
               <!-- LICENCIAS -->
               <?php include_once PATH_VISTA.'Notificaciones/licencias.php'; ?>
               <!-- FIN LICENCIAS -->
+              <!-- ASISTENCIAS -->
+              <?php include_once PATH_VISTA.'Notificaciones/asistencia.php'; ?>
+              <!-- FIN ASISTENCIAS -->
 
               <li class="dropdown user user-menu">
                 </a>

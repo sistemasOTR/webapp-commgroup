@@ -142,7 +142,20 @@
 			}
 		}
         
-        public function crearCategoria($categoria){
+        public function fechaBajaLegajo($fecha,$id){
+			try {
+				$legajo = new Legajos;
+				$legajo->setId($id);
+				$legajo=$legajo->select();
+
+				$legajo->setFechaBaja($fecha);				
+				$legajo->delete(false);
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+		public function crearCategoria($categoria){
 			try {
 				$legajo = new LegajosCategorias;
 				$legajo->setCategoria($categoria);

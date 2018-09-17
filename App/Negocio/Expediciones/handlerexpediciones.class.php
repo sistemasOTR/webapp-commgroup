@@ -302,6 +302,27 @@
 			}
 		}
 
+		public function seleccionarAllComprasByFiltros($fdesde, $fhasta, $tipo_expe, $estados_expe){
+					
+
+					try {
+						$handler = new HandlerConsultasControl;
+
+						$data = $handler->seleccionarTodasComprasByFiltros($fdesde, $fhasta,$tipo_expe,$estados_expe);
+
+						if(count($data)==1){
+							$data = array('' => $data );                   
+							return $data;
+						}				
+						else{
+							return $data;
+						}
+					
+					} catch (Exception $e) {
+						throw new Exception($e->getMessage());				
+					}
+				}
+
 		public function guardarItemExpedicion($fecha,$usuario,$detalle,$observaciones,$item,$cant,$estados,$entregada,$plaza){
 			try {
 
@@ -862,6 +883,25 @@
 				$handler = new ExpedicionesEnvios;
 
 				$data = $handler->selectByNroEnvio($idenviado);
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		public function selectByIdEnviado($id_numero)
+		{
+			try {
+					
+				$handler = new ExpedicionesEnviados;
+
+				$data = $handler->selectByIdEnviado($id_numero);
 				if(count($data)==1){
 					$data = array('' => $data );                   
 					return $data;

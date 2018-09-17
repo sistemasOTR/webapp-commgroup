@@ -7,21 +7,24 @@
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
   include_once PATH_NEGOCIO."Modulos/handlercelulares.class.php";
   include_once PATH_NEGOCIO."Modulos/handlerlegajos.class.php"; 
+  include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php";
 
 
   $url_update = PATH_VISTA.'Modulos/UsuariosAdmin/action_update_usuario.php';  
   $url_delete = PATH_VISTA.'Modulos/UsuariosAdmin/action_delete_usuario.php';  
+  
   $url_volver = "?view=usuarioABM";
-
+  $dFechas=new Fechas;
   $id = (isset($_GET["id"])?$_GET["id"]:"");
-
+ 
   $user=null;
   if(!empty($id)){
     $handler = new HandlerUsuarios;
     $user = $handler->selectById($id);
     $handlerLegajo= new HandlerLegajos;
     $legajo = $handlerLegajo->seleccionarLegajos($id);
-    // var_dump($legajo);
+
+    // var_dump($user->getUsuarioPerfil()->getId());
     // exit();
   }
 
@@ -47,7 +50,9 @@
   $handlerP = new HandlerPerfiles;
   $arrPerfiles = $handlerP->selectTodosNoAdmin(); 
 
-
+  
+  // var_dump($url_activar);
+  // exit(); 
   $url_impresion_celu = PATH_VISTA.'Modulos/Herramientas/Celulares/imprimir_comodato.php?'; 
   $url_impresion_celu_baja = PATH_VISTA."Modulos/Herramientas/Celulares/imprimir_baja_comodato.php?"; 
 ?>
@@ -222,7 +227,7 @@
                     <input type="number" class="form-control" id="legajo" name="legajo"  value='<?php echo $num_legajo; ?>'>
                   </div>
 
-                  <div class="col-md-12" style="margin-top: 20px;">  
+                  <div class="col-md-6" style="">  
                     <label>Plaza</label>                          
                     <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" required="">                    
                       <option></option>
@@ -238,7 +243,21 @@
                         }                      
                       ?>                      
                     </select>                  
-                  </div>                  
+                  </div>
+
+                  <?php  if ($user->getUsuarioPerfil()->getId()!=6) {
+
+                    if ($legajo) {
+                    if(!empty($legajo->getFechaBaja())){
+                   if ($legajo->getFechaBaja()->format('d-m-Y')!='01-01-1900') {
+                    // var_dump($legajo->getFechaBaja());
+                    ?> 
+
+                  <div class="col-md-4 Nocliente">
+                    <label for="apellido" class="text-red">Fecha Baja</label>
+                    <input type="text" class="form-control text-red" id="fecha_baja" name="fecha_baja" disabled  value='<?php echo $legajo->getFechaBaja()->format('d-m-Y'); ?>'>
+                  </div>
+                  <?php } } } }?>                 
                 </div>
 
                 <div class="col-md-6">
@@ -286,7 +305,35 @@
 
           <div class="box-footer">
             <a href='<?php echo $url_volver; ?>' class="pull-left btn btn-default"><i class="fa fa-chevron-left"></i> Volver</a>
-            <a class="btn btn-danger pull-right" href="#" data-toggle='modal' data-target='#modalEliminar'><i class="fa fa-trash-o"></i> Eliminar Usuario</a>
+            <?php if ($user->getUsuarioPerfil()->getId()!=6) {
+
+            if ($legajo) {
+              if(!empty($legajo->getFechaBaja())){
+
+            if ($legajo->getFechaBaja()->format('d-m-Y')!='01-01-1900') { 
+              $url_activar = PATH_VISTA.'Modulos/UsuariosAdmin/action_activar_usuario.php?id_aprobar='.$user->getId().'&id_legajo='.$legajo->getId().'&perfil='.$user->getUsuarioPerfil()->getId(); ?>
+              <a class="btn btn-primary pull-right" href="<?php echo $url_activar ?>"><i class="fa fa-check"></i> Activar Usuario</a>
+              <script>
+                $(document).ready(function() {
+                $("#delete_user").hide();
+                });     
+              </script>
+              <?php } } } 
+               }else{
+                
+                if ($user->getEstado()==0) { 
+                  $url_activar_cli = PATH_VISTA.'Modulos/UsuariosAdmin/action_activar_usuario.php?id_aprobar='.$user->getId().'&perfil='.$user->getUsuarioPerfil()->getId(); ?>
+                <a class="btn btn-primary pull-right" href="<?php echo $url_activar_cli ?>"><i class="fa fa-check"></i> Activar Usuario</a> 
+                <script>
+                $(document).ready(function() {
+                $("#delete_user").hide();
+                });     
+              </script> 
+
+               <?php } } ?>
+               
+            <a class="btn btn-danger pull-right" href="#" data-toggle='modal' id="delete_user" data-target='#modalEliminar'><i class="fa fa-trash-o"></i> Eliminar Usuario</a> 
+         
             <button type="submit" style="margin-right: 15px" class="btn btn-success pull-right"><i class="fa fa-save"></i> Guardar</button>
           </div>          
         </form>
@@ -301,7 +348,8 @@
 				<ul class="nav nav-tabs">
 					<li class='active'><a href="#tab_1" data-toggle="tab" aria-expanded="true">Líneas</a></li>
 					<li class=''><a href="#tab_2" data-toggle="tab" aria-expanded="false">Equipos</a></li>
-					<li class=''><a href="#tab_3" data-toggle="tab" aria-expanded="false">Impresoras</a></li>
+          <li class=''><a href="#tab_3" data-toggle="tab" aria-expanded="false">Impresoras</a></li>
+					<li class=''><a href="#tab_4" data-toggle="tab" aria-expanded="false">Licencias</a></li>
 				</ul>
 				<div class="tab-content col-xs-12">
 		          	<div class='tab-pane active' id="tab_1">
@@ -311,7 +359,10 @@
 		        		<?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/equipos_usuario.php'; ?>
 	        		</div>
 		          	<div class='tab-pane' id="tab_3">
-		        		<?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/impresoras_usuario.php'; ?>
+                <?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/impresoras_usuario.php'; ?>
+              </div>
+              <div class='tab-pane' id="tab_4">
+		        		<?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/cantidad_licencias.php'; ?>
 	        		</div>
         		</div>
         	</div>
@@ -424,13 +475,26 @@
         <input type="hidden" name="id" value=<?php echo $user->getId();?>>  
         <input type="hidden" name="nombre" value=<?php echo $user->getNombre();?>>  
         <input type="hidden" name="apellido" value=<?php echo $user->getApellido();?>>  
-
+        <input type="hidden" name="perfil" value=<?php echo $user->getUsuarioPerfil()->getId();?>>  
+        <?php if ($user->getUsuarioPerfil()->getId()!=6) {?>
+        <input type="hidden" name="legajo_id" value=<?php echo $legajo->getId();?>> 
+        <?php } ?> 
         <div class="modal-body">
+        <div class="row">
+         <?php if ($user->getUsuarioPerfil()->getId()!=6) {?> 
+        <div class="col-md-4">
+          <label>Fecha Baja</label>
+        <input type="date" name="fecha_baja" id="fecha_baja" value="<?php echo $dFechas->FechaActual(); ?>" class="form-control">  
+        </div>
+        <?php } ?> 
+        <div class="col-md-8">
           <div id="mensaje_eliminar">
             <P>
               Se eliminará el usuario <b><?php echo $user->getNombre()." ".$user->getApellido(); ?></b>. <br>              
               ¿Desea continuar?
             </P>
+          </div>
+        </div>
           </div>                    
         </div>
         <div class="modal-footer">
@@ -442,22 +506,12 @@
   </div>
 </div>
 
-  <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function() {
       $("#slt_perfil").select2({
           placeholder: "Seleccionar",                  
       });
-    }); 
-
-    $(document).ready(function() {
-      if($("#slt_perfil").val()==6){ 
-      $(".Nocliente").hide();                 
-      $("#asignaciones_user").hide();                 
-      }else{
-      $(".Nocliente").show();
-      $("#asignaciones_user").show();  
-      };
-    });   
+    });  
 
      $(document).ready(function() {
       $("#slt_categoria").select2({
@@ -468,5 +522,16 @@
       $("#slt_plaza").select2({
           placeholder: "Seleccionar",                  
       });
-    });     
+    }); 
+
+    $(document).ready(function() {
+      if($("#slt_perfil").val()==6){ 
+      $(".Nocliente").hide();                 
+      $("#asignaciones_user").hide();                
+      }else{
+      $(".Nocliente").show();
+      $("#asignaciones_user").show(); 
+      };
+    });   
+
   </script>

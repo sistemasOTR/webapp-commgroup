@@ -17,6 +17,9 @@
         $url_estadisticas_empresas = "index.php?view=estadisticas_empresas&empresa=2";
         $url_estadisticas_clientes = "index.php?view=estadisticas_clientes";
         $url_estadisticas_tickets = "index.php?view=estadisticas_tickets&fplaza=1";
+        $url_estadisticas_licencias = "index.php?view=estadisticas_licencias";
+        $url_estadisticas_expediciones = "index.php?view=estadisticas_expediciones";
+        $url_estadisticas_compras = "index.php?view=estadisticas_compras";
         $url_configuraciones = "index.php?view=configuraciones";
         $url_importacion = "index.php?view=importacion";
         $url_importacion_manual = "index.php?view=importacion_manual";
@@ -27,6 +30,8 @@
         $url_ayuda = "index.php?view=ayuda";
         $url_grupo_ayuda = "index.php?view=grupo_ayuda";
         $url_documento_ayuda = "index.php?view=documento_ayuda";
+
+        $url_asistencias = "index.php?view=asistencias";
 
         $url_legajos_carga = "index.php?view=legajos_carga";
         $url_sueldos_remun = "index.php?view=sueldos_remun";
@@ -179,6 +184,22 @@
             <?php 
               }
             ?>  
+
+            <?php
+              if($permiso->getModuloLicenciasBoolean()){ 
+                if($esCoordinador){   
+            ?>
+              <li class="treeview" id="mnu_asistencias">
+                <a href="#"><i class="fa fa-user"></i> <span>Asistencias</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li id="mnu_asistencias_presentismo">
+                      <a href=<?php echo $url_asistencias; ?>>
+                        <i class="fa fa-check-square-o"></i> <span>Presentismo</span>
+                      </a>
+                    </li> 
+                </ul>
+              </li>
+                <?php } }?> 
 
             <?php
               if($permiso->getModuloTicketsBoolean()){  
@@ -625,6 +646,21 @@
               <li id="mnu_estadisticas_tickets">
                 <a href=<?php echo $url_estadisticas_tickets; ?>>
                   <i class="fa fa-bar-chart"></i> <span>Est.Tickets</span> </i>
+                </a>              
+              </li>
+             <li id="mnu_estadisticas_licencias">
+                <a href=<?php echo $url_estadisticas_licencias; ?>>
+                  <i class="fa fa-pie-chart"></i> <span>Est.Licencias</span> </i>
+                </a>              
+              </li>
+              <li id="mnu_estadisticas_expediciones">
+                <a href=<?php echo $url_estadisticas_expediciones; ?>>
+                  <i class="fa fa-line-chart"></i> <span>Est.Expediciones</span> </i>
+                </a>              
+              </li>
+               <li id="mnu_estadisticas_compras">
+                <a href=<?php echo $url_estadisticas_compras; ?>>
+                  <i class="fa fa-bar-chart"></i> <span>Est.Compras</span> </i>
                 </a>              
               </li>
             <?php } ?>
