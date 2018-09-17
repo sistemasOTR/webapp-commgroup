@@ -96,7 +96,7 @@
             <!-- AdminLTE App -->
             <script src=<?php echo PATH_VISTA.'assets/dist/js/app.min.js'; ?> type="text/javascript"></script>
             <!-- CK Editor -->
-            <script src="//cdn.ckeditor.com/4.4.3/full/ckeditor.js"></script>
+            <script src="//cdn.ckeditor.com/4.10.1/standard/ckeditor.js"></script>
             <!-- Treeview -->
             <script src=<?php echo PATH_VISTA.'assets/plugins/treeview/treeview.js'; ?>></script>
             <!-- Select -->                                      

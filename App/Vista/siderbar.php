@@ -83,6 +83,8 @@
         $url_guias_seguimiento = "index.php?view=guias_seguimiento";
         $url_agenda = "index.php?view=agenda";
         $url_agenda_rubros = "index.php?view=agenda_rubros";
+
+        $url_kanban_listado = "index.php?view=kanban";
       
         $perfil =$usuarioActivoSesion->getUsuarioPerfil()->getId();
         $url_cambiar_side=PATH_VISTA.'Modulos/UsuariosAdmin/action_cambiar_rol_usuario_side.php?id=';
@@ -822,6 +824,23 @@
                 </ul>              
               </li>   
             <?php } ?>
+
+            
+              <li class="treeview" id="mnu_kanban">
+                <a href="#"><i class="fa  fa-list-ol "></i> <span>Tareas</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li id="mnu_kanban_listado">
+                    <a href=<?php echo $url_kanban_listado ?>> 
+                      <i class="fa  fa-list-ol"></i> <span>Solicitudes</span> </i>
+                    </a>
+                  </li><!-- 
+                  <li id="mnu_agenda_rubros">
+                    <a href=<?php echo $url_agenda_rubros ?>> 
+                      <i class="fa fa-list"></i> <span>Rubros</span> </i>
+                    </a>
+                  </li> -->
+                </ul>              
+              </li>   
 
              <?php
               if($usuarioActivoSesion->getId()==10164){    

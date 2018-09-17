@@ -750,6 +750,14 @@
 
 
 	      /*########*/
+		 /* KANBAN */
+		/*########*/
+		case 'kanban':
+			$include = 'Modulos/Kanban/listado.php';		
+			break;
+
+
+		  /*########*/
 		 /* AGENDA */
 		/*########*/
 		case 'agenda':
