@@ -114,6 +114,11 @@
 		        						estado_kb,
 		        						prioridad,
 		        						plaza,
+		        						id_enc,
+		        						inicio_est,
+		        						fin_est,
+		        						inicio_real,
+		        						fin_real,
 		        						estado
 		        						
 	        			) VALUES (
@@ -124,6 +129,11 @@
 	        							0,
 	        							".$this->getPrioridad().",
 	        							".$this->getPlaza().",
+	        							".$this->getIdEnc().",
+	        							'".$this->getInicioEst()."',
+	        							'".$this->getFinEst()."',
+	        							'".$this->getInicioReal()."',
+	        							'".$this->getFinReal()."',
 	        							'".$this->getEstado()."'
 
 	        							
@@ -348,6 +358,42 @@
 			}
 
 		}
+
+		public function getSolById($id)
+		{			
+			try {
+											
+				# Query
+				$query="SELECT * FROM kanban WHERE estado ='true' AND id = ".$id;
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new Kanban);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
+
+		public function updateEncargado($conexion,$id,$id_enc)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE kanban SET
+        						id_enc=".$id_enc."
+							WHERE id=".$id;
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
 
 
 	}

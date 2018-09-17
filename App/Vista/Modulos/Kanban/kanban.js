@@ -18,6 +18,17 @@ $(document).ready(function(){
   });
 });
 
+function asigUser(id) {
+    id_tarea = document.getElementById('asig_'+id).getAttribute('data-id');
+    id_user = document.getElementById('asig_'+id).getAttribute('data-iduser');
+
+    console.log(id_tarea, id, id_user);
+
+
+    document.getElementById('id_tarea').value = id_tarea;
+    document.getElementById('slt_usuario').value = id_user;
+}
+
 
     // $(document).ready(function() {
     //     $('#tabla-sueldos').DataTable({

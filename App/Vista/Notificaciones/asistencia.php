@@ -19,7 +19,12 @@
     $fechahora=$dFechas->FechaHoraActual();
     $ultimoRegistro=$handlerA->selecTop($user->getId());
     // var_dump($ultimoRegistro,$dFechas->FechaActual());
-   $ultimaFecha=$ultimoRegistro->getFecha()->format('Y-m-d');
+    if (!empty($ultimoRegistro)) {
+       $ultimaFecha=$ultimoRegistro->getFecha()->format('Y-m-d');
+    } else {
+      $ultimaFecha = $dFechas->RestarDiasFechaActual(1);
+    }
+  
    $horaAct= new DateTime(date('H:i'));
     // var_dump($horaAct);
     //  exit();
@@ -278,9 +283,9 @@
                 <input type="hidden" name="user_id" id="user_id" class="form-control">    
                 <input type="hidden" name="estado" id="estado" class="form-control">    
                        
-              <div class="col-md-8">
+              <div class="col-md-12">
                 <label>Observacion</label> 
-                <textarea class='form-control' id="observacion" name="observacion" rows="3" cols="50" name="observacion"></textarea>
+                <textarea class='form-control' id="observacion" name="observacion" rows="3" cols="50" ></textarea>
               </div>
         </div>
       </div>

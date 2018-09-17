@@ -12,7 +12,7 @@
 	
 
 	$err = "../../../../index.php?view=usuarioABM&id=".$id_aprobar."&err=";     		
-	$info = "../../../../index.php?view=usuarioABM&id=".$id_aprobar."info=";     		
+	$info = "../../../../index.php?view=usuarioABM&id=".$id_aprobar."&info=";     		
 
 	try
 	{							

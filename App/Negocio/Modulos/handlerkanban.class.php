@@ -55,16 +55,51 @@
 				$handlerHist->setDescripcion($last->getDescripcion());
 				$handlerHist->setIdKanban($last->getId());
 				$handlerHist->setIdOperador($last->getIdSol());
-				// $handlerHist->setIdEnc(0);     	
-				// $handlerHist->setInicioEst($last->getInicioEst());     	
-				// $handlerHist->setFinEst($last->getFinEst());
+				$handlerHist->setIdEnc(0);     	
+				$handlerHist->setInicioEst('');     	
+				$handlerHist->setFinEst('');
 				$handlerHist->setEstadoKb(0);
 				$handlerHist->setPrioridad($last->getPrioridad());     	
 				$handlerHist->setFechaHora($fechahora);     	
-				// $handlerHist->setInicioReal($last->getInicioReal());     	
-				// $handlerHist->setFinReal($last->getFinReal());
+				$handlerHist->setInicioReal('');     	
+				$handlerHist->setFinReal('');
 				// $handlerHist->setSector($last->getSector());
 				$handlerHist->setTipoCambio(0);
+				$handlerHist->setEstado(true);
+
+				$handlerHist->insert(null);
+
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
+		public function asignarUsuario($id,$id_enc){
+			try {
+					
+				$handler = new Kanban;
+
+				$handler->updateEncargado(null,$id,$id_enc);
+
+				$last = $handler->getSolById($id);
+				$f = new Fechas;
+				$fechahora = $f->FechaHoraActual();
+
+				$handlerHist = new KanbanHistoria;
+				$handlerHist->setTitulo($last->getTitulo());     	
+				$handlerHist->setDescripcion($last->getDescripcion());
+				$handlerHist->setIdKanban($id);
+				$handlerHist->setIdOperador($last->getIdSol());
+				$handlerHist->setIdEnc($id_enc);
+				$handlerHist->setInicioEst($last->getInicioEst()->format('Y-m-d'));
+				$handlerHist->setFinEst($last->getFinEst()->format('Y-m-d'));
+				$handlerHist->setEstadoKb($last->getEstadoKb());
+				$handlerHist->setPrioridad($last->getPrioridad());     	
+				$handlerHist->setFechaHora($fechahora);
+				$handlerHist->setInicioReal($last->getInicioReal()->format('Y-m-d'));
+				$handlerHist->setFinReal($last->getFinReal()->format('Y-m-d'));
+				$handlerHist->setTipoCambio(2);
 				$handlerHist->setEstado(true);
 
 				$handlerHist->insert(null);

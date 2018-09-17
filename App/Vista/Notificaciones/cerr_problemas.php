@@ -15,9 +15,11 @@
     $handlerSist = new HandlerSistema;
     $arrCerrProb = $handlerSist->getCerrProb($fdesde,$fHoy,$fplaza);
     $total = 0;
-    foreach ($arrCerrProb as $key => $value) {
-      $total = $total + $value->CANT;
+    if (!empty($arrCerrProb)) {
+      foreach ($arrCerrProb as $key => $value) {
+        $total = $total + $value->CANT;
 
+      }
     }
 
     $url_servicios = "index.php?view=servicio&fdesde=".$fdesde."&fhasta=".$fHoy."&festado=8&fcliente=";

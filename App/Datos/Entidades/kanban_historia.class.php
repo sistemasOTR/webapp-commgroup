@@ -120,6 +120,11 @@
 		        						prioridad,
 		        						fecha_hora,
 		        						tipo_cambio,
+		        						id_enc,
+		        						inicio_est,
+		        						fin_est,
+		        						inicio_real,
+		        						fin_real,
 		        						estado
 		        						
 	        			) VALUES (
@@ -131,6 +136,11 @@
 	        							".$this->getPrioridad().",     	
 	        							'".$this->getFechaHora()."',
 	        							".$this->getTipoCambio().",
+	        							".$this->getIdEnc().",
+	        							'".$this->getInicioEst()."',
+	        							'".$this->getFinEst()."',
+	        							'".$this->getInicioReal()."',
+	        							'".$this->getFinReal()."',
 	        							'".$this->getEstado()."'
 
 	        							
