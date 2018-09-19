@@ -7,6 +7,7 @@
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
   include_once PATH_NEGOCIO."Modulos/handlerasistencias.class.php"; 
   include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php"; 
+  include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php"; 
 
 
     $dFechas = new Fechas;
@@ -154,8 +155,20 @@
     $activoCount=0;
     $sinSalida=0;
     $trabajando='asdas';
-     
-    $arrGestorr = $handlerUsuarios->selectGestoresByPlaza(1); //$user->getUserPlaza()
+    $id='';
+    $handlerplazas=new HandlerPlazaUsuarios();
+    $plazasOtr=$handlerplazas->selectTodas();
+
+    foreach ($plazasOtr as $key => $value) {   
+    
+      if ($user->getAliasUserSistema()==strtoupper($value->getNombre())) {
+
+        $id=$value->getId();
+      }
+    
+    }    
+
+    $arrGestorr = $handlerUsuarios->selectGestoresByPlaza($id); 
       
                     foreach ($arrGestorr as $key => $value) {
                       $trabajando='Inactivo';

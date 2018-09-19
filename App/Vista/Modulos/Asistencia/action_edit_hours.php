@@ -7,7 +7,7 @@
     $dFecha= new Fechas;
     $handler=new HandlerAsistencias;
 
-	$hora = (isset($_POST["hora"])?$_POST["hora"]:'');
+	$hora = (isset($_POST["hora_edit"])?$_POST["hora_edit"]:'');
 
 	$edit_id = (isset($_POST["edit_id"])?$_POST["edit_id"]:'');
 

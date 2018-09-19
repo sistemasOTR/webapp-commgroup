@@ -116,7 +116,7 @@
                           
                             if (!empty($asistencias[$i])) {
                               $ingreso=$asistencias[$i]->getFecha()->format('H:i');
-                            echo"<td>".$ingreso." "."<a href='#' id='".$asistencias[$i]->getId()."' data-editfecha='".$fdesde."' data-idi='".$asistencias[$i]->getId()."' data-toggle='modal' data-target='#modal-editar' class='fa fa-refresh text-yellow' onclick='cargarDatos(".$asistencias[$i]->getId().")'></a></td> ";
+                            echo"<td>".$ingreso." "."<a href='#' id='".$asistencias[$i]->getId()."' data-edithora='".$ingreso."' data-editfecha='".$fdesde."' data-idi='".$asistencias[$i]->getId()."' data-toggle='modal' data-target='#modal-editar' class='fa fa-refresh text-yellow' onclick='cargarDatos(".$asistencias[$i]->getId().")'></a></td> ";
                                
                                $arrValor[]=$asistencias[$i]->getFecha()->format('H:i');
                              
@@ -205,7 +205,7 @@
                           
                             if (!empty($asistencias[$i])) {
                               $ingreso=$asistencias[$i]->getFecha()->format('H:i');
-                            echo"<td>".$ingreso." "."<a href='#' id='".$asistencias[$i]->getId()."' data-editfecha='".$fdesde."' data-idi='".$asistencias[$i]->getId()."' data-toggle='modal' data-target='#modal-editar' class='fa fa-refresh text-yellow' onclick='cargarDatos(".$asistencias[$i]->getId().")'></a></td> ";
+                            echo"<td>".$ingreso." "."<a href='#' id='".$asistencias[$i]->getId()."' data-edithora='".$ingreso."' data-editfecha='".$fdesde."' data-idi='".$asistencias[$i]->getId()."' data-toggle='modal' data-target='#modal-editar' class='fa fa-refresh text-yellow' onclick='cargarDatos(".$asistencias[$i]->getId().")'></a></td> ";
                                
                                $arrValor[]=$asistencias[$i]->getFecha()->format('H:i');
                              
@@ -313,7 +313,7 @@
               </div>         
               <div class="col-md-8">
                 <label>Observaciones</label> 
-                <textarea id="observacion" rows="3" cols="50" name="observacion"></textarea>
+                <textarea id="observacion"  rows="3" cols="50" style="width: 430px; color: black;" name="observacion"></textarea>
               </div>
         </div>
       </div>
@@ -342,13 +342,13 @@
           <div class="row">
               <div class="col-md-3">
                 <label>Horario</label> 
-                <input type="time" name="hora" id="hora"required class="form-control" value="">
+                <input type="time" name="hora_edit" id="hora_edit" required class="form-control" value="">
                 <input type="hidden" name="edit_id" id="edit_id" class="form-control">     
                 <input type="hidden" name="fecha_edit" id="fecha_edit" class="form-control">    
               </div>         
               <div class="col-md-8">
                 <label>Observaciones</label> 
-                <textarea id="observacion" rows="3" cols="50" name="observacion"></textarea>
+                <textarea id="observacion" rows="3" cols="50" style="width: 430px; color: black;" name="observacion"></textarea>
               </div>
         </div>
       </div>
@@ -385,15 +385,24 @@
     estados= document.getElementById(id).getAttribute('data-estados');
     fecha= document.getElementById(id).getAttribute('data-fecha');
     fecha_edit= document.getElementById(id).getAttribute('data-editfecha');
-   
+   hora= document.getElementById(id).getAttribute('data-edithora');
+
     document.getElementById("cord_id").value = cord_id;
     document.getElementById("edit_id").value = edit_id;
     document.getElementById("estados").value = estados;
     document.getElementById("fecha").value = fecha;
     document.getElementById("fecha_edit").value = fecha_edit;
- 
+    document.getElementById("hora_edit").value = hora;
     
-  }
+  } 
+  // function editarDatos(id){
+
+    
+
+    
+
+    
+  // }
 
   $('#sandbox-container .input-daterange').datepicker({
       format: "dd/mm/yyyy",
