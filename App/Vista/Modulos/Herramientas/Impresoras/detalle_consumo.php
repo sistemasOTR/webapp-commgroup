@@ -23,7 +23,7 @@
   $user = $usuarioActivoSesion;
   $fserialNro=(isset($_GET["fserialNro"])?$_GET["fserialNro"]:'');
   $url_action_guardar = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_guardar.php';
-  $arrUsuarios = $handlerUs->selectGestores();
+  $arrUsuarios = $handlerUs->selectGestores(null);
   $impresora = $handlerimpresoras->getDatosConSerial($fserialNro);
   $arrDatos = $handlerimpresoras->getAsignaciones($impresora['_serialNro']);
 

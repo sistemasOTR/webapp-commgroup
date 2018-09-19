@@ -483,11 +483,15 @@
 			}					
 		}
 
-		public function selectGestores()
-		{		
-			try {
-				
-				$query = "SELECT * FROM usuario WHERE estado='true' and id_tipo_usuario = 3 order by apellido";
+		public function selectGestores($plaza)
+		{	
+
+		try {
+				if (!empty($plaza)) {
+					$query = "SELECT * FROM usuario WHERE estado = 'true' AND id_tipo_usuario = 3 and id_plaza = ".$plaza." order by apellido";
+				}else{
+					$query = "SELECT * FROM usuario WHERE estado='true' and id_tipo_usuario = 3 order by apellido";
+				}
 				
 				# Ejecucion 				
 				$result = SQL::selectObject($query, new Usuario);

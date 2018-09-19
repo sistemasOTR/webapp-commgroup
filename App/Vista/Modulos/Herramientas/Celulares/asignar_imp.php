@@ -26,7 +26,7 @@
   $fgestorId=(isset($_GET["fgestorId"])?$_GET["fgestorId"]:0);
   $arrCoordinador = $handler->selectAllPlazasArray();
   $arrGestor = $handler->selectAllGestor($fplaza); 
-  $arrUsuarios = $handlerUs->selectGestores();
+  $arrUsuarios = $handlerUs->selectGestores(null);
 
   $url_detalle = "index.php?view=impresora_detalle";
   $url_asignacion = "index.php?view=asignar_imp";

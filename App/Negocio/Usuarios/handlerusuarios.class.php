@@ -437,10 +437,10 @@
 			}
 		}
 
-		public function selectGestores(){
+		public function selectGestores($plaza){
 			try{
 				$u = new Usuario;
-				$data = $u->selectGestores();				
+				$data = $u->selectGestores($plaza);				
 	
 				if(count($data)==1){
 					$data = array('' => $data );                   

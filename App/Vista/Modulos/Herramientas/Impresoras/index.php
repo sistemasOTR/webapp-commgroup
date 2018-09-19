@@ -48,7 +48,7 @@ echo "window.open('".PATH_VISTA."Modulos/Herramientas/Impresoras/imprimir_baja_c
   $arrPlaza = $handlerPlaza->selectTodas();
 
   $arrUsuarios = $handlerUs->selectEmpleados();
-  $arrGestores = $handlerUs->selectGestores();
+  $arrGestores = $handlerUs->selectGestores(null);
 
   $url_detalle = "index.php?view=impresora_detalle";
   $url_asignacion = "index.php?view=asignar_imp";

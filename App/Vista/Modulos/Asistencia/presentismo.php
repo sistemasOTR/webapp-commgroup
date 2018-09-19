@@ -5,17 +5,14 @@
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
   include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php"; 
-  include_once PATH_NEGOCIO."Modulos/handlerasistencias.class.php"; 
+  include_once PATH_NEGOCIO."Modulos/handlerasistencias.class.php";
+  include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php"; 
  
   $dFecha = new Fechas;
   $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
 
-  // $url_action_guardar_tipo = PATH_VISTA.'Modulos/Expediciones/action_item_abm.php';
-  // $url_action_eliminar_tipo = PATH_VISTA.'Modulos/Expediciones/action_itemeliminar.php';
   $url_action_agregar = PATH_VISTA.'Modulos/Asistencia/action_add_hours.php';
   $url_action_editar = PATH_VISTA.'Modulos/Asistencia/action_edit_hours.php';
-  // $url_action_publicar = PATH_VISTA.'Modulos/Expediciones/action_publicarcompra.php?id_usuario='.$usuarioActivoSesion->getId();
-
  
   $user = $usuarioActivoSesion;
 
@@ -23,17 +20,20 @@
   $handlerSistema = new HandlerSistema;
   $handlerAsistencia= new HandlerAsistencias;
   $handlerAsist=new HandlerAsistencias;
-  // $arrUsuarios = $handlerUsuarios->selectByPerfil("GESTOR");
-  //selectGestoresByPlaza
- 
- // var_dump($user->getUserSistema());
-  $arrGestor = $handlerUsuarios->selectGestoresByPlaza(1);//$user->getUserPlaza()
+  $id='';
+  $handlerplazas=new HandlerPlazaUsuarios();
+  $plazasOtr=$handlerplazas->selectTodas();
 
-  // $arrAsis=$handlerAsistencia->selectAsistenciasByFiltro($fdesde,$fusuario);
+    foreach ($plazasOtr as $key => $value) {   
+    
+      if ($user->getAliasUserSistema()==strtoupper($value->getNombre())) {
 
-   // var_dump($arrGestor);
-   //  exit();
-  
+        $id=$value->getId();
+      }
+    
+    }    
+
+  $arrGestor = $handlerUsuarios->selectGestores(intval($id));
 
  
 

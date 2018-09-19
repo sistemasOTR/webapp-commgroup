@@ -24,7 +24,7 @@
 
   $handlerUsuarios = new HandlerUsuarios;
   $arrUsuarios = $handlerUsuarios->selectEmpleados();
-  $arrGestores = $handlerUsuarios->selectGestores();
+  $arrGestores = $handlerUsuarios->selectGestores(null);
   $arrGestoresXPlaza = $handlerUsuarios->selectGestoresByPlaza($fplaza);
 
   $url_action_aprobar = PATH_VISTA.'Modulos/Ticket/action_aprobar.php?id=';  
