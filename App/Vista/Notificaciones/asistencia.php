@@ -215,7 +215,7 @@
                  }
                   }
 
-             $lista.="<li><a href='#' ><b>".$value->getNombre()." ".$value->getApellido()."</b><span ".$clase.">".$trabajando."</span></a> </li>";
+             $lista.="<li><a href='index.php?view=asistencias' ><b>".$value->getNombre()." ".$value->getApellido()."</b><span ".$clase.">".$trabajando."</span></a> </li>";
                 } 
                 ?>
     

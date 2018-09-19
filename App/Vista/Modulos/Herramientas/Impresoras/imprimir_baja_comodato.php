@@ -31,9 +31,9 @@
   
   $legajo_gestor = $handlerLeg->seleccionarLegajos($asignacion['_gestorId']);
   
-  $fmes = date('m');
-  $fdia = date('d');
-  $fyear = date('Y');
+  $fmes =  $asignacion['_fechaDev']->format('m');
+  $fdia =  $asignacion['_fechaDev']->format('d');
+  $fyear =  $asignacion['_fechaDev']->format('Y');
   $ffechaAsig = $asignacion['_fechaAsig']->format('d-m-Y');
 
   switch ($fmes) {

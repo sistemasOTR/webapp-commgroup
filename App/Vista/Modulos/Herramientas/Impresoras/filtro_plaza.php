@@ -41,22 +41,22 @@
                       if(!empty($arrGestores) || !empty($arrUsuarios)){
                         if ($fplaza != '') {
 
-                          foreach ($arrGestores as $user) {
+                          foreach ($arrGestores as $usuario) {
 
                             foreach ($arrGestor as $gestor) {
-                              if($fgestorId == $user->getId() && $user->getUserSistema() == $gestor->GESTOR11_CODIGO && $user->getTipoUsuario()->getNombre()!= 'Empresa'){
-                                echo "<option value='".$user->getId()."' selected>".$user->getApellido()." ".$user->getNombre()."</option>";
-                              } elseif ($user->getUserSistema() == $gestor->GESTOR11_CODIGO && $user->getTipoUsuario()->getNombre()!= 'Empresa') {
-                                echo "<option value='".$user->getId()."'>".$user->getApellido()." ".$user->getNombre()."</option>";
+                              if($fgestorId == $usuario->getId() && $usuario->getUserSistema() == $gestor->GESTOR11_CODIGO && $usuario->getTipoUsuario()->getNombre()!= 'Empresa'){
+                                echo "<option value='".$usuario->getId()."' selected>".$usuario->getApellido()." ".$usuario->getNombre()."</option>";
+                              } elseif ($usuario->getUserSistema() == $gestor->GESTOR11_CODIGO && $usuario->getTipoUsuario()->getNombre()!= 'Empresa') {
+                                echo "<option value='".$usuario->getId()."'>".$usuario->getApellido()." ".$usuario->getNombre()."</option>";
                                 }
                               }
                             }
                         } else {
-                          foreach ($arrUsuarios as $user) {
-                            if($fgestorId == $user->getId())
-                                echo "<option value='".$user->getId()."' selected>".$user->getApellido()." ".$user->getNombre()."</option>";
+                          foreach ($arrUsuarios as $usuario) {
+                            if($fgestorId == $usuario->getId())
+                                echo "<option value='".$usuario->getId()."' selected>".$usuario->getApellido()." ".$usuario->getNombre()."</option>";
                               else
-                                echo "<option value='".$user->getId()."'>".$user->getApellido()." ".$user->getNombre()."</option>";                  
+                                echo "<option value='".$usuario->getId()."'>".$usuario->getApellido()." ".$usuario->getNombre()."</option>";                  
                                 
                             }
                           }
