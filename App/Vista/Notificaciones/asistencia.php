@@ -211,12 +211,9 @@
                       }                     
                        
                  }
+                  }
 
              $lista.="<li><a href='#' ><b>".$value->getNombre()." ".$value->getApellido()."</b><span ".$clase.">".$trabajando."</span></a> </li>";
-                       
-        
-                
-                  }
                 } 
                 ?>
     

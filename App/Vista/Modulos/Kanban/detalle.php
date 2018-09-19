@@ -69,7 +69,7 @@
           $btn_accion = ' <a href="#" class="btn btn-info pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="2">A revisión <i class="fa fa-angle-double-right"></i></a>';
           break;
         case 2:
-          $btn_accion = ' <a href="#" class="btn btn-success pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="3">Terminar <i class="fa fa-angle-double-right"></i></a>';
+          $btn_accion = ' <a href="#" class="btn btn-success pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="3">Terminar <i class="fa fa-angle-double-right"></i></a> <a href="#" class="btn btn-warning pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="1" style="margin-right:10px;"><i class="fa fa-angle-double-left"></i> Volver</a>';
           break;
         
         default:
