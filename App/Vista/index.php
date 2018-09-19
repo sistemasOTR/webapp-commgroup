@@ -779,6 +779,9 @@
 		case 'kanban':
 			$include = 'Modulos/Kanban/listado.php';		
 			break;
+		case 'kanban_terminadas':
+			$include = 'Modulos/Kanban/lista_terminadas.php';		
+			break;
 
 
 		  /*########*/

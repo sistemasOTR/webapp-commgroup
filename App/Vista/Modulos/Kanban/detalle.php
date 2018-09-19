@@ -56,7 +56,7 @@
       }
 
       if ($solicitud->getInicioEst()->format('Y-m-d') != '1900-01-01') {
-        $inicio = 'Inicio estimado: '.$solicitud->getInicioEst()->format('d-m')."<br>Final estimado: ".$solicitud->getFinEst()->format('d-m');
+        $inicio = "Fecha Entraga:<br>".$solicitud->getFinEst()->format('d-m');
       } else {
         $inicio = '<i class="fa fa-lg fa-calendar-plus-o"></i> Sin fechas estimadas';
       }
@@ -70,6 +70,9 @@
           break;
         case 2:
           $btn_accion = ' <a href="#" class="btn btn-success pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="3">Terminar <i class="fa fa-angle-double-right"></i></a> <a href="#" class="btn btn-warning pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="1" style="margin-right:10px;"><i class="fa fa-angle-double-left"></i> Volver</a>';
+          break;
+        case 3:
+          $btn_accion = '<i class="fa fa-check text-green pull-right"></i>';
           break;
         
         default:
@@ -86,13 +89,12 @@
                   <!-- /.box-header -->
                   <div class="box-body div-conteiner">';
   
-  $respuesta .= '<div class="asignaciones col-xs-12 with-border"><a href="#" id="fecha_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-inicio="'.$solicitud->getInicioEst()->format('Y-m-d').'" data-fin="'.$solicitud->getFinEst()->format('Y-m-d').'" data-toggle="modal" data-target="#modal-fechas" class="col-md-4 text-black" onclick="asigFecha('.$solicitud->getId().')">'.$inicio.'</a><a href="#" id="asig_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-iduser="'.$userAsignado.'" data-toggle="modal" data-target="#modal-usuario" class="col-md-4 text-black" onclick="asigUser('.$solicitud->getId().')">'.$asig.'</a><a href="" class="col-md-4 text-black">Prioridad: '.$prior.'</a></span></div>';
-  $respuesta .= '<div class="col-xs-12"><hr></div>';
+  $respuesta .= '<div class="asignaciones col-xs-12 with-border"><a href="#" id="fecha_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-inicio="'.$solicitud->getInicioEst()->format('Y-m-d').'" data-fin="'.$solicitud->getFinEst()->format('Y-m-d').'" data-toggle="modal" data-target="#modal-fechas" class="col-md-4 col-xs-6 text-black" onclick="asigFecha('.$solicitud->getId().')">'.$inicio.'</a><a href="#" id="asig_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-iduser="'.$userAsignado.'" data-toggle="modal" data-target="#modal-usuario" class="col-md-4 col-xs-6 text-black" onclick="asigUser('.$solicitud->getId().')">'.$asig.'</a><a href="" class="col-md-4 col-xs-12 text-black">Prioridad: '.$prior.'</a></span></div>';
   $respuesta .= '<div class="col-xs-12"><h3>Descripción</h3></div>';
   $respuesta .= '<div class="col-xs-12" style="border: 1px solid #eee;border-radius:5px;min-height:150px;" id="descripcion">'.$solicitud->getDescripcion().'</div>';
 
-  $respuesta .= '<div class="col-xs-12"><h3>Acciones</h3></div>';
-  $respuesta .= '<div class="col-xs-12">';
+  $respuesta .= '<div class="col-xs-12"><h4>Historico</h4></div>';
+  $respuesta .= '<div class="col-xs-12 historia">';
   if (!empty($arrSolHistorico)) {
     foreach ($arrSolHistorico as $histo) {
       $operador = $handlerUs->selectById(intval($histo->getIdOperador()));
@@ -142,6 +144,7 @@
 
 $respuesta.= '</div>
                 </div>
+                <div class="box-footer"><i class="fa fa-commenting-o"></i></div>
                 </div>';
   echo $respuesta;
 ?>

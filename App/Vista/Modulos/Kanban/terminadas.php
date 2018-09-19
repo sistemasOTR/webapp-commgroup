@@ -2,12 +2,12 @@
 </style>
 
 <?php 
-	$arrRev = $handlerKB->selectSolicitudesByEstado(2);
-	$cantRev = count($arrRev);
+	$arrTerminadas = $handlerKB->selectSolicitudesByEstado(3);
+	$cantTerminadas = count($arrTerminadas);
 
-	$list_Rev = '';
-	if (!empty($arrRev)) {
-		foreach ($arrRev as $key => $value) {
+	$list_terminadas = '';
+	if (!empty($arrTerminadas)) {
+		foreach ($arrTerminadas as $key => $value) {
 			switch ($value->getPrioridad()) {
 				case 0:
 		          $prior = '<span class="label label-success">BAJA</span>';
@@ -36,11 +36,11 @@
 			}
 
 			if ($value->getInicioEst()->format('Y-m-d') != '1900-01-01') {
-				$inicio = $value->getFinEst()->format('d-m');
+				$inicio = $value->getInicioEst()->format('d-m');
 			} else {
 				$inicio = '<i class="fa fa-lg fa-calendar-plus-o"></i>';
 			}
-			$list_Rev .= '<li class="item-flex"><a href="#" class="btn-sol" data-idsol="'.$value->getId().'" data-idoperador="'.$user->getId().'">'.$value->getTitulo().' </a><span class="lsp"><a href="#" id="fecha_'.$value->getId().'" data-id="'.$value->getId().'" data-inicio="'.$value->getInicioEst()->format('Y-m-d').'" data-fin="'.$value->getFinEst()->format('Y-m-d').'" data-toggle="modal" data-target="#modal-fechas" class="btn-enc" onclick="asigFecha('.$value->getId().')">'.$inicio.'</a><a href="#" id="asig_'.$value->getId().'" data-id="'.$value->getId().'" data-iduser="'.$userAsignado.'" data-toggle="modal" data-target="#modal-usuario" class="btn-enc" onclick="asigUser('.$value->getId().')">'.$asig.'</a><a href="">'.$prior.'</a></span></li>';
+			$list_terminadas .= '<li class="item-flex"><a href="#" class="btn-sol" data-idsol="'.$value->getId().'" data-idoperador="'.$user->getId().'">'.$value->getTitulo().' </a><span class="lsp"><a href="#" id="fecha_'.$value->getId().'" data-id="'.$value->getId().'" data-inicio="'.$value->getInicioEst()->format('Y-m-d').'" data-fin="'.$value->getFinEst()->format('Y-m-d').'" data-toggle="modal" data-target="#modal-fechas" class="btn-enc" onclick="asigFecha('.$value->getId().')">'.$inicio.'</a><a href="#" id="asig_'.$value->getId().'" data-id="'.$value->getId().'" data-iduser="'.$userAsignado.'" data-toggle="modal" data-target="#modal-usuario" class="btn-enc" onclick="asigUser('.$value->getId().')">'.$asig.'</a><a href="">'.$prior.'</a></span></li>';
 		}
 	}
 

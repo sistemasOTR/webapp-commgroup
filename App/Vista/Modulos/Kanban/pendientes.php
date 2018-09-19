@@ -29,14 +29,14 @@
 				$userAsignado = '';
 			} else {
 				$usuario = $handlerUs->selectById(intval($value->getIdEnc()));
-				$avatar = $usuario->getNombre()[0].$usuario->getApellido()[0];
+				$avatar = strtoupper($usuario->getNombre()[0].$usuario->getApellido()[0]);
 				$userAsignado = $usuario->getId();
 
 				$asig = '<span data-toggle="tooltip" data-original-title="'.$usuario->getNombre().' '.$usuario->getApellido().'">'.$avatar.'</span>';
 			}
 
 			if ($value->getInicioEst()->format('Y-m-d') != '1900-01-01') {
-				$inicio = $value->getInicioEst()->format('d-m');
+				$inicio = $value->getFinEst()->format('d-m');
 			} else {
 				$inicio = '<i class="fa fa-lg fa-calendar-plus-o"></i>';
 			}
