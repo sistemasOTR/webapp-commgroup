@@ -7,24 +7,22 @@
 
 	$handlerKB = new HandlerKanban;
 
-	$titulo=(isset($_POST["titulo"])?$_POST["titulo"]:'');
-	$descripcion=(isset($_POST["descripcion"])?$_POST['descripcion']:'');
-	$id_sol=(isset($_POST["id_sol"])?$_POST["id_sol"]:'');
-	$fecha_sol=(isset($_POST["fecha_sol"])?$_POST["fecha_sol"]:'');
-	$plaza=(isset($_POST["plaza"])?$_POST["plaza"]:'');
-	$prioridad=(isset($_POST["slt_prioridad"])?$_POST["slt_prioridad"]:'');
+	$id=(isset($_POST["id_tarea"])?$_POST["id_tarea"]:'');
+	$id_operador=(isset($_POST["id_operador"])?$_POST["id_operador"]:'');
+	$inicio_est=(isset($_POST["inicio_est"])?$_POST['inicio_est']:'');
+	$fin_est=(isset($_POST["fin_est"])?$_POST['fin_est']:'');
 
 	$err = "../../../../index.php?view=kanban&err=";     		
 	$info = "../../../../index.php?view=kanban&info=";
 
-	// var_dump($descripcion);
+	// var_dump($id);
 	// exit();
 
 	try {
 
-		$handlerKB->nuevaSolicitud($titulo,$descripcion,$fecha_sol,$id_sol,$prioridad,$plaza);
+		$handlerKB->asignarFechasEst(intval($id),$inicio_est,$fin_est,intval($id_operador));
 
-		$msj="Solicitud creada con éxito";
+		$msj="Fechas estimadas asignadas con éxito";
 		header("Location: ".$info.$msj);
 	  			
 	} catch (Exception $e) {

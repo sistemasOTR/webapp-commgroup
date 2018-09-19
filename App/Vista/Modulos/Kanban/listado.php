@@ -10,10 +10,15 @@
   $dFecha = new Fechas;
   $handlerKB = new HandlerKanban;
   include_once 'pendientes.php';
+  include_once 'encurso.php';
+  include_once 'enrevision.php';
   # URLs externas #
   $url_action_nueva_tarea = PATH_VISTA.'Modulos/Kanban/action_nueva_tarea.php';
   $url_action_asignar_user = PATH_VISTA.'Modulos/Kanban/action_asignar_user.php';
+  $url_action_asignar_fechas = PATH_VISTA.'Modulos/Kanban/action_asignar_fecha.php';
+  $url_action_cambio_estado = PATH_VISTA.'Modulos/Kanban/action_cambio_estado.php';
   $url_js = PATH_VISTA.'Modulos/Kanban/kanban.js';
+  $url_ajax = PATH_VISTA.'Modulos/Kanban/detalle.php';
 ?>
 <style>
   .panel .box-header {padding: 0 !important;}
@@ -21,25 +26,25 @@
   .bg-red:hover {background: #cc4b39 !important}
   .bg-yellow:hover {background: #f38b12 !important}
   .bg-aqua:hover {background: #00c0bc !important}
+  .asignaciones {padding: 15px 0;}
+  .asig-user-image {float: left;width: 25px;height: 25px;border-radius: 50%;margin-right: 10px;margin-top: -2px;}
+
+  .lsp {flex-grow: 1;padding:10px 0px;}
+  .lsa {flex-grow: 1;}
+  .lsp a {padding: 5px}
+  .item-flex {display: flex !important;}
+  .btn-sol {flex-grow: 100;}
+
+  .div-conteiner {max-height: calc(100vh - 220px); overflow-y: auto;}
 </style>
 
-<div class="content-wrapper">  
-  <section class="content-header">
-    <h1>
-      Sistema de tickets
-      <small></small>
-    </h1>
-    <ol class="breadcrumb">
-      <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
-      <li class="active">Kanban</li>
-    </ol>
-  </section>        
+<div class="content-wrapper">    
   
   <section class="content">
     <?php include_once PATH_VISTA."error.php"; ?>
     <?php include_once PATH_VISTA."info.php"; ?>
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div class="box box-solid">
             <div class="box-header with-border">
               <h3 class="box-title">Solicitudes</h3>
@@ -48,7 +53,7 @@
               </a>
             </div>
             <!-- /.box-header -->
-            <div class="box-body no-padding">
+            <div class="box-body no-padding div-conteiner">
               <div class="box-group" id="accordion">
                 <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
                 <div class="panel box box-solid">
@@ -76,11 +81,14 @@
                       <h4 class="box-title">
                         En Curso
                       </h4>
+                      <span class="pull-right badge bg-black"><?php echo $cantEnCurso ?></span>
                     </a>
                   </div>
                   <div id="collapseTwo" class="panel-collapse in">
-                    <div class="box-body">
-
+                    <div class="box-body no-padding">
+                      <ul class="nav nav-stacked">
+                        <?php echo $list_EnCurso; ?>
+                      </ul>
                     </div>
                   </div>
                 </div>
@@ -92,10 +100,14 @@
                       <h4 class="box-title">
                         En Revisión
                       </h4>
+                      <span class="pull-right badge bg-black"><?php echo $cantRev ?></span>
                     </a>
                   </div>
                   <div id="collapseThree" class="panel-collapse in">
-                    <div class="box-body">
+                    <div class="box-body no-padding">
+                      <ul class="nav nav-stacked">
+                        <?php echo $list_Rev; ?>
+                      </ul>
                     </div>
                   </div>
                 </div>
@@ -104,8 +116,40 @@
             <!-- /.box-body -->
           </div>
       </div>
+      <div class="col-md-6">
+              <div id="detalle"></div>
+        
+        </div>
+      </div>
     </div>
   </section>
 </div>
 <?php include_once 'modales.php'; ?>
 <script type="text/javascript" language="javascript" src='<?php echo $url_js; ?>'></script>
+
+<script>
+  
+
+  $(document).ready(function(){                
+  $(".btn-sol").on('click',function(){
+    var id = $(this).attr("data-idsol"),
+        id_operador = $(this).attr("data-idoperador"),
+        self=this;
+
+
+        $.ajax({
+            type: "POST",
+            url: '<?php echo $url_ajax; ?>',
+            data: {
+                id: id,
+                id_operador: id_operador
+            },
+            success: function(data){
+                $('#detalle').html(data);
+            }
+        });
+  });
+
+
+});
+</script>

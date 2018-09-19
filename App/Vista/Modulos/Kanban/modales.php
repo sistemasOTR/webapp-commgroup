@@ -71,6 +71,7 @@
                      ?>
                   </select>
                   <input type="hidden" name="id_tarea" id="id_tarea" class="form-control">
+                  <input type="hidden" name="id_operador" id="id_operador" class="form-control" value='<?php echo $user->getId(); ?>'>
                 </div>              
             </div>
         </div>
@@ -89,7 +90,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
 
-      <form action="<?php echo $url_action_asignar_user; ?>" method="post">
+      <form action="<?php echo $url_action_asignar_fechas; ?>" method="post">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span></button>
@@ -99,12 +100,13 @@
             <div class="row">
                 <div class="col-md-6">
                   <label>Inicio</label>
-                  <input type="date" name="inicio_est" class="form-control">
+                  <input type="date" name="inicio_est" id="inicio_est" class="form-control">
                   <input type="hidden" name="id_tarea" id="id_tarea_fechas" class="form-control">
+                  <input type="hidden" name="id_operador" id="id_operador" class="form-control" value='<?php echo $user->getId(); ?>'>
                 </div>           
                 <div class="col-md-6">
                   <label>Final</label>
-                  <input type="date" name="fin_est" class="form-control">
+                  <input type="date" name="fin_est" id="fin_est" class="form-control">
                 </div>              
             </div>
         </div>

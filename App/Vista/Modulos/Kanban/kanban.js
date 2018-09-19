@@ -29,6 +29,31 @@ function asigUser(id) {
     document.getElementById('slt_usuario').value = id_user;
 }
 
+function asigFecha(id) {
+    id_tarea = document.getElementById('fecha_'+id).getAttribute('data-id');
+    inicio = document.getElementById('fecha_'+id).getAttribute('data-inicio');
+    fin = document.getElementById('fecha_'+id).getAttribute('data-fin');
+
+    console.log(id_tarea, inicio, fin);
+
+    if (inicio == '1900-01-01') {
+        var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        inicio = [year, month, day].join('-');
+        fin = [year, month, day].join('-');
+    }
+
+    document.getElementById('id_tarea_fechas').value = id_tarea;
+    document.getElementById('inicio_est').value = inicio;
+    document.getElementById('fin_est').value = fin;
+}
+
 
     // $(document).ready(function() {
     //     $('#tabla-sueldos').DataTable({

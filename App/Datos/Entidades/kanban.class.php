@@ -377,6 +377,26 @@
 
 		}
 
+		public function updateFechas($conexion,$id,$inicio_est,$fin_est)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE kanban SET
+        						inicio_est='".$inicio_est."',
+        						fin_est='".$fin_est."'
+							WHERE id=".$id;
+
+							// var_dump($query);
+							// exit();
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
 		public function updateEncargado($conexion,$id,$id_enc)
 		{
 			try {
@@ -384,6 +404,23 @@
 				# Query 			
 				$query="UPDATE kanban SET
         						id_enc=".$id_enc."
+							WHERE id=".$id;
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+		public function cambiarEstadoKB($conexion,$id,$estado)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE kanban SET
+        						estado_kb=".$estado."
 							WHERE id=".$id;
 
 				# Ejecucion 					

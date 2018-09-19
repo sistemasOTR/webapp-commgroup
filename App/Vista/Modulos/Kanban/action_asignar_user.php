@@ -8,6 +8,7 @@
 	$handlerKB = new HandlerKanban;
 
 	$id=(isset($_POST["id_tarea"])?$_POST["id_tarea"]:'');
+	$id_operador=(isset($_POST["id_operador"])?$_POST["id_operador"]:'');
 	$id_enc=(isset($_POST["slt_usuario"])?$_POST['slt_usuario']:'');
 
 	$err = "../../../../index.php?view=kanban&err=";     		
@@ -18,7 +19,7 @@
 
 	try {
 
-		$handlerKB->asignarUsuario($id,$id_enc);
+		$handlerKB->asignarUsuario($id,$id_enc,$id_operador);
 
 		$msj="Usuario asignado con éxito";
 		header("Location: ".$info.$msj);

@@ -227,7 +227,7 @@
 					if(empty($this->getId()))
 						throw new Exception("No se selecciono el solicitud");		
 
-					$query="SELECT * FROM kanban WHERE id=".$this->getId();
+					$query="SELECT * FROM kanban_hist WHERE id=".$this->getId();
 				}
 				
 				# Ejecucion 					
@@ -334,6 +334,24 @@
 		/*########################*/
 		/* METODOS PERSONALIZADOS */
 		/*########################*/
+
+		public function selectHistoricoById($id)
+		{			
+			try {
+
+				#Query
+				$query="SELECT * FROM kanban_hist WHERE id_kanban=".$id;
+				
+				# Ejecucion 					
+				$result = SQL::selectObject($query, new KanbanHistoria);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());						
+			}
+
+		}
 
 
 	}
