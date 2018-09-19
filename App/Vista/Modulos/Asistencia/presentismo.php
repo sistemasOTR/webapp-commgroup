@@ -108,7 +108,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <td><b><?php echo $user->getNombre()."".$user->getApellido() ; ?></b></td>
+                    <td><b><?php echo $user->getNombre()." ".$user->getApellido() ; ?></b></td>
                     <?php 
                     $asistencias=$handlerAsist->selectAsistenciasByFiltro($fdesde,$user->getId()); //
                     for ($i=0; $i <6 ; $i++) { 
@@ -199,7 +199,7 @@
                           ?>
 
                           <tr>
-                            <td> <?php echo $value->getNombre()."".$value->getApellido() ;?> </td>
+                            <td> <?php echo $value->getNombre()." ".$value->getApellido() ;?> </td>
                             <?php for ($i=0; $i <6 ; $i++) { 
                            
                           
