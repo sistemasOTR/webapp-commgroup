@@ -13,11 +13,11 @@
                   </thead>
                   <tbody>
 
-				<?php
+				<?php	
+
 				    ##############################
 				    #Calculo de días de licencia #
 				    ##############################
-		
 
 				  $MesActual=date('n');
             
@@ -25,11 +25,7 @@
 				                   
 				    $fDesdeLicencia = date('Y-m-01', mktime(0,0,0,$i,1,date('Y')));
 				    $fHastaLicencia = date('Y-m-t', mktime(0,0,0,$i,1,date('Y')));
-				    setlocale(LC_TIME, 'spanish');  
-
-				      
-				    // $fDesdeLicencia = $sueldo->getPeriodo()->format('Y-m-1');
-				    // $fHastaLicencia = $sueldo->getPeriodo()->format('Y-m-t');
+				    setlocale(LC_TIME, 'spanish'); 
 
                      $arrayId[]=0;
 				    while (strtotime($fDesdeLicencia) <= strtotime($fHastaLicencia)) {
@@ -64,12 +60,9 @@
                               echo "<td>".$dif_dias."</td>";
                               echo "<td>".$value->getFechaInicio()->format('d/m/Y')."</td>";
                               echo "<td>".$value->getFechaFin()->format('d/m/Y')."</td>";
-                              
-
-
-				        // exit(); 
+    
 				               
-				            }
+				            	}
 				            }
 				        }
 				      }  

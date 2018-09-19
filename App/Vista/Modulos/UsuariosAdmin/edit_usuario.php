@@ -8,6 +8,10 @@
   include_once PATH_NEGOCIO."Modulos/handlercelulares.class.php";
   include_once PATH_NEGOCIO."Modulos/handlerlegajos.class.php"; 
   include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php";
+  include_once PATH_NEGOCIO."Modulos/handlertickets.class.php";
+  include_once PATH_NEGOCIO."Sistema/handlerconsultas.class.php";
+  include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php";
+  include_once PATH_NEGOCIO."Modulos/handlersueldos.class.php";
 
 
   $url_update = PATH_VISTA.'Modulos/UsuariosAdmin/action_update_usuario.php';  
@@ -16,10 +20,14 @@
   $url_volver = "?view=usuarioABM";
   $dFechas=new Fechas;
   $id = (isset($_GET["id"])?$_GET["id"]:"");
+  $handlerTickets = new HandlerTickets;
  
   $user=null;
   if(!empty($id)){
     $handler = new HandlerUsuarios;
+    $handlerConsultas = new HandlerConsultas;
+    $handlerPuntaje = new HandlerPuntaje;
+    $handlerSueldos = new HandlerSueldos;
     $user = $handler->selectById($id);
     $handlerLegajo= new HandlerLegajos;
     $legajo = $handlerLegajo->seleccionarLegajos($id);
@@ -49,6 +57,35 @@
 
   $handlerP = new HandlerPerfiles;
   $arrPerfiles = $handlerP->selectTodosNoAdmin(); 
+
+  $pestaña = (isset($_GET["pestaña"])?$_GET["pestaña"]:'');
+  switch ($pestaña) { 
+    case 'viaticos':
+      $act_1 = '';
+      $act_2 = '';
+      $act_3 = '';
+      $act_4 = '';
+      $act_5 = 'active';
+      $act_6 = '';
+      break;
+    case 'comisiones':
+      $act_1 = '';
+      $act_2 = '';
+      $act_3 = '';
+      $act_4 = '';
+      $act_5 = '';
+      $act_6 = 'active';
+      break;
+    
+    default:
+      $act_1 = ' active';
+      $act_2 = '';
+      $act_3 = '';
+      $act_4 = '';
+      $act_5 = '';
+      $act_6= '';
+      break;
+    }
 
   
   // var_dump($url_activar);
@@ -346,23 +383,31 @@
         <div class="box-body">
 	        <div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
-					<li class='active'><a href="#tab_1" data-toggle="tab" aria-expanded="true">Líneas</a></li>
-					<li class=''><a href="#tab_2" data-toggle="tab" aria-expanded="false">Equipos</a></li>
-          <li class=''><a href="#tab_3" data-toggle="tab" aria-expanded="false">Impresoras</a></li>
-					<li class=''><a href="#tab_4" data-toggle="tab" aria-expanded="false">Licencias</a></li>
+					<li class='<?php echo $act_1 ?>'><a href="#tab_1" data-toggle="tab" aria-expanded="true">Líneas</a></li>
+					<li class='<?php echo $act_2 ?>'><a href="#tab_2" data-toggle="tab" aria-expanded="false">Equipos</a></li>
+          <li class='<?php echo $act_3 ?>'><a href="#tab_3" data-toggle="tab" aria-expanded="false">Impresoras</a></li>
+          <li class='<?php echo $act_4 ?>'><a href="#tab_4" data-toggle="tab" aria-expanded="false">Licencias</a></li>
+          <li class='<?php echo $act_5 ?>'><a href="#tab_5" data-toggle="tab" aria-expanded="false">Viaticos</a></li>
+					<li class='<?php echo $act_6 ?>'><a href="#tab_6" data-toggle="tab" aria-expanded="false">Comisiones</a></li>
 				</ul>
 				<div class="tab-content col-xs-12">
-		          	<div class='tab-pane active' id="tab_1">
+		          	<div class='tab-pane <?php echo $act_1 ?>' id="tab_1">
 		        		<?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/lineas_usuario.php'; ?>
 	        		</div>
-		          	<div class='tab-pane' id="tab_2">
+		          	<div class='tab-pane <?php echo $act_2 ?>' id="tab_2">
 		        		<?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/equipos_usuario.php'; ?>
 	        		</div>
-		          	<div class='tab-pane' id="tab_3">
+		          	<div class='tab-pane <?php echo $act_3 ?>' id="tab_3">
                 <?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/impresoras_usuario.php'; ?>
               </div>
-              <div class='tab-pane' id="tab_4">
-		        		<?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/cantidad_licencias.php'; ?>
+              <div class='tab-pane <?php echo $act_4 ?>' id="tab_4">
+                <?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/cantidad_licencias.php'; ?>
+              </div>
+              <div class='tab-pane <?php echo $act_5 ?>' id="tab_5">
+                <?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/calculo_viaticos.php'; ?>
+              </div> 
+              <div class='tab-pane <?php echo $act_6 ?>' id="tab_6">
+		        		<?php include_once PATH_VISTA.'Modulos/UsuariosAdmin/calculo_comisiones.php'; ?>
 	        		</div>
         		</div>
         	</div>
