@@ -17,7 +17,7 @@
 	// $hora=date('H:i');
     if ($modo=='coordinador') {
 
-    $fecha=$fechaCord." ".$hora;
+    $fecha=$dFecha->FechaHoraActual();
     $estado=$estados;
     $user_id=$cord_id;
     $err = "../../../../index.php?view=asistencias&fdesde=".$fechaCord."&err=";     		
