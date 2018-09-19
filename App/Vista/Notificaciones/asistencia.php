@@ -15,7 +15,7 @@
     $handlerUsuarios=new HandlerUsuarios;
     $user = $usuarioActivoSesion;
     $url_action_horario= PATH_VISTA.'Modulos/Asistencia/action_add_hours.php';
-    if($esGestor){
+    
 
     $fechahora=$dFechas->FechaHoraActual();
     $ultimoRegistro=$handlerA->selecTop($user->getId());
@@ -39,6 +39,7 @@
     <style>
       .modal-backdrop {z-index: 5 !important;}
     </style>
+    <?php if($esGestor){ ?>
 
     <li class="dropdown notifications-menu">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
@@ -105,7 +106,6 @@
                             
                             $total=$total_horas+round($minutos,2); //round($minutos,2)
         
-
         ?>
         <i class="fa fa-truck"><?php echo " ".round($total,2)." Hs"; ?> </i>
         <span id="contador_noti_user" class="label" style="font-size:12px;"></span>
@@ -119,18 +119,19 @@
         </li>
       </ul>
     </li>
+      <?php }  ?>
 
     <li class="dropdown notifications-menu">
       <?php if ($ultimaFecha == $dFechas->FechaActual()){
        if ($ultimoRegistro->getIngreso()=='1') { ?>
-      <a href="#" id='<?php echo $user->getId() ?>'data-id='<?php echo $user->getId() ?>'data-accion='salida' data-toggle='modal' data-target='#modal-asistencia' onclick='cargarDatos(<?php echo $user->getId() ?>)'class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+      <a href="#" id='<?php echo $user->getId() ?>' data-id='<?php echo $user->getId() ?>' data-accion='salida' data-toggle='modal' data-target='#modal-asistencia' onclick='cargarDatos(<?php echo $user->getId() ?>)' class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
         
          <i class="fa fa-calendar-plus-o text-red"></i> 
        <?php }elseif ($ultimoRegistro->getIngreso()=='0') {?>
-        <a href="#" id='<?php echo $user->getId() ?>'data-id='<?php echo $user->getId() ?>'data-accion='ingreso' data-toggle='modal' data-target='#modal-asistencia' onclick='cargarDatos(<?php echo $user->getId() ?>)'class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+        <a href="#" id='<?php echo $user->getId() ?>' data-id='<?php echo $user->getId() ?>' data-accion='ingreso' data-toggle='modal' data-target='#modal-asistencia' onclick='cargarDatos(<?php echo $user->getId() ?>)' class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
          <i class="fa fa-calendar-plus-o text-green"></i>
          <?php } }else {?> 
-          <a href="#" id='<?php echo $user->getId() ?>'data-id='<?php echo $user->getId() ?>'data-accion='ingreso' data-toggle='modal' data-target='#modal-asistencia' onclick='cargarDatos(<?php echo $user->getId() ?>)'class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+          <a href="#" id='<?php echo $user->getId() ?>' data-id='<?php echo $user->getId() ?>' data-accion='ingreso' data-toggle='modal' data-target='#modal-asistencia' onclick='cargarDatos(<?php echo $user->getId() ?>)' class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
          <i class="fa fa-calendar-plus-o text-green"></i>
        <?php  }?>
           
@@ -147,7 +148,7 @@
       </ul>
     </li>
 
-   <?php } 
+   <?php 
 
    if ($esCoordinador) {
 
@@ -318,6 +319,7 @@ function cargarDatos(id){
 
     item_id = document.getElementById(id).getAttribute('data-id');
     estado= document.getElementById(id).getAttribute('data-accion');
+    console.log(item_id,estado);
    
     document.getElementById("user_id").value = item_id;
     document.getElementById("estado").value = estado;
