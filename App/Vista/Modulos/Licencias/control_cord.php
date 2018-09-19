@@ -238,7 +238,7 @@
 
                               } 
                             
-                            if($value->getAprobado()){
+                            elseif($value->getAprobado()){
                               echo "<td class='text-center'>
                                       <a href='".$url_action_imprimir.$value->getId()."' class='btn btn-default btn-xs'>
                                         <i class='fa fa-print' data-toggle='tooltip' data-original-title='Imprimir'></i>

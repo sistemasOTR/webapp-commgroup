@@ -28,7 +28,7 @@
   
       $arrUsuarios = '';
       $arrGestoresSist = $handlerSist->selectAllGestor($usuarioActivoSesion->getAliasUserSistema());
-      $arrGestoresPort = $handlerUs->selectGestores();
+      $arrGestoresPort = $handlerUs->selectGestores(null);
       if (!empty($arrGestoresPort) && !empty($arrGestoresSist)) {
       	foreach ($arrGestoresPort as $gestPort) {
 	        foreach ($arrGestoresSist as $gestSist) {

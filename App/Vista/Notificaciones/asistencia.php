@@ -159,7 +159,9 @@
     $handlerplazas=new HandlerPlazaUsuarios();
     $plazasOtr=$handlerplazas->selectTodas();
 
-    foreach ($plazasOtr as $key => $value) {   
+
+    foreach ($plazasOtr as $key => $value) { 
+
     
       if ($user->getAliasUserSistema()==strtoupper($value->getNombre())) {
 
@@ -168,7 +170,7 @@
     
     }    
 
-    $arrGestorr = $handlerUsuarios->selectGestoresByPlaza($id); 
+    $arrGestorr = $handlerUsuarios->selectGestores(intval($id)); 
       
                     foreach ($arrGestorr as $key => $value) {
                       $trabajando='Inactivo';

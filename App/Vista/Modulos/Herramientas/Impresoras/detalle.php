@@ -24,7 +24,7 @@
   $fserialNro=(isset($_GET["fserialNro"])?$_GET["fserialNro"]:'');
   $url_action_guardar = PATH_VISTA.'Modulos/Herramientas/Impresoras/action_editar.php';
   $url_ver_consumo = 'index.php?view=consumo_impresora&fserialNro=';
-  $arrUsuarios = $handlerUs->selectGestores();
+  $arrUsuarios = $handlerUs->selectGestores(null);
   $impresora = $handlerimpresoras->getDatosConSerial($fserialNro);
   $arrDatos = $handlerimpresoras->getAsignaciones($impresora['_serialNro']);
   $url_impresion = PATH_VISTA.'Modulos/Herramientas/Impresoras/imprimir_baja_comodato.php?';

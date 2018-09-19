@@ -27,7 +27,7 @@
 
   $handlerUsuarios = new HandlerUsuarios;
   $arrUsuarios = $handlerUsuarios->selectEmpleados();
-  $arrGestores = $handlerUsuarios->selectGestores();
+  $arrGestores = $handlerUsuarios->selectGestores(null);
 
   $url_action_aprobar = PATH_VISTA.'Modulos/Ticket/action_aprobar.php?id=';  
   $url_action_desaprobar = PATH_VISTA.'Modulos/Ticket/action_desaprobar.php?id=';  
