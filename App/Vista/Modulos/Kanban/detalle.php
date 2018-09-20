@@ -52,11 +52,11 @@
         // $avatar = $usuario->getFotoPerfil();
         $userAsignado = $usuario->getId();
 
-        $asig = '<span class="text-black"><img src='.$foto_perfil.' class="asig-user-image" alt="User Image"/></span><span class="text-black"> - '.$usuario->getNombre().' '.$usuario->getApellido().'</span>';
+        $asig = '<span class="bg-teal asig-user-image">'.strtoupper($usuario->getNombre()[0].' '.$usuario->getApellido()[0]).'</span><span class="text-black">Asignado a:<br><b>'.$usuario->getNombre().' '.$usuario->getApellido().'</b></span>';
       }
 
-      if ($solicitud->getInicioEst()->format('Y-m-d') != '1900-01-01') {
-        $inicio = "Fecha Entraga:<br>".$solicitud->getFinEst()->format('d-m');
+      if ($solicitud->getFinEst()->format('Y-m-d') != '1900-01-01') {
+        $inicio = "Fecha Entrega:<br><b>".$solicitud->getFinEst()->format('d-m')."</b>";
       } else {
         $inicio = '<i class="fa fa-lg fa-calendar-plus-o"></i> Sin fechas estimadas';
       }
@@ -89,7 +89,7 @@
                   <!-- /.box-header -->
                   <div class="box-body div-conteiner">';
   
-  $respuesta .= '<div class="asignaciones col-xs-12 with-border"><a href="#" id="fecha_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-inicio="'.$solicitud->getInicioEst()->format('Y-m-d').'" data-fin="'.$solicitud->getFinEst()->format('Y-m-d').'" data-toggle="modal" data-target="#modal-fechas" class="col-md-4 col-xs-6 text-black" onclick="asigFecha('.$solicitud->getId().')">'.$inicio.'</a><a href="#" id="asig_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-iduser="'.$userAsignado.'" data-toggle="modal" data-target="#modal-usuario" class="col-md-4 col-xs-6 text-black" onclick="asigUser('.$solicitud->getId().')">'.$asig.'</a><a href="" class="col-md-4 col-xs-12 text-black">Prioridad: '.$prior.'</a></span></div>';
+  $respuesta .= '<div class="asignaciones col-xs-12 with-border"><a href="#" id="fecha_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-fin="'.$solicitud->getFinEst()->format('Y-m-d').'" data-toggle="modal" data-target="#modal-fechas" class="col-md-4 col-xs-6 text-black" onclick="asigFecha('.$solicitud->getId().')">'.$inicio.'</a><a href="#" id="asig_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-iduser="'.$userAsignado.'" data-toggle="modal" data-target="#modal-usuario" class="col-md-4 col-xs-6 text-black" onclick="asigUser('.$solicitud->getId().')">'.$asig.'</a><a href="" class="col-md-4 col-xs-12 text-black">Prioridad:<br>'.$prior.'</a></span></div>';
   $respuesta .= '<div class="col-xs-12"><h3>Descripción</h3></div>';
   $respuesta .= '<div class="col-xs-12" style="border: 1px solid #eee;border-radius:5px;min-height:150px;" id="descripcion">'.$solicitud->getDescripcion().'</div>';
 
@@ -127,7 +127,7 @@
          $respuesta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b> asignó la tarea a <b>'.strtoupper($encargado->getNombre()[0].'. '.$encargado->getApellido()).'</b></span><span class="lsa"><b>'.$histo->getFechaHora()->format('d-m H:i').'</b></span></li>';
          break;
        case 3:
-         $respuesta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b> estimó la tarea desde el '.$histo->getInicioEst()->format('d-m').' al '.$histo->getFinEst()->format('d-m').'</span><span class="lsa"><b>'.$histo->getFechaHora()->format('d-m H:i').'</b></span></li>';
+         $respuesta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b> asignó la fecha de entrega para el '.$histo->getFinEst()->format('d-m').'</span><span class="lsa"><b>'.$histo->getFechaHora()->format('d-m H:i').'</b></span></li>';
          break;
        case 4:
          $respuesta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b> creó la solicitud</span><span class="lsa"><b>'.$histo->getFechaHora()->format('d-m H:i').'</b></span></li>';

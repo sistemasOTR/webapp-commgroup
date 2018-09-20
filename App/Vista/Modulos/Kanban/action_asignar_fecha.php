@@ -9,7 +9,6 @@
 
 	$id=(isset($_POST["id_tarea"])?$_POST["id_tarea"]:'');
 	$id_operador=(isset($_POST["id_operador"])?$_POST["id_operador"]:'');
-	$inicio_est=(isset($_POST["inicio_est"])?$_POST['inicio_est']:'');
 	$fin_est=(isset($_POST["fin_est"])?$_POST['fin_est']:'');
 
 	$err = "../../../../index.php?view=kanban&err=";     		
@@ -20,7 +19,7 @@
 
 	try {
 
-		$handlerKB->asignarFechasEst(intval($id),$inicio_est,$fin_est,intval($id_operador));
+		$handlerKB->asignarFechasEst(intval($id),$fin_est,intval($id_operador));
 
 		$msj="Fechas estimadas asignadas con éxito";
 		header("Location: ".$info.$msj);

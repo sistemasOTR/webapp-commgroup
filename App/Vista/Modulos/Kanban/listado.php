@@ -27,7 +27,7 @@
   .bg-yellow:hover {background: #f38b12 !important}
   .bg-aqua:hover {background: #00c0bc !important}
   .asignaciones {padding: 15px 0 0;}
-  .asig-user-image {float: left;width: 25px;height: 25px;border-radius: 50%;margin-right: 10px;margin-top: -2px;}
+  .asig-user-image {float: left;width: 35px;height: 35px;border-radius: 50%;margin-right: 10px;text-align: center;padding: 7px;}
 
   .lsp {flex-grow: 1;padding:10px 0px;}
   .lsa {flex-grow: 1;}
@@ -36,7 +36,7 @@
   .btn-sol {flex-grow: 100;}
   .historia {color: #777;font-size: 12px;}
 
-  .div-conteiner {max-height: calc(100vh - 220px); overflow-y: auto;}
+  .div-conteiner {max-height: calc(100vh - 230px); overflow-y: auto;}
 </style>
 
 <div class="content-wrapper">    

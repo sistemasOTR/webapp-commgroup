@@ -55,13 +55,11 @@
 				$handlerHist->setDescripcion($last->getDescripcion());
 				$handlerHist->setIdKanban($last->getId());
 				$handlerHist->setIdOperador($last->getIdSol());
-				$handlerHist->setIdEnc(0);     	
-				$handlerHist->setInicioEst('');     	
+				$handlerHist->setIdEnc(0);
 				$handlerHist->setFinEst('');
 				$handlerHist->setEstadoKb(0);
 				$handlerHist->setPrioridad($last->getPrioridad());     	
-				$handlerHist->setFechaHora($fechahora);     	
-				$handlerHist->setInicioReal('');     	
+				$handlerHist->setFechaHora($fechahora);
 				$handlerHist->setFinReal('');
 				// $handlerHist->setSector($last->getSector());
 				$handlerHist->setTipoCambio(0);
@@ -92,12 +90,10 @@
 				$handlerHist->setIdKanban($id);
 				$handlerHist->setIdOperador($id_operador);
 				$handlerHist->setIdEnc($id_enc);
-				$handlerHist->setInicioEst($last->getInicioEst()->format('Y-m-d'));
 				$handlerHist->setFinEst($last->getFinEst()->format('Y-m-d'));
 				$handlerHist->setEstadoKb($last->getEstadoKb());
 				$handlerHist->setPrioridad($last->getPrioridad());     	
 				$handlerHist->setFechaHora($fechahora);
-				$handlerHist->setInicioReal($last->getInicioReal()->format('Y-m-d'));
 				$handlerHist->setFinReal($last->getFinReal()->format('Y-m-d'));
 				$handlerHist->setTipoCambio(2);
 				$handlerHist->setEstado(true);
@@ -110,12 +106,12 @@
 			}
 		}
 
-		public function asignarFechasEst($id,$inicio_est,$fin_est,$id_operador){
+		public function asignarFechasEst($id,$fin_est,$id_operador){
 			try {
 					
 				$handler = new Kanban;
 
-				$handler->updateFechas(null,$id,$inicio_est,$fin_est);
+				$handler->updateFechas(null,$id,$fin_est);
 
 				$last = $handler->getSolById($id);
 				$f = new Fechas;
@@ -127,12 +123,10 @@
 				$handlerHist->setIdKanban($id);
 				$handlerHist->setIdOperador($id_operador);
 				$handlerHist->setIdEnc($last->getIdEnc());
-				$handlerHist->setInicioEst($last->getInicioEst()->format('Y-m-d'));
 				$handlerHist->setFinEst($last->getFinEst()->format('Y-m-d'));
 				$handlerHist->setEstadoKb($last->getEstadoKb());
 				$handlerHist->setPrioridad($last->getPrioridad());     	
 				$handlerHist->setFechaHora($fechahora);
-				$handlerHist->setInicioReal($last->getInicioReal()->format('Y-m-d'));
 				$handlerHist->setFinReal($last->getFinReal()->format('Y-m-d'));
 				$handlerHist->setTipoCambio(3);
 				$handlerHist->setEstado(true);
@@ -165,12 +159,10 @@
 				$handlerHist->setIdKanban($id);
 				$handlerHist->setIdOperador($id_operador);
 				$handlerHist->setIdEnc($last->getIdEnc());
-				$handlerHist->setInicioEst($last->getInicioEst()->format('Y-m-d'));
 				$handlerHist->setFinEst($last->getFinEst()->format('Y-m-d'));
 				$handlerHist->setEstadoKb($last->getEstadoKb());
 				$handlerHist->setPrioridad($last->getPrioridad());     	
 				$handlerHist->setFechaHora($fechahora);
-				$handlerHist->setInicioReal($last->getInicioReal()->format('Y-m-d'));
 				$handlerHist->setFinReal($last->getFinReal()->format('Y-m-d'));
 				$handlerHist->setTipoCambio(1);
 				$handlerHist->setEstado(true);

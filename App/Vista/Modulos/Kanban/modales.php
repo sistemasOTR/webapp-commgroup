@@ -98,15 +98,11 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-md-6">
-                  <label>Inicio</label>
-                  <input type="date" name="inicio_est" id="inicio_est" class="form-control">
-                  <input type="hidden" name="id_tarea" id="id_tarea_fechas" class="form-control">
-                  <input type="hidden" name="id_operador" id="id_operador" class="form-control" value='<?php echo $user->getId(); ?>'>
-                </div>           
-                <div class="col-md-6">
+                <div class="col-md-6 col-md-offset-3">
                   <label>Final</label>
                   <input type="date" name="fin_est" id="fin_est" class="form-control">
+                  <input type="hidden" name="id_tarea" id="id_tarea_fechas" class="form-control">
+                  <input type="hidden" name="id_operador" id="id_operador" class="form-control" value='<?php echo $user->getId(); ?>'>
                 </div>              
             </div>
         </div>

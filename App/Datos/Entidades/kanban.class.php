@@ -39,9 +39,9 @@
 		public function getIdEnc(){ return $this->_idEnc; }
 		public function setIdEnc($idEnc){ $this->_idEnc =$idEnc; }
 
-		private $_inicioEst;
-		public function getInicioEst(){ return $this->_inicioEst; }
-		public function setInicioEst($inicioEst){ $this->_inicioEst =$inicioEst; }
+		// private $_inicioEst;
+		// public function getInicioEst(){ return $this->_inicioEst; }
+		// public function setInicioEst($inicioEst){ $this->_inicioEst =$inicioEst; }
 		
 		private $_finEst;
 		public function getFinEst(){ return $this->_finEst; }
@@ -63,9 +63,9 @@
 		public function getPlaza(){ return $this->_plaza; }
 		public function setPlaza($plaza){ $this->_plaza =$plaza; }
 		
-		private $_inicioReal;
-		public function getInicioReal(){ return $this->_inicioReal; }
-		public function setInicioReal($inicioReal){ $this->_inicioReal =$inicioReal; }
+		// private $_inicioReal;
+		// public function getInicioReal(){ return $this->_inicioReal; }
+		// public function setInicioReal($inicioReal){ $this->_inicioReal =$inicioReal; }
 
 		private $_finReal;
 		public function getFinReal(){ return $this->_finReal; }
@@ -87,13 +87,13 @@
 			$this->setFechaSol('');
 			$this->setIdSol(0);
 			$this->setIdEnc(0);
-			$this->setInicioEst('');
+			// $this->setInicioEst('');
 			$this->setFinEst('');
 			$this->setEstadoKb(0);
 			$this->setPrioridad(0);
 			// $this->setSector(0);
 			$this->setPlaza(0);
-			$this->setInicioReal('');
+			// $this->setInicioReal('');
 			$this->setFinReal('');
 			$this->setEstado(true);
 		}
@@ -115,9 +115,7 @@
 		        						prioridad,
 		        						plaza,
 		        						id_enc,
-		        						inicio_est,
 		        						fin_est,
-		        						inicio_real,
 		        						fin_real,
 		        						estado
 		        						
@@ -130,9 +128,7 @@
 	        							".$this->getPrioridad().",
 	        							".$this->getPlaza().",
 	        							".$this->getIdEnc().",
-	        							'".$this->getInicioEst()."',
 	        							'".$this->getFinEst()."',
-	        							'".$this->getInicioReal()."',
 	        							'".$this->getFinReal()."',
 	        							'".$this->getEstado()."'
 
@@ -164,12 +160,10 @@
         						fecha_sol='".$this->getFechaSol()."',
         						id_sol=".$this->getIdSol().",
         						id_enc=".$this->getIdEnc().",
-        						inicio_est='".$this->getInicioEst()."',
         						fin_est='".$this->getFinEst()."',
         						estado_kb=".$this->getEstadoKb().",
         						prioridad=".$this->getPrioridad().",
         						plaza=".$this->getPlaza().",
-        						inicio_real='".$this->getInicioReal()."',
         						fin_real='".$this->getFinReal()."',
         						estado='".$this->getEstado()."'
 							WHERE id=".$this->getId();
@@ -241,13 +235,11 @@
 				$this->setDescripcion($filas['descripcion']);			
 				$this->setFechaSol($filas['fecha_sol']);			
 				$this->setIdSol($filas['id_sol']);			
-				$this->setIdEnc(trim($filas['id_enc']));			
-				$this->setInicioEst($filas['inicio_est']);			
+				$this->setIdEnc(trim($filas['id_enc']));		
 				$this->setFinEst($filas['fin_est']);
 				$this->setEstadoKb($filas['estado_kb']);			
 				$this->setPrioridad($filas['prioridad']);
 				$this->setPlaza($filas['plaza']);
-				$this->setInicioReal($filas['inicio_real']);
 				$this->setFinReal($filas['fin_real']);
 				$this->setEstado($filas['estado']);
 			}
@@ -261,12 +253,10 @@
 			$this->setFechaSol('');
 			$this->setIdSol(0);
 			$this->setIdEnc(0);
-			$this->setInicioEst('');
 			$this->setFinEst('');
 			$this->setEstadoKb(0);
 			$this->setPrioridad(0);
 			$this->setPlaza(0);
-			$this->setInicioReal('');
 			$this->setFinReal('');
 			$this->setEstado(true);
 		}
@@ -294,12 +284,10 @@
 				[fecha_sol] [date] NOT NULL,
 				[id_sol] [int] NOT NULL,
 				[id_enc] [int] NULL,
-				[inicio_est] [date] NULL,
 				[fin_est] [date] NULL,
 				[estado_kb] [int] NOT NULL,
 				[prioridad] [int] NOT NULL,
 				[plaza] [int] NOT NULL,
-				[inicio_real] [date] NULL,
 				[fin_real] [date] NULL,
 				[estado] [bit] NOT NULL,
 			 CONSTRAINT [PK_kanban] PRIMARY KEY CLUSTERED 
@@ -377,13 +365,12 @@
 
 		}
 
-		public function updateFechas($conexion,$id,$inicio_est,$fin_est)
+		public function updateFechas($conexion,$id,$fin_est)
 		{
 			try {
 
 				# Query 			
 				$query="UPDATE kanban SET
-        						inicio_est='".$inicio_est."',
         						fin_est='".$fin_est."'
 							WHERE id=".$id;
 

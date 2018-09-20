@@ -39,9 +39,9 @@
 		public function getIdEnc(){ return $this->_idEnc; }
 		public function setIdEnc($idEnc){ $this->_idEnc =$idEnc; }
 
-		private $_inicioEst;
-		public function getInicioEst(){ return $this->_inicioEst; }
-		public function setInicioEst($inicioEst){ $this->_inicioEst =$inicioEst; }
+		// private $_inicioEst;
+		// public function getInicioEst(){ return $this->_inicioEst; }
+		// public function setInicioEst($inicioEst){ $this->_inicioEst =$inicioEst; }
 		
 		private $_finEst;
 		public function getFinEst(){ return $this->_finEst; }
@@ -67,9 +67,9 @@
 		public function getFechaHora(){ return $this->_fechaHora; }
 		public function setFechaHora($fechaHora){ $this->_fechaHora =$fechaHora; }
 		
-		private $_inicioReal;
-		public function getInicioReal(){ return $this->_inicioReal; }
-		public function setInicioReal($inicioReal){ $this->_inicioReal =$inicioReal; }
+		// private $_inicioReal;
+		// public function getInicioReal(){ return $this->_inicioReal; }
+		// public function setInicioReal($inicioReal){ $this->_inicioReal =$inicioReal; }
 
 		private $_finReal;
 		public function getFinReal(){ return $this->_finReal; }
@@ -91,14 +91,14 @@
 			$this->setIdKanban(0);
 			$this->setIdOperador(0);
 			$this->setIdEnc(0);
-			$this->setInicioEst('');
+			// $this->setInicioEst('');
 			$this->setFinEst('');
 			$this->setEstadoKb(0);
 			$this->setPrioridad(0);
 			// $this->setSector(0);
 			$this->setTipoCambio(0);
 			$this->setFechaHora('');
-			$this->setInicioReal('');
+			// $this->setInicioReal('');
 			$this->setFinReal('');
 			$this->setEstado(true);
 		}
@@ -121,9 +121,7 @@
 		        						fecha_hora,
 		        						tipo_cambio,
 		        						id_enc,
-		        						inicio_est,
 		        						fin_est,
-		        						inicio_real,
 		        						fin_real,
 		        						estado
 		        						
@@ -137,9 +135,7 @@
 	        							'".$this->getFechaHora()."',
 	        							".$this->getTipoCambio().",
 	        							".$this->getIdEnc().",
-	        							'".$this->getInicioEst()."',
 	        							'".$this->getFinEst()."',
-	        							'".$this->getInicioReal()."',
 	        							'".$this->getFinReal()."',
 	        							'".$this->getEstado()."'
 
@@ -173,13 +169,11 @@
         						id_kanban=".$this->getIdKanban().",
         						id_operador=".$this->getIdOperador().",
         						id_enc=".$this->getIdEnc().",
-        						inicio_est='".$this->getInicioEst()."',
         						fin_est='".$this->getFinEst()."',
         						estado_kb=".$this->getEstadoKb().",
         						prioridad=".$this->getPrioridad().",
         						tipo_cambio=".$this->getTipoCambio().",
         						fecha_hora='".$this->getFechaHora()."',
-        						inicio_real='".$this->getInicioReal()."',
         						fin_real='".$this->getFinReal()."',
         						estado='".$this->getEstado()."'
 							WHERE id=".$this->getId();
@@ -252,13 +246,11 @@
 				$this->setIdKanban($filas['id_kanban']);			
 				$this->setIdOperador($filas['id_operador']);			
 				$this->setIdEnc($filas['id_enc']);			
-				$this->setInicioEst($filas['inicio_est']);			
 				$this->setFinEst($filas['fin_est']);
 				$this->setEstadoKb($filas['estado_kb']);			
 				$this->setPrioridad($filas['prioridad']);
 				$this->setTipoCambio($filas['tipo_cambio']);
 				$this->setFechaHora($filas['fecha_hora']);
-				$this->setInicioReal($filas['inicio_real']);
 				$this->setFinReal($filas['fin_real']);
 				$this->setEstado($filas['estado']);
 			}
@@ -272,13 +264,11 @@
 			$this->setIdKanban(0);
 			$this->setIdOperador(0);
 			$this->setIdEnc(0);
-			$this->setInicioEst('');
 			$this->setFinEst('');
 			$this->setEstadoKb(0);
 			$this->setPrioridad(0);
 			$this->setTipoCambio(0);
 			$this->setFechaHora('');
-			$this->setInicioReal('');
 			$this->setFinReal('');
 			$this->setEstado(true);
 		}
@@ -305,14 +295,12 @@
 				[titulo] [varchar](100) NOT NULL,
 				[descripcion] [text] NOT NULL,
 				[id_enc] [int] NULL,
-				[inicio_est] [date] NULL,
 				[fin_est] [date] NULL,
 				[estado_kb] [int] NOT NULL,
 				[prioridad] [int] NOT NULL,
 				[tipo_cambio] [int] NOT NULL,
 				[fecha_hora] [datetime] NOT NULL,
 				[id_operador] [int] NOT NULL,
-				[inicio_real] [date] NOT NULL,
 				[fin_real] [date] NOT NULL,
 				[estado] [bit] NOT NULL,
 			 CONSTRAINT [PK_kanban_hist] PRIMARY KEY CLUSTERED 

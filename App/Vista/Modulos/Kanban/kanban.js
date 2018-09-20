@@ -31,12 +31,11 @@ function asigUser(id) {
 
 function asigFecha(id) {
     id_tarea = document.getElementById('fecha_'+id).getAttribute('data-id');
-    inicio = document.getElementById('fecha_'+id).getAttribute('data-inicio');
     fin = document.getElementById('fecha_'+id).getAttribute('data-fin');
 
-    console.log(id_tarea, inicio, fin);
+    console.log(id_tarea, fin);
 
-    if (inicio == '1900-01-01') {
+    if (fin == '1900-01-01') {
         var d = new Date(),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
@@ -45,12 +44,10 @@ function asigFecha(id) {
         if (month.length < 2) month = '0' + month;
         if (day.length < 2) day = '0' + day;
 
-        inicio = [year, month, day].join('-');
         fin = [year, month, day].join('-');
     }
 
     document.getElementById('id_tarea_fechas').value = id_tarea;
-    document.getElementById('inicio_est').value = inicio;
     document.getElementById('fin_est').value = fin;
 }
 
