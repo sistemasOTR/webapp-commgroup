@@ -316,7 +316,7 @@
 			try {
 											
 				# Query
-				$query="SELECT * FROM kanban WHERE estado_kb=".$estadoKb;
+				$query="SELECT * FROM kanban WHERE estado_kb=".$estadoKb." AND estado = 'true'";
 				
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new Kanban);
@@ -352,7 +352,7 @@
 			try {
 											
 				# Query
-				$query="SELECT * FROM kanban WHERE estado ='true' AND id = ".$id;
+				$query="SELECT * FROM kanban WHERE id = ".$id;
 				
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new Kanban);
@@ -405,10 +405,17 @@
 		{
 			try {
 
-				# Query 			
-				$query="UPDATE kanban SET
+				if ($estado != 10) {
+					# Query 			
+					$query="UPDATE kanban SET
         						estado_kb=".$estado."
 							WHERE id=".$id;
+				} else {
+					# Query 			
+				$query="UPDATE kanban SET
+        						estado = 'false'
+							WHERE id=".$id;
+				}
 
 				# Ejecucion 					
 				return SQL::update($conexion,$query);	

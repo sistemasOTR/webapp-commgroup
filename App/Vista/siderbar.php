@@ -864,11 +864,11 @@
 
             
               <li class="treeview" id="mnu_kanban">
-                <a href="#"><i class="fa  fa-list-ol "></i> <span>Tareas</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><i class="fa fa-bookmark-o"></i> <span>Tareas</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                   <li id="mnu_kanban_listado">
                     <a href=<?php echo $url_kanban_listado ?>> 
-                      <i class="fa  fa-list-ol"></i> <span>Solicitudes</span> </i>
+                      <i class="fa fa-bookmark-o"></i> <span>Solicitudes</span> </i>
                     </a>
                   </li>
                   <li id="mnu_kanban_lista_terminadas">

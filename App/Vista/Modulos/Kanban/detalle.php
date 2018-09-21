@@ -65,7 +65,12 @@
 
       switch ($solicitud->getEstadoKb()) {
         case 0:
-          $btn_accion = ' <button class="btn btn-warning pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="1">Iniciar</button>';
+          if ($solicitud->getFinEst()->format('Y-m-d') == '1900-01-01' || $solicitud->getIdEnc() == 0) {
+            $btn_accion = '<button class="btn btn-danger pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="10" style="margin-right:10px;">Eliminar</button> ';
+          } else {
+            $btn_accion = ' <button class="btn btn-warning pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="1">Iniciar</button>';
+          }
+          
           break;
         case 1:
           $btn_accion = ' <a href="#" class="btn btn-info pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="2">Revisar</a>';
@@ -98,16 +103,16 @@
 
     
   $respuesta .= '<div class="col-xs-12"><h3>Descripción</h3></div>';
-  $respuesta .= '<div class="col-xs-12" style="border: 1px solid #eee;border-radius:5px;min-height:150px;" id="descripcion">'.$solicitud->getDescripcion().'</div>';
+  $respuesta .= '<div class="col-xs-12" style="border: 1px solid #eee;border-radius:5px;min-height:150px;" id="desc_detalle"  contenteditable="true">'.$solicitud->getDescripcion().'</div>';
 
   $respuesta .= '<div class="comentarios">';
   if (!empty($arrSolComentarios)) {
     $respuesta .= '<div class="col-xs-12"><h4>Comentarios</h4></div>';
-    $respuesta .= '<div class="col-xs-12 historia">';
+    $respuesta .= '<div class="col-xs-12 historia" style="border-bottom:1px solid #ccc;">';
       foreach ($arrSolComentarios as $comentario) {
         $operador = $handlerUs->selectById(intval($comentario->getIdOperador()));
 
-        $respuesta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b><br>'.$comentario->getComentario().'.</span><span class="lsa"><b>'.$comentario->getFechaHora()->format('d-m H:i').'</b></span></li>';
+        $respuesta .= '<li style="padding: 5px 0; color: #333;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b><span class="direct-chat-text">'.$comentario->getComentario().'.</span></span><span class="lsa"><b>'.$comentario->getFechaHora()->format('d-m H:i').'</b></span></li>';
 
       }
     $respuesta .= '</div>';
@@ -167,8 +172,8 @@ $respuesta.= '</div>
                 </div>';
                 if ($solicitud->getEstadoKb() != 3) {
                   $respuesta .= '<div class="box-footer">
-                    <a href="#" id="coment_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-toggle="modal" data-target="#modal-comentarios" class="text-black" onclick="comentar('.$solicitud->getId().')">
-                    <i class="fa fa-comment-o pull-right fa-2x"></i></a>
+                    <a href="#" id="coment_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-toggle="modal" data-target="#modal-comentarios" class="text-black pull-right" onclick="comentar('.$solicitud->getId().')">Comentar 
+                    <i class="fa fa-comment-o fa-lg"></i></a>
                   </div>';
                 }
                 
@@ -199,6 +204,13 @@ $respuesta .= '</div>';
               }
           });
     });
+
+
+
+    try{
+      CKEDITOR.disableAutoInline = true;
+    CKEDITOR.inline( 'desc_detalle' );
+    }catch(e){}
 
   });
 </script>

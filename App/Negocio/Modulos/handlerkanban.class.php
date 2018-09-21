@@ -157,8 +157,6 @@
 					$handler->terminar(null,$id,$estado,$fechaFin);
 				}
 
-				$handler->cambiarEstadoKB(null,$id,$estado);
-
 				$last = $handler->getSolById($id);
 				$f = new Fechas;
 				$fechahora = $f->FechaHoraActual();

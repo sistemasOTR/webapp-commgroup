@@ -15,7 +15,7 @@
   $url_action_asignar_user = PATH_VISTA.'Modulos/Kanban/action_asignar_user.php';
   $url_action_asignar_fechas = PATH_VISTA.'Modulos/Kanban/action_asignar_fecha.php';
   $url_action_cambio_estado = PATH_VISTA.'Modulos/Kanban/action_cambio_estado.php';
-  $url_js = PATH_VISTA.'Modulos/Kanban/kanban.js';
+  $url_js = PATH_VISTA.'Modulos/Kanban/kanban_finish.js';
   $url_ajax = PATH_VISTA.'Modulos/Kanban/detalle.php';
 ?>
 <style>

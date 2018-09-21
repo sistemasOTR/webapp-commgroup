@@ -26,11 +26,11 @@
     $arrComments = $handlerKB->selectComentariosById($id_kanban);
     if (!empty($arrComments)) {
       $rta .= '<div class="col-xs-12"><h4>Comentarios</h4></div>';
-      $rta .= '<div class="col-xs-12 historia">';
+      $rta .= '<div class="col-xs-12 historia" style="border-bottom:1px solid #ccc;">';
       foreach ($arrComments as $comentario) {
         $operador = $handlerUs->selectById(intval($comentario->getIdOperador()));
 
-        $rta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b><br>'.$comentario->getComentario().'.</span><span class="lsa"><b>'.$comentario->getFechaHora()->format('d-m H:i').'</b></span></li>';
+        $rta .= '<li style="padding: 5px 0; color:#333;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b><br><span class="direct-chat-text">'.$comentario->getComentario().'.</span></span><span class="lsa"><b>'.$comentario->getFechaHora()->format('d-m H:i').'</b></span></li>';
 
       }
       $rta .= '</div>';

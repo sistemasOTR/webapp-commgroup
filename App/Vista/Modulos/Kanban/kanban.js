@@ -7,7 +7,6 @@ $(document).ready(function(){
 
     try{
         CKEDITOR.replace( 'descripcion' );
-
     }catch(e){}
 
 $(document).ready(function(){                
