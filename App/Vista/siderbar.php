@@ -90,6 +90,7 @@
         $url_agenda_rubros = "index.php?view=agenda_rubros";
 
         $url_kanban_listado = "index.php?view=kanban";
+        $url_kanban_lista_terminadas = "index.php?view=kanban_terminadas";
       
         $perfil =$usuarioActivoSesion->getUsuarioPerfil()->getId();
         $url_cambiar_side=PATH_VISTA.'Modulos/UsuariosAdmin/action_cambiar_rol_usuario_side.php?id=';
@@ -868,6 +869,11 @@
                   <li id="mnu_kanban_listado">
                     <a href=<?php echo $url_kanban_listado ?>> 
                       <i class="fa  fa-list-ol"></i> <span>Solicitudes</span> </i>
+                    </a>
+                  </li>
+                  <li id="mnu_kanban_lista_terminadas">
+                    <a href=<?php echo $url_kanban_lista_terminadas ?>> 
+                      <i class="fa  fa-check"></i> <span>Terminadas</span> </i>
                     </a>
                   </li><!-- 
                   <li id="mnu_agenda_rubros">

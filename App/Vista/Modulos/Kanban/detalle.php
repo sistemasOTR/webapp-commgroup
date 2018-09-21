@@ -17,59 +17,64 @@
 
 
   $url_action_cambio_estado = PATH_VISTA.'Modulos/Kanban/action_cambio_estado.php';
+  $url_action_nuevo_comentario = PATH_VISTA.'Modulos/Kanban/action_nuevo_comentario.php';
   $respuesta = '';
 
   $solicitud = $handlerKB->selectById($id);
 
   $arrSolHistorico=$handlerKB->selectHistoricoById($id);
+  $arrSolComentarios=$handlerKB->selectComentariosById($id);
 
   switch ($solicitud->getPrioridad()) {
         case 0:
-          $prior = '<span class="label label-success">BAJA</span>';
-          break;
-        case 1:
-          $prior = '<span class="label label-warning">MEDIA</span>';
-          break;
-        case 2:
-          $prior = '<span class="label label-danger">ALTA</span>';
-          break;
-        
-        default:
-          $prior = '<span class="label label-success">BAJA</span>';
-          break;
+              $prior = '<span><i class="fa fa-arrow-down text-green"></i></span>';
+              break;
+            case 1:
+              $prior = '<span><i class="fa fa-arrow-right text-yellow"></i></span>';
+              break;
+            case 2:
+              $prior = '<span><i class="fa fa-arrow-up text-red"></i></span>';
+              break;
+            
+            default:
+              $prior = '<span><i class="fa fa-arrow-down text-green"></i></span>';
+              break;
       }
 
       if ($solicitud->getIdEnc() == 0) {
-        $asig = '<i class="fa fa-lg text-gray fa-user-plus"></i> Sin usuario asigado';
+        $asig = '<span class="asig-user-image" style="border: 1px dashed #d2d6de !important;"><i class="fa fa-lg text-gray fa-user-plus"></i></span><span class="text-black">Asignado a:<br><b> Nadie </b></span>';
         $userAsignado = '';
       } else {
         $usuario = $handlerUs->selectById(intval($solicitud->getIdEnc()));
-
-        if(StringUser::emptyUser($usuario->getFotoPerfil()))
-          $foto_perfil = PATH_VISTA."assets/dist/img/sinlogo_usuario.png";                                                        
-        else                  
-          $foto_perfil = PATH_CLIENTE.$usuario->getFotoPerfil();
-        // $avatar = $usuario->getFotoPerfil();
         $userAsignado = $usuario->getId();
 
-        $asig = '<span class="text-black"><img src='.$foto_perfil.' class="asig-user-image" alt="User Image"/></span><span class="text-black"> - '.$usuario->getNombre().' '.$usuario->getApellido().'</span>';
+        $asig = '<span class="bg-teal asig-user-image">'.strtoupper($usuario->getNombre()[0].' '.$usuario->getApellido()[0]).'</span><span class="text-black">Asignado a:<br><b>'.$usuario->getNombre().' '.$usuario->getApellido().'</b></span>';
       }
 
-      if ($solicitud->getInicioEst()->format('Y-m-d') != '1900-01-01') {
-        $inicio = 'Inicio estimado: '.$solicitud->getInicioEst()->format('d-m')."<br>Final estimado: ".$solicitud->getFinEst()->format('d-m');
+      if ($solicitud->getFinEst()->format('Y-m-d') != '1900-01-01' ) {
+        $inicio = "Entrega estimada:<br><b>".$solicitud->getFinEst()->format('d-m')."</b>";
       } else {
-        $inicio = '<i class="fa fa-lg fa-calendar-plus-o"></i> Sin fechas estimadas';
+        $inicio = '<i class="fa fa-lg fa-calendar-plus-o asig-user-image"></i> Entrega estimada:<br><b> Ninguna </b>';
       }
+
+      if ($solicitud->getFinEst()->format('Y-m-d') != '1900-01-01' && $solicitud->getEstadoKb() == 3) {
+        $inicio .= "<br>Entrega real:<br><b>".$solicitud->getFinReal()->format('d-m')."</b>";
+      }
+
+
 
       switch ($solicitud->getEstadoKb()) {
         case 0:
-          $btn_accion = ' <button class="btn btn-warning pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="1">Iniciar <i class="fa fa-angle-double-right"></i></button>';
+          $btn_accion = ' <button class="btn btn-warning pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="1">Iniciar</button>';
           break;
         case 1:
-          $btn_accion = ' <a href="#" class="btn btn-info pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="2">A revisión <i class="fa fa-angle-double-right"></i></a>';
+          $btn_accion = ' <a href="#" class="btn btn-info pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="2">Revisar</a>';
           break;
         case 2:
-          $btn_accion = ' <a href="#" class="btn btn-success pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="3">Terminar <i class="fa fa-angle-double-right"></i></a>';
+          $btn_accion = ' <a href="#" class="btn btn-success pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="3">Terminar</a> <a href="#" class="btn btn-warning pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="1" style="margin-right:10px;">Reiniciar</a>';
+          break;
+        case 3:
+          $btn_accion = '<i class="fa fa-check text-green pull-right"></i>';
           break;
         
         default:
@@ -85,14 +90,32 @@
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body div-conteiner">';
-  
-  $respuesta .= '<div class="asignaciones col-xs-12 with-border"><a href="#" id="fecha_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-inicio="'.$solicitud->getInicioEst()->format('Y-m-d').'" data-fin="'.$solicitud->getFinEst()->format('Y-m-d').'" data-toggle="modal" data-target="#modal-fechas" class="col-md-4 text-black" onclick="asigFecha('.$solicitud->getId().')">'.$inicio.'</a><a href="#" id="asig_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-iduser="'.$userAsignado.'" data-toggle="modal" data-target="#modal-usuario" class="col-md-4 text-black" onclick="asigUser('.$solicitud->getId().')">'.$asig.'</a><a href="" class="col-md-4 text-black">Prioridad: '.$prior.'</a></span></div>';
-  $respuesta .= '<div class="col-xs-12"><hr></div>';
+    if ($solicitud->getEstadoKb() != 3) {
+      $respuesta .= '<div class="asignaciones col-xs-12 with-border"><a href="#" id="fecha_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-fin="'.$solicitud->getFinEst()->format('Y-m-d').'" data-toggle="modal" data-target="#modal-fechas" class="col-md-4 col-xs-6 text-black" onclick="asigFecha('.$solicitud->getId().')">'.$inicio.'</a><a href="#" id="asig_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-iduser="'.$userAsignado.'" data-toggle="modal" data-target="#modal-usuario" class="col-md-4 col-xs-6 text-black" onclick="asigUser('.$solicitud->getId().')">'.$asig.'</a><a href="" class="col-md-4 col-xs-12 text-black">Prioridad:<br>'.$prior.'</a></span></div>';
+    } else {
+      $respuesta .= '<div class="asignaciones col-xs-12 with-border"><span class="col-md-4 col-xs-6 text-black" >'.$inicio.'</span><span class="col-md-4 col-xs-6 text-black">'.$asig.'</span><span class="col-md-4 col-xs-12 text-black">Prioridad:<br>'.$prior.'</span></span></div>';
+    }
+
+    
   $respuesta .= '<div class="col-xs-12"><h3>Descripción</h3></div>';
   $respuesta .= '<div class="col-xs-12" style="border: 1px solid #eee;border-radius:5px;min-height:150px;" id="descripcion">'.$solicitud->getDescripcion().'</div>';
 
-  $respuesta .= '<div class="col-xs-12"><h3>Acciones</h3></div>';
-  $respuesta .= '<div class="col-xs-12">';
+  $respuesta .= '<div class="comentarios">';
+  if (!empty($arrSolComentarios)) {
+    $respuesta .= '<div class="col-xs-12"><h4>Comentarios</h4></div>';
+    $respuesta .= '<div class="col-xs-12 historia">';
+      foreach ($arrSolComentarios as $comentario) {
+        $operador = $handlerUs->selectById(intval($comentario->getIdOperador()));
+
+        $respuesta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b><br>'.$comentario->getComentario().'.</span><span class="lsa"><b>'.$comentario->getFechaHora()->format('d-m H:i').'</b></span></li>';
+
+      }
+    $respuesta .= '</div>';
+  }
+
+  $respuesta .= '</div>';
+  $respuesta .= '<div class="col-xs-12"><h4>Historico</h4></div>';
+  $respuesta .= '<div class="col-xs-12 historia">';
   if (!empty($arrSolHistorico)) {
     foreach ($arrSolHistorico as $histo) {
       $operador = $handlerUs->selectById(intval($histo->getIdOperador()));
@@ -125,7 +148,7 @@
          $respuesta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b> asignó la tarea a <b>'.strtoupper($encargado->getNombre()[0].'. '.$encargado->getApellido()).'</b></span><span class="lsa"><b>'.$histo->getFechaHora()->format('d-m H:i').'</b></span></li>';
          break;
        case 3:
-         $respuesta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b> estimó la tarea desde el '.$histo->getInicioEst()->format('d-m').' al '.$histo->getFinEst()->format('d-m').'</span><span class="lsa"><b>'.$histo->getFechaHora()->format('d-m H:i').'</b></span></li>';
+         $respuesta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b> asignó la fecha de entrega para el '.$histo->getFinEst()->format('d-m').'</span><span class="lsa"><b>'.$histo->getFechaHora()->format('d-m H:i').'</b></span></li>';
          break;
        case 4:
          $respuesta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b> creó la solicitud</span><span class="lsa"><b>'.$histo->getFechaHora()->format('d-m H:i').'</b></span></li>';
@@ -141,33 +164,41 @@
 
 
 $respuesta.= '</div>
-                </div>
                 </div>';
+                if ($solicitud->getEstadoKb() != 3) {
+                  $respuesta .= '<div class="box-footer">
+                    <a href="#" id="coment_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-toggle="modal" data-target="#modal-comentarios" class="text-black" onclick="comentar('.$solicitud->getId().')">
+                    <i class="fa fa-comment-o pull-right fa-2x"></i></a>
+                  </div>';
+                }
+                
+$respuesta .= '</div>';
   echo $respuesta;
 ?>
 
 <script type="text/javascript">
   $(document).ready(function(){                
-  $(".btn-accion").on('click',function(){
-    
-    var id = $(this).attr("data-id"),
-        estado = $(this).attr("data-estado"),
-        id_operador = $(this).attr("data-idoperador"),
-        self=this;
+    $(".btn-accion").on('click',function(){
+      
+      var id = $(this).attr("data-id"),
+          estado = $(this).attr("data-estado"),
+          id_operador = $(this).attr("data-idoperador"),
+          self=this;
 
-        // console.log(id,estado);
-        $.ajax({
-            type: "POST",
-            url: '<?php echo $url_action_cambio_estado; ?>',
-            data: {
-                id: id,
-                id_operador: id_operador,
-                estado: estado
-            },
-            success: function(data){
-                window.location = data;
-            }
-        });
+          // console.log(id,estado);
+          $.ajax({
+              type: "POST",
+              url: '<?php echo $url_action_cambio_estado; ?>',
+              data: {
+                  id: id,
+                  id_operador: id_operador,
+                  estado: estado
+              },
+              success: function(data){
+                  window.location = data;
+              }
+          });
+    });
+
   });
-});
 </script>

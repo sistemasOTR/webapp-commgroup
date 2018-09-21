@@ -9,15 +9,12 @@
   $handlerUs = new HandlerUsuarios;
   $dFecha = new Fechas;
   $handlerKB = new HandlerKanban;
-  include_once 'pendientes.php';
-  include_once 'encurso.php';
-  include_once 'enrevision.php';
+  include_once 'terminadas.php';
   # URLs externas #
   $url_action_nueva_tarea = PATH_VISTA.'Modulos/Kanban/action_nueva_tarea.php';
   $url_action_asignar_user = PATH_VISTA.'Modulos/Kanban/action_asignar_user.php';
   $url_action_asignar_fechas = PATH_VISTA.'Modulos/Kanban/action_asignar_fecha.php';
   $url_action_cambio_estado = PATH_VISTA.'Modulos/Kanban/action_cambio_estado.php';
-  $url_action_nuevo_comentario = PATH_VISTA.'Modulos/Kanban/action_nuevo_comentario.php';
   $url_js = PATH_VISTA.'Modulos/Kanban/kanban.js';
   $url_ajax = PATH_VISTA.'Modulos/Kanban/detalle.php';
 ?>
@@ -32,12 +29,14 @@
 
   .lsp {flex-grow: 1;padding:10px 0px;}
   .lsa {flex-grow: 1;}
-  .lsp a {padding: 5px}
+  .lsp span {padding: 5px}
   .item-flex {display: flex !important;}
   .btn-sol {flex-grow: 100;}
   .historia {color: #777;font-size: 12px;}
+  @media (min-width: 768px){
+    .div-conteiner {max-height: calc(100vh - 230px); overflow-y: auto;}
+  }
 
-  .div-conteiner {max-height: calc(100vh - 230px); overflow-y: auto;}
 </style>
 
 <div class="content-wrapper">    
@@ -49,66 +48,28 @@
       <div class="col-md-6">
         <div class="box box-solid">
             <div class="box-header with-border">
-              <h3 class="box-title">Solicitudes</h3>
+              <h3 class="box-title">Solicitudes</h3><!-- 
               <a href="#" class="btn btn-info pull-right btn-new" data-toggle='modal' data-target='#modal-nuevo'>
                   <i class="fa fa-plus"></i> Nueva
-              </a>
+              </a> -->
             </div>
             <!-- /.box-header -->
             <div class="box-body no-padding div-conteiner">
               <div class="box-group" id="accordion">
                 <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
                 <div class="panel box box-solid">
-                  <div class="box-header with-border bg-red">
+                  <div class="box-header with-border bg-green">
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                       <h4 class="box-title">
-                        Pendientes 
+                        Tareas Terminadas 
                       </h4>
-                      <span class="pull-right badge bg-black"><?php echo $cantPend ?></span>
+                      <span class="pull-right badge bg-black"><?php echo $cantTerminadas ?></span>
                     </a>
                   </div>
                   <div id="collapseOne" class="panel-collapse in">
                     <div class="box-body no-padding">
                       <ul class="nav nav-stacked">
-                        <?php echo $list_pendientes; ?>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="box-group" id="accordion2">
-                <div class="panel box box-solid">
-                  <div class="box-header with-border bg-yellow">
-                    <a data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-                      <h4 class="box-title">
-                        En Curso
-                      </h4>
-                      <span class="pull-right badge bg-black"><?php echo $cantEnCurso ?></span>
-                    </a>
-                  </div>
-                  <div id="collapseTwo" class="panel-collapse in">
-                    <div class="box-body no-padding">
-                      <ul class="nav nav-stacked">
-                        <?php echo $list_EnCurso; ?>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="box-group" id="accordion3">
-                <div class="panel box box-solid">
-                  <div class="box-header with-border bg-aqua">
-                    <a data-toggle="collapse" data-parent="#accordion3" href="#collapseThree">
-                      <h4 class="box-title">
-                        En Revisión
-                      </h4>
-                      <span class="pull-right badge bg-black"><?php echo $cantRev ?></span>
-                    </a>
-                  </div>
-                  <div id="collapseThree" class="panel-collapse in">
-                    <div class="box-body no-padding">
-                      <ul class="nav nav-stacked">
-                        <?php echo $list_Rev; ?>
+                        <?php echo $list_terminadas; ?>
                       </ul>
                     </div>
                   </div>
@@ -151,29 +112,6 @@
             }
         });
   });
-  
-
-    $(".btn-comentario").on('click',function(){
-      
-      var comentario = $('#comentario').val(),
-          id_kanban = $('#id_tarea_coment').val(),
-          id_operador_coment = $('#id_operador_coment').val(),
-          self=this;
-
-          console.log(id_kanban,comentario,id_operador_coment);
-          $.ajax({
-              type: "POST",
-              url: '<?php echo $url_action_nuevo_comentario; ?>',
-              data: {
-                  comentario: comentario,
-                  id_operador_coment: id_operador_coment,
-                  id_kanban: id_kanban
-              },
-              success: function(data){
-                  $('.comentarios').html(data);
-              }
-          });
-    });
 
 
 });

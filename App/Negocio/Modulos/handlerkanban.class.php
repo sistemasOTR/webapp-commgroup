@@ -8,6 +8,7 @@
 	include_once PATH_DATOS.'BaseDatos/conexionapp.class.php';
 	include_once PATH_DATOS.'Entidades/kanban.class.php';
 	include_once PATH_DATOS.'Entidades/kanban_historia.class.php';
+	include_once PATH_DATOS.'Entidades/kanban_comentarios.class.php';
 	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
 	include_once PATH_NEGOCIO."Funciones/Archivo/archivo.class.php"; 
 	
@@ -55,13 +56,11 @@
 				$handlerHist->setDescripcion($last->getDescripcion());
 				$handlerHist->setIdKanban($last->getId());
 				$handlerHist->setIdOperador($last->getIdSol());
-				$handlerHist->setIdEnc(0);     	
-				$handlerHist->setInicioEst('');     	
+				$handlerHist->setIdEnc(0);
 				$handlerHist->setFinEst('');
 				$handlerHist->setEstadoKb(0);
 				$handlerHist->setPrioridad($last->getPrioridad());     	
-				$handlerHist->setFechaHora($fechahora);     	
-				$handlerHist->setInicioReal('');     	
+				$handlerHist->setFechaHora($fechahora);
 				$handlerHist->setFinReal('');
 				// $handlerHist->setSector($last->getSector());
 				$handlerHist->setTipoCambio(0);
@@ -92,12 +91,10 @@
 				$handlerHist->setIdKanban($id);
 				$handlerHist->setIdOperador($id_operador);
 				$handlerHist->setIdEnc($id_enc);
-				$handlerHist->setInicioEst($last->getInicioEst()->format('Y-m-d'));
 				$handlerHist->setFinEst($last->getFinEst()->format('Y-m-d'));
 				$handlerHist->setEstadoKb($last->getEstadoKb());
 				$handlerHist->setPrioridad($last->getPrioridad());     	
 				$handlerHist->setFechaHora($fechahora);
-				$handlerHist->setInicioReal($last->getInicioReal()->format('Y-m-d'));
 				$handlerHist->setFinReal($last->getFinReal()->format('Y-m-d'));
 				$handlerHist->setTipoCambio(2);
 				$handlerHist->setEstado(true);
@@ -110,12 +107,12 @@
 			}
 		}
 
-		public function asignarFechasEst($id,$inicio_est,$fin_est,$id_operador){
+		public function asignarFechasEst($id,$fin_est,$id_operador){
 			try {
 					
 				$handler = new Kanban;
 
-				$handler->updateFechas(null,$id,$inicio_est,$fin_est);
+				$handler->updateFechas(null,$id,$fin_est);
 
 				$last = $handler->getSolById($id);
 				$f = new Fechas;
@@ -127,12 +124,10 @@
 				$handlerHist->setIdKanban($id);
 				$handlerHist->setIdOperador($id_operador);
 				$handlerHist->setIdEnc($last->getIdEnc());
-				$handlerHist->setInicioEst($last->getInicioEst()->format('Y-m-d'));
 				$handlerHist->setFinEst($last->getFinEst()->format('Y-m-d'));
 				$handlerHist->setEstadoKb($last->getEstadoKb());
 				$handlerHist->setPrioridad($last->getPrioridad());     	
 				$handlerHist->setFechaHora($fechahora);
-				$handlerHist->setInicioReal($last->getInicioReal()->format('Y-m-d'));
 				$handlerHist->setFinReal($last->getFinReal()->format('Y-m-d'));
 				$handlerHist->setTipoCambio(3);
 				$handlerHist->setEstado(true);
@@ -150,8 +145,17 @@
 
 		public function cambiarEstadoKB($id,$estado,$id_operador){
 			try {
-					
+
+				$f = new Fechas;
+				$fechahora = $f->FechaHoraActual();
+				$fechaFin = $f->FechaActual();
+
 				$handler = new Kanban;
+				if ($estado != 3) {
+					$handler->cambiarEstadoKB(null,$id,$estado);
+				} else {
+					$handler->terminar(null,$id,$estado,$fechaFin);
+				}
 
 				$handler->cambiarEstadoKB(null,$id,$estado);
 
@@ -165,12 +169,10 @@
 				$handlerHist->setIdKanban($id);
 				$handlerHist->setIdOperador($id_operador);
 				$handlerHist->setIdEnc($last->getIdEnc());
-				$handlerHist->setInicioEst($last->getInicioEst()->format('Y-m-d'));
 				$handlerHist->setFinEst($last->getFinEst()->format('Y-m-d'));
 				$handlerHist->setEstadoKb($last->getEstadoKb());
 				$handlerHist->setPrioridad($last->getPrioridad());     	
 				$handlerHist->setFechaHora($fechahora);
-				$handlerHist->setInicioReal($last->getInicioReal()->format('Y-m-d'));
 				$handlerHist->setFinReal($last->getFinReal()->format('Y-m-d'));
 				$handlerHist->setTipoCambio(1);
 				$handlerHist->setEstado(true);
@@ -215,6 +217,48 @@
 					return $data;
 				}
 				
+
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
+		public function selectComentariosById($id){
+			try {
+					
+				$handler = new KanbanComentarios;
+
+				$data = $handler->selectComentariosById($id);
+				if(count($data)==1){
+					$data = array('' => $data );
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+				
+
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
+		public function nuevoComentario($comentario,$id_kanban,$id_operador){
+			try {
+
+				$f = new Fechas;
+				$fechahora = $f->FechaHoraActual();
+
+				$handlerComent = new KanbanComentarios;    	
+				$handlerComent->setComentario($comentario);
+				$handlerComent->setIdKanban($id_kanban);
+				$handlerComent->setIdOperador($id_operador);	
+				$handlerComent->setFechaHora($fechahora);
+				$handlerComent->setEstado(true);
+
+				$handlerComent->insert(null);
 
 				
 			} catch (Exception $e) {
