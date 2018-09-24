@@ -401,6 +401,25 @@
 			}		
 		}
 
+		public function updatePrioridad($conexion,$id,$prioridad)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE kanban SET
+        						prioridad=".$prioridad."
+							WHERE id=".$id;
+
+							// var_dump($query);
+							// exit();
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
 		public function cambiarEstadoKB($conexion,$id,$estado)
 		{
 			try {
@@ -416,6 +435,24 @@
         						estado = 'false'
 							WHERE id=".$id;
 				}
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+		public function editDescKanban($conexion,$id,$desc)
+		{
+			try {
+
+				#Query
+				$query="UPDATE kanban SET
+        						descripcion='".$desc."'
+							WHERE id=".$id;
+				
 
 				# Ejecucion 					
 				return SQL::update($conexion,$query);	

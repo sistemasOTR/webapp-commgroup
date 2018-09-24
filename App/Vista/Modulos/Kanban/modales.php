@@ -144,3 +144,35 @@
     </div>
   </div>
 </div>
+
+
+<!-- modal asignacion prioridad -->
+<div class="modal fade in small" id="modal-prioridad">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" data-dismiss="modal" class="close" aria-label="Close">
+            <span aria-hidden="true">×</span></button>
+          <h4 class="modal-title">Asignar prioridad</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                  <label>Prioridad</label>
+                  <select name="slt_prioridad" id="slt_prioridad_cambio" class="form-control">
+                    <option value="0">BAJA</option>
+                    <option value="1">MEDIA</option>
+                    <option value="2">ALTA</option>
+                  </select>
+                  <input type="hidden" name="id_tarea" id="id_tarea_prioridad" class="form-control">
+                  <input type="hidden" name="id_operador" id="id_operador_prioridad" class="form-control" value='<?php echo $user->getId(); ?>'>
+                </div>              
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button data-dismiss="modal"  class="btn btn-primary btn-prioridad">Guardar</button>
+        </div>
+
+    </div>
+  </div>
+</div>

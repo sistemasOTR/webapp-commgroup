@@ -17,6 +17,14 @@ $(document).ready(function(){
   });
 });
 
+function asigPrior(id) {
+    id_tarea = document.getElementById('prior_'+id).getAttribute('data-id');
+    id_prior = document.getElementById('prior_'+id).getAttribute('data-prior');
+
+    document.getElementById('id_tarea_prioridad').value = id_tarea;
+    document.getElementById('slt_prioridad_cambio').value = id_prior;
+}
+
 function asigUser(id) {
     id_tarea = document.getElementById('asig_'+id).getAttribute('data-id');
     id_user = document.getElementById('asig_'+id).getAttribute('data-iduser');
@@ -51,8 +59,7 @@ function asigFecha(id) {
     document.getElementById('id_tarea_fechas').value = id_tarea;
     document.getElementById('fin_est').value = fin;
 }
-
-
+    
     // $(document).ready(function() {
     //     $('#tabla-sueldos').DataTable({
     //       "dom": 'Bfrtip',
