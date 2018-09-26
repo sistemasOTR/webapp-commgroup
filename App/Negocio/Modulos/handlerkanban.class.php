@@ -9,6 +9,8 @@
 	include_once PATH_DATOS.'Entidades/kanban.class.php';
 	include_once PATH_DATOS.'Entidades/kanban_historia.class.php';
 	include_once PATH_DATOS.'Entidades/kanban_comentarios.class.php';
+	include_once PATH_DATOS.'Entidades/kanban_notificaciones.class.php';
+	include_once PATH_DATOS.'Entidades/usuario.class.php';
 	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
 	include_once PATH_NEGOCIO."Funciones/Archivo/archivo.class.php"; 
 	
@@ -41,7 +43,6 @@
 				$handler->setFechaSol($fechaSol);
 				$handler->setIdSol($idSol);
 				$handler->setPrioridad($prioridad);
-				// $handler->setSector($sector);
 				$handler->setPlaza($plaza);
 				$handler->setEstado(true);
 				
@@ -62,11 +63,29 @@
 				$handlerHist->setPrioridad($last->getPrioridad());     	
 				$handlerHist->setFechaHora($fechahora);
 				$handlerHist->setFinReal('');
-				// $handlerHist->setSector($last->getSector());
 				$handlerHist->setTipoCambio(0);
 				$handlerHist->setEstado(true);
 
 				$handlerHist->insert(null);
+
+				$handlerNoti = new KanbanNotificaciones;
+
+				$handlerNoti->setDescripcion('Se ha creado la solicitud "'.$last->getTitulo().'"');
+				$handlerNoti->setIdKanban($last->getId());
+				$handlerNoti->setIdUser(3);    	
+				$handlerNoti->setFechaHora($fechahora);
+				$handlerNoti->setEstado(true);
+
+				$handlerNoti->insert(null);
+				
+				$handlerNoti->setIdUser(10082);
+
+				$handlerNoti->insert(null);    	
+
+				$handlerNoti->setIdUser(20174);
+
+				$handlerNoti->insert(null);    	
+
 
 				
 			} catch (Exception $e) {
@@ -101,6 +120,34 @@
 
 				$handlerHist->insert(null);
 
+				$handlerUs = new Usuario;
+				$handlerUs->setId($id_enc);
+				$usuario = $handlerUs->select();
+
+
+				$handlerNoti = new KanbanNotificaciones;
+
+				$handlerNoti->setDescripcion('Se ha asignado la solicitud "'.$last->getTitulo().'" a '.strtoupper($usuario->getNombre()[0].'.'.$usuario->getApellido()));
+				$handlerNoti->setIdKanban($last->getId());
+				$handlerNoti->setIdUser(3);    	
+				$handlerNoti->setFechaHora($fechahora);
+				$handlerNoti->setEstado(true);
+
+				$handlerNoti->insert(null);
+				
+				$handlerNoti->setIdUser(10082);
+
+				$handlerNoti->insert(null);    	
+
+				$handlerNoti->setIdUser(20174);
+
+				$handlerNoti->insert(null);    	    	
+
+				$handlerNoti->setIdUser($id_enc);
+				$handlerNoti->setDescripcion('Se te ha asignado la solicitud "'.$last->getTitulo().'"');
+
+				$handlerNoti->insert(null);    	
+
 				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
@@ -134,6 +181,31 @@
 
 				$handlerHist->insert(null);
 
+				$handlerNoti = new KanbanNotificaciones;
+
+				$handlerNoti->setDescripcion('Se ha cambiado la prioridad de la solicitud "'.$last->getTitulo().'"');
+				$handlerNoti->setIdKanban($last->getId());
+				$handlerNoti->setIdUser(3);    	
+				$handlerNoti->setFechaHora($fechahora);
+				$handlerNoti->setEstado(true);
+
+				$handlerNoti->insert(null);
+				
+				$handlerNoti->setIdUser(10082);
+
+				$handlerNoti->insert(null);    	
+
+				$handlerNoti->setIdUser(20174);
+
+				$handlerNoti->insert(null);
+
+				if ($last->getIdEnc() != 0) {
+
+					$handlerNoti->setIdUser($last->getIdEnc());
+
+					$handlerNoti->insert(null); 
+				}
+
 				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
@@ -165,10 +237,33 @@
 				$handlerHist->setTipoCambio(3);
 				$handlerHist->setEstado(true);
 
-				// var_dump($handlerHist);
-				// exit();
-
 				$handlerHist->insert(null);
+
+				$handlerNoti = new KanbanNotificaciones;
+
+				$handlerNoti->setDescripcion('Se ha asignado una fecha límite a la solicitud "'.$last->getTitulo().'"');
+				$handlerNoti->setIdKanban($last->getId());
+				$handlerNoti->setIdUser(3);    	
+				$handlerNoti->setFechaHora($fechahora);
+				$handlerNoti->setEstado(true);
+
+				$handlerNoti->insert(null);
+				
+				$handlerNoti->setIdUser(10082);
+
+				$handlerNoti->insert(null);    	
+
+				$handlerNoti->setIdUser(20174);
+
+				$handlerNoti->insert(null);
+
+				if ($last->getIdEnc() != 0) {
+
+					$handlerNoti->setIdUser($last->getIdEnc());
+
+					$handlerNoti->insert(null); 
+				}
+
 
 				
 			} catch (Exception $e) {
@@ -208,10 +303,37 @@
 				$handlerHist->setTipoCambio(1);
 				$handlerHist->setEstado(true);
 
-				// var_dump($handlerHist);
-				// exit();
-
 				$handlerHist->insert(null);
+
+				$handlerNoti = new KanbanNotificaciones;
+
+				if ($estado != 3) {
+					$handlerNoti->setDescripcion('Se ha cambiado el estado de la solicitud "'.$last->getTitulo().'"');
+				} else {
+					$handlerNoti->setDescripcion('Se ha finalizado la solicitud "'.$last->getTitulo().'"');
+				}
+				$handlerNoti->setIdKanban($last->getId());
+				$handlerNoti->setIdUser(3);    	
+				$handlerNoti->setFechaHora($fechahora);
+				$handlerNoti->setEstado(true);
+
+				$handlerNoti->insert(null);
+				
+				$handlerNoti->setIdUser(10082);
+
+				$handlerNoti->insert(null);    	
+
+				$handlerNoti->setIdUser(20174);
+
+				$handlerNoti->insert(null);
+
+				if ($last->getIdEnc() != 0) {
+
+					$handlerNoti->setIdUser($last->getIdEnc());
+
+					$handlerNoti->insert(null); 
+				}
+
 
 				
 			} catch (Exception $e) {
@@ -335,4 +457,39 @@
 				throw new Exception($e->getMessage());
 			}
 		}
+
+		public function selectNotificacionesByUser($id_user){
+			try {
+					
+				$handler = new KanbanNotificaciones;
+
+				$data = $handler->selectNotificacionesByUser($id_user);
+				if(count($data)==1){
+					$data = array('' => $data );
+					return $data;
+				}				
+				else{
+					return $data;
+				}
+				
+
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
+		public function borrarNotificacion($id){
+			try {
+					
+				$handler = new KanbanNotificaciones;
+
+				$handler->setId($id);
+				$handler->delete(false);
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
 	}

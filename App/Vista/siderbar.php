@@ -875,12 +875,7 @@
                     <a href=<?php echo $url_kanban_lista_terminadas ?>> 
                       <i class="fa  fa-check"></i> <span>Terminadas</span> </i>
                     </a>
-                  </li><!-- 
-                  <li id="mnu_agenda_rubros">
-                    <a href=<?php echo $url_agenda_rubros ?>> 
-                      <i class="fa fa-list"></i> <span>Rubros</span> </i>
-                    </a>
-                  </li> -->
+                  </li>
                 </ul>              
               </li>   
 
