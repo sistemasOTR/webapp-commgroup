@@ -135,13 +135,19 @@
 
 				$handlerNoti->insert(null);
 				
-				$handlerNoti->setIdUser(10082);
+				if ($id_enc != 10082) {
 
-				$handlerNoti->insert(null);    	
+					$handlerNoti->setIdUser(10082);
 
-				$handlerNoti->setIdUser(20174);
+					$handlerNoti->insert(null);    	
+				}
+				
+				if ($id_enc != 20174) {
 
-				$handlerNoti->insert(null);    	    	
+					$handlerNoti->setIdUser(20174);
+
+					$handlerNoti->insert(null);
+				}
 
 				$handlerNoti->setIdUser($id_enc);
 				$handlerNoti->setDescripcion('Se te ha asignado la solicitud "'.$last->getTitulo().'"');
@@ -187,15 +193,21 @@
 				$handlerNoti->setFechaHora($fechahora);
 				$handlerNoti->setEstado(true);
 
-				$handlerNoti->insert(null);
+				$handlerNoti->insert(null);    
 				
-				$handlerNoti->setIdUser(10082);
+				if ($last->getIdEnc() != 10082) {
 
-				$handlerNoti->insert(null);    	
+					$handlerNoti->setIdUser(10082);
 
-				$handlerNoti->setIdUser(20174);
+					$handlerNoti->insert(null);    	
+				}
+				
+				if ($last->getIdEnc() != 20174) {
 
-				$handlerNoti->insert(null);
+					$handlerNoti->setIdUser(20174);
+
+					$handlerNoti->insert(null);
+				}
 
 				if ($last->getIdEnc() != 0) {
 
@@ -245,15 +257,21 @@
 				$handlerNoti->setFechaHora($fechahora);
 				$handlerNoti->setEstado(true);
 
-				$handlerNoti->insert(null);
+				$handlerNoti->insert(null);    
 				
-				$handlerNoti->setIdUser(10082);
+				if ($last->getIdEnc() != 10082) {
 
-				$handlerNoti->insert(null);    	
+					$handlerNoti->setIdUser(10082);
 
-				$handlerNoti->setIdUser(20174);
+					$handlerNoti->insert(null);    	
+				}
+				
+				if ($last->getIdEnc() != 20174) {
 
-				$handlerNoti->insert(null);
+					$handlerNoti->setIdUser(20174);
+
+					$handlerNoti->insert(null);
+				}
 
 				if ($last->getIdEnc() != 0) {
 
@@ -261,7 +279,6 @@
 
 					$handlerNoti->insert(null); 
 				}
-
 
 				
 			} catch (Exception $e) {
@@ -317,13 +334,19 @@
 
 				$handlerNoti->insert(null);
 				
-				$handlerNoti->setIdUser(10082);
+				if ($last->getIdEnc() != 10082) {
 
-				$handlerNoti->insert(null);    	
+					$handlerNoti->setIdUser(10082);
 
-				$handlerNoti->setIdUser(20174);
+					$handlerNoti->insert(null);    	
+				}
+				
+				if ($last->getIdEnc() != 20174) {
 
-				$handlerNoti->insert(null);
+					$handlerNoti->setIdUser(20174);
+
+					$handlerNoti->insert(null);
+				}
 
 				if ($last->getIdEnc() != 0) {
 

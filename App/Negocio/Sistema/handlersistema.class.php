@@ -2769,16 +2769,21 @@
 			}
 		}
 
-		public function selectLastEstadoServicio($nrodoc){
+		public function selectLastEstadoServicio($nrodoc,$empresa){
 			try {
 
 				$filtro_nrodoc="";
 				if(!empty($nrodoc))								
 					$filtro_nrodoc = "SERTT31_PERNUMDOC = ".$nrodoc;
 
+				$filtro_empresa="";
+				if(!empty($empresa))								
+					$filtro_empresa = "SERTT91_CODEMPRE = ".$empresa." AND ";
+
 				$query = "SELECT SERTT91_ESTADO as ESTADO
 						FROM SERVTT
 						WHERE 
+							".$filtro_empresa."
 							".$filtro_nrodoc." AND SERTT91_ESTADO <> 12
 						ORDER BY SERTT41_FECEST DESC";
 				

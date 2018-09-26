@@ -862,7 +862,7 @@
               </li>   
             <?php } ?>
 
-            
+            <?php if(!$esCliente){ ?>
               <li class="treeview" id="mnu_kanban">
                 <a href="#"><i class="fa fa-bookmark-o"></i> <span>Tareas</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
@@ -877,7 +877,8 @@
                     </a>
                   </li>
                 </ul>              
-              </li>   
+              </li>  
+              <?php } ?> 
 
              <?php
               if($usuarioActivoSesion->getId()==10164){    

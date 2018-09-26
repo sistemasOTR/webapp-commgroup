@@ -14,7 +14,7 @@
 
         if (!empty($impoMensual)) {
         	foreach ($impoMensual as $key => $value) {
-	        	$lastEstado = $handler->selectLastEstadoServicio(intval(trim($value->getNroDoc())));
+	        	$lastEstado = $handler->selectLastEstadoServicio(intval(trim($value->getNroDoc())),$est_empresa);
 	        	if (!empty($lastEstado)) {
 	        		if (intval($lastEstado[0]->ESTADO) == 6 || intval($lastEstado[0]->ESTADO) == 9 || intval($lastEstado[0]->ESTADO) == 10 || intval($lastEstado[0]->ESTADO) == 14) {
 	        			if (count($lastEstado) == 1) {

@@ -52,23 +52,43 @@
 
     <script>
     	$(document).ready(function(){
-		  $(".close-notif").on('click',function(){
-		    var id = $(this).attr("data-id"),
-		    	id_user = $(this).attr("data-iduser"),
-		        self=this;
+  		  $(".close-notif").on('click',function(){
+  		    var id = $(this).attr("data-id"),
+  		    	id_user = $(this).attr("data-iduser"),
+  		        self=this;
 
 
-		        $.ajax({
-		            type: "POST",
-		            url: '<?php echo $url_borrar_notificacion; ?>',
-		            data: {
-		                id: id,
-		                id_user:id_user
-		            },
-		            success: function(data){
-		                $('#notiKB').html(data);
-		            }
-		        });
-		  });
-		});
+  		        $.ajax({
+  		            type: "POST",
+  		            url: '<?php echo $url_borrar_notificacion; ?>',
+  		            data: {
+  		                id: id,
+  		                id_user:id_user
+  		            },
+  		            success: function(data){
+  		                $('#notiKB').html(data);
+  		            }
+  		        });
+  		  });
+  		});
+      $( document ).ajaxComplete(function() {
+        $(".close-notif").on('click',function(){
+          var id = $(this).attr("data-id"),
+            id_user = $(this).attr("data-iduser"),
+              self=this;
+
+
+              $.ajax({
+                  type: "POST",
+                  url: '<?php echo $url_borrar_notificacion; ?>',
+                  data: {
+                      id: id,
+                      id_user:id_user
+                  },
+                  success: function(data){
+                      $('#notiKB').html(data);
+                  }
+              });
+        });
+      });
     </script>

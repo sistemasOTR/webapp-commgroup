@@ -38,7 +38,7 @@
   .btn-sol {flex-grow: 100;}
   .historia {color: #777;font-size: 12px;}
 
-  .div-conteiner {max-height: calc(100vh - 230px); overflow-y: auto;}
+  .div-conteiner {max-height: calc(100vh - 250px); overflow-y: auto;}
 </style>
 
 <div class="content-wrapper">    
