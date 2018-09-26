@@ -6,9 +6,10 @@
     #######################
 
     $fDesde= (isset($_GET["fdesde"])?$_GET["fdesde"]:'');
+    $fDesdeC = $fDesde.'-01';
 
-    $fDesdeTicket = date('Y-m-26',strtotime($fDesde.'-1 days'));
-    $fHastaTicket = date('Y-m-25',strtotime($fDesde));
+    $fDesdeTicket = date('Y-m-26',strtotime($fDesdeC.'-1 days'));
+    $fHastaTicket = date('Y-m-25',strtotime($fDesdeC));
     $resumenTickets = $handlerTickets->resumenGestor($id, $fDesdeTicket, $fHastaTicket);
     $reintegroTotal = 0;
     if (!empty($resumenTickets)) {
