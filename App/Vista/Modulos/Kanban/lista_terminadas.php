@@ -15,7 +15,7 @@
   $url_action_asignar_user = PATH_VISTA.'Modulos/Kanban/action_asignar_user.php';
   $url_action_asignar_fechas = PATH_VISTA.'Modulos/Kanban/action_asignar_fecha.php';
   $url_action_cambio_estado = PATH_VISTA.'Modulos/Kanban/action_cambio_estado.php';
-  $url_js = PATH_VISTA.'Modulos/Kanban/kanban.js';
+  $url_js = PATH_VISTA.'Modulos/Kanban/kanban_finish.js';
   $url_ajax = PATH_VISTA.'Modulos/Kanban/detalle.php';
 ?>
 <style>
@@ -25,11 +25,11 @@
   .bg-yellow:hover {background: #f38b12 !important}
   .bg-aqua:hover {background: #00c0bc !important}
   .asignaciones {padding: 15px 0 0;}
-  .asig-user-image {float: left;width: 35px;height: 35px;border-radius: 50%;margin-right: 10px;text-align: center;padding: 7px;}
+  .asig-user-image {float: left;width: 35px;height: 35px;border-radius: 50%;margin-right: 5px;text-align: center;padding: 7px;}
 
   .lsp {flex-grow: 1;padding:10px 0px;}
   .lsa {flex-grow: 1;}
-  .lsp a {padding: 5px}
+  .lsp span {padding: 5px}
   .item-flex {display: flex !important;}
   .btn-sol {flex-grow: 100;}
   .historia {color: #777;font-size: 12px;}

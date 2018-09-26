@@ -17,6 +17,8 @@
   $url_action_asignar_user = PATH_VISTA.'Modulos/Kanban/action_asignar_user.php';
   $url_action_asignar_fechas = PATH_VISTA.'Modulos/Kanban/action_asignar_fecha.php';
   $url_action_cambio_estado = PATH_VISTA.'Modulos/Kanban/action_cambio_estado.php';
+  $url_action_prioridad = PATH_VISTA.'Modulos/Kanban/action_prioridad.php';
+  $url_action_nuevo_comentario = PATH_VISTA.'Modulos/Kanban/action_nuevo_comentario.php';
   $url_js = PATH_VISTA.'Modulos/Kanban/kanban.js';
   $url_ajax = PATH_VISTA.'Modulos/Kanban/detalle.php';
 ?>
@@ -27,7 +29,7 @@
   .bg-yellow:hover {background: #f38b12 !important}
   .bg-aqua:hover {background: #00c0bc !important}
   .asignaciones {padding: 15px 0 0;}
-  .asig-user-image {float: left;width: 35px;height: 35px;border-radius: 50%;margin-right: 10px;text-align: center;padding: 7px;}
+  .asig-user-image {float: left;width: 35px;height: 35px;border-radius: 50%;margin-right: 5px;text-align: center;padding: 7px;}
 
   .lsp {flex-grow: 1;padding:10px 0px;}
   .lsa {flex-grow: 1;}
@@ -150,6 +152,54 @@
             }
         });
   });
+  
+
+    $(".btn-comentario").on('click',function(){
+      
+      var comentario = $('#comentario').val(),
+          id_kanban = $('#id_tarea_coment').val(),
+          id_operador_coment = $('#id_operador_coment').val(),
+          self=this;
+
+          console.log(id_kanban,comentario,id_operador_coment);
+          $.ajax({
+              type: "POST",
+              url: '<?php echo $url_action_nuevo_comentario; ?>',
+              data: {
+                  comentario: comentario,
+                  id_operador_coment: id_operador_coment,
+                  id_kanban: id_kanban
+              },
+              success: function(data){
+                  $('.comentarios').html(data);
+              }
+          });
+    });
+
+    $(".btn-prioridad").on('click',function(){
+          
+          var id = $('#id_tarea_prioridad').val(),
+              prioridad = $('#slt_prioridad_cambio').val(),
+              id_operador = $('#id_operador_prioridad').val(),
+              self=this;
+
+              // console.log(id,estado);
+              $.ajax({
+                  type: "POST",
+                  url: '<?php echo $url_action_prioridad; ?>',
+                  data: {
+                      id: id,
+                      id_operador: id_operador,
+                      prioridad: prioridad
+                  },
+                  success: function(data){
+                      rta = data.split('|');
+                      $('#'+id+'_prioridad').html(rta[0]);
+                      $('#'+id+'_prioridad_detalle').html(rta[1]);
+                      $('#hist_detalle').html(rta[2]);
+                  }
+              });
+        });
 
 
 });

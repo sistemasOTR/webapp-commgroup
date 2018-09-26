@@ -17,59 +17,66 @@
 
 
   $url_action_cambio_estado = PATH_VISTA.'Modulos/Kanban/action_cambio_estado.php';
+  $url_action_edit_desc = PATH_VISTA.'Modulos/Kanban/action_edit_desc.php';
+  $url_action_nuevo_comentario = PATH_VISTA.'Modulos/Kanban/action_nuevo_comentario.php';
   $respuesta = '';
 
   $solicitud = $handlerKB->selectById($id);
 
   $arrSolHistorico=$handlerKB->selectHistoricoById($id);
+  $arrSolComentarios=$handlerKB->selectComentariosById($id);
 
   switch ($solicitud->getPrioridad()) {
         case 0:
-          $prior = '<span class="label label-success">BAJA</span>';
-          break;
-        case 1:
-          $prior = '<span class="label label-warning">MEDIA</span>';
-          break;
-        case 2:
-          $prior = '<span class="label label-danger">ALTA</span>';
-          break;
-        
-        default:
-          $prior = '<span class="label label-success">BAJA</span>';
-          break;
+              $prior = '<span><i class="fa fa-arrow-down text-green"></i></span>';
+              break;
+            case 1:
+              $prior = '<span><i class="fa fa-arrow-right text-yellow"></i></span>';
+              break;
+            case 2:
+              $prior = '<span><i class="fa fa-arrow-up text-red"></i></span>';
+              break;
+            
+            default:
+              $prior = '<span><i class="fa fa-arrow-down text-green"></i></span>';
+              break;
       }
 
       if ($solicitud->getIdEnc() == 0) {
-        $asig = '<i class="fa fa-lg text-gray fa-user-plus"></i> Sin usuario asigado';
+        $asig = '<span class="asig-user-image" style="border: 1px dashed #d2d6de !important;"><i class="fa fa-lg text-gray fa-user-plus"></i></span><span class="text-black">Asignado a:<br><b> Nadie </b></span>';
         $userAsignado = '';
       } else {
         $usuario = $handlerUs->selectById(intval($solicitud->getIdEnc()));
-
-        if(StringUser::emptyUser($usuario->getFotoPerfil()))
-          $foto_perfil = PATH_VISTA."assets/dist/img/sinlogo_usuario.png";                                                        
-        else                  
-          $foto_perfil = PATH_CLIENTE.$usuario->getFotoPerfil();
-        // $avatar = $usuario->getFotoPerfil();
         $userAsignado = $usuario->getId();
 
         $asig = '<span class="bg-teal asig-user-image">'.strtoupper($usuario->getNombre()[0].' '.$usuario->getApellido()[0]).'</span><span class="text-black">Asignado a:<br><b>'.$usuario->getNombre().' '.$usuario->getApellido().'</b></span>';
       }
-
-      if ($solicitud->getFinEst()->format('Y-m-d') != '1900-01-01') {
-        $inicio = "Fecha Entrega:<br><b>".$solicitud->getFinEst()->format('d-m')."</b>";
+      if ($solicitud->getFinEst()->format('Y-m-d') != '1900-01-01' ) {
+        $inicio = "Entrega estimada:<br><b>".$solicitud->getFinEst()->format('d-m')."</b>";
       } else {
-        $inicio = '<i class="fa fa-lg fa-calendar-plus-o"></i> Sin fechas estimadas';
+        $inicio = '<i class="fa fa-lg fa-calendar-plus-o asig-user-image"></i> Entrega estimada:<br><b> Ninguna </b>';
       }
+
+      if ($solicitud->getFinEst()->format('Y-m-d') != '1900-01-01' && $solicitud->getEstadoKb() == 3) {
+        $inicio .= "<br>Entrega real:<br><b>".$solicitud->getFinReal()->format('d-m')."</b>";
+      }
+
+
 
       switch ($solicitud->getEstadoKb()) {
         case 0:
-          $btn_accion = ' <button class="btn btn-warning pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="1">Iniciar <i class="fa fa-angle-double-right"></i></button>';
+          if ($solicitud->getFinEst()->format('Y-m-d') == '1900-01-01' || $solicitud->getIdEnc() == 0) {
+            $btn_accion = '<button class="btn btn-danger pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="10" style="margin-right:10px;">Eliminar</button> ';
+          } else {
+            $btn_accion = ' <button class="btn btn-warning pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="1">Iniciar</button>';
+          }
+          
           break;
         case 1:
-          $btn_accion = ' <a href="#" class="btn btn-info pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="2">A revisión <i class="fa fa-angle-double-right"></i></a>';
+          $btn_accion = ' <a href="#" class="btn btn-info pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="2">Revisar</a>';
           break;
         case 2:
-          $btn_accion = ' <a href="#" class="btn btn-success pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="3">Terminar <i class="fa fa-angle-double-right"></i></a> <a href="#" class="btn btn-warning pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="1" style="margin-right:10px;"><i class="fa fa-angle-double-left"></i> Volver</a>';
+          $btn_accion = ' <a href="#" class="btn btn-success pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="3">Terminar</a> <a href="#" class="btn btn-warning pull-right btn-accion" data-idoperador="'.$id_operador.'" data-id="'.$solicitud->getId().'" data-estado="1" style="margin-right:10px;">Reiniciar</a>';
           break;
         case 3:
           $btn_accion = '<i class="fa fa-check text-green pull-right"></i>';
@@ -88,13 +95,32 @@
                   </div>
                   <!-- /.box-header -->
                   <div class="box-body div-conteiner">';
-  
-  $respuesta .= '<div class="asignaciones col-xs-12 with-border"><a href="#" id="fecha_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-fin="'.$solicitud->getFinEst()->format('Y-m-d').'" data-toggle="modal" data-target="#modal-fechas" class="col-md-4 col-xs-6 text-black" onclick="asigFecha('.$solicitud->getId().')">'.$inicio.'</a><a href="#" id="asig_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-iduser="'.$userAsignado.'" data-toggle="modal" data-target="#modal-usuario" class="col-md-4 col-xs-6 text-black" onclick="asigUser('.$solicitud->getId().')">'.$asig.'</a><a href="" class="col-md-4 col-xs-12 text-black">Prioridad:<br>'.$prior.'</a></span></div>';
-  $respuesta .= '<div class="col-xs-12"><h3>Descripción</h3></div>';
-  $respuesta .= '<div class="col-xs-12" style="border: 1px solid #eee;border-radius:5px;min-height:150px;" id="descripcion">'.$solicitud->getDescripcion().'</div>';
+    if ($solicitud->getEstadoKb() != 3) {
+      $respuesta .= '<div class="asignaciones col-xs-12 with-border"><a href="#" id="fecha_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-fin="'.$solicitud->getFinEst()->format('Y-m-d').'" data-toggle="modal" data-target="#modal-fechas" class="col-md-4 col-xs-6 text-black" onclick="asigFecha('.$solicitud->getId().')">'.$inicio.'</a><a href="#" id="asig_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-iduser="'.$userAsignado.'" data-toggle="modal" data-target="#modal-usuario" class="col-md-4 col-xs-6 text-black" onclick="asigUser('.$solicitud->getId().')">'.$asig.'</a><span id="'.$solicitud->getId().'_prioridad_detalle"><a href="#" id="prior_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-prior="'.$solicitud->getPrioridad().'" data-toggle="modal" data-target="#modal-prioridad" class="btn-enc col-md-4 col-xs-12 text-black" onclick="asigPrior('.$solicitud->getId().')">Prioridad:<br>'.$prior.'</a></span></span></div>';
+    } else {
+      $respuesta .= '<div class="asignaciones col-xs-12 with-border"><span class="col-md-4 col-xs-6 text-black" >'.$inicio.'</span><span class="col-md-4 col-xs-6 text-black">'.$asig.'</span><span class="col-md-4 col-xs-12 text-black">Prioridad:<br>'.$prior.'</span></span></div>';
+    }
 
+    
+  $respuesta .= '<div class="col-xs-12"><h3>Descripción</h3></div>';
+  $respuesta .= '<div class="col-xs-12 desc_editor" style="border: 1px solid #eee;border-radius:5px;min-height:150px;" id="desc_detalle" data-id="'.$solicitud->getId().'" data-idoperador="'.$id_operador.'">'.$solicitud->getDescripcion().'</div>';
+
+  $respuesta .= '<div class="comentarios">';
+  if (!empty($arrSolComentarios)) {
+    $respuesta .= '<div class="col-xs-12"><h4>Comentarios</h4></div>';
+    $respuesta .= '<div class="col-xs-12 historia" style="border-bottom:1px solid #ccc;">';
+      foreach ($arrSolComentarios as $comentario) {
+        $operador = $handlerUs->selectById(intval($comentario->getIdOperador()));
+
+        $respuesta .= '<li style="padding: 5px 0; color: #333;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b><span class="direct-chat-text">'.$comentario->getComentario().'.</span></span><span class="lsa"><b>'.$comentario->getFechaHora()->format('d-m H:i').'</b></span></li>';
+
+      }
+    $respuesta .= '</div>';
+  }
+
+  $respuesta .= '</div>';
   $respuesta .= '<div class="col-xs-12"><h4>Historico</h4></div>';
-  $respuesta .= '<div class="col-xs-12 historia">';
+  $respuesta .= '<div class="col-xs-12 historia" id="hist_detalle">';
   if (!empty($arrSolHistorico)) {
     foreach ($arrSolHistorico as $histo) {
       $operador = $handlerUs->selectById(intval($histo->getIdOperador()));
@@ -130,7 +156,24 @@
          $respuesta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b> asignó la fecha de entrega para el '.$histo->getFinEst()->format('d-m').'</span><span class="lsa"><b>'.$histo->getFechaHora()->format('d-m H:i').'</b></span></li>';
          break;
        case 4:
-         $respuesta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b> creó la solicitud</span><span class="lsa"><b>'.$histo->getFechaHora()->format('d-m H:i').'</b></span></li>';
+        switch ($histo->getPrioridad()) {
+        case 0:
+              $prior = 'BAJA';
+              break;
+            case 1:
+              $prior = 'MEDIA';
+              break;
+            case 2:
+              $prior = 'ALTA';
+              break;
+            
+            default:
+              $prior = 'BAJA';
+              break;
+      }
+
+
+         $respuesta .= '<li style="padding: 5px 0;" class="item-flex"><span class="btn-sol"><b>'.strtoupper($operador->getNombre()[0].'. '.$operador->getApellido()).'</b> cambió la prioridad de la tarea a '.$prior.'</span><span class="lsa"><b>'.$histo->getFechaHora()->format('d-m H:i').'</b></span></li>';
          break;
        
        default:
@@ -140,37 +183,77 @@
     }
   }
 
-
+$solicitante =  $handlerUs->selectById(intval($solicitud->getIdSol()));
 
 $respuesta.= '</div>
                 </div>
-                <div class="box-footer"><i class="fa fa-commenting-o"></i></div>
-                </div>';
+                <div class="box-footer">
+                    <span>Solicitó: '.strtoupper($solicitante->getNombre()[0].'. '.$solicitante->getApellido()).' </span>';
+                if ($solicitud->getEstadoKb() != 3) {
+                  
+                  $respuesta .= '
+                    <a href="#" id="coment_'.$solicitud->getId().'" data-id="'.$solicitud->getId().'" data-toggle="modal" data-target="#modal-comentarios" class="text-black pull-right" onclick="comentar('.$solicitud->getId().')">Comentar 
+                    <i class="fa fa-comment-o fa-lg"></i></a>
+                  ';
+                }
+                
+$respuesta .= '</div>
+              </div>';
   echo $respuesta;
 ?>
 
 <script type="text/javascript">
-  $(document).ready(function(){                
-  $(".btn-accion").on('click',function(){
-    
-    var id = $(this).attr("data-id"),
-        estado = $(this).attr("data-estado"),
-        id_operador = $(this).attr("data-idoperador"),
-        self=this;
+  $(document).ready(function(){
 
-        // console.log(id,estado);
-        $.ajax({
-            type: "POST",
-            url: '<?php echo $url_action_cambio_estado; ?>',
-            data: {
-                id: id,
-                id_operador: id_operador,
-                estado: estado
-            },
-            success: function(data){
-                window.location = data;
-            }
-        });
+    $('.cke_editable').change(function(){
+      console.log('prueba');
+      var id = $(this).attr('data-id'),
+          id_operador = $(this).attr("data-idoperador"),
+          desc = CKEDITOR.instances.desc_detalle.getData()
+          self = $(this);
+          $.ajax({
+              type: "POST",
+              url: '<?php echo $url_action_edit_desc; ?>',
+              data: {
+                  id: id,
+                  desc: desc,
+                  id_operador:id_operador
+              },
+              success: function(data){
+                  window.location = data;
+              }
+          });
+
+
+    });                
+    $(".btn-accion").on('click',function(){
+      
+      var id = $(this).attr("data-id"),
+          estado = $(this).attr("data-estado"),
+          id_operador = $(this).attr("data-idoperador"),
+          self=this;
+
+          // console.log(id,estado);
+          $.ajax({
+              type: "POST",
+              url: '<?php echo $url_action_cambio_estado; ?>',
+              data: {
+                  id: id,
+                  id_operador: id_operador,
+                  estado: estado
+              },
+              success: function(data){
+                  window.location = data;
+              }
+          });
+    });
+
+
+
+    // try{
+    //   CKEDITOR.disableAutoInline = true;
+    // CKEDITOR.inline( 'desc_detalle' );
+    // }catch(e){}
+
   });
-});
 </script>

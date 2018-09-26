@@ -14,7 +14,7 @@
   $handlerKB = new HandlerKanban;
   $id = $_POST['id'];
   $estado = $_POST['estado'];
-  $id_operador=(isset($_POST["id_operador"])?$_POST["id_operador"]:'');
+  $id_operador=$_POST["id_operador"];
 
   $err = "index.php?view=kanban&err=";        
   $info = "index.php?view=kanban&info=";

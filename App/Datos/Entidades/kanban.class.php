@@ -316,7 +316,7 @@
 			try {
 											
 				# Query
-				$query="SELECT * FROM kanban WHERE estado_kb=".$estadoKb;
+				$query="SELECT * FROM kanban WHERE estado_kb=".$estadoKb." AND estado = 'true'";
 				
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new Kanban);
@@ -352,7 +352,7 @@
 			try {
 											
 				# Query
-				$query="SELECT * FROM kanban WHERE estado ='true' AND id = ".$id;
+				$query="SELECT * FROM kanban WHERE id = ".$id;
 				
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new Kanban);
@@ -401,13 +401,75 @@
 			}		
 		}
 
-		public function cambiarEstadoKB($conexion,$id,$estado)
+		public function updatePrioridad($conexion,$id,$prioridad)
 		{
 			try {
 
 				# Query 			
 				$query="UPDATE kanban SET
+        						prioridad=".$prioridad."
+							WHERE id=".$id;
+
+							// var_dump($query);
+							// exit();
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+		public function cambiarEstadoKB($conexion,$id,$estado)
+		{
+			try {
+
+				if ($estado != 10) {
+					# Query 			
+					$query="UPDATE kanban SET
         						estado_kb=".$estado."
+							WHERE id=".$id;
+				} else {
+					# Query 			
+				$query="UPDATE kanban SET
+        						estado = 'false'
+							WHERE id=".$id;
+				}
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+		public function editDescKanban($conexion,$id,$desc)
+		{
+			try {
+
+				#Query
+				$query="UPDATE kanban SET
+        						descripcion='".$desc."'
+							WHERE id=".$id;
+				
+
+				# Ejecucion 					
+				return SQL::update($conexion,$query);	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}		
+		}
+
+		public function terminar($conexion,$id,$estado,$fechaFin)
+		{
+			try {
+
+				# Query 			
+				$query="UPDATE kanban SET
+        						estado_kb=".$estado.",
+        						fin_real = '".$fechaFin."' 
 							WHERE id=".$id;
 
 				# Ejecucion 					

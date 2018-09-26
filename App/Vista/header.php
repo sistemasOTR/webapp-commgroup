@@ -159,6 +159,9 @@
               <!-- ASISTENCIAS -->
               <?php include_once PATH_VISTA.'Notificaciones/asistencia.php'; ?>
               <!-- FIN ASISTENCIAS -->
+              <!-- ASISTENCIAS -->
+              <?php include_once PATH_VISTA.'Notificaciones/kanban.php'; ?>
+              <!-- FIN ASISTENCIAS -->
 
               <li class="dropdown user user-menu">
                 </a>

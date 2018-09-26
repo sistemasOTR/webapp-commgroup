@@ -7,7 +7,6 @@ $(document).ready(function(){
 
     try{
         CKEDITOR.replace( 'descripcion' );
-
     }catch(e){}
 
 $(document).ready(function(){                
@@ -18,23 +17,32 @@ $(document).ready(function(){
   });
 });
 
+function asigPrior(id) {
+    id_tarea = document.getElementById('prior_'+id).getAttribute('data-id');
+    id_prior = document.getElementById('prior_'+id).getAttribute('data-prior');
+
+    document.getElementById('id_tarea_prioridad').value = id_tarea;
+    document.getElementById('slt_prioridad_cambio').value = id_prior;
+}
+
 function asigUser(id) {
     id_tarea = document.getElementById('asig_'+id).getAttribute('data-id');
     id_user = document.getElementById('asig_'+id).getAttribute('data-iduser');
-
-    console.log(id_tarea, id, id_user);
-
 
     document.getElementById('id_tarea').value = id_tarea;
     document.getElementById('slt_usuario').value = id_user;
 }
 
+function comentar(id) {
+    id_tarea = document.getElementById('asig_'+id).getAttribute('data-id');
+
+    document.getElementById('id_tarea_coment').value = id_tarea;
+    document.getElementById('comentario').value = '';
+}
+
 function asigFecha(id) {
     id_tarea = document.getElementById('fecha_'+id).getAttribute('data-id');
     fin = document.getElementById('fecha_'+id).getAttribute('data-fin');
-
-    console.log(id_tarea, fin);
-
     if (fin == '1900-01-01') {
         var d = new Date(),
         month = '' + (d.getMonth() + 1),
@@ -50,8 +58,7 @@ function asigFecha(id) {
     document.getElementById('id_tarea_fechas').value = id_tarea;
     document.getElementById('fin_est').value = fin;
 }
-
-
+    
     // $(document).ready(function() {
     //     $('#tabla-sueldos').DataTable({
     //       "dom": 'Bfrtip',
