@@ -253,7 +253,7 @@
                       foreach ($histEntregas as $entrega) {
                       	$IMEI = $entrega->getIMEI();
                         $usuarioIdHist = $entrega->getUsId();
-                        if($IMEI != ''){
+                        if($IMEI != 0){
                           $equipo = $handlerCel->getEquipoLinea($IMEI);
                           $telefono = $equipo->getMarca()." ".$equipo->getModelo();
                         } else {

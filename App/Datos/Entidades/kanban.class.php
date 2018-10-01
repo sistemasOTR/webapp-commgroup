@@ -316,7 +316,7 @@
 			try {
 											
 				# Query
-				$query="SELECT * FROM kanban WHERE estado_kb=".$estadoKb." AND estado = 'true'";
+				$query="SELECT * FROM kanban WHERE estado_kb=".$estadoKb." AND estado = 'true' order by prioridad desc, id";
 				
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new Kanban);

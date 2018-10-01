@@ -2,18 +2,23 @@
   	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
   	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
 	include_once PATH_DATOS.'Entidades/importaciontipo1.class.php'; 
+	include_once PATH_DATOS.'Entidades/usuario_plaza.class.php'; 
     include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
   	
   	$dFecha = new Fechas;    
   	$handler = new HandlerSistema;
-  	$handlerImp = new ImportacionTipo1;
+    $handlerImp = new ImportacionTipo1;
+    
+    $handlerPlaza = new PlazaUsuario;
+    $arrPlaza = $handlerPlaza->selectAll();
   
  	  $user = $usuarioActivoSesion;
     $est_empresa=$usuarioActivoSesion->getUserSistema();
 
     /*-------------------------*/
     /* --- gestion de fechas --*/
-    $periodo = (isset($_GET["periodo"])?$_GET["periodo"]:date('Y-m',strtotime($dFecha->FechaActual())));
+    $fDesde = (isset($_GET["fDesde"])?$_GET["fDesde"]:date('Y-m-d'));
+    $fHasta = (isset($_GET["fHasta"])?$_GET["fHasta"]:date('Y-m-d'));
     /*-------------------------*/
      if(!PRODUCCION)
       $fHOY = "2018-07-23"; ?>
@@ -41,6 +46,10 @@
             
            include 'met_mensual_empresa.php'; 
 
+           foreach ($arrPlaza as $plaza) {
+             include 'met_mensual_empresa_plaza.php';
+           }
+
 }
 ?>
 	</div>
@@ -53,9 +62,13 @@
 	crearHref();
   function crearHref()
   {
-      aEnd = $("#periodo").val();
+      aStart = $("#start").val();
+      aEnd = $("#end").val();
 
-      url_filtro_reporte="index.php?view=metricas_empresa&periodo="+aEnd;
+      f_inicio = aStart[2] +"-"+ aStart[1] +"-"+ aStart[0];
+      f_fin = aEnd[2] +"-"+ aEnd[1] +"-"+ aEnd[0]; 
+
+      url_filtro_reporte="index.php?view=metricas_empresa&fDesde="+aStart+"&fHasta="+aEnd;
       
       $("#filtro_reporte").attr("href", url_filtro_reporte);
   } 

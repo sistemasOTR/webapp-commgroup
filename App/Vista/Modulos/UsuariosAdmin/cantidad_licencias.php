@@ -53,6 +53,7 @@
 				            	$ini=$value->getFechaInicio()->format('Y-m-d');
 				            
 				             $dif_dias = $dFechas->DiasDiferenciaFechas($fin,$ini,"Y-m-d");
+				             $dif_dias += 1;
 				             // var_dump($dif_dias);
 
 				              echo "<tr>";

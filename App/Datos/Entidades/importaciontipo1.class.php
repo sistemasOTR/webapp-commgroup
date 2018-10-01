@@ -655,7 +655,7 @@
 			return $this->getCalle()." ".$this->getNumero()." ".$this->getPiso()." ".$this->getDpto();
 		}		
 
-		public function selectImportacionesByCliente($fdesde,$fhasta,$fcliente){
+		public function selectImportacionesByCliente($fdesde,$fhasta,$fcliente,$plaza){
 			try {
 
 				$f = new Fechas;
@@ -692,6 +692,10 @@
 				$filtro_cliente="";
 				if(!empty($fcliente))								
 					$filtro_cliente = "cliente_tt = ".$fcliente." AND ";				
+
+				$filtro_plaza="";
+				if(!empty($plaza))								
+					$filtro_plaza = "plaza = '".$plaza."' AND ";				
 																	
 				$filtro_estado = "estado = 'true'";
 
@@ -701,6 +705,7 @@
 									".$filtro_fdesde."
 									".$filtro_fhasta."
 									".$filtro_cliente."
+									".$filtro_plaza."
 									".$filtro_estado;
 
 				# Ejecucion 					

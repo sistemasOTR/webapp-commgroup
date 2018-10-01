@@ -149,6 +149,10 @@
 					$handlerNoti->insert(null);
 				}
 
+				$handlerNoti->setIdUser($last->getIdSol());
+
+				$handlerNoti->insert(null);
+
 				$handlerNoti->setIdUser($id_enc);
 				$handlerNoti->setDescripcion('Se te ha asignado la solicitud "'.$last->getTitulo().'"');
 
@@ -216,6 +220,10 @@
 					$handlerNoti->insert(null); 
 				}
 
+				$handlerNoti->setIdUser($last->getIdSol());
+
+				$handlerNoti->insert(null);
+
 				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
@@ -279,6 +287,10 @@
 
 					$handlerNoti->insert(null); 
 				}
+
+				$handlerNoti->setIdUser($last->getIdSol());
+
+				$handlerNoti->insert(null);
 
 				
 			} catch (Exception $e) {
@@ -354,6 +366,10 @@
 
 					$handlerNoti->insert(null); 
 				}
+
+				$handlerNoti->setIdUser($last->getIdSol());
+
+				$handlerNoti->insert(null);
 
 
 				
