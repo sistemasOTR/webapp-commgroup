@@ -215,10 +215,7 @@
                       prioridad: prioridad
                   },
                   success: function(data){
-                      rta = data.split('|');
-                      $('#'+id+'_prioridad').html(rta[0]);
-                      $('#'+id+'_prioridad_detalle').html(rta[1]);
-                      $('#hist_detalle').html(rta[2]);
+                    window.location = data;
                   }
               });
         });

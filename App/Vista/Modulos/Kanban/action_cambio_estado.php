@@ -15,9 +15,13 @@
   $id = $_POST['id'];
   $estado = $_POST['estado'];
   $id_operador=$_POST["id_operador"];
-
-  $err ="index.php?view=kanban&id_sol=".$id."&err=";        
-  $info ="index.php?view=kanban&id_sol=".$id."&info=";
+  if ($estado != 10) {
+    $err ="index.php?view=kanban&id_sol=".$id."&err=";        
+    $info ="index.php?view=kanban&id_sol=".$id."&info=";
+  } else {
+    $err ="index.php?view=kanban&err=";        
+    $info ="index.php?view=kanban&info=";
+  }
 
   try {
 
