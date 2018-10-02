@@ -242,6 +242,9 @@ $respuesta .= '</div>
                   id_operador: id_operador,
                   estado: estado
               },
+              beforeSend: function(){
+                $(self).html("<i class='fa fa-spinner fa-pulse fa-fw'></i>");
+              },
               success: function(data){
                   window.location = data;
               }

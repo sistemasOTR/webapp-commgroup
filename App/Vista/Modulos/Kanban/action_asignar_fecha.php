@@ -11,8 +11,8 @@
 	$id_operador=(isset($_POST["id_operador"])?$_POST["id_operador"]:'');
 	$fin_est=(isset($_POST["fin_est"])?$_POST['fin_est']:'');
 
-	$err = "../../../../index.php?view=kanban&err=";     		
-	$info = "../../../../index.php?view=kanban&info=";
+	$err = "../../../../index.php?view=kanban&id_sol=".$id."&err=";     		
+	$info = "../../../../index.php?view=kanban&id_sol=".$id."&info=";
 
 	// var_dump($id);
 	// exit();

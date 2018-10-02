@@ -16,8 +16,8 @@
   $estado = $_POST['estado'];
   $id_operador=$_POST["id_operador"];
 
-  $err = "index.php?view=kanban&err=";        
-  $info = "index.php?view=kanban&info=";
+  $err ="index.php?view=kanban&id_sol=".$id."&err=";        
+  $info ="index.php?view=kanban&id_sol=".$id."&info=";
 
   try {
 
@@ -27,7 +27,7 @@
     echo $info.$msj;
           
   } catch (Exception $e) {
-    header("Location: ".$err.$e->getMessage());
+   echo $err.$e->getMessage();
   }  
 
   ?>

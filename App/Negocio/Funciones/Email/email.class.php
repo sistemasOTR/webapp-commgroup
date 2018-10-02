@@ -103,6 +103,7 @@
 
 				// puerto utilizado para el envio de email
 				$mail->Port = $this->getPort();
+				$mail->SMTPSecure = 'tls';
 
 				// asunto y cuerpo alternativo del mensaje
 				$mail->Subject = $this->getAsunto();
@@ -127,6 +128,11 @@
 				// Credenciales usuario
 				$mail->Username = $this->getUsuario();
 				$mail->Password = $this->getPassword();
+				// $mail->SMTPDebug = true;
+				// $mail->Timeout = 30;
+
+				// var_dump($mail);
+				// exit();
 				 
 				if(!$mail->Send()) 
 				{																
@@ -204,6 +210,82 @@
 				throw new Exception($e->getMessage());				  
 			}
 		}
+		
+		
+		function notificarKanban(){
+
+			try {
+							
+				$mail = new PHPMailer();
+
+				// Activo condificacción utf-8
+				$mail->CharSet = "UTF-8";
+
+				// Aclaramos que vamos a usar SMTP
+				$mail->IsSMTP();
+
+				// la dirección del servidor, por ej.: smtp.servidor.com
+				$mail->Host = $this->getServidor();
+
+				// dirección remitente, por ej.: no-responder@miempresa.com
+				$mail->From = $this->getEmailRemitente();
+
+				// nombre remitente, por ej.: "Servicio de envío automático"
+				$mail->FromName = $this->getNombreRemitente();
+
+				// puerto utilizado para el envio de email
+				$mail->Port = $this->getPort();
+				$mail->SMTPSecure = 'tls';
+
+				// asunto y cuerpo alternativo del mensaje
+				$mail->Subject = $this->getAsunto();
+				$mail->AltBody = $this->getCuerpoAlt();
+
+				// Cuerpo del mensaje HTML, definido en la variable $body
+				$mail->MsgHTML($this->getHtmlCuerpo());
+								
+				//destinatarios
+				foreach ($this->getDestinatario() as $destinatario) {
+					$mail->AddAddress($destinatario[0], $destinatario[1]." ".$destinatario[2]);
+				}
+				
+				if(!empty($this->getDestinatariosOcultos()))
+				{
+					foreach ($this->getDestinatariosOcultos() as $ocultos) {
+						$mail->AddBCC($ocultos[0], $ocultos[1]." ".$ocultos[2]);
+					}
+				}		
+
+				//si el SMTP necesita autenticación
+				$mail->SMTPAuth = true;
+
+				// Credenciales usuario
+				$mail->Username = $this->getUsuario();
+				$mail->Password = $this->getPassword();
+				// $mail->SMTPDebug = true;
+				// $mail->Timeout = 30;
+
+				// var_dump($mail);
+				// exit();
+				 
+				if(!$mail->Send()) 
+				{																
+					if(!empty($this->getRedireccionarError()))					
+						header('Location:'.$this->getRedireccionarError());					
+					else					
+						throw new Exception("Error enviando: " . $mail->ErrorInfo);									
+				} 
+				else 
+				{				
+					if(!empty($this->getRedireccionar()))				
+						header('Location:'.$this->getRedireccionar());					
+				}
+			} 
+			catch (Exception $e) {
+				throw new Exception($e->getMessage());				  
+			}
+		}
+
 	}
 
 ?>

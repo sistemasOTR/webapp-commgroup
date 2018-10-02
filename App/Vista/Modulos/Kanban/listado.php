@@ -12,6 +12,8 @@
   include_once 'pendientes.php';
   include_once 'encurso.php';
   include_once 'enrevision.php';
+
+  $id_sol= (isset($_GET["id_sol"])?$_GET["id_sol"]:0);
   # URLs externas #
   $url_action_nueva_tarea = PATH_VISTA.'Modulos/Kanban/action_nueva_tarea.php';
   $url_action_asignar_user = PATH_VISTA.'Modulos/Kanban/action_asignar_user.php';
@@ -46,6 +48,8 @@
   <section class="content">
     <?php include_once PATH_VISTA."error.php"; ?>
     <?php include_once PATH_VISTA."info.php"; ?>
+    <input type="hidden" id="id_sol_param" value="<?php echo $id_sol ?>">
+    <input type="hidden" id="id_user_param" value='<?php echo $user->getId(); ?>'>
     <div class="row">
       <div class="col-md-6">
         <div class="box box-solid">
@@ -133,7 +137,25 @@
 <script>
   
 
-  $(document).ready(function(){                
+  $(document).ready(function(){
+    if ($('#id_sol_param').val() != 0 ) {
+      var id = $('#id_sol_param').val(),
+        id_operador = $('#id_user_param').val();
+
+
+        $.ajax({
+            type: "POST",
+            url: '<?php echo $url_ajax; ?>',
+            data: {
+                id: id,
+                id_operador: id_operador
+            },
+            success: function(data){
+                $('#detalle').html(data);
+            }
+        });
+    }
+                    
   $(".btn-sol").on('click',function(){
     var id = $(this).attr("data-idsol"),
         id_operador = $(this).attr("data-idoperador"),

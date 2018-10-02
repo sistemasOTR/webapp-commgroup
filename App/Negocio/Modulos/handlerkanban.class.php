@@ -12,7 +12,8 @@
 	include_once PATH_DATOS.'Entidades/kanban_notificaciones.class.php';
 	include_once PATH_DATOS.'Entidades/usuario.class.php';
 	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
-	include_once PATH_NEGOCIO."Funciones/Archivo/archivo.class.php"; 
+	include_once PATH_NEGOCIO."Funciones/Archivo/archivo.class.php";
+	include_once PATH_NEGOCIO."Funciones/Email/email.class.php";
 	
 	class HandlerKanban{
 
@@ -36,7 +37,7 @@
 
 		public function nuevaSolicitud($titulo,$descripcion,$fechaSol,$idSol,$prioridad,$plaza){
 			try {
-					
+									
 				$handler = new Kanban;
 				$handler->setTitulo($titulo);     	
 				$handler->setDescripcion($descripcion);
@@ -84,9 +85,37 @@
 
 				$handlerNoti->setIdUser(20174);
 
-				$handlerNoti->insert(null);    	
+				$handlerNoti->insert(null); 
 
-
+				$handlerUs = new Usuario;
+				$handlerUs->setId($idSol);
+				$usuario = $handlerUs->select();
+				switch ($prioridad) {
+					case 0:
+						$desc_prior = 'BAJA';
+						break;
+					case 1:
+						$desc_prior = 'MEDIA';
+						break;
+					case 2:
+						$desc_prior = 'ALTA';
+						break;
+					
+					default:
+						$desc_prior = 'BAJA';
+						break;
+				}
+				$correos[] = array('pablobruno@commgroup.com.ar','Pablo Bruno','');
+				$correos[] = array('milton@commgroup.com.ar','Milton Ojeda','');
+				
+				$email = new Email;
+				$dest = $correos;
+				// var_dump($dest);
+				// exit;
+				$email->setDestinatario($dest);
+				$email->setAsunto("Nueva solicitud");
+				$email->setHtmlCuerpo('<p>Título: <b>'.$last->getTitulo().'</b> <a href="http://app.otrgroup.com.ar/index.php?view=kanban&id_sol='.$last->getId().'">[ver tarea]</a></p><p><small>Prioridad: '.$desc_prior.'</small><small style="padding-left:60px;">Solicitó: '.$usuario->getNombre()[0].'. '.$usuario->getApellido().'</small></p><p><small>Descripción:</small></p>'.$descripcion);
+				$email->notificarKanban();
 				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
@@ -156,7 +185,35 @@
 				$handlerNoti->setIdUser($id_enc);
 				$handlerNoti->setDescripcion('Se te ha asignado la solicitud "'.$last->getTitulo().'"');
 
-				$handlerNoti->insert(null);    	
+				$handlerNoti->insert(null);  
+				
+				
+				$correos[] = array('pablobruno@commgroup.com.ar','Pablo Bruno','');
+				$correos[] = array('milton@commgroup.com.ar','Milton Ojeda','');
+				if ($last->getIdSol() != 10082 && $last->getIdSol() != 20174){
+					$handlerUs->setId($last->getIdSol());
+					$usuario = $handlerUs->select();
+					$correos[] = array($usuario->getEmail(), $usuario->getNombre()." ".$usuario->getApellido(),"");
+				}
+
+				if ($id_enc != 10082 && $id_enc != 20174){
+					$handlerUs->setId($id_enc);
+					$usuario = $handlerUs->select();
+					$correos[] = array($usuario->getEmail(), $usuario->getNombre()." ".$usuario->getApellido(),"");
+				}
+
+					$handlerUs->setId($id_enc);
+					$usuario = $handlerUs->select();
+
+					$email = new Email;
+					$dest = $correos;
+					// var_dump($dest);
+					// exit;
+					$email->setDestinatario($dest);
+					$email->setAsunto("Asignación de solicitud");
+					$email->setHtmlCuerpo('<p>Título: <b>'.$last->getTitulo().'</b> <a href="http://app.otrgroup.com.ar/index.php?view=kanban&id_sol='.$last->getId().'">[ver tarea]</a></p><p>La tarea fué asignada a '.$usuario->getNombre()[0].'. '.$usuario->getApellido().'</p>');
+					$email->notificarKanban();
+				
 
 				
 			} catch (Exception $e) {
@@ -223,6 +280,46 @@
 				$handlerNoti->setIdUser($last->getIdSol());
 
 				$handlerNoti->insert(null);
+				
+				switch ($prioridad) {
+					case 0:
+						$desc_prior = 'BAJA';
+						break;
+					case 1:
+						$desc_prior = 'MEDIA';
+						break;
+					case 2:
+						$desc_prior = 'ALTA';
+						break;
+					
+					default:
+						$desc_prior = 'BAJA';
+						break;
+				}
+
+				$correos[] = array('pablobruno@commgroup.com.ar','Pablo Bruno','');
+				$correos[] = array('milton@commgroup.com.ar','Milton Ojeda','');
+				$handlerUs = new Usuario;
+				if ($last->getIdSol() != 10082 && $last->getIdSol() != 20174){
+					$handlerUs->setId($last->getIdSol());
+					$usuario = $handlerUs->select();
+					$correos[] = array($usuario->getEmail(), $usuario->getNombre()." ".$usuario->getApellido(),"");
+				}
+
+				if ($last->getIdEnc() != 10082 && $last->getIdEnc() != 20174){
+					$handlerUs->setId($last->getIdEnc());
+					$usuario = $handlerUs->select();
+					$correos[] = array($usuario->getEmail(), $usuario->getNombre()." ".$usuario->getApellido(),"");
+				}
+
+					$email = new Email;
+					$dest = $correos;
+					// var_dump($dest);
+					// exit;
+					$email->setDestinatario($dest);
+					$email->setAsunto("Cambio de prioridad");
+					$email->setHtmlCuerpo('<p>Título: <b>'.$last->getTitulo().'</b> <a href="http://app.otrgroup.com.ar/index.php?view=kanban&id_sol='.$last->getId().'">[ver tarea]</a></p><p>La prioridad de tarea fué cambiada a '.$desc_prior.'</p>');
+					$email->notificarKanban();
 
 				
 			} catch (Exception $e) {
@@ -292,6 +389,30 @@
 
 				$handlerNoti->insert(null);
 
+				$correos[] = array('pablobruno@commgroup.com.ar','Pablo Bruno','');
+				$correos[] = array('milton@commgroup.com.ar','Milton Ojeda','');
+				$handlerUs = new Usuario;
+				if ($last->getIdSol() != 10082 && $last->getIdSol() != 20174){
+					$handlerUs->setId($last->getIdSol());
+					$usuario = $handlerUs->select();
+					$correos[] = array($usuario->getEmail(), $usuario->getNombre()." ".$usuario->getApellido(),"");
+				}
+
+				if ($last->getIdEnc() != 10082 && $last->getIdEnc() != 20174 && $last->getIdEnc() != 0){
+					$handlerUs->setId($last->getIdEnc());
+					$usuario = $handlerUs->select();
+					$correos[] = array($usuario->getEmail(), $usuario->getNombre()." ".$usuario->getApellido(),"");
+				}
+
+					$email = new Email;
+					$dest = $correos;
+					// var_dump($dest);
+					// exit;
+					$email->setDestinatario($dest);
+					$email->setAsunto("Asignación de fecha de entrega");
+					$email->setHtmlCuerpo('<p>Título: <b>'.$last->getTitulo().'</b> <a href="http://app.otrgroup.com.ar/index.php?view=kanban&id_sol='.$last->getId().'">[ver tarea]</a></p><p>Se ha programado la fecha de entrega para el '.$last->getFinEst()->format('d-m-Y').'</p>');
+					$email->notificarKanban();
+
 				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());
@@ -336,41 +457,86 @@
 
 				if ($estado != 3) {
 					$handlerNoti->setDescripcion('Se ha cambiado el estado de la solicitud "'.$last->getTitulo().'"');
+					$link='http://app.otrgroup.com.ar/index.php?view=kanban&id_sol='.$last->getId();
 				} else {
 					$handlerNoti->setDescripcion('Se ha finalizado la solicitud "'.$last->getTitulo().'"');
+					$link='http://app.otrgroup.com.ar/index.php?view=kanban_terminadas&id_sol='.$last->getId();
 				}
-				$handlerNoti->setIdKanban($last->getId());
-				$handlerNoti->setIdUser(3);    	
-				$handlerNoti->setFechaHora($fechahora);
-				$handlerNoti->setEstado(true);
 
-				$handlerNoti->insert(null);
-				
-				if ($last->getIdEnc() != 10082) {
-
-					$handlerNoti->setIdUser(10082);
-
-					$handlerNoti->insert(null);    	
-				}
-				
-				if ($last->getIdEnc() != 20174) {
-
-					$handlerNoti->setIdUser(20174);
-
+				if ($estado != 10) {
+					$handlerNoti->setIdKanban($last->getId());
+					$handlerNoti->setIdUser(3);    	
+					$handlerNoti->setFechaHora($fechahora);
+					$handlerNoti->setEstado(true);
+	
 					$handlerNoti->insert(null);
+					
+					if ($last->getIdEnc() != 10082) {
+	
+						$handlerNoti->setIdUser(10082);
+	
+						$handlerNoti->insert(null);    	
+					}
+					
+					if ($last->getIdEnc() != 20174) {
+	
+						$handlerNoti->setIdUser(20174);
+	
+						$handlerNoti->insert(null);
+					}
+	
+					if ($last->getIdEnc() != 0) {
+	
+						$handlerNoti->setIdUser($last->getIdEnc());
+	
+						$handlerNoti->insert(null); 
+					}
+	
+					$handlerNoti->setIdUser($last->getIdSol());
+	
+					$handlerNoti->insert(null);
+					switch ($estado) {
+						case 1:
+							$desc_estado = 'EN CURSO';
+							break;
+						case 2:
+							$desc_estado = 'A REVISIÓN';
+							break;
+						case 3:
+							$desc_estado = 'TERMINADA';
+							break;
+						
+						default:
+							$desc_estado = 'EN CURSO';
+							break;
+					}
+
+					$correos[] = array('pablobruno@commgroup.com.ar','Pablo Bruno','');
+					$correos[] = array('milton@commgroup.com.ar','Milton Ojeda','');
+					$handlerUs = new Usuario;
+					if ($last->getIdSol() != 10082 && $last->getIdSol() != 20174){
+						$handlerUs->setId($last->getIdSol());
+						$usuario = $handlerUs->select();
+						$correos[] = array($usuario->getEmail(), $usuario->getNombre()." ".$usuario->getApellido(),"");
+					}
+
+					if ($last->getIdEnc() != 10082 && $last->getIdEnc() != 20174 && $last->getIdEnc() != 0){
+						$handlerUs->setId($last->getIdEnc());
+						$usuario = $handlerUs->select();
+						$correos[] = array($usuario->getEmail(), $usuario->getNombre()." ".$usuario->getApellido(),"");
+					}
+
+						$email = new Email;
+						$dest = $correos;
+						// var_dump($dest);
+						// exit;
+						$email->setDestinatario($dest);
+						$email->setAsunto("Cambio de estado de una tarea");
+						$email->setHtmlCuerpo('<p>Título: <b>'.$last->getTitulo().'</b> <a href="'.$link.'">[ver tarea]</a></p><p>Se colocó la tarea en '.$desc_estado.'</p>');
+						$email->notificarKanban();
 				}
 
-				if ($last->getIdEnc() != 0) {
-
-					$handlerNoti->setIdUser($last->getIdEnc());
-
-					$handlerNoti->insert(null); 
-				}
-
-				$handlerNoti->setIdUser($last->getIdSol());
-
-				$handlerNoti->insert(null);
-
+				
 
 				
 			} catch (Exception $e) {

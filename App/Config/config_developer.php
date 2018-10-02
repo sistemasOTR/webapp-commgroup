@@ -47,12 +47,12 @@
 		######################
 		# EMAIL - PRODUCCION #
 		######################
-		if (!defined('SERVER_EMAIL')) define('SERVER_EMAIL','smtp.mailgun.org');	
-		if (!defined('USER_EMAIL')) define('USER_EMAIL','notify@mg.inescapp.com');	
-		if (!defined('PASS_EMAIL')) define('PASS_EMAIL','inescapp100');		
-		if (!defined('EMAIL_PRINCIPAL_ENVIADOR')) define('EMAIL_PRINCIPAL_ENVIADOR','info@otrgroup.com.ar');	
+		if (!defined('SERVER_EMAIL')) define('SERVER_EMAIL','smtp.office365.com');	
+		if (!defined('USER_EMAIL')) define('USER_EMAIL','no-reply@otrgroup.com.ar');	
+		if (!defined('PASS_EMAIL')) define('PASS_EMAIL','CommGroup307123');		
+		if (!defined('EMAIL_PRINCIPAL_ENVIADOR')) define('EMAIL_PRINCIPAL_ENVIADOR','no-reply@otrgroup.com.ar');	
 		if (!defined('NOMBRE_PRINCIPAL_ENVIADOR')) define('NOMBRE_PRINCIPAL_ENVIADOR','Equipo de OTR Group');	
-		if (!defined('PORT_EMAIL')) define('PORT_EMAIL',2525);	
+		if (!defined('PORT_EMAIL')) define('PORT_EMAIL',587);	
 
 		########################################
 		# CARPETA "FILES" USUARIO - PRODUCCION #
