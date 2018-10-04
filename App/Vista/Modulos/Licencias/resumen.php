@@ -81,18 +81,6 @@
                       <input type="text" class="input-sm form-control" onchange="crearHref()" id="end" name="end" value="<?php echo $dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y'); ?>"/>
                     </div>
                 </div>
-                <?php
-                // var_dump($arrUsuarios);
-                //   exit();
-
-                // if(!empty($arrUsuarios))
-                //       {                     
-                                        
-                //         foreach ($arrUsuarios as $key => $value) {
-                //           var_dump($value->getTipoUsuario()->getId());
-                //         }
-                //       }
-                //       ?>
             <div class="col-md-3">
                   <label>Usuarios </label>                
                   <select id="slt_usuario" class="form-control" style="width: 100%" name="slt_usuario" onchange="crearHref()">
