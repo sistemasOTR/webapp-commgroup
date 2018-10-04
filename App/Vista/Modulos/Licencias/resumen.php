@@ -17,17 +17,9 @@
   $handlerSistema = new HandlerSistema;
   $handlerUsuarios = new HandlerUsuarios;
 
-  $user = $usuarioActivoSesion;  
-  
-   // $arrLicencias = $handler->seleccionarByFiltrosRRHH($fdesde,$fhasta,$fusuario,$festados);
-  
-  $arrUsuarios = $handlerUsuarios->selectTodos();
-  //$arrGestor = $handlerSistema->selectAllGestor($user->getAliasUserSistema());
-  
-  // $usuarr=$handlerUsuarios->selectByTipo(3,$user->getAliasUserSistema());
-  // var_dump($user->getTipoUsuario());
-  // exit();
+  $user = $usuarioActivoSesion;
 
+  $arrUsuarios = $handlerUsuarios->selectTodos();
 
   $url_action_aprobar = PATH_VISTA.'Modulos/Licencias/action_aprobar.php?fdesde='.$fdesde.'&fhasta='.$fhasta.'&fusuario='.$fusuario.'&festados='.$festados;  
   $url_action_desaprobar = PATH_VISTA.'Modulos/Licencias/action_desaprobar.php?id=';  
@@ -54,8 +46,6 @@
 
     <?php include_once PATH_VISTA."error.php"; ?>
     <?php include_once PATH_VISTA."info.php"; ?>
-
-
     <div class="row">
 
       <div class='col-md-12'>
@@ -75,7 +65,7 @@
                       <input type="text" class="input-sm form-control" onchange="crearHref()" id="end" name="end" value="<?php echo $dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y'); ?>"/>
                     </div>
                 </div>
-            <div class="col-md-3">
+                <div class="col-md-3">
                   <label>Usuarios </label>                
                   <select id="slt_usuario" class="form-control" style="width: 100%" name="slt_usuario" onchange="crearHref()">
                     <option value=''></option>
@@ -101,22 +91,11 @@
                           elseif($notHidden){
                             echo "<option value='".$value->getId()."'>".$value->getApellido()." ".$value->getNombre()."</option>";                  
                           }
-                            
                         }
-                        
                       }           
                     ?>
                   </select>
-                </div>       
-                <!-- <div class="col-md-2">
-                  <label>Estados </label>                
-                  <select id="slt_estados" class="form-control" style="width: 100%" name="slt_estados" onchange="crearHref()">
-                    <option value='0'>TODOS</option>
-                    <option value='1' <?php if ($festados == 1) { echo "selected";} ?>>PENDIENTES</option>
-                    <option value='2' <?php if ($festados == 2) { echo "selected";} ?>>APROBADOS</option>
-                    <option value='3' <?php if ($festados == 3) { echo "selected";} ?>>RECHAZADOS</option>
-                 </select>
-                </div>     -->
+                </div>
                 <div class='col-md-3 col-md-offset-1 pull-right'>                
                   <label></label>                
                   <a class="btn btn-block btn-success" id="filtro_reporte" onclick="crearHref()"><i class='fa fa-filter'></i> Filtrar</a>
@@ -158,63 +137,52 @@
                             $arrLicencia = $handler->seleccionarByFiltrosRRHH($FECHA,$FECHA,$fusuario,$festados);
                             // var_dump(count($arrLicencia));
                             
-                            if(!empty($arrLicencia))
-                               { 
-                            
-                                                                        
-                                foreach ($arrLicencia as $key => $value) {
+                            if(!empty($arrLicencia)){
+                              foreach ($arrLicencia as $key => $value) {
                                     foreach ($arrayIde as $idrepeate) {
-                                    if (intval($value->getId()) == $idrepeate) {
-                                        $seguir = false;
-                                        break;
-                                    } else {
-                                        $seguir = true;
-                                    }
+                                      if (intval($value->getId()) == $idrepeate) {
+                                          $seguir = false;
+                                          break;
+                                      } else {
+                                          $seguir = true;
+                                      }
                                     }
                                 
                                     if($seguir){
-                                        $arrayIde[]=intval($value->getId());
-        
-                                        if (strtotime($FECHA) == strtotime($value->getFechaInicio()->format('Y-m-d')) ) {
-                                            $inicio = $value->getFechaInicio()->format('d-m-Y');
-                                        } else {
-                                            $inicio = date('d-m-Y',strtotime($FECHA)).' <span class="text-red" style="padding-left: 10px;">('.$value->getFechaInicio()->format('d-m-Y').')</span>';
-                                        }
-                                        
-                                        $dias = date_diff( date_create($FECHA), date_create($value->getFechaFin()->format('Y-m-d')) );
-                                        $cantDias = $dias->days + 1;
-                                        $total += $cantDias;
-                                    
-                                    echo "<tr>";
+                                      $arrayIde[]=intval($value->getId());
+      
+                                      if (strtotime($FECHA) == strtotime($value->getFechaInicio()->format('Y-m-d')) ) {
+                                          $inicio = $value->getFechaInicio()->format('d-m-Y');
+                                      } else {
+                                          $inicio = date('d-m-Y',strtotime($FECHA)).' <span class="text-red" style="padding-left: 10px;">('.$value->getFechaInicio()->format('d-m-Y').')</span>';
+                                      }
+                                      
+                                      $dias = date_diff( date_create($FECHA), date_create($value->getFechaFin()->format('Y-m-d')) );
+                                      $cantDias = $dias->days + 1;
+                                      $total += $cantDias;
+                                  
+                                      echo "<tr>";
                                         echo "<td>".$value->getUsuarioId()->getApellido()." ".$value->getUsuarioId()->getNombre()."</td>";
                                         echo "<td>".$value->getTipoLicenciasId()->getNombre()."</td>";
                                         echo "<td>".$inicio."</td>";
                                         echo "<td>".$value->getFechaFin()->format('d-m-Y')."</td>";
                                         echo "<td>".$value->getObservaciones()."</td>";
                                         echo "<td>".$cantDias."</td>";
-        
-                                    echo "</tr>";
-                                    
+                                      echo "</tr>";
                                     }
-                                    
                                 }
-        
+                              } 
                                 
-                                
-                                } 
-                                
-                                $FECHA = date('Y-m-d',strtotime('+1 day',strtotime($FECHA)));    
-                            
+                              $FECHA = date('Y-m-d',strtotime('+1 day',strtotime($FECHA)));    
                             }
                             
                             echo "<tr class='bg-green'>";
-                            echo "<td>Total</td>";
-                            echo "<td></td>";
-                            echo "<td></td>";
-                            echo "<td></td>";
-                            echo "<td></td>";
-                            echo "<td>".$total."</td>";
-        
+                              echo "<td>Total</td>";
+                              echo "<td></td>";
+                              echo "<td></td>";
+                              echo "<td></td>";
+                              echo "<td></td>";
+                              echo "<td>".$total."</td>";
                             echo "</tr>";
                         } else {
                           if (!empty($arrUsuarios)) {
