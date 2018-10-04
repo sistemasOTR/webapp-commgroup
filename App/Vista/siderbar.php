@@ -53,6 +53,7 @@
         
         $url_licencias_carga = "index.php?view=licencias_carga";
         $url_licencias_control = "index.php?view=licencias_control";       
+        $url_licencias_resumen = "index.php?view=licencias_resumen";       
         $url_licencias_controlcoordinador = "index.php?view=licencias_controlcoord";       
         $url_tipo_licencias_abm = "index.php?view=tipo_licencias";
         
@@ -293,6 +294,11 @@
                     <li id="mnu_licencias_control">
                       <a href=<?php echo $url_licencias_control; ?>>
                         <i class="fa fa-tasks"></i> <span>Control</span>
+                      </a>
+                    </li> 
+                    <li id="mnu_licencias_resumen">
+                      <a href=<?php echo $url_licencias_resumen; ?>>
+                        <i class="fa fa-list"></i> <span>Resumen</span>
                       </a>
                     </li> 
                     <li id="mnu_tipo_licencias_abm">

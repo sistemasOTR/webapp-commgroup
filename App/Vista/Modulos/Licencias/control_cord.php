@@ -94,10 +94,10 @@
                          foreach ($arrGestor as $gestor) {
                         
                           if($fusuario == $usuario->getId() && $usuario->getUserSistema() == $gestor->GESTOR11_CODIGO){
-                            echo "<option value='".$usuario->getId()."'selected>".$usuario->getNombre()." ".$usuario->getApellido()."</option>";
+                            echo "<option value='".$usuario->getId()."'selected>".$usuario->getApellido()." ".$usuario->getNombre()."</option>";
                           }
                            elseif($usuario->getUserSistema() == $gestor->GESTOR11_CODIGO){
-                            echo "<option value='".$usuario->getId()."'>".$usuario->getNombre()." ".$usuario->getApellido()."</option>"; 
+                            echo "<option value='".$usuario->getId()."'>".$usuario->getApellido()." ".$usuario->getNombre()."</option>"; 
                           }                 
                           }   
                         }                  

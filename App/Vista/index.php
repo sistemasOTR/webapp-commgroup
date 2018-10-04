@@ -633,6 +633,11 @@
 		case 'licencias_control':
 			if($permiso->getModuloLicenciasBoolean() && (($esBO || $esRRHH) || $esCoordinador))
 				$include = 'Modulos/Licencias/control.php';
+			break;
+
+		case 'licencias_resumen':
+			if($permiso->getModuloLicenciasBoolean() && (($esBO || $esRRHH) || $esCoordinador))
+				$include = 'Modulos/Licencias/resumen.php';
 			break;	
 
 		case 'licencias_controlcoord':

@@ -114,10 +114,10 @@
                             $notHidden = true;
                           }
                           if($fusuario == $value->getId() && $notHidden){
-                            echo "<option value='".$value->getId()."' selected>".$value->getNombre()." ".$value->getApellido()."</option>";
+                            echo "<option value='".$value->getId()."' selected>".$value->getApellido()." ".$value->getNombre()."</option>";
                           }
                           elseif($notHidden){
-                            echo "<option value='".$value->getId()."'>".$value->getNombre()." ".$value->getApellido()."</option>";                  
+                            echo "<option value='".$value->getId()."'>".$value->getApellido()." ".$value->getNombre()."</option>";                  
                           }
                             
                         }

@@ -216,7 +216,7 @@
 				
 				# Query
 				if(empty($this->getId())){
-					$query = "SELECT * FROM usuario WHERE estado='true'";
+					$query = "SELECT * FROM usuario WHERE estado='true' order by apellido";
 				}
 				else{
 					if(empty($this->getId()))
