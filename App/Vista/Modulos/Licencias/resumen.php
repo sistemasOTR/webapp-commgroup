@@ -20,9 +20,6 @@
   $user = $usuarioActivoSesion;  
   
    // $arrLicencias = $handler->seleccionarByFiltrosRRHH($fdesde,$fhasta,$fusuario,$festados);
-   
-
- 
   
   $arrUsuarios = $handlerUsuarios->selectTodos();
   //$arrGestor = $handlerSistema->selectAllGestor($user->getAliasUserSistema());
@@ -38,9 +35,6 @@
   $url_action_imprimir =  PATH_VISTA.'Modulos/Licencias/action_imprimir.php?id=';
 
   $url_redireccion ='&fdesde='.$fdesde.'&fhasta='.$fhasta.'&fusuario='.$fusuario.'&festados='.$festados;
-
-
-
 
 ?>
 
