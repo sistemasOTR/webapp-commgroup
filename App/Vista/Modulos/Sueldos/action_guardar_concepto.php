@@ -11,6 +11,7 @@
     $accion=(isset($_POST["accion"])?$_POST["accion"]:'');
     $valor=(isset($_POST["valor"])?$_POST["valor"]:'');
     $base=(isset($_POST["base"])?$_POST["base"]:'');
+    $fecha_vigencia=(isset($_POST["fecha_vigencia"])?$_POST["fecha_vigencia"]:'');
 
     // var_dump($categoria);
     // exit(); 
@@ -37,7 +38,10 @@
  else {
 	try {
 
-   $handler->updateConcepto($id,$categoria,$valor,$base);
+   		$handler->updateConcepto($id,$categoria,$valor,$base);
+   		if ($id == 2) {
+   			$handler->newComision($valor,$fecha_vigencia);
+   		}
 
 		$msj="Concepto editado con éxtio";
 		header("Location: ".$info.$msj);
@@ -48,4 +52,4 @@
 
 	}
 
-?>	
+?>

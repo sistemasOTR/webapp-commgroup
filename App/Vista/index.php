@@ -696,22 +696,27 @@
 			break;	
 
 		case 'puntajes_general':
-			if($permiso->getModuloPuntajesBoolean() && $esGerencia)
+			if($permiso->getModuloPuntajesBoolean() && ($esGerencia || $esBO || $esContabilidad || $esRRHH))
 				$include = 'Modulos/Puntajes/view_general.php';
 			break;	
 
 		case 'puntajes_general_detalle':
-			if($permiso->getModuloPuntajesBoolean() && $esGerencia)
+			if($permiso->getModuloPuntajesBoolean() && ($esGerencia || $esBO || $esContabilidad || $esRRHH))
 				$include = 'Modulos/Puntajes/view_general_detalle.php';
 			break;	
 
 		case 'puntajes_general_gestores':
-			if($permiso->getModuloPuntajesBoolean() && $esGerencia)
+			if($permiso->getModuloPuntajesBoolean() && ($esGerencia || $esBO || $esContabilidad || $esRRHH))
 				$include = 'Modulos/Puntajes/view_general_gestores.php';
+			break;		
+
+		case 'resumen_comisiones':
+			if($permiso->getModuloPuntajesBoolean() && ($esGerencia || $esBO || $esContabilidad || $esRRHH))
+				$include = 'Modulos/Puntajes/resumen_comisiones.php';
 			break;	
 
 		case 'puntajes_general_xgestor':
-			if($permiso->getModuloPuntajesBoolean() && ($esGerencia || $esCoordinador || $esGestor))
+			if($permiso->getModuloPuntajesBoolean() && ($esGerencia || $esCoordinador || $esGestor || $esBO || $esContabilidad || $esRRHH))
 				$include = 'Modulos/Puntajes/view_general_xgestor.php';
 			break;
 

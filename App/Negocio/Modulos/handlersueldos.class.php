@@ -12,6 +12,7 @@
 	include_once PATH_DATOS.'Entidades/sueldos_conceptos.class.php';
 	include_once PATH_DATOS.'Entidades/sueldos_items.class.php';
 	include_once PATH_DATOS.'Entidades/sueldos.class.php';
+	include_once PATH_DATOS.'Entidades/comisiones.class.php';
 	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
 	include_once PATH_NEGOCIO."Funciones/Archivo/archivo.class.php"; 
 	
@@ -225,6 +226,41 @@
 				$handler = new SueldosItems;
 
 				$handler->deleteItemsBySueldo($id_sueldo);
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
+		// Comisiones
+		// ============================
+
+		public function newComision($valor,$fecha_vigencia){
+			try {
+					
+				$handler = new Comisiones;
+				$handler->setValor($valor);
+				$handler->setFechaVigencia($fecha_vigencia);
+
+				$handler->insert(null);
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());
+			}
+		}
+
+		public function selectByDate($fecha){
+			try {
+					
+				$handler = new Comisiones;
+				$data= $handler->selectByDate($fecha);
+				if(count($data)==1){
+					$data = array('' => $data );
+					return $data;
+				}				
+				else{
+					return $data;
+				}
 				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());

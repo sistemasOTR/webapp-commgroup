@@ -68,6 +68,7 @@
         $url_puntajes_coordinador = "index.php?view=puntajes_coordinador";
         $url_puntajes_general = "index.php?view=puntajes_general";
         $url_puntajes_supervisor = "index.php?view=puntajes_supervisor";
+        $url_resumen_comisiones = "index.php?view=resumen_comisiones";
 
         $url_stock = "index.php?view=stock";
         $url_enviadas = "index.php?view=enviadas";
@@ -359,13 +360,23 @@
               </li>              
             <?php 
               }
-              if($permiso->getModuloPuntajesBoolean() && $esGerencia){
-            ?>  
-              <li class="treeview" id="mnu_puntajes">
-                <a href=<?php echo $url_puntajes_general; ?>> 
-                  <i class="fa fa-percent"></i> <span>Puntajes</span> </i>
-                </a>
-              </li>
+              if($permiso->getModuloPuntajesBoolean() && ($esGerencia || $esBO || $esContabilidad || $esRRHH)){
+            ?>
+            <li class="treeview" id="mnu_puntajes">
+              <a href="#"><i class="fa fa-percent"></i> <span>Puntajes</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu">  
+                <li class="treeview" id="mnu_puntajes">
+                  <a href=<?php echo $url_puntajes_general; ?>> 
+                    <i class="fa fa-percent"></i> <span>Puntajes</span> </i>
+                  </a>
+                </li>  
+                <li class="treeview" id="mnu_resumen_comisiones">
+                  <a href=<?php echo $url_resumen_comisiones; ?>> 
+                    <i class="fa fa-list"></i> <span>Resumen Comisiones</span> </i>
+                  </a>
+                </li>
+              </ul>
+            </li>
             <?php 
               }
             ?>  

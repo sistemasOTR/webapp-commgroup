@@ -108,6 +108,10 @@
         </div>
         <div class="modal-body">
             <div class="row">
+                <div class="col-md-4" style="display: none;" id="div_fecha_vigencia">
+                  <label>Fecha</label>
+                  <input type="date" name="fecha_vigencia" id="fecha_vigencia" class="form-control" value="<?php echo date('Y-m-d'); ?>"  >
+                </div>
                 <div class="col-md-12">
                   <label>Concepto</label>
                   <input type="text" name="categoria" id="categoria" class="form-control" >
@@ -183,6 +187,12 @@
     estado= document.getElementById(id).getAttribute('data-accion');
     valor= document.getElementById(id).getAttribute('data-valor');
     base= document.getElementById(id).getAttribute('data-base');
+
+    if(Number(id) == 2){
+      document.getElementById('div_fecha_vigencia').style.display= 'block';
+    } else {
+      document.getElementById('div_fecha_vigencia').style.display= 'none';
+    }
    
    
     document.getElementById("categoria").value = categoria;
