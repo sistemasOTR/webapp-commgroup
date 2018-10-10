@@ -49,8 +49,12 @@
 				$filtro_estado="";
 				if(!empty($estado)){
 					
-					if($estado == '50') {
-						$filtro_estado = "SERTT91_AUDITADO = 'R' AND ";	
+					if($estado == '56') {
+						$filtro_estado = "SERTT91_AUDITADO = 'R' AND SERTT91_ESTADO = 6 AND ";	
+					} elseif($estado == '55') {
+						$filtro_estado = "SERTT91_AUDITADO = 'R' AND SERTT91_ESTADO = 5 AND ";	
+					} elseif($estado == '54') {
+						$filtro_estado = "SERTT91_AUDITADO = 'R' AND SERTT91_ESTADO = 4 AND ";	
 					} elseif($estado == '100') {
 						$filtro_estado = "(SERTT91_ESTADO = 3 OR SERTT91_ESTADO = 6) AND";								
 					} else {
@@ -2238,17 +2242,21 @@
 		}
 
 
-		public function contarRecibidos($fecha, $empresa, $plaza,$gestor){
+		public function contarRecibidos($fecha, $empresa, $plaza,$gestor,$estado){
 			try {
 
 				$f = new Fechas;
 				$tmp = $f->FormatearFechas($fecha,"Y-m-d","Y-m-d");
 				$filtro_fecha = "SERTT11_FECSER = '".$tmp."' AND ";
-				$filtro_estado = "SERTT91_AUDITADO = 'R' AND ";
+				$filtro_recibido = "SERTT91_AUDITADO = 'R' AND ";
 				
 				$filtro_empresa="";
 				if(!empty($empresa))								
 					$filtro_empresa = "SERTT91_CODEMPRE = ".$empresa." AND ";
+				
+				$filtro_estado="";
+				if(!empty($estado))								
+					$filtro_estado = "SERTT91_ESTADO = ".$estado." AND ";
 
 				$filtro_gestor="";
 				if(!empty($gestor))								
@@ -2263,6 +2271,7 @@
 					WHERE
 						".$filtro_fecha." 
 						".$filtro_estado." 
+						".$filtro_recibido." 
 						".$filtro_empresa." 
 						".$filtro_gestor." 
 						".$filtro_plaza;
@@ -2796,6 +2805,85 @@
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());		
+			}
+		}
+
+		public function selectImprimirServicios($fecha, $estado, $empresa, $gestor, $coordinador){
+			try {
+
+				$f = new Fechas;
+
+				$filtro_fecha="";
+					if(!empty($fecha)){					
+						$tmp = $f->FormatearFechas($fecha,"Y-m-d","Y-m-d");				
+						$filtro_fecha = "SERTT11_FECSER = '".$tmp."' AND ";
+					}
+
+				$filtro_estado="";
+				if(!empty($estado)){
+					
+					if($estado == '56') {
+						$filtro_estado = "SERTT91_AUDITADO = 'R' AND SERTT91_ESTADO = 6 AND ";	
+					} elseif($estado == '55') {
+						$filtro_estado = "SERTT91_AUDITADO = 'R' AND SERTT91_ESTADO = 5 AND ";	
+					} elseif($estado == '54') {
+						$filtro_estado = "SERTT91_AUDITADO = 'R' AND SERTT91_ESTADO = 4 AND ";						
+					} else {
+						$filtro_estado = "SERTT91_ESTADO = ".$estado." AND ";
+					}
+				}
+				
+				$filtro_empresa="";
+				if(!empty($empresa))								
+					$filtro_empresa = "SERTT91_CODEMPRE = ".$empresa." AND ";
+
+				$filtro_gestor="";
+				if(!empty($gestor))								
+					$filtro_gestor = "SERTT91_CODGESTOR = ".$gestor." AND ";
+
+				$filtro_coordinador="";
+				if(!empty($coordinador))								
+					$filtro_coordinador = "SERTT91_COOALIAS = '".$coordinador."' ";
+
+
+				$query = "SELECT SERTT91_NOMBRE, SERTT31_PERNUMDOC,
+					CASE SERTT91_ESTADO
+					  WHEN 1 THEN 'Pendiente' 
+					  WHEN 2 THEN 'Despachado'  
+					  WHEN 3 THEN 'Cerrado Parcial' 
+					  WHEN 4 THEN 'Re Pactado' 
+					  WHEN 5 THEN 'Re Llamar' 
+					  WHEN 6 THEN 'Cerrado' 
+					  WHEN 7 THEN 'Negativo' 
+					  WHEN 8 THEN 'Cerrado en Problemas' 
+					  WHEN 9 THEN 'Enviado' 
+					  WHEN 10 THEN 'A Liquidar' 
+					  WHEN 11 THEN 'Negativo B.O.' 
+					  WHEN 12 THEN 'Cancelado' 
+					  WHEN 13 THEN 'Problemas B.O.'
+					  WHEN 14 THEN 'Liquidar C. Parcial' 
+					  WHEN 15 THEN 'No Efectivas'					  
+					END as ESTADOS_DESCCI
+				FROM SERVTT
+				WHERE  				
+					".$filtro_fecha."
+					".$filtro_estado." 
+					".$filtro_empresa." 
+					".$filtro_gestor." 
+					".$filtro_coordinador."
+				ORDER BY 
+					SERTT31_PERNUMDOC";
+				
+					// var_dump($query);
+					// exit;
+
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
 			}
 		}
 	}

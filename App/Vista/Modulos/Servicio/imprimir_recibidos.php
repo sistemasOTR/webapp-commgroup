@@ -25,12 +25,15 @@
   $fcoordinador=(isset($_GET["fcoordinador"])?$_GET["fcoordinador"]:'');
   $fgestor=(isset($_GET["fgestor"])?$_GET["fgestor"]:'');
   $foperador=(isset($_GET["foperador"])?$_GET["foperador"]:'');
+  $fest=(isset($_GET["festado"])?$_GET["festado"]:'');
+
+  $festado += $fest;
 
   
-  $arrDatos = $handler->selectServicios($fechaRecep,$fechaRecep,$festado,$fcliente,$fgestor,null,$plaza,$foperador,$fequipoventa);
+  $arrDatos = $handler->selectImprimirServicios($fechaRecep,$festado,$fcliente,$fgestor,$plaza);
   $arrEstados = $handler->selectAllEstados();    
   $allEstados = $handler->selectAllEstados(); 
-  $totalRecib = $handler->contarRecibidos($fechaRecep, $fcliente, $plaza,$fgestor);
+  $totalRecib = $handler->contarRecibidos($fechaRecep, $fcliente, $plaza,$fgestor,$fest);
 
                     
 

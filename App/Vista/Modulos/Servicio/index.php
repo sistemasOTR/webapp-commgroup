@@ -244,22 +244,32 @@
                   </select>
                 </div>
                 <div class="col-md-12">
-                  <label>Gestor </label>                
-                  <select id="fgestor" class="form-control" style="width: 100%" name="fgestor">                              
-                    <option value=''></option>
-                    <option value='0'>TODOS</option>
-                    <?php
-                      if(!empty($arrGestor))
-                      {                        
-                        foreach ($arrGestor as $key => $value) {                                                  
-                          if($fgestor==$value->GESTOR11_CODIGO)
-                            echo "<option value='".trim($value->GESTOR11_CODIGO)."' selected>".$value->GESTOR21_ALIAS."</option>";
-                          else
-                            echo "<option value='".trim($value->GESTOR11_CODIGO)."'>".$value->GESTOR21_ALIAS."</option>";
-                        }
-                      }                      
-                    ?>
-                  </select>
+                  <div class="col-md-6">
+                    <label>Gestor </label>                
+                    <select id="fgestor" class="form-control" style="width: 100%" name="fgestor">                              
+                      <option value=''></option>
+                      <option value='0'>TODOS</option>
+                      <?php
+                        if(!empty($arrGestor))
+                        {                        
+                          foreach ($arrGestor as $key => $value) {                                                  
+                            if($fgestor==$value->GESTOR11_CODIGO)
+                              echo "<option value='".trim($value->GESTOR11_CODIGO)."' selected>".$value->GESTOR21_ALIAS."</option>";
+                            else
+                              echo "<option value='".trim($value->GESTOR11_CODIGO)."'>".$value->GESTOR21_ALIAS."</option>";
+                          }
+                        }                      
+                      ?>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <label>Estado </label>                
+                    <select id="slt_est" class="form-control" style="width: 100%" name="slt_est">
+                      <option value='6'>CERRADOS</option>
+                      <option value='5'>RELLAMAR</option>
+                      <option value='4'>REPACTAR</option>
+                    </select>
+                  </div>
                 </div>
             </div>
           </div>
@@ -284,6 +294,11 @@
         placeholder: "Seleccionar",                  
     }).on('change', function (e) { 
       filtrarReporte();                  
+    });
+    $("#slt_est").select2({
+        placeholder: "Seleccionar",                  
+    }).on('change', function (e) { 
+      linkImprimir();                  
     });
   });
 
@@ -331,7 +346,7 @@
     $("#fgestor").select2({
         placeholder: "Seleccionar",                  
     }).on('change', function (e) {
-      linkImprimir()();
+      linkImprimir();
     });
   });
 
@@ -349,7 +364,7 @@
 
   $(document).ready(function() {
     $("#fechaRecep").on('change', function (e) { 
-      linkImprimir()(); 
+      linkImprimir(); 
     });
   });
 
@@ -366,6 +381,7 @@
     f_plaza = $('#plaza').val();
     f_cuenta = $('#cuenta').val();
     f_gestor = $('#fgestor').val();
+    f_estado = $('#slt_est').val();
 
     if(f_fechaRecep!=undefined)
       if(f_fechaRecep!='')
@@ -383,6 +399,10 @@
     if(f_gestor!=undefined)
       if(f_gestor!='')
         url_imprimir = url_imprimir + "&fgestor=" + f_gestor;
+
+    if(f_estado!=undefined)
+      if(f_estado!='')
+        url_imprimir = url_imprimir + "&festado=" + f_estado;
 
     $("#btn-imprimir").attr("href", url_imprimir);
 
