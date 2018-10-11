@@ -2828,6 +2828,8 @@
 						$filtro_estado = "SERTT91_AUDITADO = 'R' AND SERTT91_ESTADO = 5 AND ";	
 					} elseif($estado == '54') {
 						$filtro_estado = "SERTT91_AUDITADO = 'R' AND SERTT91_ESTADO = 4 AND ";						
+					} elseif($estado == '53') {
+						$filtro_estado = "SERTT91_AUDITADO = 'R' AND SERTT91_ESTADO = 3 AND ";						
 					} else {
 						$filtro_estado = "SERTT91_ESTADO = ".$estado." AND ";
 					}

@@ -268,6 +268,7 @@
                       <option value='6'>CERRADOS</option>
                       <option value='5'>RELLAMAR</option>
                       <option value='4'>REPACTAR</option>
+                      <option value='3'>CERRADO PARCIAL</option>
                     </select>
                   </div>
                 </div>
