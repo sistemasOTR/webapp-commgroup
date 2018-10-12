@@ -30,7 +30,7 @@
   $festado += $fest;
 
   
-  $arrDatos = $handler->selectImprimirServicios($fechaRecep,$festado,$fcliente,$fgestor,$plaza);
+  $arrDatos = $handler->selectImprimirServicios($fechaRecep,$fest,$fcliente,$fgestor,$plaza);
   $arrEstados = $handler->selectAllEstados();    
   $allEstados = $handler->selectAllEstados(); 
   $totalRecib = $handler->contarRecibidos($fechaRecep, $fcliente, $plaza,$fgestor,$fest);

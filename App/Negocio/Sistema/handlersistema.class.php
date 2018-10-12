@@ -2821,18 +2821,8 @@
 
 				$filtro_estado="";
 				if(!empty($estado)){
+					$filtro_estado = "SERTT91_ESTADO = ".$estado." AND ";
 					
-					if($estado == '56') {
-						$filtro_estado = "SERTT91_AUDITADO = 'R' AND SERTT91_ESTADO = 6 AND ";	
-					} elseif($estado == '55') {
-						$filtro_estado = "SERTT91_AUDITADO = 'R' AND SERTT91_ESTADO = 5 AND ";	
-					} elseif($estado == '54') {
-						$filtro_estado = "SERTT91_AUDITADO = 'R' AND SERTT91_ESTADO = 4 AND ";						
-					} elseif($estado == '53') {
-						$filtro_estado = "SERTT91_AUDITADO = 'R' AND SERTT91_ESTADO = 3 AND ";						
-					} else {
-						$filtro_estado = "SERTT91_ESTADO = ".$estado." AND ";
-					}
 				}
 				
 				$filtro_empresa="";
@@ -2872,11 +2862,11 @@
 					".$filtro_estado." 
 					".$filtro_empresa." 
 					".$filtro_gestor." 
-					".$filtro_coordinador."
+					".$filtro_coordinador." AND SERTT91_AUDITADO = 'R' 
 				ORDER BY 
 					SERTT31_PERNUMDOC";
 				
-					// var_dump($query);
+					// var_dump($query,$estado);
 					// exit;
 
 
