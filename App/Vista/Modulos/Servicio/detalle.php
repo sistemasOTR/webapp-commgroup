@@ -2,6 +2,7 @@
 	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";  
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php";   
 
+
 	$fechaing=(isset($_GET["fechaing"])?$_GET["fechaing"]:0);
 	$nroing=(isset($_GET["nroing"])?$_GET["nroing"]:0);
 
