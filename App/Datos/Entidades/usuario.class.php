@@ -521,6 +521,23 @@
 			}					
 		}
 
+		// public function selectEmpleadosByPlaza($idplaza)
+		// {		
+		// 	try {
+				
+		// 		$query = "SELECT * FROM usuario WHERE estado='true' and id_tipo_usuario <> 1 and id_plaza=".$id_plaza." order by apellido";
+				
+		// 		# Ejecucion 				
+		// 		$result = SQL::selectObject($query, new Usuario);
+
+		// 		return $result;
+
+
+		// 	} catch (Exception $e) {
+		// 		throw new Exception($e->getMessage());		
+		// 	}					
+		// }
+
 		public function selectByPlaza($id_plaza)
 		{		
 			try {

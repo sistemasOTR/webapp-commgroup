@@ -7,6 +7,7 @@
 		
 	include_once PATH_DATOS.'BaseDatos/conexionapp.class.php';	
 	include_once PATH_DATOS.'Entidades/asistencias.class.php';
+	include_once PATH_DATOS.'Entidades/asistenciasestados.class.php';
 	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
 	
 	class HandlerAsistencias{
@@ -27,7 +28,25 @@
 			}
 		}
 
-		public function updateAsistencia($id,$hora,$observacion){
+		public function newEstado($nombre,$perfil,$color,$productividad){
+					try {
+							
+						$handler = new AsistenciasEstados;
+							
+						$handler->setNombre($nombre);		
+						$handler->setUsuarioPerfil($perfil);		
+						$handler->setColor($color);		
+						$handler->setProductivo($productividad);		
+						$handler->setEstado(true);		
+							
+						$handler->insert(false);		
+						
+					} catch (Exception $e) {
+						throw new Exception($e->getMessage());				
+					}
+				}
+
+		public function updateAsistencia($id,$hora,$observacion,$ingresos){
 			try {
 					
 				$handler = new Asistencias;				
@@ -37,8 +56,37 @@
                 $handler->setId($id); 
 				$handler->setFecha($hora);
 				$handler->setObservacion($observacion);
+				$handler->setIngreso($ingresos);
 
 				$handler->update(false);		
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
+		public function updateEstados($id,$nombre,$perfil,$color,$productividad){
+			try {
+					
+				$handler = new AsistenciasEstados;				
+                $handler->setId($id); 
+				$handler->setNombre($nombre);
+				$handler->setUsuarioPerfil($perfil);
+				$handler->setColor($color);
+				$handler->setProductivo($productividad);
+				$handler->update(false);		
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
+		public function deletEstados($id){
+			try {
+					
+				$handler = new AsistenciasEstados;				
+                $handler->setId($id);
+				$handler->delete(false);		
 				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
@@ -49,6 +97,24 @@
 			try {
 					
 				$handler = new Asistencias;
+				$data= $handler->select();	
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}										
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
+		public function selectEstados(){
+			try {
+					
+				$handler = new AsistenciasEstados;
 				$data= $handler->select();	
 				if(count($data)==1){
 					$data = array('' => $data );                   
@@ -81,6 +147,25 @@
 				throw new Exception($e->getMessage());				
 			}
 		}
+
+		public function selectEstadosById($id){
+			try {
+					
+				$handler = new AsistenciasEstados;
+				$data= $handler->selectById($id);	
+				
+				if(count($data)==1){
+					$data = array($data);                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}								
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
 		public function selectAsistenciasByIdUser($id_user){
 			try {
 					
@@ -99,19 +184,19 @@
 				throw new Exception($e->getMessage());				
 			}
 		}
-		public function selectAsistenciasByFiltro($fecha,$usuario){
+		public function selectAsistenciasByFiltro($fecha,$hasta,$usuario){
 			try {
 					
 				$handler = new Asistencias;
-				$data= $handler->selectByFiltro($fecha,$usuario);	
+				$data= $handler->selectByFiltro($fecha,$hasta,$usuario);	
 
-				if(count($data)==1){
-					$data = array($data );                   
+				// if(count($data)==1){
+				// 	$data = array($data );                   
+				// 	return $data;
+				// }				
+				// else{
 					return $data;
-				}				
-				else{
-					return $data;
-				}								
+				// }								
 				
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());				
