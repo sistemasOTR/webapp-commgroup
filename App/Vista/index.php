@@ -472,6 +472,21 @@
 				$include = 'Modulos/Estadisticas/estadisticas_compras.php';
 			break;
 
+	  case 'estadisticas_asistencias':
+			if($permiso->getModuloMetricasBoolean() && ($esGerencia || $esBO))
+				$include = 'Modulos/Estadisticas/estadisticas_asistencias.php';
+			break;
+
+     case 'estadisticas_asis_coord':
+			if($permiso->getModuloMetricasBoolean() && ($esGerencia || $esBO || $esCoordinador))
+				$include = 'Modulos/Estadisticas/estadisticas_asistencia_coord.php';
+			break;  
+
+	case 'estadisticas_asistencia_gestor':
+			if($permiso->getModuloMetricasBoolean() && ($esGestor || $esCoordinador || $esGerencia))
+				$include = 'Modulos/Estadisticas/estadisticas_asistencia_gestor.php';
+			break;
+
 		case 'estadisticas_gestor':
 			if($permiso->getModuloMetricasBoolean() && $esGestor)
 				$include = 'Modulos/Estadisticas/estadisticas_gestor.php';
@@ -660,8 +675,28 @@
 		/*###########*/
 
 		case 'asistencias':
-			if($permiso->getModuloLicenciasBoolean()  && (($esBO || $esRRHH) || $esCoordinador))
+			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador && $usuarioActivoSesion->getId() !=10045))
 				$include = 'Modulos/Asistencia/presentismo.php';
+			break;
+
+		case 'asistencias_estados':
+			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador||$usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104))
+				$include = 'Modulos/Asistencia/abm_estados.php';
+			break;
+
+		case 'asistencias_gestor':
+			if($permiso->getModuloLicenciasBoolean()  && ($esGestor))
+				$include = 'Modulos/Asistencia/presentismo_gestor.php';
+			break;
+
+		case 'asistencias_gerenciaBO':
+			if($permiso->getModuloLicenciasBoolean()  && ($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104))
+				$include = 'Modulos/Asistencia/presentismo_gerenciaBO.php';
+			break;
+
+		case 'asistencias_historial':
+			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador||$usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104))
+				$include = 'Modulos/Asistencia/filtro_historial.php';
 			break;	
 
 		  /*################*/

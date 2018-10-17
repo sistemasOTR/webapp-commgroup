@@ -21,6 +21,8 @@
         $url_estadisticas_licencias = "index.php?view=estadisticas_licencias";
         $url_estadisticas_expediciones = "index.php?view=estadisticas_expediciones";
         $url_estadisticas_compras = "index.php?view=estadisticas_compras";
+        $url_estadisticas_asistencias = "index.php?view=estadisticas_asistencias";
+        $url_estadisticas_asistencias_coord = "index.php?view=estadisticas_asistencia_coord";
         $url_configuraciones = "index.php?view=configuraciones";
         $url_importacion = "index.php?view=importacion";
         $url_importacion_manual = "index.php?view=importacion_manual";
@@ -33,6 +35,9 @@
         $url_documento_ayuda = "index.php?view=documento_ayuda";
 
         $url_asistencias = "index.php?view=asistencias";
+        $url_asistencias_gestor = "index.php?view=asistencias_gestor";
+        $url_asistencias_estados = "index.php?view=asistencias_estados";
+        $url_asistencias_gerenciaBO = "index.php?view=asistencias_gerenciaBO";
 
         $url_legajos_carga = "index.php?view=legajos_carga";
         $url_sueldos_remun = "index.php?view=sueldos_remun";
@@ -194,19 +199,46 @@
 
             <?php
               if($permiso->getModuloLicenciasBoolean()){ 
-                if($esCoordinador){   
+                if($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104 || $esGestor || $esCoordinador){   
             ?>
               <li class="treeview" id="mnu_asistencias">
                 <a href="#"><i class="fa fa-user"></i> <span>Asistencias</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
+                <?php  if($esCoordinador && $usuarioActivoSesion->getId()!=10045 && $usuarioActivoSesion->getId()!=10007){ ?>
                     <li id="mnu_asistencias_presentismo">
                       <a href=<?php echo $url_asistencias; ?>>
-                        <i class="fa fa-check-square-o"></i> <span>Presentismo</span>
+                        <i class="fa fa-check-square-o"></i> <span>Presentismo Coord</span>
                       </a>
-                    </li> 
+                    </li>
+                        <li id="mnu_asistencias_estados">
+                      <a href=<?php echo $url_asistencias_estados; ?>>
+                        <i class="fa fa-edit"></i> <span>ABM Estados</span>
+                      </a>
+                    </li>  
+                    </ul>
+                  </li>
+                  <?php }elseif($esGestor){?> 
+                   <li id="mnu_asistencias_presentismo">
+                      <a href=<?php echo $url_asistencias_gestor; ?>>
+                        <i class="fa fa-check-square-o"></i> <span>Gestor</span>
+                      </a>
+                    </li>  
                 </ul>
               </li>
-                <?php } }?> 
+                <?php } elseif($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104){?> 
+                   <li id="mnu_asistencias_gerenciaBO">
+                      <a href=<?php echo $url_asistencias_gerenciaBO; ?>>
+                        <i class="fa fa-check-square-o"></i> <span>Presentismo Global</span>
+                      </a>
+                    </li> 
+                       <li id="mnu_asistencias_estados">
+                      <a href=<?php echo $url_asistencias_estados; ?>>
+                        <i class="fa fa-edit"></i> <span>ABM Estados</span>
+                      </a>
+                    </li>     
+                </ul>
+              </li>
+               <?php } } }?> 
 
             <?php
               if($permiso->getModuloTicketsBoolean()){  
@@ -688,6 +720,11 @@
                <li id="mnu_estadisticas_compras">
                 <a href=<?php echo $url_estadisticas_compras; ?>>
                   <i class="fa fa-bar-chart"></i> <span>Est.Compras</span> </i>
+                </a>              
+              </li>
+              <li id="mnu_estadisticas_asistencias">
+                <a href=<?php echo $url_estadisticas_asistencias; ?>>
+                  <i class="fa fa-pie-chart"></i> <span>Est.Asistencias</span> </i>
                 </a>              
               </li>
             <?php } ?>

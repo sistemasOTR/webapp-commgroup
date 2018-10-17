@@ -84,7 +84,7 @@
 	        			) VALUES (
 	        				".$this->getIdUsuario().",  
 							'".$this->getFecha()."',
-							'".$this->getIngreso()."',
+							".$this->getIngreso().",
 							'".$this->getEstado()."',
 							'".$this->getObservacion()."'
 							
@@ -113,14 +113,14 @@
 				$query="UPDATE asistencias SET
 							fecha='".$this->getFecha()."',	
 							id_usuario=".$this->getIdUsuario().",
-							ingreso='".$this->getIngreso()."',
+							ingreso=".$this->getIngreso().",
 							estado='".$this->getEstado()."',
 							observacion='".$this->getObservacion()."'
 								
 							WHERE id=".$this->getId();
 
-	        	//echo $query;
-	        	//exit();
+	        	// echo $query;
+	        	// exit();
 
 				# Ejecucion 					
 				return SQL::update($conexion,$query);
@@ -253,20 +253,83 @@
 
 		}
 
-		public function selectByFiltro($fecha,$usuario)
+		public function selectByFiltro($fdesde,$fhasta,$usuario)
 		{			
-			try {
+			// try {
 
 
-				$query="SELECT * FROM asistencias WHERE estado='true' AND format(fecha,'yyyy-MM-dd')='".$fecha."' AND id_usuario=".$usuario;
+			// 	$query="SELECT * FROM asistencias WHERE estado='true' AND format(fecha,'yyyy-MM-dd')='".$fecha."' AND id_usuario=".$usuario;
 				
-				# Ejecucion 					
-				$result = SQL::selectObject($query, new Asistencias);
+			// 	# Ejecucion 					
+			// 	$result = SQL::selectObject($query, new Asistencias);
 						
-				return $result;
+			// 	return $result;
+
+			// } catch (Exception $e) {
+			// 	throw new Exception($e->getMessage());		
+			// }
+
+
+				try {
+				
+				$f = new Fechas;
+
+				if($fdesde==$fhasta)
+				{
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "format(fecha,'yyyy-MM-dd')= '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "format(fecha,'yyyy-MM-dd')='".$tmp."' AND ";
+					}
+				}
+				else
+				{					
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "format(fecha,'yyyy-MM-dd') >= '".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "format(fecha,'yyyy-MM-dd') <=  '".$tmp."' AND ";
+					}
+				}
+               
+               $filtro_usuario="";
+				if(!empty($usuario))								
+					$filtro_usuario = "id_usuario = '".$usuario."' AND ";
+				
+				
+				$filtro_estado = "estado =1";			
+
+				$query = "SELECT * FROM asistencias 
+								WHERE 									 
+									".$filtro_fdesde." 
+									".$filtro_fhasta." 												
+									".$filtro_usuario." 												
+									".$filtro_estado."
+								ORDER BY fecha ASC";
+
+
+				$result = SQL::selectObject($query, new Asistencias);	
+
+				if(count($result)==1)
+					$resultFinal[0] = $result;		
+				else
+					$resultFinal = $result;									
+
+				return $resultFinal;
 
 			} catch (Exception $e) {
-				throw new Exception($e->getMessage());		
+				throw new Exception($e->getMessage());	
 			}
 
 		}

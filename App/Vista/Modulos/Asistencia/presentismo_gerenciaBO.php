@@ -11,10 +11,13 @@
  
   $dFecha = new Fechas;
   $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
+  $plazas = (isset($_GET["fplaza"])?$_GET["fplaza"]:0);
 
-  $url_action_agregar = PATH_VISTA.'Modulos/Asistencia/action_add_hours.php';
-  $url_action_editar = PATH_VISTA.'Modulos/Asistencia/action_edit_hours.php';
+  $url_action_agregar = PATH_VISTA.'Modulos/Asistencia/action_add_hours.php?perfil=gerenciaBO&fdesde='.$fdesde.'&fplaza='.$plazas;
+  $url_action_editar = PATH_VISTA.'Modulos/Asistencia/action_edit_hours.php?perfil=gerenciaBO&fdesde='.$fdesde.'&fplaza='.$plazas;
   $url_ajax =PATH_VISTA.'Modulos/Asistencia/select_usuario.php';
+ 
+  $url_historial='';
  
   $user = $usuarioActivoSesion;
   // var_dump($user->getNombre());
@@ -24,25 +27,16 @@
   $handlerSistema = new HandlerSistema;
   $handlerAsistencia= new HandlerAsistencias;
   $handlerAsist=new HandlerAsistencias;
-  $id='';
   $arrEstados = $handlerAsistencia->selectEstados();
   $handlerplazas=new HandlerPlazaUsuarios();
   $plazasOtr=$handlerplazas->selectTodas();
   $handlerLic= new HandlerLicencias;
 
-    foreach ($plazasOtr as $key => $value) {   
-    
-      if ($user->getAliasUserSistema()==strtoupper($value->getNombre())) {
+  
 
-        $id=$value->getId();
-      }
-    
-    }    
-
-  $arrGestor = $handlerUsuarios->selectGestores(intval($id));
-
-
-
+  $arrEmpleados = $handlerUsuarios->selectEmpleados();
+// var_dump($arrCoordinador);
+// exit();
  
 
 ?>
@@ -83,6 +77,20 @@
                     <div class="input-daterange input-group" id="datepicker">
                       <input type="text" class="input-sm form-control" onchange="crearHref()" id="start" name="start" value="<?php echo $dFecha->FormatearFechas($fdesde,'Y-m-d','d/m/Y'); ?>"/>
                     </div>
+                </div>
+                <div class="col-md-2">
+                  <label>PLAZAS</label>  
+                  <select id="slt_plaza" class="form-control" style="width: 100%" name="slt_plaza" onchange="crearHref()">
+                  <option value="0">TODAS</option>
+                  <?php 
+                  foreach ($plazasOtr as $key => $value) {
+                  if ($value->getId()==$plazas) {
+                       echo "<option value='".$value->getId()."' selected >".$value->getNombre()."</option>";
+                     } else{ 
+                    echo "<option value='".$value->getId()."'>".$value->getNombre()."</option>";
+                  } }?> 
+                  
+                  </select>
                 </div> 
                   <div class='col-md-3 pull-right'>                
                   <label></label>                
@@ -93,183 +101,30 @@
           </div>
         </div>
       </div>
-       <div class="row">
-       <div class='col-md-3'>
-           <div class="box">
-            <div class="box-body table-responsive">
-             
-              <table class="table table-striped table-condensed" id="tabla-items" cellspacing="0" width="100%">
-      
-                 <thead>
-                    <tr>                                       
-                      <th><b><?php echo $user->getNombre()." ".$user->getApellido() ;?></b>
-                          <a href="index.php?view=asistencias_historial&userPerfil=gerenciaBO&iduser=<?php echo $user->getId();?>&plaza=9999" class="btn btn-primary btn-xs pull-right"> Ver Historial</a> <a href="index.php?view=estadisticas_asis_coord&fplaza=<?php echo $user->getUserPlaza(); ?>"  class="fa fa-bar-chart "></a>
-                          <?php
-                        if($user->getId()==10045 ||$user->getId()==3 ||$user->getId()==10007){ ?>
-                        <i class="pull-right"><a href="#" id='<?php echo $user->getId() ?>'data-ide='<?php echo $user->getId() ?>' data-fecha='<?php echo $fdesde;?>'data-usuario='<?php echo $user->getUsuarioPerfil()->getId(); ?>' data-hora='<?php echo date('H:i'); ?>' data-estados='<?php echo $accion; ?>'class="btn btn-default btn-xs" data-toggle='modal' data-target='#modal-presentismo' onclick='cargarDatos(<?php echo $user->getId()?>)'>Nuevo Horario</a></i>
-                      <?php } ?>
-                      </th>
-                     </tr>
-                  </thead>
-
-                  <tbody>
-                    <?php 
-
-              
-                     $asistencias=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$user->getId());
-                     $arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($fdesde,$fdesde,intval($user->getId()),2);
-
-                               if (!empty($asistencias)) {
-                        foreach ($arrEstados as $key => $vv) {
-
-                           if (($vv->getUsuarioPerfil()==0) || ($vv->getUsuarioPerfil()==$user->getUsuarioPerfil()->getId())) {
-                                $act[$vv->getId()]=0;  
-                                }  
-                             }
-
-                             $cant = count($asistencias);
-
-                             for ($i=1; $i < $cant; $i++) { 
-                               $id_actAnt = $asistencias[($i-1)]->getIngreso();
-                               $id_actual=$asistencias[$i]->getIngreso();
-
-                             
-                               $inicioAct = new DateTime($asistencias[($i-1)]->getFecha()->format('H:i'));
-                               $finAct = new DateTime($asistencias[$i]->getFecha()->format('H:i'));
-                                         
-                               #-------------------------------------------------------------------
-                               $difParcial=$finAct->diff($inicioAct); 
-                               $formato=$difParcial->format('%H:%i');
-                               $horass=split(":",$formato);
-                              
-                               $total_horas=$horass[0];
-                               $minutos=$horass[1]/60;
-                            
-                               $total=$total_horas+round($minutos,2);              
-                               #-------------------------------------------------------------------
-                               $act[intval($id_actAnt)] = $act[intval($id_actAnt)]+$total;
-
-                          
-                           
-                             }
-                              
-                              
-                          
-                                $lista1='';
-                                $listaProd1=0;
-                                $listaImprod1=0;
-
-                                foreach ($arrEstados as $key => $vv) {
-
-                                 if (($vv->getUsuarioPerfil()==0) || ($vv->getUsuarioPerfil()==$user->getUsuarioPerfil()->getId())) {
-                                  if (!empty($act[$vv->getId()])) {
-                                                                   
-                                    $lista1.= "<tr><td>".$vv->getNombre()." : ".$act[$vv->getId()]." Hs</td></tr>";
-                                      
-                                         }
-                                    if ($vv->getProductivo()==1) {
-                                       if (!empty($act[$vv->getId()])) {
-                                                                   
-                                    $listaProd1+= $act[$vv->getId()];
-                                      
-                                        } 
-                                      } 
-                                     if ($vv->getProductivo()==0) {
-                                      if (!empty($act[$vv->getId()])) {
-                                                                   
-                                    $listaImprod1+= $act[$vv->getId()];
-                                      
-                                           }
-
-                                         }    
-
-                                       }
-                                   }
-
-
-                        
-                             }            
-
-                  
-                    
-                    if(!empty($asistencias)){
-                         foreach ($asistencias as $key => $val) {
-                         $estadoId=$val->getIngreso();
-                         if (!empty($estadoId)) {        
-                        $select=$handlerAsistencia->selectEstadosById($estadoId);
-                        if (!empty($select)) {
-                          $ingreso=$val->getFecha()->format('H:i');
-                          $est=$val->getIngreso();
-                        ?> 
-
-                        <tr><td>
-                          <?php if($user->getId()==10045 ||$user->getId()==3 ||$user->getId()==10007){ ?>
-                          <a href='#' id='<?php echo $val->getId();?>' data-ingreso='<?php echo $est;?>' data-edithora='<?php echo $ingreso ?>' data-editfecha='<?php echo $fdesde; ?>' data-idi='<?php echo $val->getId();?>' data-user='<?php echo $user->getUsuarioPerfil()->getId(); ?>' data-toggle='modal' data-target='#modal-editar' class='fa fa-refresh text-yellow btn-modal' onclick='cargarDatos(<?php echo $val->getId();?>)'></a>
-                           <?php } ?> 
-                          <?php echo " ".$val->getFecha()->format('H:i')."<span class='".$select[0]->getColor()." pull-right'><b>".$select[0]->getNombre()."</b></span>"  ?></td></tr> 
-                      <?php } } } }else{
-                         $deLic='';
-                                if(!empty($arrLicencias)) {
-
-                                foreach ($arrLicencias as $key => $value) {
-                          
-                                if (!$value->getRechazado()) {
-       
-                                 if($value->getAprobado()) {
-
-                                  if ($fdesde <= $value->getFechaFin()->format('Y-m-d') ) { 
-                                   
-                                    $deLic= "<span class='label label-warning pull-left'> LICENCIA EN CURSO</span>";
-                                   
-                                   }
-                                    else{ 
-                                       $deLic="";
-                                      }
-
-                                     
-                                    }
-                                  }
-                                }
-                              }
-                        echo"<tr><td>".$deLic."</td></tr>";
-                         $lista1=null;
-                         $listaProd1=null;
-                         $listaImprod1=null;
-                      }
-                     
-                      echo $lista1;
-                      if (!empty($listaProd1)) {
-                      echo "<tr><td class='bg-green'> HRS PRODUCTIVAS : ".$listaProd1." Hs</td></tr>";
-                      }
-                      if (!empty($listaImprod1)) {
-                      echo "<tr><td class='bg-red'> HRS IMPRODUCTIVAS : ".$listaImprod1." Hs</td></tr>";
-                      }
-                       ?>
-                  </tbody>
-
-                  
-              </table>
-            </div>
-            </div>
-          </div>
-            
-          
+   
         <?php 
 
-          $contador=2;
-          
+          $contador=1;
+          $flag=false;
+          // var_dump($arrCoordinador);  
 
-          if (!empty($arrGestor)) {   
+          if (!empty($arrEmpleados)) {
+
                            
-            foreach ($arrGestor as $key => $value) {
-              $flag=false;
+            foreach ($arrEmpleados as $key => $value) { 
+            // var_dump($value->getUsuarioPerfil()->getId());
+            // exit(); 
+
+            if ($value->getUserPlaza()==$plazas || $plazas==0 ) {
+                                     
+              
             if ($contador==1) {
                echo "<div class='row'>";
                $flag=false;
              } 
             
              $asistencias=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
-             $arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($fdesde,$fdesde,intval($value->getId()),2);
+              $arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($fdesde,$fdesde,intval($value->getId()),2);
                // var_dump($asistencias);
                // exit();
                ?>  
@@ -281,11 +136,36 @@
 
                      <thead>
                         <tr>                                       
-                          <th><b><?php echo $value->getNombre()." ".$value->getApellido() ;?></b>
-                            <a href="index.php?view=asistencias_historial&userPerfil=gerenciaBO&iduser=<?php echo $value->getId(); ?>&plaza=<?php echo $id; ?>" class="btn btn-primary btn-xs pull-right">Ver Historial</a> <a href="index.php?view=estadisticas_asistencia_gestor&id_gestor=<?php echo $value->getId(); ?>" style="text-align: center;" class="fa fa-bar-chart "></a>
-                            <?php if($user->getId()==10045 ||$user->getId()==3 ||$user->getId()==10007){ ?>     
-                            <i class="pull-right"><a href="#" id='<?php echo $value->getId() ?>'data-ide='<?php echo $value->getId() ?>' data-fecha='<?php echo $fdesde;?>' data-usuario='5' data-hora='<?php echo date('H:i'); ?>' class="btn btn-default btn-xs" data-toggle='modal' data-target='#modal-presentismo' onclick='cargarDatos(<?php echo $value->getId() ?>)'>Nuevo Horario</a></i>
-                          <?php } ?> 
+                          <th><b><?php echo $value->getNombre()." ".$value->getApellido() ;?></b> <a href="index.php?view=estadisticas_asistencia_gestor&id_gestor=<?php echo $value->getId(); ?>" class="fa fa-bar-chart "></a>
+                            <a href="index.php?view=asistencias_historial&userPerfil=gerenciaBO&iduser=<?php echo $value->getId(); ?>&plaza=<?php echo $value->getUserPlaza(); ?>" style="" class="btn btn-primary pull-right btn-xs">Ver Historial</a>
+                            <?php if($user->getId()==10045 ||$user->getId()==3 ||$user->getId()==1){  
+                              $seguir=true;
+                             $arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($dFechas->FechaActual(),$dFechas->FechaActual(),intval($value->getId()),2);
+                    
+                                if(!empty($arrLicencias)) {
+
+                                foreach ($arrLicencias as $key => $vl) {
+                          
+                                if (!$vl->getRechazado()) {
+       
+                                 if($vl->getAprobado()) {
+
+                                  if ($dFechas->FechaActual() <= $vl->getFechaFin()->format('Y-m-d') ) { 
+                                   
+                                   $seguir=false;
+                                   
+                                   }
+                                   
+                                     
+                                    }
+                                  }
+                                }
+                              }
+                             if ($seguir) {
+                             
+                              ?>
+                            <i class="pull-right"><a href="#" id='<?php echo $value->getId() ?>'data-ide='<?php echo $value->getId() ?>' data-fecha='<?php echo $fdesde;?>' data-usuario='<?php echo $value->getUsuarioPerfil()->getId(); ?>' data-hora='<?php echo date('H:i'); ?>' class="btn btn-default btn-xs" data-toggle='modal' data-target='#modal-presentismo' onclick='cargarDatos(<?php echo $value->getId() ?>)'>Nuevo Horario</a></i>
+                          <?php } } ?> 
                           </th>
                          </tr>
                       </thead>
@@ -295,7 +175,7 @@
                                if (!empty($asistencias)) {
                         foreach ($arrEstados as $key => $v) {
 
-                           if ($v->getUsuarioPerfil()==0 || $v->getUsuarioPerfil()==5) {
+                           if ($v->getUsuarioPerfil()==0 || $v->getUsuarioPerfil()==$value->getUsuarioPerfil()->getId()) {
                                 $act[$v->getId()]=0;  
                                 }  
                              }
@@ -334,7 +214,7 @@
 
                                 foreach ($arrEstados as $key => $v) {
 
-                                 if ($v->getUsuarioPerfil()==0 || $v->getUsuarioPerfil()==5) {
+                                 if ($v->getUsuarioPerfil()==0 || $v->getUsuarioPerfil()==$value->getUsuarioPerfil()->getId()) {
                                        if (!empty($act[$v->getId()])) {
                                                                    
                                            $lista2.= "<tr><td>".$v->getNombre()." : ".$act[$v->getId()]." Hs</td></tr>";
@@ -351,11 +231,6 @@
                                    }
 
 
-                        
-                             }            
-                           
-
-                        if(!empty($asistencias)){
                          foreach ($asistencias as $key => $valu) {
                          $estadoId=$valu->getIngreso();
                          if (!empty($estadoId)) {        
@@ -368,12 +243,24 @@
                         ?> 
 
                         <tr><td>
-                           <?php if($user->getId()==10045 ||$user->getId()==3 ||$user->getId()==10007){ ?>
-                          <a href='#'  id='<?php echo $valu->getId();?>' data-ingreso='<?php echo $est;?>' data-edithora='<?php echo $ingreso; ?>' data-editfecha='<?php echo $fdesde; ?>' data-idi='<?php echo $valu->getId();?>' data-user='5' data-toggle='modal' data-target='#modal-editar' class='fa fa-refresh text-yellow btn-modal' onclick='cargarDatos(<?php echo $valu->getId();?>)'></a>
+                           <?php if($user->getId()==10045 ||$user->getId()==3 ||$user->getId()==1){ ?>
+                          <a href='#'  id='<?php echo $valu->getId();?>' data-ingreso='<?php echo $est;?>' data-edithora='<?php echo $ingreso; ?>' data-editfecha='<?php echo $fdesde; ?>' data-idi='<?php echo $valu->getId();?>' data-user='<?php echo $value->getUsuarioPerfil()->getId(); ?>' data-toggle='modal' data-target='#modal-editar' class='fa fa-refresh text-yellow btn-modal' onclick='cargarDatos(<?php echo $valu->getId();?>)'></a>
                         <?php } ?>
                           <?php echo " ".$valu->getFecha()->format('H:i')."<span class='".$select[0]->getColor()." pull-right '><b>".$select[0]->getNombre()."</b></span>"  ?></td></tr>                    
-                      <?php } } } }else{
-                              $deLic='';
+                      <?php } } } 
+
+ 
+                      echo $lista2;
+                      if (!empty($listaProd)) {
+                      echo "<tr><td class='bg-green'> HRS PRODUCTIVAS : ".$listaProd." Hs</td></tr>";
+                      }
+                      if (!empty($listaImprod)) {
+                      echo "<tr><td class='bg-red'> HRS IMPRODUCTIVAS : ".$listaImprod." Hs</td></tr>";
+                      }
+
+                       
+                      }else{
+                        $deLic='';
                                 if(!empty($arrLicencias)) {
 
                                 foreach ($arrLicencias as $key => $value) {
@@ -396,21 +283,9 @@
                                   }
                                 }
                               }
-                        echo"<tr><td>".$deLic."</td></tr>";
-                        
-                        $lista2=null;
-                        $listaProd=null;
-                        $listaImprod=null;
-                      }
-                     
-                      echo $lista2;
-                      if (!empty($listaProd)) {
-                      echo "<tr><td class='bg-green'> HRS PRODUCTIVAS : ".$listaProd." Hs</td></tr>";
-                      }
-                      if (!empty($listaImprod)) {
-                      echo "<tr><td class='bg-red'> HRS IMPRODUCTIVAS : ".$listaImprod." Hs</td></tr>";
-                      }
 
+                       echo"<tr><td >".$deLic."</td></tr>";
+                        }// cierre asistencias.
                        ?>
                        
                       </tbody>
@@ -429,13 +304,15 @@
                   $contador=1;
                   $flag=true;
                  } 
-
+                   
                 } 
+               }
                } 
-
+              
                if (!$flag) {
                echo "</div>";
                  } 
+
              ?>      
 <div class="modal modal-primary fade in" id="modal-presentismo">
      <div class="modal-dialog">
@@ -456,7 +333,7 @@
                 <input type="time" name="hora" id="hora" required class="form-control" value="">
                 <input type="hidden" name="cord_id" id="cord_id" class="form-control">       
                 <input type="hidden" name="fecha" id="fecha" class="form-control" value="">    
-                <input type="hidden" name="modo" id="modo" value="coordinador">
+                <input type="hidden" name="modo" id="modo" value="gerenciaBO">
                 <input type="hidden" name="usuario" class="form-control" id="usuario" value="">
                 </div>
                 <div class="col-md-6">
@@ -590,12 +467,19 @@
       todayBtn: "linked",  
   });
 
+$(document).ready(function() {
+    $("#slt_plaza").select2({
+        placeholder: "TODAS",                  
+    });
+  });
+
   crearHref();
   function crearHref()
   {
       aStart = $("#start").val().split('/');
-      f_inicio = aStart[2] +"-"+ aStart[1] +"-"+ aStart[0];                        
-      url_filtro_reporte="index.php?view=asistencias&fdesde="+f_inicio;  
+      f_inicio = aStart[2] +"-"+ aStart[1] +"-"+ aStart[0];
+      f_plaza = $("#slt_plaza").val();                        
+      url_filtro_reporte="index.php?view=asistencias_gerenciaBO&fdesde="+f_inicio+"&fplaza="+f_plaza;  
       $("#filtro_reporte").attr("href", url_filtro_reporte);
   } 
 
