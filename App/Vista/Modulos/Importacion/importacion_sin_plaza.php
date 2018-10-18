@@ -11,8 +11,8 @@
 
   $dFecha = new Fechas;
 
-  $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
-  $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());    
+  $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->RestarDiasFechaActual(30));
+  $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->SumarDiasFechaActual(365));    
   $fcliente= (isset($_GET["fcliente"])?$_GET["fcliente"]:'');
 
   $handler = new HandlerImportacion;
@@ -92,14 +92,20 @@
               <i class="fa fa-edit"></i>
               <h3 class="box-title">Importaciones</h3>
             </div>
-            <div class="box-body">
+            <div class="box-body table-responsive">
               <table class="table table-striped table-condensed" id="tabla" cellspacing="0" width="100%">
                   <thead>
                     <tr>
                       <th>Cliente</th>
+                      <th>Producto</th>
                       <th>Fecha Visita</th>
+                      <th>DNI</th>
+                      <th>Nombre y Apellido</th>
+                      <th>Direccion</th>
                       <th>CP</th>
                       <th>Localidad</th>                      
+                      <th>Telefono</th>  
+                      <th>Plaza</th>  
                       <th style="width: 3%;" class='text-center'></th>
                       <th style="width: 3%;" class='text-center'></th>
                     </tr>
@@ -112,9 +118,15 @@
                         
                           echo "<tr>";
                             echo "<td>".$handlerSist->selectEmpresaById($value->getClienteTT())[0]->EMPTT21_NOMBREFA."</td>";
+                            echo "<td>".$value->getProducto()."</td>";
                             echo "<td>".$value->getFecha()->format('d/m/Y')."</td>";
+                            echo "<td>".$value->getNroDoc()."</td>";
+                            echo "<td>".$value->getNombre()." ".$value->getApellido()."</td>";
+                            echo "<td>".$value->getDireccion()."</td>";                            
                             echo "<td>".$value->getCodPostal()."</td>";
                             echo "<td>".$value->getLocalidad()."</td>";
+                            echo "<td>".$value->getTelefono()."</td>";
+                            echo "<td>".$value->getPlaza()."</td>";
                             echo "<td class='text-center'>
                                     <a href='#' id='".$value->getId()."_asignar' class='btn btn-default btn-xs' data-toggle='modal' data-target='#modal-asignar' onclick='asignar(".$value->getId().")'>
                                       <i class='fa fa-hand-lizard-o' data-toggle='tooltip' data-original-title='Asignar registro'></i>

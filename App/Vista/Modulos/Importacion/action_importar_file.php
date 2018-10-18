@@ -4,6 +4,8 @@
 	include_once PATH_NEGOCIO.'Funciones/Fechas/fechas.class.php';		
 
 	$fecha = (isset($_POST['fecha_importacion'])? $_POST['fecha_importacion']:'');
+	$fecha_hora = (isset($_POST['fecha_hora'])? $_POST['fecha_hora']:'');
+
 	$tipo_importacion = (isset($_POST['tipo_importacion'])? $_POST['tipo_importacion']:'');
 	$id_empresa_sistema = (isset($_POST['id_empresa_sistema'])? $_POST['id_empresa_sistema']:'');
 	$plaza = "-";
@@ -22,13 +24,13 @@
 		$url_view = "";
 
 		if($tipo_importacion == 1)
-			$url_view = "../../../../index.php?view=importacion_1&id_empresa_sistema=".$id_empresa_sistema."&fecha_importacion=".$fecha."&plaza=".$plaza."&excel=";
+			$url_view = "../../../../index.php?view=importacion_1&id_empresa_sistema=".$id_empresa_sistema."&fecha_importacion=".$fecha."&fecha_hora=".$fecha_hora."&plaza=".$plaza."&excel=";
 
 		if($tipo_importacion == 2)
-			$url_view = "../../../../index.php?view=importacion_2&id_empresa_sistema=".$id_empresa_sistema."&fecha_importacion=".$fecha."&plaza=".$plaza."&excel=";  
+			$url_view = "../../../../index.php?view=importacion_2&id_empresa_sistema=".$id_empresa_sistema."&fecha_importacion=".$fecha."&fecha_hora=".$fecha_hora."&plaza=".$plaza."&excel=";  
 
 		if($tipo_importacion == 3)
-			$url_view = "../../../../index.php?view=importacion_3&id_empresa_sistema=".$id_empresa_sistema."&fecha_importacion=".$fecha."&plaza=".$plaza."&excel=";
+			$url_view = "../../../../index.php?view=importacion_3&id_empresa_sistema=".$id_empresa_sistema."&fecha_importacion=".$fecha."&fecha_hora=".$fecha_hora."&plaza=".$plaza."&excel=";
 
 		$handler = new handlerimportacion;        
         $result = $handler->cargarExcel($archivo,$email,$id_empresa_sistema,$fecha,$plaza);	

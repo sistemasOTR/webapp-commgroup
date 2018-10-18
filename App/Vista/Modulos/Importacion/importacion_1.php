@@ -6,6 +6,8 @@
   $id_empresa_sistema = (isset($_GET['id_empresa_sistema'])? $_GET['id_empresa_sistema']:'');
   $fecha_importacion = (isset($_GET['fecha_importacion'])? $_GET['fecha_importacion']:'');
   $plaza = (isset($_GET['plaza'])? $_GET['plaza']:'');
+  
+  $fecha_hora = (isset($_GET['fecha_hora'])? $_GET['fecha_hora']:'');
 
   $action_guardar = PATH_VISTA.'Modulos/Importacion/action_guardar.php';   
 
@@ -136,6 +138,7 @@
           </div>
             
           <input type="hidden" name="fecha_importacion" value="<?php echo $fecha_importacion; ?>">
+          <input type="hidden" name="fecha_hora" value="<?php echo $fecha_hora; ?>">
           <input type="hidden" name="tipo_importacion" value="<?php echo $objTipoImportacion->getId(); ?>">
           <input type="hidden" name="id_empresa_sistema" value="<?php echo $id_empresa_sistema; ?>">
           <input type="hidden" name="plaza" value="<?php echo $plaza; ?>">

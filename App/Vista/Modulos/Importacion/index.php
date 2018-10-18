@@ -6,6 +6,8 @@
   $subir_file = PATH_VISTA.'Modulos/Importacion/action_importar_file.php';   
   $delete_file = PATH_VISTA.'Modulos/Importacion/action_delete_importacion.php';   
 
+  $view_detalle = "?view=importacion_detalle&importacion_id=";
+
   $handler = new HandlerImportacion;  
   $objTipoImpo = $handler->ConfiguracionByEmpresa($usuarioActivoSesion->getUserSistema());
   
@@ -47,24 +49,24 @@
             <form enctype="multipart/form-data" action="<?php echo $subir_file; ?>" method="POST">
               <input type="hidden" name="email" value="<?php echo $usuarioActivoSesion->getEmail(); ?>">
               <input type='hidden' name="tipo_importacion" value='<?php echo $objTipoImpo->getIdTipoImportacion()->getId(); ?>'>            
-              <input type='hidden' name="id_empresa_sistema" value='<?php echo $usuarioActivoSesion->getUserSistema(); ?>'>            
+              <input type='hidden' name="id_empresa_sistema" value='<?php echo $usuarioActivoSesion->getUserSistema(); ?>'>                          
 
               <div class="box-body">                
                 <div class='row'>
-                  <div class='col-md-3'>
-                    <label for="exampleFecha">Fecha</label>
-                    <div class="input-group date" id='date'>
-                      <input type="text" class="form-control" name='fecha_importacion' value="<?php echo $fechas->FormatearFechas($fechas->FechaActual(),'Y-m-d','d/m/Y'); ?>"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                    </div>
-                  </div>  
 
-                  
                   <?php 
 
                     if(!empty($objTipoImpo)){
                       if(!empty($objTipoImpo->getIdTipoImportacion()->getId()<>3)){
                    
                   ?>
+                    <div class='col-md-3'>
+                      <label for="exampleFecha">Fecha</label>
+                      <div class="input-group date" id='date'>
+                        <input type="text" class="form-control" name='fecha_importacion' value="<?php echo $fechas->FormatearFechas($fechas->FechaActual(),'Y-m-d','d/m/Y'); ?>"><span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+                      </div>
+                    </div>  
+
                       <div class='col-md-3'>
                         <label for="examplePlaza">Plaza</label>
                         
@@ -82,6 +84,12 @@
                         </select>   
                       </div>                   
                    <?php 
+                      }
+                      else{
+                    ?>
+                      <input type='hidden' name="fecha_importacion" value='<?php echo $fechas->FormatearFechas($fechas->FechaActual(),'Y-m-d','d/m/Y'); ?>'>            
+                      <input type='hidden' name="fecha_hora" value='<?php echo $fechas->FechaHoraActual(); ?>'>            
+                    <?php
                       }
                     } 
                   ?>
@@ -120,7 +128,8 @@
                     <th class='text-center'>Estado</th>
                     <th class='text-center'>Enviados</th>
                     <th class='text-center'>Aprobados</th>
-                    <th class='text-center'>Acción</th>
+                    <th class='text-center'></th>
+                    <th class='text-center'></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -133,13 +142,16 @@
                         $countRegistros = count($datos);
                         $countAprobados = $value->countAprobados();
 
-                        if($countAprobados==0) 
-                          $importadoTT = "<span class='label label-danger'>SIN APROBAR</span>";
+                        if($countRegistros==0 && $countAprobados==0) 
+                          $importadoTT = "<span class='label label-info'>REVISION DE PLAZAS</span>";
+
+                        if($countRegistros>0 && $countAprobados==0) 
+                          $importadoTT = "<span class='label label-danger'>PENDIENTES</span>";
                             
                         if($countAprobados>0 && $countAprobados<$countRegistros) 
-                          $importadoTT = "<span class='label label-warning'>SINCRONIZANDO</span>";
+                          $importadoTT = "<span class='label label-warning'>REVISION DE FECHAS Y PLAZAS</span>";
 
-                        if($countAprobados==$countRegistros) 
+                        if($countAprobados==$countRegistros && $countRegistros>0) 
                           $importadoTT = "<span class='label label-success'>APROBADO</span>";
 
                         $obj = $handlerSist->getPlazaByCordinador($value->getPlaza());
@@ -156,14 +168,18 @@
                             <td class='text-center'>".$importadoTT."</td>
                             <td class='text-center' style='font-size:15px;'><b>".$countRegistros."</b></td>                            
                             <td class='text-center' style='font-size:15px;'><b>".$countAprobados."</b></td>                            
+                            <td class='text-center'>
+                              <a href=".$view_detalle.$value->getId()." class='btn btn-default btn-xs'>Detalle</a>
+                            </td>
                             <td class='text-center'>                              
                               <button                                                                           
-                                type='button' class='btn btn-default btn-xs' 
+                                type='button' 
+                                class='btn btn-danger btn-xs' 
                                 data-toggle='modal' 
                                 data-target='#modalEliminar' 
                                 onclick=btnEliminar(".$value->getId().")><i class='fa fa-trash'></i> Eliminar
                               </button>
-                            </td>
+                            </td>                            
                           </tr>";                                                
                         
                       }

@@ -115,7 +115,7 @@
 			}
 		}
 
-		public function guardarRegistrosTipo1($fecha,$id_empresa_sistema,$tipo_importacion,$plaza,$datos){
+		public function guardarRegistrosTipo1($fecha,$fecha_hora,$id_empresa_sistema,$tipo_importacion,$plaza,$datos){
 			try {
 			
 				$impo = new Importacion;
@@ -126,6 +126,7 @@
 
 					//guardo cabecera
 					$impo->setFecha($fecha);
+					$impo->setFechaHora($fecha_hora);
 					$impo->setIdEmpresaSistema($id_empresa_sistema);
 					$impo->setIdTipoImportacion($tipo_importacion);
 					$impo->setPlaza($plaza);
@@ -198,7 +199,7 @@
 			}
 		}
 
-		public function guardarRegistrosTipo2($fecha,$id_empresa_sistema,$tipo_importacion,$plaza,$datos){
+		public function guardarRegistrosTipo2($fecha,$fecha_hora,$id_empresa_sistema,$tipo_importacion,$plaza,$datos){
 			try {
 			
 				$impo = new Importacion;
@@ -209,6 +210,7 @@
 
 					//guardo cabecera
 					$impo->setFecha($fecha);
+					$impo->setFechaHora($fecha_hora);
 					$impo->setIdEmpresaSistema($id_empresa_sistema);
 					$impo->setIdTipoImportacion($tipo_importacion);
 					$impo->setPlaza($plaza);
@@ -321,9 +323,9 @@
 			}
 		}
 
-		public function guardarRegistrosTipo3($fecha,$id_empresa_sistema,$tipo_importacion,$plaza,$datos){
+		public function guardarRegistrosTipo3($fecha,$fecha_hora,$id_empresa_sistema,$tipo_importacion,$plaza,$datos){
 			try {
-				
+						
 				$impo = new Importacion;
 
 				$conn = new ConexionApp();
@@ -332,6 +334,7 @@
 
 					//guardo cabecera
 					$impo->setFecha($fecha);
+					$impo->setFechaHora($fecha_hora);
 					$impo->setIdEmpresaSistema($id_empresa_sistema);
 					$impo->setIdTipoImportacion($tipo_importacion);
 					$impo->setPlaza($plaza);
@@ -353,7 +356,7 @@
 						$address = $value[6]."+".$value[7]."+".$value[10];												
 						$mapas = new Mapas;					
 						$med = $mapas->getLatLong($address);
-						
+						$telefonos = $value[12].",".$value[13];
 						$latitud = $med["latitud"]; 
 						$longitud = $med["longitud"];
 
@@ -373,7 +376,7 @@
 						$impo_1->setDpto($value[9]);	
 						$impo_1->setLocalidad($value[10]);	
 						$impo_1->setCodPostal($value[11]);	
-						$impo_1->setTelefono($value[12]);	
+						$impo_1->setTelefono($telefonos);	
 						$impo_1->setEmail($value[14]);	
 						$impo_1->setHorario($value[15]);	
 						$impo_1->setImpRendir($value[16]);	
@@ -607,6 +610,45 @@
 			}
 		}
 
+		public function selecionarImportacionTipo1SinPlazaGroupCliente(){
+			try {
+			
+				$impo = new ImportacionTipo1;				
+				$datos = $impo->selecionarImportacionTipo1SinPlazaGroupCliente();				
+
+				return $datos;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}			
+		}
+
+		public function selecionarImportacionesSinImportar(){
+			try {
+				$impo = new ImportacionTipo1;				
+				$datos = $impo->selecionarImportacionSinImportar();				
+
+				return $datos;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+		public function selecionarImportacionesSinImportarByCliente($cliente){
+			try {
+				$impo = new ImportacionTipo1;				
+				$datos = $impo->selecionarImportacionSinImportarByCliente($cliente);				
+
+				if(is_object($datos))
+					$datos = array($datos);
+				
+				return $datos;
+				
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
 		public function asignarPlaza($id){
 			try {
 				$impo = new ImportacionTipo1;
@@ -660,6 +702,64 @@
 				throw new Exception($e->getMessage());					
 			}
 		}
+
+		public function deleteRegistroImportacion($impo, $reg){
+			try {
+				
+				if(empty($impo))
+					throw new Exception("ID de importación no encontrado");
+
+				if(empty($reg))
+					throw new Exception("Registro de importación no encontrado");
+
+				$i = new Importacion;
+				$i->setId($impo);
+				$i = $i->select();
+
+				switch ($i->getIdTipoImportacion()->getId()) {
+					case 1:
+						$r = new ImportacionTipo1;
+						$r->setId($reg);
+						$r = $r->select();
+
+						if(empty($r->getNumeroTT()))
+							$r->delete();
+						else
+							throw new Exception("No se puede borrar un registro sincronizado");
+					
+						break;
+					case 2:
+						$r = new ImportacionTipo2;
+						$r->setId($reg);
+						$r = $r->select();
+						
+
+						if(empty($r->getNumeroTT()))
+							$r->delete();
+						else
+							throw new Exception("No se puede borrar un registro sincronizado");
+
+						break;
+					case 3:
+						$r = new ImportacionTipo1;
+						$r->setId($reg);
+						$r = $r->select();
+						
+
+						if(empty($r->getNumeroTT()))
+							$r->delete();
+						else
+							throw new Exception("No se puede borrar un registro sincronizado");
+
+						break;					
+				}
+	
+								
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
 		
 		public function countSinPlaza(){
 			try {
@@ -694,7 +794,6 @@
 				throw new Exception($e->getMessage());					
 			}
 		}			
-
 	}
 
 ?>

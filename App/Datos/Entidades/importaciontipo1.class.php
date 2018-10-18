@@ -477,7 +477,7 @@
 			
 				# Query 			
 				$query="UPDATE importacion_tipo1 SET estado='false', sin_plaza = 'false' WHERE id_importacion =".$this->getImportacion();
-				
+
 				# Ejecucion 	
 				return SQL::delete($conexion,$query);
 
