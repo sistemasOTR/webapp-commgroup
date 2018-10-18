@@ -73,7 +73,7 @@
 		public function cargarExcel($archivo,$carpeta_user,$empresa,$fecha,$plaza){
 			try {
 
-				if(!$this->existeImportacion($empresa,$fecha,$plaza)){
+				// if(!$this->existeImportacion($empresa,$fecha,$plaza)){
 
 					$path_excel = $archivo["tmp_name"];
 					$objPHPExcel = PHPExcel_IOFactory::load($path_excel);
@@ -105,10 +105,10 @@
 						return $nombre;
 					}
 
-				}
-				else{
-					throw new Exception("Ya se importo el excel para los servicios de la fecha ".$fecha." y plaza ".$plaza."<br>Borre la importación anterior para poder cargarlos nuevamente.");					
-				}
+				// }
+				// else{
+				// 	throw new Exception("Ya se importo el excel para los servicios de la fecha ".$fecha." y plaza ".$plaza."<br>Borre la importación anterior para poder cargarlos nuevamente.");					
+				// }
 
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	

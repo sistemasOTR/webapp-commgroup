@@ -3,7 +3,8 @@
 
 		public static function getLatLong($address) 
 		{
-			$url = "http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=".urlencode($address)."&key=AIzaSyAFIze2OonMyj3L7KKisgK-iKqss3tI7-o";
+			$url = "https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=".urlencode($address)."&key=AIzaSyAFIze2OonMyj3L7KKisgK-iKqss3tI7-o";
+			
 			$lat_long = get_object_vars(json_decode(file_get_contents($url)));	
 
 			$medidas["latitud"]='';

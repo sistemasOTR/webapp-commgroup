@@ -123,8 +123,7 @@
               <table class="table table-striped table-condensed" id="tabla" cellspacing="0" width="100%">
                 <thead>
                   <tr>       
-                    <th class='text-center'>Fecha</th>                  
-                    <th class='text-center'>Plaza</th>                  
+                    <th class='text-center'>Fecha</th>                
                     <th class='text-center'>Estado</th>
                     <th class='text-center'>Enviados</th>
                     <th class='text-center'>Aprobados</th>
@@ -154,17 +153,10 @@
                         if($countAprobados==$countRegistros && $countRegistros>0) 
                           $importadoTT = "<span class='label label-success'>APROBADO</span>";
 
-                        $obj = $handlerSist->getPlazaByCordinador($value->getPlaza());
-                        if(is_null($obj))
-                          $nombre_plaza = "";
-                        else
-                          $nombre_plaza = $obj[0]->PLAZA;
-
 
                         echo "
                           <tr>
                             <td class='text-center'>".$value->getFecha()->format('d/m/Y')."</td>
-                            <td class='text-center'>".$nombre_plaza."</td>
                             <td class='text-center'>".$importadoTT."</td>
                             <td class='text-center' style='font-size:15px;'><b>".$countRegistros."</b></td>                            
                             <td class='text-center' style='font-size:15px;'><b>".$countAprobados."</b></td>                            
