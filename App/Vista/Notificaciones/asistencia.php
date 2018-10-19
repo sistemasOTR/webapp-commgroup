@@ -245,6 +245,8 @@
     $handlerplazas=new HandlerPlazaUsuarios();
     $plazasOtr=$handlerplazas->selectTodas();
 
+if ($esCoordinador) {
+  
 
     foreach ($plazasOtr as $key => $val) { 
 
@@ -257,6 +259,11 @@
     }    
 
     $arrGestorr = $handlerUsuarios->selectGestores(intval($id)); 
+
+  }else{
+
+    $arrGestorr=$handlerUsuarios->selectEmpleados();
+  }
       
                     foreach ($arrGestorr as $key => $value) {
                       $trabajando='Inactivo';
@@ -326,8 +333,11 @@
                        
                  }
                   }
-
-             $lista.="<li><a href='index.php?view=asistencias' ><b>".$value->getNombre()." ".$value->getApellido()."</b><span ".$clase.">".$trabajando."</span></a> </li>";
+              if ($esGerencia) {
+              $lista.="<li><a href='index.php?view=asistencias_gerenciaBO' ><b>".$value->getApellido()." ".$value->getNombre()."</b><span ".$clase.">".$trabajando."</span></a> </li>";
+              }else{
+             $lista.="<li><a href='index.php?view=asistencias' ><b>".$value->getApellido()." ".$value->getNombre()."</b><span ".$clase.">".$trabajando."</span></a> </li>";
+              }
                 } 
                 ?>
     
@@ -375,9 +385,17 @@
                           $diaAnterior=$dFechas->RestarDiasFechaActual(2);
                          }
 
+                  if ($esGerencia) { ?>
+                <a href="index.php?view=asistencias_gerenciaBO&salida=no&fdesde=<?php echo $diaAnterior; ?>" ><b>Sin Salida Dia Anterior</b><span class="badge bg-red pull-right">
+                     <?php  echo $sinSalida."</span></a>"; 
+                    }else{  ?> 
+                <a href="index.php?view=asistencias&salida=no&fdesde=<?php echo $diaAnterior; ?>" ><b>Sin Salida Dia Anterior</b><span class="badge bg-red pull-right">
+                  <?php echo $sinSalida."</span></a>"; 
+
+                     }
                    ?>
-                <a href="index.php?view=asistencias&fdesde=<?php echo $diaAnterior; ?>" ><b>Sin Salida Dia Anterior</b><span class="badge bg-red pull-right">
-                      <?php  echo $sinSalida; ?> </span></a>
+
+
               </li> 
             </ul>
           </div>

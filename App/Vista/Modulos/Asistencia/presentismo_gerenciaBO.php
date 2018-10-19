@@ -12,6 +12,7 @@
   $dFecha = new Fechas;
   $fdesde = (isset($_GET["fdesde"])?$_GET["fdesde"]:$dFecha->FechaActual());
   $plazas = (isset($_GET["fplaza"])?$_GET["fplaza"]:0);
+  $salida = (isset($_GET["salida"])?$_GET["salida"]:'');
 
   $url_action_agregar = PATH_VISTA.'Modulos/Asistencia/action_add_hours.php?perfil=gerenciaBO&fdesde='.$fdesde.'&fplaza='.$plazas;
   $url_action_editar = PATH_VISTA.'Modulos/Asistencia/action_edit_hours.php?perfil=gerenciaBO&fdesde='.$fdesde.'&fplaza='.$plazas;
@@ -125,18 +126,47 @@
             
              $asistencias=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
               $arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($fdesde,$fdesde,intval($value->getId()),2);
+             
+
+                // $ultimoRegistro=$handlerAsist->selecTop($value->getId());
+
+                      if (!empty($asistencias)) {
+
+                         $indice=count($asistencias)-1;
+
+                      $idEstadoUltimo=$handlerAsist->selectEstadosById($asistencias[$indice]->getIngreso());
+                      $ultimaFecha=$asistencias[$indice]->getFecha()->format('Y-m-d');
+                     
+                     if ($ultimaFecha == $fdesde)
+                      { 
+                      
+                        if ($idEstadoUltimo[0]->getProductivo()!=0) {
+                              $sinSalida="<span class='label label-danger pull-left'><b>Sin Salida</b></span><br>";
+                              $idEstado=$handlerAsist->selectEstadosById($asistencias[$indice]->getIngreso());
+                              
+                          }else{
+                            $sinSalida='';
+                          }
+                      
+                       }
+                      }else{
+                        $sinSalida='';
+                      } 
+
+
                // var_dump($asistencias);
                // exit();
                ?>  
               <div class='col-md-3'>
                <div class="box">
-                <div class="box-body table-responsive">
+                <div class="box-body table-responsive ">
                  
-                  <table class="table table-striped table-condensed" id="tabla-items" cellspacing="0" width="100%">
+                  <table class="table table-striped table-condensed " id="tabla-items" cellspacing="0" width="100%">
 
                      <thead>
                         <tr>                                       
-                          <th><b><?php echo $value->getNombre()." ".$value->getApellido() ;?></b> <a href="index.php?view=estadisticas_asistencia_gestor&id_gestor=<?php echo $value->getId(); ?>" class="fa fa-bar-chart "></a>
+                          <th><?php echo $sinSalida; ?>
+                            <b><?php echo $value->getApellido()." ".$value->getNombre() ;?></b> <a href="index.php?view=estadisticas_asistencia_gestor&id_gestor=<?php echo $value->getId(); ?>" class="fa fa-bar-chart "></a>
                             <a href="index.php?view=asistencias_historial&userPerfil=gerenciaBO&iduser=<?php echo $value->getId(); ?>&plaza=<?php echo $value->getUserPlaza(); ?>" style="" class="btn btn-primary pull-right btn-xs">Ver Historial</a>
                             <?php if($user->getId()==10045 ||$user->getId()==3 ||$user->getId()==1){  
                               $seguir=true;

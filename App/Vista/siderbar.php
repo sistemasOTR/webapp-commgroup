@@ -204,7 +204,7 @@
               <li class="treeview" id="mnu_asistencias">
                 <a href="#"><i class="fa fa-user"></i> <span>Asistencias</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                <?php  if($esCoordinador && $usuarioActivoSesion->getId()!=10045 && $usuarioActivoSesion->getId()!=10007){ ?>
+                <?php  if($esCoordinador && $usuarioActivoSesion->getId()!=10045 ){ ?>
                     <li id="mnu_asistencias_presentismo">
                       <a href=<?php echo $url_asistencias; ?>>
                         <i class="fa fa-check-square-o"></i> <span>Presentismo Coord</span>

@@ -135,6 +135,33 @@
                            echo "<div class='row'>";
                            $flag=false;
                          } 
+
+                         if (!empty($asistencias)) {
+
+                         $indice=count($asistencias)-1;
+
+                      $idEstadoUltimo=$handlerAsist->selectEstadosById($asistencias[$indice]->getIngreso());
+                      $ultimaFecha=$asistencias[$indice]->getFecha()->format('Y-m-d');
+                     
+                     if ($ultimaFecha == $FECHA)
+                      { 
+                      
+                        if ($idEstadoUltimo[0]->getProductivo()!=0) {
+                              $sinSalida="<span class='label label-danger pull-left'><b>Sin Salida</b></span><br>";
+                              $idEstado=$handlerAsist->selectEstadosById($asistencias[$indice]->getIngreso());
+                              
+                          }else{
+                            $sinSalida='';
+                          }
+                      
+                       }
+                      }else{
+                        $sinSalida='';
+                      } 
+
+
+
+
 ?>             
 
       
@@ -149,7 +176,8 @@
       
                  <thead>
                     <tr>                                       
-                      <th><b><?php echo $FECHA ;?></b> <a href="index.php?view=estadisticas_asistencia_gestor&id_gestor=<?php echo $idUser; ?>"  class="fa fa-bar-chart "></a>
+                      <th><?php echo $sinSalida; ?>
+                        <b><?php echo $FECHA ;?></b> <a href="index.php?view=estadisticas_asistencia_gestor&id_gestor=<?php echo $idUser; ?>"  class="fa fa-bar-chart "></a>
                         
                         <?php
     

@@ -54,6 +54,32 @@
                          } 
 
 
+                      if (!empty($asistencias)) {
+
+                         $indice=count($asistencias)-1;
+
+                      $idEstadoUltimo=$handlerAsist->selectEstadosById($asistencias[$indice]->getIngreso());
+                      $ultimaFecha=$asistencias[$indice]->getFecha()->format('Y-m-d');
+                     
+                     if ($ultimaFecha == $FECHA)
+                      { 
+                      
+                        if ($idEstadoUltimo[0]->getProductivo()!=0) {
+                              $sinSalida="<span class='label label-danger pull-left'><b>Sin Salida</b></span><br>";
+                              $idEstado=$handlerAsist->selectEstadosById($asistencias[$indice]->getIngreso());
+                              
+                          }else{
+                            $sinSalida='';
+                          }
+                      
+                       }
+                      }else{
+                        $sinSalida='';
+                      } 
+
+
+
+
                        
                       
 ?>             
@@ -70,7 +96,8 @@
       
                  <thead>
                     <tr>                                       
-                      <th><b><?php echo $FECHA ;?></b>
+                      <th><?php echo $sinSalida; ?>
+                        <b><?php echo $FECHA ;?></b>
                         <a href="index.php?view=estadisticas_asistencia_gestor&id_gestor=<?php echo $user->getId();?>&fdesde=<?php echo $FECHA ?>&fhasta=<?php echo $FECHA ?>" class="fa fa-bar-chart"></a>
                         <?php if($user->getId()==10045 ||$user->getId()==3 ||$user->getId()==10007){ ?>
                         <i class="pull-right"><a href="#" id='<?php echo $user->getId() ?>'data-ide='<?php echo $user->getId() ?>' data-fecha='<?php echo $fdesde;?>'data-usuario='4' data-hora='<?php echo date('H:i'); ?>' data-estados='<?php echo $accion; ?>'class="btn btn-default btn-xs" data-toggle='modal' data-target='#modal-presentismo' onclick='cargarDatos(<?php echo $user->getId()?>)'>Nuevo Horario</a></i>
