@@ -281,10 +281,10 @@
 
 				
 				if(!empty($adjunto1["size"]))
-					$handler->setAdjunto1($this->cargarArchivos($usuario,"ADJUNTO_1",$adjunto1));
+					$handler->setAdjunto1($this->cargarArchivos($usuario,$fecha."_ADJUNTO_1",$adjunto1));
 
 				if(!empty($adjunto2["size"]))
-					$handler->setAdjunto2($this->cargarArchivos($usuario,"ADJUNTO_2",$adjunto2));				
+					$handler->setAdjunto2($this->cargarArchivos($usuario,$fecha."_ADJUNTO_2",$adjunto2));				
 
 				//var_dump($handler);
 				//exit();
@@ -328,9 +328,10 @@
 				$handler->setFecha($handler->getFecha()->format('Y-m-d'));
 				$handler->setFechaInicio($handler->getFechaInicio()->format('Y-m-d'));
 				$handler->setFechaFin($handler->getFechaFin()->format('Y-m-d'));
+				$handler->setFechaRechazo($handler->getFechaRechazo()->format('Y-m-d'));
 
 				if(!empty($adjunto1["size"]))
-					$handler->setAdjunto1($this->cargarArchivos($usuario,"ADJUNTO_1",$adjunto1));
+					$handler->setAdjunto1($this->cargarArchivos($usuario,$handler->getFecha()->format('Y-m-d')."_ADJUNTO_1",$adjunto1));
 
 				$handler->update(false);
 
@@ -370,9 +371,10 @@
 				$handler->setFecha($handler->getFecha()->format('Y-m-d'));
 				$handler->setFechaInicio($handler->getFechaInicio()->format('Y-m-d'));
 				$handler->setFechaFin($handler->getFechaFin()->format('Y-m-d'));
+				$handler->setFechaRechazo($handler->getFechaRechazo()->format('Y-m-d'));
 
 				if(!empty($adjunto2["size"]))
-					$handler->setAdjunto2($this->cargarArchivos($usuario,"ADJUNTO_2",$adjunto2));
+					$handler->setAdjunto2($this->cargarArchivos($usuario,$handler->getFecha()."_ADJUNTO_2",$adjunto2));
 
 				$handler->update(false);
 
