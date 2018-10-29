@@ -331,7 +331,7 @@
 				$handler->setFechaRechazo($handler->getFechaRechazo()->format('Y-m-d'));
 
 				if(!empty($adjunto1["size"]))
-					$handler->setAdjunto1($this->cargarArchivos($usuario,$handler->getFecha()->format('Y-m-d')."_ADJUNTO_1",$adjunto1));
+					$handler->setAdjunto1($this->cargarArchivos($usuario,$handler->getFecha()."_ADJUNTO_1",$adjunto1));
 
 				$handler->update(false);
 
