@@ -10,6 +10,7 @@
 	include_once PATH_DATOS.'Entidades/agenda_empresa.class.php';
 	include_once PATH_DATOS.'Entidades/agenda_rubro.class.php';
 	include_once PATH_DATOS.'Entidades/agenda_historico.class.php';
+	include_once PATH_DATOS.'Entidades/agenda_estados.class.php';
 	include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
 	
 	class HandlerAgenda{
@@ -46,11 +47,11 @@
 			}
 		}
 
-		public function selectEmpresaByRubro($rubro){
+		public function selectEmpresaByRubro($rubro,$estado,$plaza){
 			try {
 				$handlerAg = new AgendaEmpresa;	
 				$handlerAg->setRubro($rubro);							
-				$data = $handlerAg->selectEmpresaByRubro($rubro);
+				$data = $handlerAg->selectEmpresaByRubro($rubro,$estado,$plaza);
 				if(count($data)==1){
 					$data = array('' => $data );                   
 					return $data;
@@ -135,7 +136,7 @@
 			}
 		}
 
-		public function guardarEmpresa($fecha_hora,$nombre,$rubro,$domicilio,$web,$per_contacto_1,$puesto_1,$telefono_1,$email_1,$per_contacto_2,$puesto_2,$telefono_2,$email_2){
+		public function guardarEmpresa($fecha_hora,$nombre,$rubro,$domicilio,$web,$per_contacto_1,$puesto_1,$telefono_1,$email_1,$per_contacto_2,$puesto_2,$telefono_2,$email_2,$plaza,$instancia){
 			try {
 				
 				$fecha=substr($fecha_hora,0,10);
@@ -157,6 +158,8 @@
 				$t->setPuesto2($puesto_2);
 				$t->setTelefono2($telefono_2);
 				$t->setEmail2($email_2);
+				$t->setPlaza($plaza);
+				$t->setInstancia($instancia);
 
 				$t->insert(false);
 				
@@ -165,7 +168,7 @@
 			}
 		}
 
-		public function actualizarEmpresa($id,$fecha_hora,$nombre,$rubro,$domicilio,$web,$per_contacto_1,$puesto_1,$telefono_1,$email_1,$per_contacto_2,$puesto_2,$telefono_2,$email_2){
+		public function actualizarEmpresa($id,$fecha_hora,$nombre,$rubro,$domicilio,$web,$per_contacto_1,$puesto_1,$telefono_1,$email_1,$per_contacto_2,$puesto_2,$telefono_2,$email_2,$plaza,$instancia){
 			try {
 				
 				$fecha=substr($fecha_hora,0,10);
@@ -187,6 +190,8 @@
 				$t->setPuesto2($puesto_2);
 				$t->setTelefono2($telefono_2);
 				$t->setEmail2($email_2);
+				$t->setPlaza($plaza);
+				$t->setInstancia($instancia);
 
 				$t->actualizar(false);
 				
@@ -195,7 +200,7 @@
 			}
 		}
 
-		public function contactar($fecha_hora,$usuario,$empresa,$tipo,$contacto,$obs){
+		public function contactar($fecha_hora,$usuario,$empresa,$tipo,$contacto,$obs,$instancia){
 			try {
 				
 				$fecha=substr($fecha_hora,0,10);
@@ -204,6 +209,7 @@
 				
 				$t = new AgendaEmpresa;
 				$t->setFechaUltContacto($fecha_hora);
+				$t->setInstancia($instancia);
 				$t->setId(intval($empresa));
 				
 				$t->ultContacto(false);
@@ -215,6 +221,7 @@
 				$handlerHist->setTipoId($tipo);
 				$handlerHist->setContacto($contacto);
 				$handlerHist->setObs($obs);
+				$handlerHist->setInstancia($instancia);
 
 				$handlerHist->insert(false);
 
@@ -281,8 +288,72 @@
 			}
 		}
 
+		// Estados
+		// ============================
 
+		public function selectEstados(){
+			try {
+				$handlerAg = new AgendaEstados;								
+				$data = $handlerAg->select();
+				
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}	
 
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
+		public function newEstado($nombre,$color){
+			try {
+				$handler = new AgendaEstados;
+
+				$handler->setNombre($nombre);
+				$handler->setColor($color);
+
+				$handler->insert(false);			
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
+		public function updateEstados($id,$nombre,$color){
+			try {
+				$handler = new AgendaEstados;
+
+				$handler->setId($id);
+				$handler->setNombre($nombre);
+				$handler->setColor($color);
+
+				$handler->update(false);			
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
+
+		public function selectEstadoById($id){
+			try {
+				$handlerAg = new AgendaEstados;	
+				$handlerAg->setId($id);
+				$data = $handlerAg->select();
+				
+				if(count($data)==1){
+					$data = array('' => $data );                   
+					return $data;
+				}				
+				else{
+					return $data;
+				}	
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());				
+			}
+		}
 	}
 
 ?>

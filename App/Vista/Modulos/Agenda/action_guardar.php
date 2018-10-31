@@ -19,6 +19,8 @@
 	$puesto_2 = (isset($_POST["puesto_2"])?$_POST["puesto_2"]:'');
 	$telefono_2 = (isset($_POST["telefono_2"])?$_POST["telefono_2"]:'');
 	$email_2 = (isset($_POST["email_2"])?$_POST["email_2"]:'');
+	$plaza = (isset($_POST["plaza"])?$_POST["plaza"]:'');
+	$instancia = (isset($_POST["instancia"])?$_POST["instancia"]:'');
 	$fecha_hora = $handlerFecha->FechaHoraActual();
 	
 	try {
@@ -26,7 +28,7 @@
 		$err = "../../../../index.php?view=agenda&err=";     		
 		$info = "../../../../index.php?view=agenda&info=";
 
-			$handler->guardarEmpresa($fecha_hora,$nombre,$rubro,$domicilio,$web,$per_contacto_1,$puesto_1,$telefono_1,$email_1,$per_contacto_2,$puesto_2,$telefono_2,$email_2);
+			$handler->guardarEmpresa($fecha_hora,$nombre,$rubro,$domicilio,$web,$per_contacto_1,$puesto_1,$telefono_1,$email_1,$per_contacto_2,$puesto_2,$telefono_2,$email_2,$plaza,$instancia);
 		
 		
 		$msj="Empresa ".$nombre." guardada con éxito";

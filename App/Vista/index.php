@@ -844,6 +844,10 @@
 			$include = 'Modulos/Agenda/rubros.php';		
 			break;
 
+		case 'agenda_estados':
+			$include = 'Modulos/Agenda/abm_estados.php';		
+			break;
+
 
 	      /*#######*/
 		 /* STOCK */

@@ -26,6 +26,10 @@
 		private $_usuarioId;
 		public function getUsuarioId(){ return $this->_usuarioId; }
 		public function setUsuarioId($usuarioId){ $this->_usuarioId =$usuarioId; }
+
+		private $_instancia;
+		public function getInstancia(){ return $this->_instancia; }
+		public function setInstancia($instancia){ $this->_instancia =$instancia; }
 		
 		private $_fechaHora;
 		public function getFechaHora(){ return $this->_fechaHora; }
@@ -56,6 +60,7 @@
 			$this->setId(0);
 			$this->setEmpresaId(0);
 			$this->setUsuarioId(0);
+			$this->setInstancia(0);
 			$this->setFechaHora('');
 			$this->setTipoId('');
 			$this->setObs('');
@@ -74,6 +79,7 @@
 				$query="INSERT INTO agenda_historico (
 										id_empresa,	
 		        						id_usuario,
+		        						instancia,
 		        						fecha_hora,
 		        						id_tipo,
 		        						obs,
@@ -83,6 +89,7 @@
 	        			) VALUES (
 	        							".$this->getEmpresaId().",     	
 	        							".$this->getUsuarioId().",
+	        							".$this->getInstancia().",
 	        							'".$this->getFechaHora()."',
 	        							'".$this->getTipoId()."',
 	        							'".$this->getObs()."',
@@ -113,6 +120,7 @@
 				$query="UPDATE agenda_historico SET
 								id_empresa=".$this->getEmpresaId().",	
         						id_usuario=".$this->getUsuarioId().",
+        						instancia=".$this->getInstancia().",
         						fecha_hora='".$this->getFechaHora()."',
         						id_tipo='".$this->getTipoId()."',
         						obs='".$this->getObs()."',
@@ -185,6 +193,7 @@
 				$this->setId($filas['id']);
 				$this->setEmpresaId($filas['id_empresa']);			
 				$this->setUsuarioId($filas['id_usuario']);			
+				$this->setInstancia($filas['instancia']);			
 				$this->setFechaHora($filas['fecha_hora']);			
 				$this->setTipoId($filas['id_tipo']);			
 				$this->setObs(trim($filas['obs']));
@@ -198,6 +207,7 @@
 			$this->setId(0);
 			$this->setEmpresaId(0);
 			$this->setUsuarioId(0);
+			$this->setInstancia(0);
 			$this->setFechaHora('');
 			$this->setTipoId('');
 			$this->setObs('');

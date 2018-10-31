@@ -95,6 +95,7 @@
         $url_guias_seguimiento = "index.php?view=guias_seguimiento";
         $url_agenda = "index.php?view=agenda";
         $url_agenda_rubros = "index.php?view=agenda_rubros";
+        $url_agenda_estados = "index.php?view=agenda_estados";
 
         $url_kanban_listado = "index.php?view=kanban";
         $url_kanban_lista_terminadas = "index.php?view=kanban_terminadas";
@@ -912,6 +913,11 @@
                       <i class="fa fa-list"></i> <span>Rubros</span> </i>
                     </a>
                   </li>
+                  <li id="mnu_agenda_estados">
+                    <a href=<?php echo $url_agenda_estados; ?>>
+                      <i class="fa fa-edit"></i> <span>ABM Estados</span>
+                    </a>
+                  </li>  
                 </ul>              
               </li>   
             <?php } ?>

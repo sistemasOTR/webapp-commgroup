@@ -7,11 +7,14 @@
   $fusuario= $usuarioActivoSesion->getId();
   $handlerUs = new HandlerUsuarios;
   $handlerAg = new HandlerAgenda;
+  $handlePlazas = new HandlerPlazaUsuarios;
+  $arrPlazas = $handlePlazas->selectAll();
   $empresaId = (isset($_GET["fid"])?$_GET["fid"]:0);
   $datosEmpresa = $handlerAg->selectEmpresaById($empresaId);
   $rubro = $handlerAg->selectRubroById($datosEmpresa->getRubro());
   $arrRubros = $handlerAg->selectAllRubros();
   $arrDatos = $handlerAg->historicoEmpresa($empresaId);
+  $arrEstados = $handlerAg->selectEstados();
 
   $url_action_guardar = PATH_VISTA.'Modulos/Agenda/action_actualizar.php';
   $url_action_accion = PATH_VISTA.'Modulos/Agenda/action_accion.php';
@@ -41,14 +44,34 @@
 
     <?php include_once PATH_VISTA."error.php"; ?>
     <?php include_once PATH_VISTA."info.php"; ?>
+    <?php 
+      if (!is_null($datosEmpresa->getPlaza())) {
+        $plazaEmp = $handlePlazas->selectById($datosEmpresa->getPlaza());
+        $plazaId = $plazaEmp->getId();
+        $nombrePlaza = $plazaEmp->getNombre();
+      } else {
+        $nombrePlaza = 'No definida';
+        $plazaId = 0;
+      }
+      if (!is_null($datosEmpresa->getInstancia())) {
+        $estadoEmp = $handlerAg->selectEstadoById($datosEmpresa->getInstancia());
+        $instanciaEmp = $estadoEmp[""]->getNombre();
+        $claseInstanciaEmp = "class='".$estadoEmp[""]->getColor()."'";
 
+      } else {
+        $instanciaEmp = "";
+        $claseInstanciaEmp = "";
+      }
+      
+      
+     ?>
 
     <div class="row">
       <div class='col-md-3'>
         <div class="box box-solid">
             <div class="box-header with-border">  
               <i class="fa fa-book"></i>  
-              <h3 class="box-title"><?php echo $datosEmpresa->getNombre(); ?></h3>
+              <h3 class="box-title"><?php echo $datosEmpresa->getNombre(); ?><br><span style="font-size: 9pt;margin-top: 5px;" <?php echo $claseInstanciaEmp; ?>><?php echo $instanciaEmp; ?></span></h3>
               <a href="#" class="btn btn-success pull-right" data-toggle='modal' data-target='#modal-nuevo'>
                   Editar
               </a>
@@ -59,6 +82,8 @@
               <p class='deta'><?php echo $rubro->getNombre(); ?></p>
               <p class="desc">Domicilio</p>
               <p class='deta'><?php echo $datosEmpresa->getDomicilio(); ?></p>
+              <p class="desc">Localidad</p>
+              <p class='deta'><?php echo $nombrePlaza; ?></p>
               <p class="desc">Página Web</p>
               <p class='deta'><a href="<?php echo $datosEmpresa->getWeb(); ?>" target="_blank"><?php echo $datosEmpresa->getWeb(); ?></a></p>
               <div class="box-group" id="accordion">
@@ -128,6 +153,7 @@
                     <th class='text-center' width="60">HORA</th>
                     <th class='text-center' width="200">CONTACTO</th>
                     <th class='text-center' width="200">USUARIO</th>
+                    <th class='text-center' width="100">ESTADO</th>
                     <th>OBSERVACIONES</th>
                   </tr>
                 </thead>
@@ -137,6 +163,17 @@
                   if(!empty($arrDatos)){
                     foreach ($arrDatos as $key => $value) {
                       $user = $handlerUs->selectById($value->getUsuarioId());
+
+                      if (!is_null($value->getInstancia())) {
+                        $estadoHist = $handlerAg->selectEstadoById($value->getInstancia());
+                        $instancia = $estadoHist[""]->getNombre();
+                        $claseInstancia = "class='badge ".$estadoHist[""]->getColor()."'";
+                      } else {
+                        $instancia = "";
+                        $claseInstancia = "";
+                      }
+                      
+
                       if ($value->getTipoId()=='Llamada') {
                       	$identificador = '<i class="fa fa-phone text-green"></i>';
                       } elseif ($value->getTipoId()=='Reunion') {
@@ -150,6 +187,7 @@
                       echo "<td>".$value->getFechaHora()->format('H:i')."</td>";
                       echo "<td>".$value->getContacto()."</td>";
                       echo "<td>".$user->getNombre()." ".$user->getApellido()."</td>";
+                      echo "<td ".$claseInstancia.">".$instancia."</td>";
                       echo "<td style='text-align:left;'>".$value->getObs()."</td>";
                       echo "</tr>";
                     }
@@ -168,7 +206,7 @@
   </section>
 </div>
 <div class="modal fade in" id="modal-nuevo">
-  <div class="modal-dialog">
+  <div class="modal-dialog" style="width: 90vw;">
     <div class="modal-content">
 
       <form action="<?php echo $url_action_guardar; ?>" method="post" enctype="multipart/form-data">
@@ -184,12 +222,12 @@
               <div class="col-xs-12" style="border-bottom: 1px solid #eee;margin-bottom:10px;">
                 <h4>Datos de la Empresa</h4>
               </div>                          
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <label>Nombre</label>
                 <input type="text" name="nombre" class="form-control"  required="" value='<?php echo $datosEmpresa->getNombre(); ?>'>
                 <input type="number" name="id" class="form-control" style="display: none;" required="" value='<?php echo $datosEmpresa->getId(); ?>'>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <label>Rubro</label>
                 <select class="form-control" name="rubro" required="">
                   <option value=""></option>     
@@ -204,51 +242,89 @@
                      } ?>
                 </select>
               </div>   
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <label>Domicilio</label>
                 <input type="text" name="domicilio" class="form-control"  required="" value='<?php echo $datosEmpresa->getDomicilio(); ?>'>
               </div>   
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <label>Web</label>
                 <input type="text" name="web" class="form-control"  required=""  value='<?php echo $datosEmpresa->getWeb(); ?>'>
               </div>
               <div class="col-xs-12" style="border-bottom: 1px solid #eee;margin-bottom:10px;">
                 <h4>Contacto Principal</h4>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <label>Nombre</label>
                 <input type="text" name="per_contacto_1" class="form-control"  required=""  value='<?php echo $datosEmpresa->getPerContacto1(); ?>'>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <label>Puesto</label>
                 <input type="text" name="puesto_1" class="form-control"  required=""  value='<?php echo $datosEmpresa->getPuesto1(); ?>'>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <label>Telefono</label>
                 <input type="text" name="telefono_1" class="form-control"  required=""  value='<?php echo $datosEmpresa->getTelefono1(); ?>'>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <label>Correo</label>
                 <input type="email" name="email_1" class="form-control"  required=""  value='<?php echo $datosEmpresa->getEmail1(); ?>'>
               </div>
               <div class="col-xs-12" style="border-bottom: 1px solid #eee;margin-bottom:10px;">
                 <h4>Contacto Alternativo</h4>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <label>Nombre</label>
                 <input type="text" name="per_contacto_2" class="form-control"  value='<?php echo $datosEmpresa->getPerContacto2(); ?>'>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <label>Puesto</label>
                 <input type="text" name="puesto_2" class="form-control"  value='<?php echo $datosEmpresa->getPuesto2(); ?>'>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <label>Telefono</label>
                 <input type="text" name="telefono_2" class="form-control" value='<?php echo $datosEmpresa->getTelefono2(); ?>'>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-3">
                 <label>Correo</label>
                 <input type="email" name="email_2" class="form-control" value='<?php echo $datosEmpresa->getEmail2(); ?>'>
+              </div>
+              <div class="col-md-6">
+                <label>Plaza</label>
+                <select name="plaza" id="plaza" class="form-control">
+                  <option value="0">No definida</option>
+                  <?php 
+                    if (!empty($arrPlazas)) {
+                      foreach ($arrPlazas as $plaza) {
+                        if ($plaza->getTipo() == 0) {
+                          if ($plaza->getId() == $plazaId) {
+                           echo "<option value='".$plaza->getId()."' selected>".$plaza->getNombre()."</option>";
+                          } else {
+                            echo "<option value='".$plaza->getId()."'>".$plaza->getNombre()."</option>";
+                          }
+                          
+                        }
+                        
+                      }
+                    }
+                  ?>
+                </select>
+              </div>
+              <div class="col-md-6" style="/*display: none;*/">
+                <label>Estado</label>
+                <select name="instancia" id="instancia" class="form-control">
+                  <?php 
+                    if (!empty($arrEstados)) {
+                      foreach ($arrEstados as $est) {
+                        if ($est->getId() == $estadoEmp[""]->getId()) {
+                          echo "<option style='font-size:12pt;font-weight:100;' class='".$est->getColor()."' value='".$est->getId()."' selected>".$est->getNombre()."</option>";
+                        } else {
+                          echo "<option style='font-size:12pt;font-weight:100;' class='".$est->getColor()."' value='".$est->getId()."'>".$est->getNombre()."</option>";
+                        }
+                        
+                      }
+                    }
+                  ?>
+                </select>
               </div>
                
             </div>
@@ -285,6 +361,21 @@
 	                <select class="form-control" name="contacto" id="slt_contacto" required="">
                    <option value="Principal"><?php echo $datosEmpresa->getPerContacto1() ?></option> 
                    <option value="Alternativo"><?php echo $datosEmpresa->getPerContacto2() ?></option> 
+                  </select>
+                  <br>
+                  <label>Estado</label>
+                  <select name="instancia" id="instancia_accion" class="form-control">
+                    <?php 
+                      if (!empty($arrEstados)) {
+                        foreach ($arrEstados as $est) {
+                          if ($est->getId() == $estadoEmp[""]->getId()) {
+                          echo "<option style='font-size:12pt;font-weight:100;' class='".$est->getColor()."' value='".$est->getId()."' selected>".$est->getNombre()."</option>";
+                        } else {
+                          echo "<option style='font-size:12pt;font-weight:100;' class='".$est->getColor()."' value='".$est->getId()."'>".$est->getNombre()."</option>";
+                        }
+                        }
+                      }
+                    ?>
                   </select>
 	                <br>
 	                <label>Observaciones</label>

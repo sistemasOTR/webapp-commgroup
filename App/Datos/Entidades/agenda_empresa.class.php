@@ -75,6 +75,14 @@
 		public function getDomicilio(){ return $this->_domicilio; }
 		public function setDomicilio($domicilio){ $this->_domicilio =$domicilio; }
 
+		private $_instancia;
+		public function getInstancia(){ return $this->_instancia; }
+		public function setInstancia($instancia){ $this->_instancia =$instancia; }
+
+		private $_plaza;
+		public function getPlaza(){ return $this->_plaza; }
+		public function setPlaza($plaza){ $this->_plaza =$plaza; }
+
 		private $_estado;
 		public function getEstado(){ return var_export($this->_estado,true); }
 		public function setEstado($estado){ $this->_estado =$estado; }
@@ -88,6 +96,8 @@
 			$this->setId(0);
 			$this->setNombre('');
 			$this->setRubro(0);
+			$this->setInstancia(0);
+			$this->setPlaza(0);
 			$this->setFechaUltContacto('');
 			$this->setFechaAlta('');
 			$this->setTelefono1('');
@@ -114,6 +124,8 @@
 				$query="INSERT INTO agenda_empresa (
 										nombre,	
 		        						rubro,
+		        						instancia,
+		        						plaza,
 		        						fecha_ult_contacto,
 		        						fecha_alta,
 		        						telefono_1,
@@ -130,7 +142,9 @@
 		        						
 	        			) VALUES (
 	        							'".$this->getNombre()."',     	
-	        							".$this->getRubro().",
+	        							".$this->getRubro().",     	
+	        							".$this->getInstancia().",     	
+	        							".$this->getPlaza().",
 	        							'".$this->getFechaUltContacto()."',
 	        							'".$this->getFechaAlta()."',
 	        							'".$this->getTelefono1()."',
@@ -169,7 +183,9 @@
 				$query="UPDATE agenda_empresa SET
 								id='".$this->getId()."',
 								nombre='".$this->getNombre()."',	
-        						rubro=".$this->getRubro().",
+        						rubro=".$this->getRubro().",	
+        						instancia=".$this->getInstancia().",	
+        						plaza=".$this->getPlaza().",
         						fecha_ult_contacto='".$this->getFechaUltContacto()."',
         						fecha_alta='".$this->getFechaAlta()."',
         						telefono_1='".$this->getTelefono1()."',
@@ -250,6 +266,8 @@
 				$this->setId($filas['id']);
 				$this->setNombre(trim($filas['nombre']));			
 				$this->setRubro($filas['rubro']);			
+				$this->setInstancia($filas['instancia']);			
+				$this->setPlaza($filas['plaza']);			
 				$this->setFechaUltContacto($filas['fecha_alta']);			
 				$this->setFechaAlta($filas['fecha_ult_contacto']);			
 				$this->setTelefono1(trim($filas['telefono_1']));			
@@ -271,6 +289,8 @@
 			$this->setId(0);
 			$this->setNombre('');
 			$this->setRubro(0);
+			$this->setInstancia(0);
+			$this->setPlaza(0);
 			$this->setFechaUltContacto('');
 			$this->setFechaAlta('');
 			$this->setTelefono1('');
@@ -349,7 +369,8 @@
 				
 				# Query 			
 				$query="UPDATE agenda_empresa SET
-								fecha_ult_contacto='".$this->getFechaUltContacto()."'
+								fecha_ult_contacto='".$this->getFechaUltContacto()."',
+								instancia = ".$this->getInstancia()."
 							WHERE id=".$this->getId();
 
 				// var_dump($query);
@@ -375,6 +396,8 @@
 				$query="UPDATE agenda_empresa SET
 								nombre='".$this->getNombre()."',	
         						rubro=".$this->getRubro().",
+        						instancia=".$this->getInstancia().",
+        						plaza=".$this->getPlaza().",
         						fecha_ult_contacto='".$this->getFechaUltContacto()."',
         						telefono_1='".$this->getTelefono1()."',
         						per_contacto_1='".$this->getPerContacto1()."',
@@ -397,19 +420,33 @@
 			}		
 		}
 
-		public function selectEmpresaByRubro($rubro)
+		public function selectEmpresaByRubro($rubro,$estado,$plaza)
 		{			
 			try {
+				$filtro_rubro='';
+				if(!$rubro == 0 || !empty($rubro)){
+					$filtro_rubro = " rubro='".$rubro."' AND ";
+				}
+
+				$filtro_estado='';
+				if (!$estado == 0 || !empty($estado)) {
+					$filtro_estado=' instancia = '.$estado.' AND ';
+				}
+
+				$filtro_plaza='';
+				if (!$plaza == 0 || !empty($plaza)) {
+					$filtro_plaza=' plaza = '.$plaza.' AND ';
+				}
+
 											
 				# Query
-				if($rubro == 0 || empty($rubro))
-				{
-					$query = "SELECT * FROM agenda_empresa WHERE estado='true'";
-				}
-				else
-				{
-					$query="SELECT * FROM agenda_empresa WHERE rubro='".$rubro."'";
-				}
+					$query = "SELECT * FROM agenda_empresa WHERE 
+					".$filtro_rubro."
+					".$filtro_plaza."
+					".$filtro_estado."
+					 estado='true'";
+				// var_dump($query);
+				// exit();
 				
 				# Ejecucion 					
 				$result = SQL::selectObject($query, new AgendaEmpresa);

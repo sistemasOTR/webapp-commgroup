@@ -13,6 +13,7 @@
 	$contacto = (isset($_POST["contacto"])?$_POST["contacto"]:'');
 	$obs = (isset($_POST["obs"])?$_POST["obs"]:'');
 	$url = (isset($_POST["url_retorno"])?$_POST["url_retorno"]:'');
+	$instancia = (isset($_POST["instancia"])?$_POST["instancia"]:'');
 	$fecha_hora = $handlerFecha->FechaHoraActual();
 
 	try {
@@ -20,7 +21,7 @@
 		$err = "../../../../index.php?".$url."&err=";     		
 		$info = "../../../../index.php?".$url."&info=";
 
-			$handler->contactar($fecha_hora,$usuario,$empresa,$tipo,$contacto,$obs);
+			$handler->contactar($fecha_hora,$usuario,$empresa,$tipo,$contacto,$obs,$instancia);
 		
 		
 		$msj="Contacto agendado";
