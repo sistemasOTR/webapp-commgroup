@@ -473,7 +473,7 @@
 			break;
 
 	  case 'estadisticas_asistencias':
-			if($permiso->getModuloMetricasBoolean() && ($esGerencia || $esBO))
+			if($permiso->getModuloMetricasBoolean() && ($esGerencia || $esCoordinador || $esBO))
 				$include = 'Modulos/Estadisticas/estadisticas_asistencias.php';
 			break;
 
@@ -679,7 +679,7 @@
 		/*###########*/
 
 		case 'asistencias':
-			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador && $usuarioActivoSesion->getId() !=10045))
+			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador && ($usuarioActivoSesion->getId() !=10045 || $usuarioActivoSesion->getId()!=20174 || $usuarioActivoSesion->getId()!=10082)))
 				$include = 'Modulos/Asistencia/presentismo.php';
 			break;
 
@@ -689,17 +689,17 @@
 			break;
 
 		case 'asistencias_comparativas':
-			if($permiso->getModuloLicenciasBoolean()  && ( $usuarioActivoSesion->getId()==3 || $usuarioActivoSesion->getId() ==10045 || $usuarioActivoSesion->getId() ==10007 ))
+			if($permiso->getModuloLicenciasBoolean()  && ( $usuarioActivoSesion->getId()==3 || $usuarioActivoSesion->getId() ==10045 || $usuarioActivoSesion->getId() ==20174 || $usuarioActivoSesion->getId() ==10082))
 				$include = 'Modulos/Asistencia/comparativas.php';
 			break;
 
 	    case 'asistencias_comparativas_coordinador':
-			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador && $usuarioActivoSesion->getId() !=10045))
+			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador && ($usuarioActivoSesion->getId() !=10045 || $usuarioActivoSesion->getId() ==20174 || $usuarioActivoSesion->getId() ==10082)))
 				$include = 'Modulos/Asistencia/coordinador_comparativas.php';
 			break;
 
 		case 'asistencias_estados':
-			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador||$usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104))
+			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador|| $esBO ||$usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104 || $usuarioActivoSesion->getId() ==20174 || $usuarioActivoSesion->getId() ==10082))
 				$include = 'Modulos/Asistencia/abm_estados.php';
 			break;
 
@@ -709,17 +709,17 @@
 			break;
 
 		case 'asistencias_gerenciaBO':
-			if($permiso->getModuloLicenciasBoolean()  && ($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104))
+			if($permiso->getModuloLicenciasBoolean()  && ($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104 || $usuarioActivoSesion->getId() ==20174 || $usuarioActivoSesion->getId() ==10082 || $esBO))
 				$include = 'Modulos/Asistencia/presentismo_gerenciaBO.php';
 			break;
 
 		case 'asistencias_gerencia_comparativas':
-			if($permiso->getModuloLicenciasBoolean()  && ($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104 ||$usuarioActivoSesion->getId()==10007))
+			if($permiso->getModuloLicenciasBoolean()  && ($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104 || $usuarioActivoSesion->getId() ==20174 || $usuarioActivoSesion->getId() ==10082 || $esBO))
 				$include = 'Modulos/Asistencia/gerencia_comparativas.php';
 			break;
 
 		case 'asistencias_historial':
-			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador||$usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104))
+			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador || $esBO || $usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104))
 				$include = 'Modulos/Asistencia/filtro_historial.php';
 			break;	
 
