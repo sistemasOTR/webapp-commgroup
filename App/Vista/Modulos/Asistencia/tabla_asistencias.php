@@ -147,8 +147,6 @@
                        if (is_null($feriado) && ($diadelasemana!=7)){
                         
                           list($año, $dia, $mes) = split('[/.-]', $FECHA);
-                          
-
 
                          echo "<th >".$mes."/".$dia."</th>";
                        }elseif($diadelasemana==7){
