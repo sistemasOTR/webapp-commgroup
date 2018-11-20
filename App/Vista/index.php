@@ -500,6 +500,10 @@
 		case 'metricas_empresa':
 				$include = 'Modulos/Estadisticas/metricas_empresa.php';
 			break;	
+			
+		case 'metricas_tt':
+				$include = 'Modulos/Metricas/index.php';
+			break;	
 
 		  /*###############*/
 		 /* CONFIGURACION */

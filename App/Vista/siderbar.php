@@ -17,6 +17,7 @@
         $url_estadisticas_empresas = "index.php?view=estadisticas_empresas&empresa=2";
         $url_estadisticas_clientes = "index.php?view=estadisticas_clientes";
         $url_metricas_empresa = "index.php?view=metricas_empresa";
+        $url_metricas_tt = "index.php?view=metricas_tt";
         $url_estadisticas_tickets = "index.php?view=estadisticas_tickets&fplaza=1";
         $url_estadisticas_licencias = "index.php?view=estadisticas_licencias";
         $url_estadisticas_expediciones = "index.php?view=estadisticas_expediciones";
@@ -694,6 +695,11 @@
                 <li id="mnu_estadisticas_global">
                 <a href=<?php echo $url_estadisticas_global; ?>>
                   <i class="fa fa-pie-chart"></i> <span>Global</span> </i>
+                </a>
+              </li>
+                <li id="mnu_metricas_tt">
+                <a href=<?php echo $url_metricas_tt; ?>>
+                  <i class="fa fa-table"></i> <span>Metricas</span> </i>
                 </a>
               </li> 
             
