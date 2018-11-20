@@ -51,7 +51,7 @@
 			}
 		}
 
-		public function guardarTipoABM($id,$nombre,$dias,$estado){
+		public function guardarTipoABM($id,$nombre,$dias,$abreviatura,$estado){
 			try {
 
 				if($estado=="EDITAR"){
@@ -62,6 +62,7 @@
 
 					$handler->setNombre($nombre);
 					$handler->setDias($dias);
+					$handler->setAbreviatura($abreviatura);
 
 					$handler->update(false);
 				}
@@ -71,6 +72,7 @@
 
 					$handler->setNombre($nombre);
 					$handler->setDias($dias);
+					$handler->setAbreviatura($abreviatura);
 					$handler->insert(false);
 				}
 						

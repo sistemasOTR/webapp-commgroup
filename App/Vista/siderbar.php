@@ -35,9 +35,13 @@
         $url_documento_ayuda = "index.php?view=documento_ayuda";
 
         $url_asistencias = "index.php?view=asistencias";
+        $url_tabla_asistencias = "index.php?view=tabla_asistencias";
         $url_asistencias_gestor = "index.php?view=asistencias_gestor";
         $url_asistencias_estados = "index.php?view=asistencias_estados";
         $url_asistencias_gerenciaBO = "index.php?view=asistencias_gerenciaBO";
+        $url_asistencias_comparativas_coord = "index.php?view=asistencias_comparativas_coordinador";
+        $url_asistencias_comparativas2 = "index.php?view=asistencias_comparativas&modo=gerencia";
+        $url_asistencias_comparativas_gerencia = "index.php?view=asistencias_gerencia_comparativas";
 
         $url_legajos_carga = "index.php?view=legajos_carga";
         $url_sueldos_remun = "index.php?view=sueldos_remun";
@@ -204,7 +208,7 @@
               <li class="treeview" id="mnu_asistencias">
                 <a href="#"><i class="fa fa-user"></i> <span>Asistencias</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                <?php  if($esCoordinador && $usuarioActivoSesion->getId()!=10045 ){ ?>
+                <?php  if($esCoordinador && $usuarioActivoSesion->getId()!=10007){ //10045   ?>
                     <li id="mnu_asistencias_presentismo">
                       <a href=<?php echo $url_asistencias; ?>>
                         <i class="fa fa-check-square-o"></i> <span>Presentismo Coord</span>
@@ -214,7 +218,12 @@
                       <a href=<?php echo $url_asistencias_estados; ?>>
                         <i class="fa fa-edit"></i> <span>ABM Estados</span>
                       </a>
-                    </li>  
+                    </li>
+                    <li id="mnu_asistencias_comparativas">
+                     <a href=<?php echo $url_asistencias_comparativas_coord; ?>>
+                       <i class="fa fa-refresh"></i> <span>Comparativas Coord</span>
+                      </a>
+                   </li>  
                     </ul>
                   </li>
                   <?php }elseif($esGestor){?> 
@@ -225,7 +234,7 @@
                     </li>  
                 </ul>
               </li>
-                <?php } elseif($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104){?> 
+                <?php } elseif($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104 ||$usuarioActivoSesion->getId()==10007 ){?> 
                    <li id="mnu_asistencias_gerenciaBO">
                       <a href=<?php echo $url_asistencias_gerenciaBO; ?>>
                         <i class="fa fa-check-square-o"></i> <span>Presentismo Global</span>
@@ -235,7 +244,23 @@
                       <a href=<?php echo $url_asistencias_estados; ?>>
                         <i class="fa fa-edit"></i> <span>ABM Estados</span>
                       </a>
-                    </li>     
+                    </li>  
+                   <li id="mnu_asistencias_gerencia_comparativas">
+                      <a href=<?php echo $url_asistencias_comparativas_gerencia; ?>>
+                        <i class="fa fa-exchange"></i> <span>Comparativas Plazas</span>
+                      </a>
+                    </li> 
+                   <li id="mnu_asistencias_comparativas">
+                     <a href=<?php echo $url_asistencias_comparativas2; ?>>
+                       <i class="fa fa-refresh"></i> <span>Comparativas Empl</span>
+                      </a>
+                   </li> 
+                    <li id="mnu_tabla_asistencias">
+                     <a href=<?php echo $url_tabla_asistencias; ?>>
+                       <i class="fa fa-file-text-o"></i> <span>Tabla Asistencias</span>
+                      </a>
+                   </li>    
+                       
                 </ul>
               </li>
                <?php } } }?> 

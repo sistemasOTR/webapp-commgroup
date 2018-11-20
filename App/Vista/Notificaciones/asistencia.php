@@ -304,14 +304,11 @@ if ($esCoordinador) {
                     
                       if ($idEstadoUltimo[0]->getProductivo()!=0) {
                             $activoCount+=1;
+                          }
+
                             $idEstado=$handlerA->selectEstadosById($ultimoRegistro->getIngreso());
-                            // var_dump($idEstado[0]->getNombre());
-                            // exit();
                             $trabajando=$idEstado[0]->getNombre();
-                            $clase="class='".$idEstado[0]->getColor()." pull-right'";
-                            
-                        }
-                    
+                            $clase="class='".$idEstado[0]->getColor()." pull-right'"; 
                      } 
                         $diadelasemana= date('N',strtotime($dFechas->FechaActual()));
                          if ($diadelasemana!=1) {
@@ -410,7 +407,7 @@ if ($esCoordinador) {
      <div class="modal-dialog">
     <div class="modal-content">
 
-      <form action="" method="post" enctype="multipart/form-data">
+      <form action="" method="post">
        
 
         <div class="modal-header">

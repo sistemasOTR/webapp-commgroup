@@ -74,7 +74,7 @@
                 <?php include_once"efectividad_asistencias_gestor.php";?>
              </div>
              <div class='col-md-6'>
-             
+                 <?php include_once"efectividad_asistencias_estados_gestor.php";?>
              </div>   
            </div>
          </div>
@@ -100,11 +100,12 @@
 
       aStart = $("#start").val().split('-');
       aFin = $("#end").val().split('-');
+      IdGestor =<?php echo $id_gestor ?>  ;
       f_inicio = aStart[0] +"-"+ aStart[1] +"-"+ aStart[2];                        
       f_fin = aFin[0] +"-"+ aFin[1] +"-"+ aFin[2]; 
                                
       
-      url_filtro_reporte="index.php?view=estadisticas_asistencia_gestor&fdesde="+f_inicio+"&fhasta="+f_fin;
+      url_filtro_reporte="index.php?view=estadisticas_asistencia_gestor&fdesde="+f_inicio+"&fhasta="+f_fin+"&id_gestor="+IdGestor;
       
       
       $("#filtro_reporte").attr("href", url_filtro_reporte);
@@ -116,6 +117,10 @@
         
         var ctx_asistencias_gestor= document.getElementById('budget_asistencias_gestor').getContext('2d');
         window.myLine_BSF = new Chart(ctx_asistencias_gestor, config_dias_asistencias_gestor);
+
+
+        var ctx_estados_gestor = document.getElementById('budget_horas_estados_gestor').getContext('2d');
+        window.myLine_BSF = new Chart(ctx_estados_gestor, config_horas_estados_gestor); 
         
    
 
@@ -136,6 +141,11 @@
     window.myLine_BSF = new Chart(ctx_reintegro<?php echo $reint['PLAZA'] ?>, config_reintegro<?php echo $reint['PLAZA'] ?>); 
 
     <?php } }?>
+
+      
+
+
+   
     };
 
 </script>

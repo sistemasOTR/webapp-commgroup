@@ -47,6 +47,7 @@
                     <tr>
                       <th>Id</th>
                       <th>Nombre</th>
+                      <th>Abreviacion</th>
                       <th>Días</th>
                       <th style="width: 3%;" class='text-center'></th>
                     </tr>
@@ -60,9 +61,10 @@
                           echo "<tr>";
                             echo "<td>".$value->getId()."</td>";
                             echo "<td>".$value->getNombre()."</td>";
+                            echo "<td>".$value->getAbreviatura()."</td>";
                             echo "<td>".$value->getDias()."</td>";
                             echo "<td class='text-center'>
-                                    <a href='#' id='".$value->getId()."_editar' data-nombre='".$value->getNombre()."' data-dias='".$value->getDias()."' class='btn btn-default btn-xs' data-toggle='modal' data-target='#modal-editar' onclick='cargarDatos(".$value->getId().")'>
+                                    <a href='#' id='".$value->getId()."_editar' data-nombre='".$value->getNombre()."' data-abreviatura='".$value->getAbreviatura()."' data-dias='".$value->getDias()."' class='btn btn-default btn-xs' data-toggle='modal' data-target='#modal-editar' onclick='cargarDatos(".$value->getId().")'>
                                       <i class='fa fa-edit' data-toggle='tooltip' data-original-title='Editar registro'></i>
                                       Editar
                                     </a>
@@ -95,6 +97,10 @@
                 <div class="col-md-12">
                   <label>Nombre</label>
                   <input type="text" name="nombre" class="form-control">
+                </div>
+                <div class="col-md-12">
+                  <label>Abreviatura</label>
+                  <input type="text" name="abreviatura" class="form-control">
                 </div>
                 <div class="col-md-12">
                   <label>Días</label>
@@ -132,6 +138,10 @@
                   <input type="text" name="nombre" class="form-control" id="nombre_tipo_edicion">
                 </div>
                 <div class="col-md-12">
+                  <label>Abreviatura</label>
+                  <input type="text" name="abreviatura" id="abreviatura_tipo_edicion" class="form-control">
+                </div>
+                <div class="col-md-12">
                   <label>Días</label>
                   <input type="number" name="dias" class="form-control" id="dias_tipo_edicion">
                 </div>              
@@ -155,10 +165,12 @@
   function cargarDatos(id){
     
     nombre = document.getElementById(id+"_editar").getAttribute('data-nombre');
+    abreviatura = document.getElementById(id+"_editar").getAttribute('data-abreviatura');
     dias = document.getElementById(id+"_editar").getAttribute('data-dias');
 
     document.getElementById("id_tipo_edicion").value = id;
     document.getElementById("nombre_tipo_edicion").value = nombre;
     document.getElementById("dias_tipo_edicion").value = dias;
+    document.getElementById("abreviatura_tipo_edicion").value = abreviatura;
   }
 </script>
