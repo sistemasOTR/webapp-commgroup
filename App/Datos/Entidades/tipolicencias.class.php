@@ -22,6 +22,10 @@
 		public function getNombre(){ return $this->_nombre; }
 		public function setNombre($nombre){ $this->_nombre=$nombre; }
 
+		private $_abreviatura;
+		public function getAbreviatura(){ return $this->_abreviatura; }
+		public function setAbreviatura($abreviatura){ $this->_abreviatura=$abreviatura; }
+
 		private $_dias;
 		public function getDias(){ return $this->_dias; }
 		public function setDias($dias){ $this->_dias=$dias; }
@@ -37,6 +41,7 @@
 		function __construct(){
 			$this->setId(0);
 			$this->setNombre('');
+			$this->setAbreviatura('');
 			$this->setDias('');		
 			$this->setEstado(true);			
 		}
@@ -57,11 +62,13 @@
 				$query="INSERT INTO tipo_licencias (
 		        						nombre,		        						
 		        						dias,		        						
-		        						estado
+		        						estado,
+		        						abreviatura
 	        			) VALUES (
 	        							'".$this->getNombre()."',   		        							
 	        							".$this->getDias().",   		        								        							
-	        							'".$this->getEstado()."'
+	        							'".$this->getEstado()."',
+	        							'".$this->getAbreviatura()."'
 	        			)";        
 			
 	        	//echo $query;
@@ -90,7 +97,8 @@
 				$query="UPDATE tipo_licencias SET
 								nombre='".$this->getNombre()."',
 								dias=".$this->getDias().",								
-								estado='".$this->getEstado()."'
+								estado='".$this->getEstado()."',
+								abreviatura='".$this->getAbreviatura()."'
 							WHERE id=".$this->getId();
 
 				# Ejecucion 					
@@ -161,6 +169,7 @@
 				$this->setNombre($filas['nombre']);				
 				$this->setDias($filas['dias']);							
 				$this->setEstado($filas['estado']);
+				$this->setAbreviatura($filas['abreviatura']);
 			}
 		}
 
@@ -168,6 +177,7 @@
 		{
 			$this->setId(0);
 			$this->setNombre('');
+			$this->setAbreviatura('');
 			$this->setDias('');		
 			$this->setEstado(true);	
 		}

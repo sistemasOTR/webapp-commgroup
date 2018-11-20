@@ -683,6 +683,21 @@
 				$include = 'Modulos/Asistencia/presentismo.php';
 			break;
 
+		case 'tabla_asistencias':
+			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador))
+				$include = 'Modulos/Asistencia/tabla_asistencias.php';
+			break;
+
+		case 'asistencias_comparativas':
+			if($permiso->getModuloLicenciasBoolean()  && ( $usuarioActivoSesion->getId()==3 || $usuarioActivoSesion->getId() ==10045 || $usuarioActivoSesion->getId() ==10007 ))
+				$include = 'Modulos/Asistencia/comparativas.php';
+			break;
+
+	    case 'asistencias_comparativas_coordinador':
+			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador && $usuarioActivoSesion->getId() !=10045))
+				$include = 'Modulos/Asistencia/coordinador_comparativas.php';
+			break;
+
 		case 'asistencias_estados':
 			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador||$usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104))
 				$include = 'Modulos/Asistencia/abm_estados.php';
@@ -696,6 +711,11 @@
 		case 'asistencias_gerenciaBO':
 			if($permiso->getModuloLicenciasBoolean()  && ($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104))
 				$include = 'Modulos/Asistencia/presentismo_gerenciaBO.php';
+			break;
+
+		case 'asistencias_gerencia_comparativas':
+			if($permiso->getModuloLicenciasBoolean()  && ($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104 ||$usuarioActivoSesion->getId()==10007))
+				$include = 'Modulos/Asistencia/gerencia_comparativas.php';
 			break;
 
 		case 'asistencias_historial':

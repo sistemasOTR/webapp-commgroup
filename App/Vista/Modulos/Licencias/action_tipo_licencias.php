@@ -10,15 +10,16 @@
 
 	$nombre = (isset($_POST["nombre"])?$_POST["nombre"]:'');
 	$dias = (isset($_POST["dias"])?$_POST["dias"]:'');	
+	$abreviatura = (isset($_POST["abreviatura"])?$_POST["abreviatura"]:'');	
 	
 	$err = "../../../../index.php?view=tipo_licencias&err=";     		
 	$info = "../../../../index.php?view=tipo_licencias&info=";     		
 
 	try {
 
-		$hanlder->guardarTipoABM($id,$nombre,$dias,$estado);
+		$hanlder->guardarTipoABM($id,$nombre,$dias,$abreviatura,$estado);
 		
-		$msj="El tipo para liquidaciones se guardo con éxito.";
+		$msj="El tipo para licencias se guardo con éxito.";
 		header("Location: ".$info.$msj);
 
 	} catch (Exception $e) {

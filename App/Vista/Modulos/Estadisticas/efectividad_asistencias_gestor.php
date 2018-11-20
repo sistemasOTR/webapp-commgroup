@@ -6,6 +6,7 @@
     include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php"; 
     include_once PATH_NEGOCIO."Modulos/handlerasistencias.class.php";
     include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";
+    include_once PATH_NEGOCIO."Modulos/handlerlicencias.class.php";
 
     $dFecha = new Fechas;    
     $handler = new HandlerSistema;
@@ -16,13 +17,14 @@
     $handlerPlaza = new HandlerPlazaUsuarios;
     $handlerAsistencia= new HandlerAsistencias;
     $arrPlaza = $handlerPlaza->selectTodas();
-  
+    $handlerLic= new HandlerLicencias;
 
 
 
     $dataAsistencia=0;
     $presente=0;
     $ausente=0;
+    $deLic=0;
  
     // if (!empty($arruser)) {
 
@@ -33,7 +35,8 @@
            $FECHA = $dFecha->FormatearFechas($fechaDesde,"Y-m-d","Y-m-d");
            $HASTA = $dFecha->FormatearFechas($fechaHasta,"Y-m-d","Y-m-d");
            while (strtotime($FECHA) <= strtotime($HASTA)) {
-           $asistencias=$handlerAsistencia->selectAsistenciasByFiltro($FECHA,$FECHA,$id_gestor); 
+           $asistencias=$handlerAsistencia->selectAsistenciasByFiltro($FECHA,$FECHA,$id_gestor);
+            $arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($FECHA,$FECHA,intval($id_gestor),2); 
             
             
          if(!empty($asistencias)) {
@@ -47,6 +50,26 @@
                $ausente+=1;
               }
             }
+             if(!empty($arrLicencias)) {
+
+                                foreach ($arrLicencias as $key => $valuue) {
+                          
+                                if (!$valuue->getRechazado()) {
+       
+                                      if($valuue->getAprobado()) {
+
+                                           if ($FECHA <= $valuue->getFechaFin()->format('Y-m-d') ) { 
+                                   
+                                            $deLic+=1;
+                                            // "<span class='label label-warning pull-left'> LICENCIA EN CURSO</span>";
+                                   
+                                            }
+                                       }
+                                    }
+                                }
+                              
+
+                        }     
 
               $FECHA = date('Y-m-d',strtotime('+1 day',strtotime($FECHA)));  
     
@@ -61,7 +84,7 @@
    
 
    
-     if ($dataAsistencia!='0,0') {
+     if ($dataAsistencia!='0,0' || !empty($deLic)) {
 
       if (!empty($id_gestor)) {
         $Usuarios=$handlerUser->selectById($id_gestor);
@@ -77,7 +100,9 @@
     <div class="box-header">
       <h3 class="box-title" style="width: 100%;">
         <i class="ion-speedometer"> </i> Asistencia <span><b><?php echo $nombreCompleto ?></b></span>
-        <small class="pull-right" style="font-size: 15px;"><span class='text-yellow '><b><?php echo $dFecha->FormatearFechas($fdesde,'Y-m-d','d/m/Y');echo "-".$dFecha->FormatearFechas($fhasta,'Y-m-d','d/m/Y'); ?></b></span></small>
+         <?php if (!empty($deLic)) { ?>
+        <small class="pull-right" style="font-size: 15px;"><span class='bg-yellow '><b><?php echo "DIAS LICENCIAS</b></span><span class='bg-green'>"."[ ".$deLic."  ]"; ?></b></span></small>
+      <?php } ?>
       </h3>
     </div>
     <div class="box-body text-center">
