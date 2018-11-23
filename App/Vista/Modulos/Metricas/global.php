@@ -16,12 +16,6 @@
             $total_servicios_PROBLEMAS_BO = 0;
             $total_servicios_LIQUIDAR_C_PARCIAL = 0;
             $total_servicios_NO_EFECTIVAS = 0;
-            $total_servicios_cerrados = 0;
-            $total_efectividad = 0;
-            $total_puntajes_cerrados = 0;
-
-            $total_servicios_enviadas = 0;
-            $total_puntajes_enviadas = 0;
 
             $objetivo=0;
             $consulta = $handler->consultaPuntajes($fdesde, $fhasta, null);

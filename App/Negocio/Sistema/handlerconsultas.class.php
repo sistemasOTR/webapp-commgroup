@@ -1190,6 +1190,128 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
 			}
-		}				
+		}
+
+		public function consultaMetricas($fdesde, $fhasta, $fdesdeR, $fhastaR, $gestor){
+			try {
+
+				$f = new Fechas;
+
+				if($fdesde==$fhasta)
+				{
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "SERTT11_FECSER='".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "SERTT11_FECSER='".$tmp."' AND ";
+					}
+				}
+				else
+				{					
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "SERTT11_FECSER>='".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "SERTT11_FECSER<='".$tmp."' AND ";
+					}
+				}
+
+				if($fdesdeR==$fhastaR)
+				{
+					$filtro_fdesdeR="";
+					if(!empty($fdesdeR)){					
+						$tmp = $f->FormatearFechas($fdesdeR,"Y-m-d","Y-m-d");				
+						$filtro_fdesdeR = "SERTT41_FECEST='".$tmp."' AND ";
+					}
+
+					$filtro_fhastaR="";
+					if(!empty($fhastaR)){					
+						$tmp = $f->FormatearFechas($fhastaR,"Y-m-d","Y-m-d");				
+						$filtro_fhastaR = "SERTT41_FECEST=DATEADD(d,1,'".$tmp."') AND ";
+					}
+				}
+				else
+				{					
+					$filtro_fdesdeR="";
+					if(!empty($fdesdeR)){					
+						$tmp = $f->FormatearFechas($fdesdeR,"Y-m-d","Y-m-d");				
+						$filtro_fdesdeR = "SERTT41_FECEST>='".$tmp."' AND ";
+					}
+
+					$filtro_fhastaR="";
+					if(!empty($fhastaR)){					
+						$tmp = $f->FormatearFechas($fhastaR,"Y-m-d","Y-m-d");				
+						$filtro_fhastaR = "SERTT41_FECEST<=DATEADD(d,1,'".$tmp."') AND ";
+					}
+				}				
+
+				$filtro_gestor="";
+				if(!empty($gestor))								
+					$filtro_gestor = "SERTT91_CODGESTOR=".$gestor." AND ";				
+
+
+				$query = "SELECT DISTINCT GESTORESTT.GESTOR11_CODIGO as COD_GESTOR, 
+								GESTOR21_ALIAS as NOM_GESTOR, 
+								SERTT91_COOALIAS as NOM_COORDINADOR,
+								SERTT91_LOCALIDAD as LOCALIDAD,
+								CONVERT(DATE,SERTT41_FECEST) as FECHA, 
+								SERVTT.SERTT91_CODEMPRE as COD_EMPRESA,
+								EMPRESASTT.EMPTT21_NOMBREFA as NOM_EMPRESA,
+								-- PER91_CODPOSTAL as CP_GEST,								
+								SUM(CASE WHEN SERTT91_ESTADO=3 THEN 1 ELSE 0 END) AS CERRADO_PARCIAL,							
+								SUM(CASE WHEN SERTT91_ESTADO=4 THEN 1 ELSE 0 END) AS RE_PACTADO,							
+								SUM(CASE WHEN SERTT91_ESTADO=5 THEN 1 ELSE 0 END) AS RE_LLAMAR,							
+								SUM(CASE WHEN SERTT91_ESTADO=7 THEN 1 ELSE 0 END) AS NEGATIVO,							
+								SUM(CASE WHEN SERTT91_ESTADO=8 THEN 1 ELSE 0 END) AS PROBLEMAS,							
+								SUM(CASE WHEN SERTT91_ESTADO=6 THEN 1 ELSE 0 END) AS CERRADO,							
+								SUM(CASE WHEN SERTT91_ESTADO=9 THEN 1 ELSE 0 END) AS ENV,							
+								SUM(CASE WHEN SERTT91_ESTADO=10 THEN 1 ELSE 0 END) AS A_LIQUIDAR,							
+								SUM(CASE WHEN SERTT91_ESTADO=11 THEN 1 ELSE 0 END) AS NEGATIVO_BO,							
+								SUM(CASE WHEN SERTT91_ESTADO=12 THEN 1 ELSE 0 END) AS CANCEL,							
+								SUM(CASE WHEN SERTT91_ESTADO=13 THEN 1 ELSE 0 END) AS PROBLEMAS_BO,							
+								SUM(CASE WHEN SERTT91_ESTADO=14 THEN 1 ELSE 0 END) AS LIQUIDAR_C_PARCIAL,							
+								SUM(CASE WHEN SERTT91_ESTADO=15 THEN 1 ELSE 0 END) AS NO_EFECTIVAS,						
+								SUM(CASE WHEN (SERTT91_ESTADO=9 OR SERTT91_ESTADO=10) THEN 1 ELSE 0 END) AS ENVIADO,
+								SUM(CASE WHEN (SERTT91_ESTADO<>12 AND SERTT91_ESTADO>2) THEN 1 ELSE 0 END) AS TOTAL_SERVICIOS
+						FROM SERVTT
+						INNER JOIN EMPRESASTT ON
+							SERVTT.SERTT91_CODEMPRE = EMPRESASTT.EMPTT11_CODIGO 
+						INNER JOIN GESTORESTT ON
+							SERVTT.SERTT91_CODGESTOR = GESTORESTT.GESTOR11_CODIGO 
+						-- INNER JOIN PERSONAS ON
+						-- 	SERVTT.SERTT31_PERNUMDOC = PERSONAS.PER12_NUMDOC	
+						WHERE  				
+							".$filtro_fdesde." 
+							".$filtro_fhasta." 	  				
+							".$filtro_fdesdeR." 
+							".$filtro_fhastaR." 							
+							".$filtro_gestor." 							
+							SERTT91_CODEMPRE = EMPTT11_CODIGO 
+						GROUP BY 
+							GESTOR11_CODIGO, GESTOR21_ALIAS, SERTT91_COOALIAS, SERTT91_CODEMPRE, EMPTT21_NOMBREFA, CONVERT(DATE,SERTT41_FECEST), SERTT91_LOCALIDAD
+						ORDER BY 
+							GESTOR11_CODIGO, GESTOR21_ALIAS, SERTT91_COOALIAS, SERTT91_CODEMPRE, EMPTT21_NOMBREFA, CONVERT(DATE,SERTT41_FECEST)";
+				
+					//echo $query;
+					//exit;
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}					
 	}
 ?>

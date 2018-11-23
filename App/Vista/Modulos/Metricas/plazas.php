@@ -1,32 +1,30 @@
     <?php 
-        $fempresa = (isset($_GET["fempresa"])?$_GET["fempresa"]:'');   
+      $listaPlaza = '';
+        if (!empty($plaa)) {
+            foreach ($arrCoord as $sltPlaza) {
+              if ($sltPlaza->CORDI91_ALIGTE == 'ZARATE' || $sltPlaza->CORDI91_ALIGTE == 'CORIA') {
+                foreach ($plaa as $key => $vlv) { 
+                  if($sltPlaza->CORDI11_ALIAS==$vlv){
+                  $listaPlaza[] = $sltPlaza;
+                }
+              }
+            }
+          }
+        } else {
+          $listaPlaza = $arrCoord;
+        }
+
        ?>
       
       <div class="col-md-12 ">
         <?php
-          $consulta = $handler->consultaPuntajes($fdesde, $fhasta, null);
+          $consulta = $handler->consultaMetricas($fdesde, $fhasta, $fdesdeR, $fhastaR, null);
           if(!empty($consulta)){
         ?>
         <div class="col-md-12 no-padding">
             <div class="box box-solid">
               <div class="box-header with-border">
                 <h3 class="box-title" style="text-transform: uppercase;">POR PLAZA</h3>
-                <div class="col-md-3 pull-right">
-                  <select name="slt_empresa" id="slt_empresa" class="form-control" onchange="crearHrefEmpresa()">
-                    <option value="0">TODAS...</option>
-                    <?php 
-                      foreach ($arrEmpresas as $sltEmp) {
-                        if ($sltEmp->EMPTT91_ACTIVA == 'S') {
-                          if ($sltEmp->EMPTT11_CODIGO == $fempresa) {
-                            echo "<option value='".$sltEmp->EMPTT11_CODIGO."' selected>".$sltEmp->EMPTT21_NOMBREFA."</option>";
-                          } else {
-                             echo "<option value='".$sltEmp->EMPTT11_CODIGO."'>".$sltEmp->EMPTT21_NOMBREFA."</option>";
-                          }
-                        }
-                      }
-                     ?>
-                  </select>
-                </div>
                 <div class="col-md-2 pull-right text-right">
                   <label >Empresa</label>
                 </div>
@@ -56,7 +54,23 @@
                   </thead>
                   <tbody>
                   <?php 
-                    foreach ($arrCoord as $plaza) {
+                        $total_servicios_T = 0;
+                        $total_servicios_T_CERRADO = 0;
+                        $total_servicios_T_ENV = 0;
+                        $total_servicios_T_CERRADO_PARCIAL = 0;
+                        $total_servicios_T_RE_PACTADO = 0;
+                        $total_servicios_T_RE_LLAMAR = 0;
+                        $total_servicios_T_NEGATIVO = 0;
+                        $total_servicios_T_PROBLEMAS = 0;
+                        $total_servicios_T_A_LIQUIDAR = 0;
+                        $total_servicios_T_CANCELADO = 0;
+                        $total_servicios_T_NEGATIVO_BO = 0;
+                        $total_servicios_T_PROBLEMAS_BO = 0;
+                        $total_servicios_T_LIQUIDAR_C_PARCIAL = 0;
+                        $total_servicios_T_NO_EFECTIVAS = 0;
+
+
+                    foreach ($listaPlaza as $plaza) {
                         $total_servicios = 0;
                         $total_servicios_CERRADO = 0;
                         $total_servicios_ENV = 0;
@@ -71,30 +85,40 @@
                         $total_servicios_PROBLEMAS_BO = 0;
                         $total_servicios_LIQUIDAR_C_PARCIAL = 0;
                         $total_servicios_NO_EFECTIVAS = 0;
-                        $total_servicios_cerrados = 0;
-                        $total_efectividad = 0;
-                        $total_puntajes_cerrados = 0;
-
-                        $total_servicios_enviadas = 0;
-                        $total_puntajes_enviadas = 0;
 
                         foreach ($consulta as $key => $value) {
-                          if (!empty($fempresa)) {
-                            if ($value->NOM_COORDINADOR == $plaza->CORDI11_ALIAS && $value->COD_EMPRESA == $fempresa) {
-                              $total_servicios = $total_servicios + $value->TOTAL_SERVICIOS;
-                              $total_servicios_CERRADO = $total_servicios_CERRADO + $value->CERRADO;
-                              $total_servicios_ENV = $total_servicios_ENV + $value->ENV;
-                              $total_servicios_CERRADO_PARCIAL = $total_servicios_CERRADO_PARCIAL + $value->CERRADO_PARCIAL;
-                              $total_servicios_RE_PACTADO = $total_servicios_RE_PACTADO + $value->RE_PACTADO;
-                              $total_servicios_RE_LLAMAR = $total_servicios_RE_LLAMAR + $value->RE_LLAMAR;
-                              $total_servicios_NEGATIVO = $total_servicios_NEGATIVO + $value->NEGATIVO;
-                              $total_servicios_PROBLEMAS = $total_servicios_PROBLEMAS + $value->PROBLEMAS;
-                              $total_servicios_A_LIQUIDAR = $total_servicios_A_LIQUIDAR + $value->A_LIQUIDAR;
-                              $total_servicios_NEGATIVO_BO = $total_servicios_NEGATIVO_BO + $value->NEGATIVO_BO;
-                              $total_servicios_PROBLEMAS_BO = $total_servicios_PROBLEMAS_BO + $value->PROBLEMAS_BO;
-                              $total_servicios_LIQUIDAR_C_PARCIAL = $total_servicios_LIQUIDAR_C_PARCIAL + $value->LIQUIDAR_C_PARCIAL;
-                              $total_servicios_NO_EFECTIVAS = $total_servicios_NO_EFECTIVAS + $value->NO_EFECTIVAS;
-                              $total_servicios_CANCELADO = $total_servicios_CANCELADO + $value->CANCEL;
+                          if (!empty($empresas)) {
+                            foreach ($empresas as $fempresa) {
+                              if ($value->NOM_COORDINADOR == $plaza->CORDI11_ALIAS && $value->COD_EMPRESA == $fempresa) {
+                                $total_servicios = $total_servicios + $value->TOTAL_SERVICIOS;
+                                $total_servicios_CERRADO = $total_servicios_CERRADO + $value->CERRADO;
+                                $total_servicios_ENV = $total_servicios_ENV + $value->ENV;
+                                $total_servicios_CERRADO_PARCIAL = $total_servicios_CERRADO_PARCIAL + $value->CERRADO_PARCIAL;
+                                $total_servicios_RE_PACTADO = $total_servicios_RE_PACTADO + $value->RE_PACTADO;
+                                $total_servicios_RE_LLAMAR = $total_servicios_RE_LLAMAR + $value->RE_LLAMAR;
+                                $total_servicios_NEGATIVO = $total_servicios_NEGATIVO + $value->NEGATIVO;
+                                $total_servicios_PROBLEMAS = $total_servicios_PROBLEMAS + $value->PROBLEMAS;
+                                $total_servicios_A_LIQUIDAR = $total_servicios_A_LIQUIDAR + $value->A_LIQUIDAR;
+                                $total_servicios_NEGATIVO_BO = $total_servicios_NEGATIVO_BO + $value->NEGATIVO_BO;
+                                $total_servicios_PROBLEMAS_BO = $total_servicios_PROBLEMAS_BO + $value->PROBLEMAS_BO;
+                                $total_servicios_LIQUIDAR_C_PARCIAL = $total_servicios_LIQUIDAR_C_PARCIAL + $value->LIQUIDAR_C_PARCIAL;
+                                $total_servicios_NO_EFECTIVAS = $total_servicios_NO_EFECTIVAS + $value->NO_EFECTIVAS;
+                                $total_servicios_CANCELADO = $total_servicios_CANCELADO + $value->CANCEL;
+                                $total_servicios_T = $total_servicios_T + $value->TOTAL_SERVICIOS;
+                                $total_servicios_T_CERRADO = $total_servicios_T_CERRADO + $value->CERRADO;
+                                $total_servicios_T_ENV = $total_servicios_T_ENV + $value->ENV;
+                                $total_servicios_T_CERRADO_PARCIAL = $total_servicios_T_CERRADO_PARCIAL + $value->CERRADO_PARCIAL;
+                                $total_servicios_T_RE_PACTADO = $total_servicios_T_RE_PACTADO + $value->RE_PACTADO;
+                                $total_servicios_T_RE_LLAMAR = $total_servicios_T_RE_LLAMAR + $value->RE_LLAMAR;
+                                $total_servicios_T_NEGATIVO = $total_servicios_T_NEGATIVO + $value->NEGATIVO;
+                                $total_servicios_T_PROBLEMAS = $total_servicios_T_PROBLEMAS + $value->PROBLEMAS;
+                                $total_servicios_T_A_LIQUIDAR = $total_servicios_T_A_LIQUIDAR + $value->A_LIQUIDAR;
+                                $total_servicios_T_NEGATIVO_BO = $total_servicios_T_NEGATIVO_BO + $value->NEGATIVO_BO;
+                                $total_servicios_T_PROBLEMAS_BO = $total_servicios_T_PROBLEMAS_BO + $value->PROBLEMAS_BO;
+                                $total_servicios_T_LIQUIDAR_C_PARCIAL = $total_servicios_T_LIQUIDAR_C_PARCIAL + $value->LIQUIDAR_C_PARCIAL;
+                                $total_servicios_T_NO_EFECTIVAS = $total_servicios_T_NO_EFECTIVAS + $value->NO_EFECTIVAS;
+                                $total_servicios_T_CANCELADO = $total_servicios_T_CANCELADO + $value->CANCEL;
+                              }
                             }
                           } elseif ($value->NOM_COORDINADOR == $plaza->CORDI11_ALIAS) {
                             $total_servicios = $total_servicios + $value->TOTAL_SERVICIOS;
@@ -111,16 +135,31 @@
                             $total_servicios_LIQUIDAR_C_PARCIAL = $total_servicios_LIQUIDAR_C_PARCIAL + $value->LIQUIDAR_C_PARCIAL;
                             $total_servicios_NO_EFECTIVAS = $total_servicios_NO_EFECTIVAS + $value->NO_EFECTIVAS;
                             $total_servicios_CANCELADO = $total_servicios_CANCELADO + $value->CANCEL;
+                            $total_servicios_T = $total_servicios_T + $value->TOTAL_SERVICIOS;
+                            $total_servicios_T_CERRADO = $total_servicios_T_CERRADO + $value->CERRADO;
+                            $total_servicios_T_ENV = $total_servicios_T_ENV + $value->ENV;
+                            $total_servicios_T_CERRADO_PARCIAL = $total_servicios_T_CERRADO_PARCIAL + $value->CERRADO_PARCIAL;
+                            $total_servicios_T_RE_PACTADO = $total_servicios_T_RE_PACTADO + $value->RE_PACTADO;
+                            $total_servicios_T_RE_LLAMAR = $total_servicios_T_RE_LLAMAR + $value->RE_LLAMAR;
+                            $total_servicios_T_NEGATIVO = $total_servicios_T_NEGATIVO + $value->NEGATIVO;
+                            $total_servicios_T_PROBLEMAS = $total_servicios_T_PROBLEMAS + $value->PROBLEMAS;
+                            $total_servicios_T_A_LIQUIDAR = $total_servicios_T_A_LIQUIDAR + $value->A_LIQUIDAR;
+                            $total_servicios_T_NEGATIVO_BO = $total_servicios_T_NEGATIVO_BO + $value->NEGATIVO_BO;
+                            $total_servicios_T_PROBLEMAS_BO = $total_servicios_T_PROBLEMAS_BO + $value->PROBLEMAS_BO;
+                            $total_servicios_T_LIQUIDAR_C_PARCIAL = $total_servicios_T_LIQUIDAR_C_PARCIAL + $value->LIQUIDAR_C_PARCIAL;
+                            $total_servicios_T_NO_EFECTIVAS = $total_servicios_T_NO_EFECTIVAS + $value->NO_EFECTIVAS;
+                            $total_servicios_T_CANCELADO = $total_servicios_T_CANCELADO + $value->CANCEL;
                           }
                         } 
 
                         if($total_servicios > 0){
+                          if ($fvista == '1' || empty($fvista)) {
 
                           ?>
 
 
                     <tr>
-                      <td rowspan="2" style="text-align: left;"><?php echo $plaza->CORDI11_ALIAS ?></td>
+                      <td <?php if ($fvista !== '1') { echo 'rowspan="2"';} ?> style="text-align: left;"><?php echo $plaza->CORDI11_ALIAS ?></td>
                       <td style="text-align: center;background: #94bcf6;"><?php echo $total_servicios_CERRADO ?></td>
                       <td style="text-align: center;background: #c2d1ad;"><?php echo $total_servicios_ENV ?></td>
                       <td  style="text-align: center;background: #c2f9ad;"><?php echo $total_servicios_A_LIQUIDAR ?></td>
@@ -137,8 +176,12 @@
                       <td style="text-align: center;background: #e8ab98;"><?php echo ($total_servicios_CERRADO + $total_servicios_ENV + $total_servicios_A_LIQUIDAR) ?></td>
                       <td style="text-align: center;background: #fdfbcb;"><?php echo $total_servicios ?></td>
                     </tr>
+                  <?php } ?>
+                  <?php if ($fvista == '2' || empty($fvista)) { ?>
                     <tr>
-                      <!-- <td style="text-align: left;"><?php echo $plaza->CORDI11_ALIAS ?></td> -->
+                      <?php if ($fvista == '2') { ?>
+                      <td style="text-align: left;"><?php echo $plaza->CORDI11_ALIAS ?></td>
+                      <?php } ?>
                       <td style="text-align: center;background: #94bcf6;"><?php echo number_format(($total_servicios_CERRADO/$total_servicios*100),2) ?> %</td>
                       <td style="text-align: center;background: #c2d1ad;"><?php echo number_format(($total_servicios_ENV/$total_servicios*100),2) ?> %</td>
                       <td  style="text-align: center;background: #c2f9ad;"><?php echo number_format(($total_servicios_A_LIQUIDAR/$total_servicios*100),2) ?> %</td>
@@ -156,89 +199,58 @@
                       <td style="text-align: center;background: #fdfbcb;"><?php echo number_format(($total_servicios/$total_servicios*100),2) ?> %</td>
                     </tr>
                         
-                      <?php }}  
-                      $total_servicios = 0;
-            $total_servicios_CERRADO = 0;
-            $total_servicios_ENV = 0;
-            $total_servicios_CERRADO_PARCIAL = 0;
-            $total_servicios_RE_PACTADO = 0;
-            $total_servicios_RE_LLAMAR = 0;
-            $total_servicios_NEGATIVO = 0;
-            $total_servicios_PROBLEMAS = 0;
-            $total_servicios_A_LIQUIDAR = 0;
-            $total_servicios_CANCELADO = 0;
-            $total_servicios_NEGATIVO_BO = 0;
-            $total_servicios_PROBLEMAS_BO = 0;
-            $total_servicios_LIQUIDAR_C_PARCIAL = 0;
-            $total_servicios_NO_EFECTIVAS = 0;
-            $total_servicios_cerrados = 0;
-            $total_efectividad = 0;
-            $total_puntajes_cerrados = 0;
-
-            $total_servicios_enviadas = 0;
-            $total_puntajes_enviadas = 0;
-
-            $objetivo=0;
-            $consulta = $handler->consultaPuntajes($fdesde, $fhasta, null);
-            // var_dump($consulta);
-            // exit();
-
-            if(!empty($consulta))
-            {
-              foreach ($consulta as $key => $value) { 
-
-
-                $total_servicios = $total_servicios + $value->TOTAL_SERVICIOS;
-                $total_servicios_CERRADO = $total_servicios_CERRADO + $value->CERRADO;
-                $total_servicios_ENV = $total_servicios_ENV + $value->ENV;
-                $total_servicios_CERRADO_PARCIAL = $total_servicios_CERRADO_PARCIAL + $value->CERRADO_PARCIAL;
-                $total_servicios_RE_PACTADO = $total_servicios_RE_PACTADO + $value->RE_PACTADO;
-                $total_servicios_RE_LLAMAR = $total_servicios_RE_LLAMAR + $value->RE_LLAMAR;
-                $total_servicios_NEGATIVO = $total_servicios_NEGATIVO + $value->NEGATIVO;
-                $total_servicios_PROBLEMAS = $total_servicios_PROBLEMAS + $value->PROBLEMAS;
-                $total_servicios_A_LIQUIDAR = $total_servicios_A_LIQUIDAR + $value->A_LIQUIDAR;
-                $total_servicios_NEGATIVO_BO = $total_servicios_NEGATIVO_BO + $value->NEGATIVO_BO;
-                $total_servicios_PROBLEMAS_BO = $total_servicios_PROBLEMAS_BO + $value->PROBLEMAS_BO;
-                $total_servicios_LIQUIDAR_C_PARCIAL = $total_servicios_LIQUIDAR_C_PARCIAL + $value->LIQUIDAR_C_PARCIAL;
-                $total_servicios_NO_EFECTIVAS = $total_servicios_NO_EFECTIVAS + $value->NO_EFECTIVAS;
-                $total_servicios_CANCELADO = $total_servicios_CANCELADO + $value->CANCEL;
-              }
-            }
+                      <?php }}} 
                       ?>
+                      <?php 
+                      if ($total_servicios_T > 0) {
+                        
+
+                        if ($fvista == '1' || empty($fvista)) { ?>
                       <tr>
-                      <td rowspan="2" style="text-align: left;">TOTALES</td>
-                      <td style="text-align: center;"><?php echo $total_servicios_CERRADO ?></td>
-                      <td style="text-align: center;"><?php echo $total_servicios_ENV ?></td>
-                      <td  style="text-align: center;"><?php echo $total_servicios_A_LIQUIDAR ?></td>
-                      <td style="text-align: center;"><?php echo $total_servicios_CERRADO_PARCIAL ?></td>
-                      <td style="text-align: center;"><?php echo $total_servicios_RE_PACTADO ?></td>
-                      <td style="text-align: center;"><?php echo $total_servicios_RE_LLAMAR ?></td>
-                      <td style="text-align: center;"><?php echo $total_servicios_NEGATIVO ?></td><td style="text-align: center;"><?php echo $total_servicios_PROBLEMAS ?></td>
-                      <td style="text-align: center;"><?php echo $total_servicios_NEGATIVO_BO ?></td>
-                      <td style="text-align: center;"><?php echo $total_servicios_PROBLEMAS_BO ?></td>
-                      <td style="text-align: center;"><?php echo $total_servicios_LIQUIDAR_C_PARCIAL ?></td>
-                      <td style="text-align: center;"><?php echo $total_servicios_NO_EFECTIVAS ?></td>
-                      <td style="text-align: center;"><?php echo $total_servicios_CANCELADO ?></td>
-                      <td style="text-align: center;"><?php echo ($total_servicios_CERRADO + $total_servicios_ENV + $total_servicios_A_LIQUIDAR) ?></td>
-                      <td style="text-align: center;"><?php echo $total_servicios ?></td>
+                      <td <?php if ($fvista !== '1') { echo 'rowspan="2"';} ?> style="text-align: left;">TOTALES</td>
+                      <td style="text-align: center;"><?php echo $total_servicios_T_CERRADO ?></td>
+                      <td style="text-align: center;"><?php echo $total_servicios_T_ENV ?></td>
+                      <td  style="text-align: center;"><?php echo $total_servicios_T_A_LIQUIDAR ?></td>
+                      <td style="text-align: center;"><?php echo $total_servicios_T_CERRADO_PARCIAL ?></td>
+                      <td style="text-align: center;"><?php echo $total_servicios_T_RE_PACTADO ?></td>
+                      <td style="text-align: center;"><?php echo $total_servicios_T_RE_LLAMAR ?></td>
+                      <td style="text-align: center;"><?php echo $total_servicios_T_NEGATIVO ?></td><td style="text-align: center;"><?php echo $total_servicios_T_PROBLEMAS ?></td>
+                      <td style="text-align: center;"><?php echo $total_servicios_T_NEGATIVO_BO ?></td>
+                      <td style="text-align: center;"><?php echo $total_servicios_T_PROBLEMAS_BO ?></td>
+                      <td style="text-align: center;"><?php echo $total_servicios_T_LIQUIDAR_C_PARCIAL ?></td>
+                      <td style="text-align: center;"><?php echo $total_servicios_T_NO_EFECTIVAS ?></td>
+                      <td style="text-align: center;"><?php echo $total_servicios_T_CANCELADO ?></td>
+                      <td style="text-align: center;"><?php echo ($total_servicios_T_CERRADO + $total_servicios_T_ENV + $total_servicios_T_A_LIQUIDAR) ?></td>
+                      <td style="text-align: center;"><?php echo $total_servicios_T ?></td>
                     </tr>
+                  <?php } ?>
+                  <?php if ($fvista == '2' || empty($fvista)) { ?>
                     <tr>
-                      <td style="text-align: center;"><?php echo $total_servicios_CERRADO ?></td>
-                      <td style="text-align: center;"><?php echo number_format(($total_servicios_ENV/$total_servicios*100),2) ?> %</td>
-                      <td  style="text-align: center;"><?php echo number_format(($total_servicios_A_LIQUIDAR/$total_servicios*100),2) ?> %</td>
-                      <td style="text-align: center;"><?php echo number_format(($total_servicios_CERRADO_PARCIAL/$total_servicios*100),2) ?> %</td>
-                      <td style="text-align: center;"><?php echo number_format(($total_servicios_RE_PACTADO/$total_servicios*100),2) ?> %</td>
-                      <td style="text-align: center;"><?php echo number_format(($total_servicios_RE_LLAMAR/$total_servicios*100),2) ?> %</td>
-                      <td style="text-align: center;"><?php echo number_format(($total_servicios_NEGATIVO/$total_servicios*100),2) ?> %</td>
-                      <td style="text-align: center;"><?php echo number_format(($total_servicios_PROBLEMAS/$total_servicios*100),2) ?> %</td>
-                      <td style="text-align: center;"><?php echo number_format(($total_servicios_NEGATIVO_BO/$total_servicios*100),2) ?> %</td>
-                      <td style="text-align: center;"><?php echo number_format(($total_servicios_PROBLEMAS_BO/$total_servicios*100),2) ?> %</td>
-                      <td style="text-align: center;"><?php echo number_format(($total_servicios_LIQUIDAR_C_PARCIAL/$total_servicios*100),2) ?> %</td>
-                      <td style="text-align: center;"><?php echo number_format(($total_servicios_NO_EFECTIVAS/$total_servicios*100),2) ?> %</td>
-                      <td style="text-align: center;"><?php echo number_format(($total_servicios_CANCELADO/$total_servicios*100),2) ?> %</td>
-                      <td style="text-align: center;"><?php echo number_format((($total_servicios_CERRADO + $total_servicios_ENV + $total_servicios_A_LIQUIDAR)/$total_servicios*100),2) ?> %</td>
-                      <td style="text-align: center;"><?php echo number_format(($total_servicios/$total_servicios*100),2) ?> %</td>
+                      <?php if ($fvista == '2') { ?>
+                        <td style="text-align: left;">TOTALES</td>
+                      <?php } ?>
+                      <td style="text-align: center;"><?php echo number_format(($total_servicios_T_CERRADO/$total_servicios_T*100),2) ?> %</td>
+                      <td style="text-align: center;"><?php echo number_format(($total_servicios_T_ENV/$total_servicios_T*100),2) ?> %</td>
+                      <td  style="text-align: center;"><?php echo number_format(($total_servicios_T_A_LIQUIDAR/$total_servicios_T*100),2) ?> %</td>
+                      <td style="text-align: center;"><?php echo number_format(($total_servicios_T_CERRADO_PARCIAL/$total_servicios_T*100),2) ?> %</td>
+                      <td style="text-align: center;"><?php echo number_format(($total_servicios_T_RE_PACTADO/$total_servicios_T*100),2) ?> %</td>
+                      <td style="text-align: center;"><?php echo number_format(($total_servicios_T_RE_LLAMAR/$total_servicios_T*100),2) ?> %</td>
+                      <td style="text-align: center;"><?php echo number_format(($total_servicios_T_NEGATIVO/$total_servicios_T*100),2) ?> %</td>
+                      <td style="text-align: center;"><?php echo number_format(($total_servicios_T_PROBLEMAS/$total_servicios_T*100),2) ?> %</td>
+                      <td style="text-align: center;"><?php echo number_format(($total_servicios_T_NEGATIVO_BO/$total_servicios_T*100),2) ?> %</td>
+                      <td style="text-align: center;"><?php echo number_format(($total_servicios_T_PROBLEMAS_BO/$total_servicios_T*100),2) ?> %</td>
+                      <td style="text-align: center;"><?php echo number_format(($total_servicios_T_LIQUIDAR_C_PARCIAL/$total_servicios_T*100),2) ?> %</td>
+                      <td style="text-align: center;"><?php echo number_format(($total_servicios_T_NO_EFECTIVAS/$total_servicios_T*100),2) ?> %</td>
+                      <td style="text-align: center;"><?php echo number_format(($total_servicios_T_CANCELADO/$total_servicios_T*100),2) ?> %</td>
+                      <td style="text-align: center;"><?php echo number_format((($total_servicios_T_CERRADO + $total_servicios_T_ENV + $total_servicios_T_A_LIQUIDAR)/$total_servicios_T*100),2) ?> %</td>
+                      <td style="text-align: center;"><?php echo number_format(($total_servicios_T/$total_servicios_T*100),2) ?> %</td>
                     </tr>
+                  <?php   }
+                      } else {
+                        echo "<tr>";
+                        echo "<td colspan='15'> No hay resultados para esta consulta </td>";
+                        echo "</tr>";
+                      } ?>
                   </tbody>
                   
                 </table>
@@ -249,48 +261,3 @@
           <?php 
           } ?>
 </div>
-
-<script type="text/javascript">
-
-  function crearHrefEmpresa()
-  {
-      aStart = $("#start").val();
-      aEnd = $("#end").val();
-
-      f_inicio = aStart[2] +"-"+ aStart[1] +"-"+ aStart[0];
-      f_fin = aEnd[2] +"-"+ aEnd[1] +"-"+ aEnd[0];                                 
-
-      // f_usuario = $("#slt_usuario").val();   
-
-      // f_plaza = $("#slt_plaza").val();
-      f_tipo = $("#slt_tipo").val();
-      f_empresa = $("#slt_empresa").val();
-
-      url_filtro_reporte="index.php?view=metricas_tt&fdesde="+aStart+"&fhasta="+aEnd;
-
-
-    // if(f_plaza!=undefined)
-    //   if(f_plaza!='' && f_plaza!=0)
-    //     url_filtro_reporte= url_filtro_reporte +"&fplaza="+f_plaza;  
-
-    //   if(f_usuario!=undefined)
-    //     if(f_usuario>0)
-    //       url_filtro_reporte= url_filtro_reporte + "&fusuario="+f_usuario; 
-
-        if(f_tipo!=undefined)
-          url_filtro_reporte= url_filtro_reporte + "&tipo="+f_tipo;
-
-        if(f_empresa!=undefined)
-          if (f_empresa>'0')
-            url_filtro_reporte= url_filtro_reporte + "&fempresa="+f_empresa;
-      
-      
-      $("#filtro_reporte").attr("href", url_filtro_reporte);
-  } 
-
-  function filtrarReporte()
-  {
-    crearHref();
-    window.location = $("#filtro_reporte").attr("href");
-  }
-</script>
