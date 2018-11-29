@@ -73,6 +73,17 @@
         $url_impresorasxplaza = "index.php?view=impresorasxplaza";
         $url_celulares = "index.php?view=celulares";
         $url_insumos = "index.php?view=insumos";
+
+        $url_track_trace="index.php?view=webservice_importacion";
+        $url_track_asignacion="index.php?view=asignacion";
+        $url_track_abm="index.php?view=track_abm";
+        $url_track_importacion="index.php?view=importacion";
+        $url_track_localizacion="index.php?view=localizacion";
+        $url_track_trackeo="index.php?view=trackeo";
+        $url_track_fidelizar="index.php?view=fidelizar";
+        $url_track_portal_importacion="index.php?view=portal_importacion";
+        $url_track_cambio_estado="index.php?view=cambio_estado";
+        $url_track_abm_empresas="index.php?view=track_trace_empresas";
         
         $url_puntajes_gestor = "index.php?view=puntajes_gestor";
         $url_puntajes_coordinador = "index.php?view=puntajes_coordinador";
@@ -175,7 +186,7 @@
               <li class="treeview" id="mnu_sueldos">
                 <a href="#"><i class="fa fa-money"></i> <span>Salarios</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                	<?php if(($esBO || $esContabilidad || $esRRHH) || $esGerencia){ ?>
+                  <?php if(($esBO || $esContabilidad || $esRRHH) || $esGerencia){ ?>
                     <li class="treeview" id="mnu_sueldos_categorias">
                       <a href=<?php echo $url_sueldos_categorias; ?>> 
                         <i class="fa fa-book"></i> <span>Categorias</span> </i>
@@ -196,6 +207,60 @@
                         <i class="fa fa-dollar"></i> <span>Salarios</span> </i>
                       </a>
                     </li> 
+                  <?php } ?> 
+                </ul>
+              </li>
+            <?php 
+              }
+            ?>  
+
+            <?php
+              if($permiso->getModuloLegajosBoolean() && ($esCoordinador)){  
+            ?>          
+              <li class="treeview" id="mnu_track_trace">
+                <a href="#"><i class="fa fa-text-width"></i> <span>T&T</span> <i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                	<?php if($esCoordinador){ ?>
+                    <li class="treeview" id="mnu_track_abm">
+                      <a href=<?php echo $url_track_abm; ?>> 
+                        <i class="fa fa-eraser"></i> <span>Abm</span> </i>
+                      </a>
+                    </li>
+                    <li class="treeview" id="mnu_track_trace">
+                      <a href=<?php echo $url_track_trace; ?>> 
+                        <i class="fa fa-book"></i> <span>Web Service</span> </i>
+                      </a>
+                    </li>
+                    <li class="treeview" id="mnu_track_asignacion">
+                      <a href=<?php echo $url_track_asignacion; ?>> 
+                        <i class="fa fa-map-pin"></i> <span>Asignacion</span> </i>
+                      </a>
+                    </li>
+                    <li class="treeview" id="mnu_track_importacion">
+                      <a href=<?php echo $url_track_importacion; ?>> 
+                        <i class="fa fa-map"></i> <span>Importacion</span> </i>
+                      </a>
+                    </li> 
+                    <li class="treeview" id="mnu_track_localizacion">
+                      <a href=<?php echo $url_track_localizacion; ?>> 
+                        <i class="fa fa-map-marker"></i> <span>Localización</span> </i>
+                      </a>
+                    </li>
+                    <li class="treeview" id="mnu_track_trackeo">
+                      <a href=<?php echo $url_track_trackeo; ?>> 
+                        <i class="fa fa-map-signs"></i> <span>Trackeo</span> </i>
+                      </a>
+                    </li>
+                    <li class="treeview" id="mnu_track_fidelizar">
+                      <a href=<?php echo $url_track_fidelizar; ?>> 
+                        <i class="fa fa-location-arrow"></i> <span>Fidelizar</span> </i>
+                      </a>
+                    </li>
+                    <li class="treeview" id="mnu_track_cambio_estado">
+                      <a href=<?php echo $url_track_cambio_estado; ?>> 
+                        <i class="fa fa-edit"></i> <span>Cambio Estado</span> </i>
+                      </a>
+                    </li>                     
                   <?php } ?> 
                 </ul>
               </li>

@@ -208,6 +208,86 @@
 				$include = 'Modulos/Inbox/index.php';
 			break;
 
+		  /*#######*/
+		 /* T&T */
+		/*#######*/
+		case 'track_abm':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/tt_abm.php';
+			break;
+
+		case 'webservice_importacion':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/importacion/webservice_importacion.php';
+			break;
+
+		case 'asignacion':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/tt_asignacion.php';
+			break;
+
+		case 'importacion':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/tt_importacion.php';
+			break;
+
+		case 'localizacion':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/tt_localizacion.php';
+			break;
+
+		case 'trackeo':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/tt_trackeo.php';
+			break;
+
+		case 'fidelizar':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/tt_fidelizar.php';
+			break;
+
+		case 'portal_importacion':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/importacion/portal_importacion.php';
+			break;
+
+		case 'portal_importacion_serv':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/importacion/portal_importacion_serv.php';
+			break;
+
+		case 'webservice_importacion_serv':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/importacion/webservice_importacion_serv.php';
+			break;
+
+		case 'webservice_importacion_serv2':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/importacion/webservice_importacion_serv2.php';
+			break;
+
+		case 'cambio_estado':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/tt_cambio_estado.php';
+			break;
+
+        case 'track_trace_empresas':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/abm/empresa/abm_empresa.php';
+			break;
+
+		case 'track_trace_coordinadores':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/abm/coordinadores/abm_coordinadores.php';
+			break;
+
+		case 'track_trace_cuadrantes':	
+			if($permiso->getModuloLicenciasBoolean())
+				$include = 'Modulos/Track_Trace/abm/cuadrantes/abm_cuadrantes.php';
+			break;
+
+	
+
 		  /*############*/
 		 /* INVENTARIO */
 		/*############*/
@@ -684,7 +764,7 @@
 			break;
 
 		case 'tabla_asistencias':
-			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador))
+			if($permiso->getModuloLicenciasBoolean()  && ($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104 || $usuarioActivoSesion->getId() ==20174 || $usuarioActivoSesion->getId() ==10082))
 				$include = 'Modulos/Asistencia/tabla_asistencias.php';
 			break;
 

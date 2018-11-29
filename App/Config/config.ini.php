@@ -72,6 +72,12 @@
 		########################################
 		if (!defined('CARPETA_FILES_USUARIO')) define('CARPETA_FILES_USUARIO','userfile/');	
 
+		#############################
+		# URL API LARAVEL MIGRACION #
+		#############################
+		if (!defined('URL_API_MIGRACION')) define('URL_API_MIGRACION','http://api.otrgroup.com.ar/api/');	
+		if (!defined('URL_API_MIGRACION_BASE')) define('URL_API_MIGRACION_BASE','http://api.otrgroup.com.ar/');	
+
 	}
 	else
 	{
