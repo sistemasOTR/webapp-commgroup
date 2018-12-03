@@ -3,21 +3,27 @@
   include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
   include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php"; 
-  include_once PATH_NEGOCIO."Sistema/handlerconsultas.class.php"; 
+  include_once PATH_NEGOCIO."Sistema/handlerconsultas.class.php";
+  include_once PATH_DATOS.'Entidades/ticketsfechasinhabilitadas.class.php'; 
 
   $user = $usuarioActivoSesion;
-  $view_detalle= "index.php?view=puntajes_coordinador_detalle";
 
   $dFecha = new Fechas;
 
   /*-------------------------*/
   /* --- gestion de fechas --*/
   $fHOY = $dFecha->FechaActual();
-  $fHOY = $dFecha->FormatearFechas($fHOY,"Y-m-d","Y-m-d"); 
+  $fHOY = $dFecha->FormatearFechas($fHOY,"Y-m-d","Y-m-d");  
+
+  $menos30 = $dFecha->RestarDiasFechaActual(30);
+  $menos30 = $dFecha->FormatearFechas($menos30,'Y-m-d','Y-m-d');
 
   $f = new DateTime();
-  $f->modify('first day of this month');
+  $f->modify('last day of this month');
   $fMES = $f->format('Y-m-d'); 
+
+  $f->modify('first day of this month');
+  $menos30 = $f->format('Y-m-d'); 
 
   setlocale(LC_TIME, 'spanish');  
   $nombreMES = strftime("%B",mktime(0, 0, 0, $f->format('m'), 1, 2000));      
@@ -41,7 +47,7 @@
 
 
   $handler =  new HandlerConsultas;
-  $consulta = $handler->consultaPuntajesCoordinador($fMES,$fHOY, $user->getAliasUserSistema());
+  $consulta = $handler->consultaPuntajesCoordinador($menos30,$fHOY, $user->getAliasUserSistema());
 
   if(!empty($consulta))
   {
@@ -98,22 +104,67 @@
     }
   }
 
+  $handlerFInhab = new TicketsFechasInhabilitadas;
+
+  // Determinar días laborales
+  // ============================
+  $diasLaborales = 0;
+  while (strtotime($menos30) <= strtotime($fHOY)) {
+
+    $result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($menos30); 
+    // var_dump($result);
+
+    $estado_result = (!empty($result)?true:false);
+
+    if (date('N',strtotime($menos30)) != 7 && !$estado_result) {
+      $diasLaborales += 1;
+    }
+
+    $menos30 = date('Y-m-d',strtotime('+1 day',strtotime($menos30)));
+  }
+
+
+  // var_dump($diasLaborales,$menos30);
+
+  $promPuntos = number_format((($total_puntajes_enviadas + $total_puntajes_cerrados) / $diasLaborales),2);
+  $promEnviadas = number_format((($total_servicios_enviadas + $total_servicios_cerrados) / $diasLaborales),2);
+  $promServicios = number_format(($total_servicios / $diasLaborales),2);
+
+
+  // Proy de puntaje
+  // ============================
+
+  $fInicio = $fHOY;
+
+  while (strtotime($fInicio) <= strtotime($fMES)) {
+
+    $result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fInicio); 
+    $estado_result = (!empty($result)?true:false);
+
+    if (date('N',strtotime($menos30)) != 7 && !$estado_result) {
+      $puntajeMes += $promPuntos;
+    }
+
+    $fInicio = date('Y-m-d',strtotime('+1 day',strtotime($fInicio)));
+  }
+  $aComisionar = 0;
   if($objetivo != 0){
-    if ($total_puntajes_enviadas > $objetivo) {
+    if ($puntajeMes > $objetivo) {
       $clase_medidor = 'class="text-green"';
       $progressbar = 'progress-bar-green';
-      $puntajePorciento = round(($total_puntajes_enviadas - $objetivo)*100/$objetivo,2);
-      $txtPuntajePorciento = round($total_puntajes_enviadas * 100/$objetivo,2);
-    } elseif(($total_puntajes_enviadas/$objetivo) >= 0.75) {
+      $puntajePorciento = round(($puntajeMes - $objetivo)*100/$objetivo,2);
+      $txtPuntajePorciento = round($puntajeMes * 100/$objetivo,2);
+      $aComisionar = round(($puntajeMes - $objetivo));
+    } elseif(($puntajeMes/$objetivo) >= 0.75) {
       $clase_medidor = 'class="text-yellow"';
       $progressbar = 'progress-bar-yellow';
-      $puntajePorciento = round(($total_puntajes_enviadas) * 100 /$objetivo,2);
-      $txtPuntajePorciento = round($total_puntajes_enviadas * 100/$objetivo,2);
+      $puntajePorciento = round(($puntajeMes) * 100 /$objetivo,2);
+      $txtPuntajePorciento = round($puntajeMes * 100/$objetivo,2);
     } else {
       $clase_medidor = 'class="text-red"';
       $progressbar = 'progress-bar-red';
-      $puntajePorciento = round(($total_puntajes_enviadas) * 100 /$objetivo,2);
-      $txtPuntajePorciento = round($total_puntajes_enviadas * 100/$objetivo,2);
+      $puntajePorciento = round(($puntajeMes) * 100 /$objetivo,2);
+      $txtPuntajePorciento = round($puntajeMes * 100/$objetivo,2);
     }
 
   } else {
@@ -123,32 +174,13 @@
     $txtPuntajePorciento = 50.00;
   }
 
-  if(!empty($total_servicios)){
-    $total_efectividad = round(($total_servicios_enviadas+$total_servicios_cerrados)*100/$total_servicios,2) ;
-    if ($total_efectividad > 70) {
-      $clase_efectividad = 'class="text-center text-green"';
-    } else if($total_efectividad < 60){
-      $clase_efectividad = 'class="text-center text-red"';
-    } else {
-      $clase_efectividad = 'class="text-center text-yellow"';
-    }
-   } else {
-    $total_efectividad = 0;
-    $clase_efectividad = 'class="text-center text-red"';
-  }  
+
   
 ?>
 
-  <div class="box box-solid">
-    <div class="box-header with-border">
-      <h3 class="box-title" style="text-transform: uppercase;"><?php echo $nombreMES ?> <?php echo $anioMES ?></h3>
-      <a class="text-navy pull-right" href="<?php echo $view_detalle."&fdesde=".$fdesde."&fhasta=".$fhasta; ?>"><i class="fa fa-search"></i></a>
-    </div>    
-    <div class="box-body no-padding">
-      <div class="col-md-6 no-padding border-right">
         <div class="col-xs-12 no-padding text-center">
-          <h3 class="text-gray">PUNTAJE</h3>
-          <h1 <?php echo $clase_medidor ?>><?php echo $total_puntajes_enviadas ?> <small>/ <?php echo number_format($objetivo,0,'',''); ?> </small></h1>
+          <h3 class="text-gray">PROYECCIÓN</h3>
+          <h1 <?php echo $clase_medidor ?>><?php echo $puntajeMes ?> <small>/ <?php echo number_format($objetivo,0,'',''); ?> </small></h1>
           <div class="col-xs-10 col-xs-offset-1">
             <div class="progress progress-xs" style="border-radius: 50px; height: 10px; margin-bottom: 5px;">
               <div class="progress-bar <?php echo $progressbar; ?>" role="progressbar" aria-valuenow="<?php echo $puntajePorciento ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $puntajePorciento; ?>%; background-image: none;">
@@ -158,27 +190,23 @@
           </div>
            <h2 <?php echo $clase_medidor ?>><?php echo number_format(($puntajePorciento),2) ?>%</h2>
         </div>
-          <div class="col-xs-6 border-right">
-            <p class="text-center text-olive">CERRADOS<br>
-            <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios_cerrados; ?></span></p>
-          </div>
-          <div class="col-xs-6">
-            <p class="text-center text-aqua">ENVIADOS<br>
-            <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios_enviadas; ?></span></p>
-          </div>
-          <div class="col-xs-6 border-right">
-            <p class="text-center text-blue">TOTAL<br>
-            <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios; ?></span></p>
-          </div>
-          <div class="col-xs-6">
-            <p <?php echo $clase_efectividad; ?>>EFECTIVIDAD<br>
-            <span style="font-weight: bold;font-size: 20px"><?php echo $total_efectividad; ?>%</span></p>
-          </div> 
-      </div>
-      <div class="col-md-6 no-padding">
-        <?php $puntajeMes = $total_puntajes_enviadas + $total_puntajes_cerrados; ?>
-            <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/Puntaje/coordinador_proy.php"; ?>
-
-      </div>
-      </div>
-    </div>
+        <div class="col-xs-6 border-right">
+          <p class="text-center text-olive">PUNTOS x DÍA<br>
+          <span style="font-weight: bold;font-size: 20px"><?php echo $promPuntos; ?></span></p>
+        </div>
+        <div class="col-xs-6">
+          <p class="text-center text-aqua">ENVIADOS x DÍA<br>
+          <span style="font-weight: bold;font-size: 20px"><?php echo $promEnviadas; ?></span></p>
+        </div>
+        <!-- <div class="col-xs-6 col-md-3 border-right">
+          <p class="text-center text-blue">TOTAL<br>
+          <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios; ?></span></p>
+        </div> -->
+        <div class="col-xs-6 border-right">
+          <p class="text-navi text-center">SERV. x DÍA<br>
+          <span style="font-weight: bold;font-size: 20px"><?php echo $promServicios; ?></span></p>
+        </div>
+        <div class="col-xs-6">
+          <p class="text-center text-green">A COMISIONAR<br>
+          <span style="font-weight: bold;font-size: 20px"><?php echo $aComisionar; ?></span></p>
+        </div>

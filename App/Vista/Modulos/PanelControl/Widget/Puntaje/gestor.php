@@ -94,17 +94,25 @@
 
   if($objetivo != 0){
     if ($total_puntajes_enviadas > $objetivo) {
-      $clase_medidor = 'class="info-box bg-green"';
+      $clase_medidor = 'class="text-green"';
+      $progressbar = 'progress-bar-green';
       $puntajePorciento = round(($total_puntajes_enviadas - $objetivo)*100/$objetivo,2);
       $txtPuntajePorciento = round($total_puntajes_enviadas * 100/$objetivo,2);
+    } elseif(($total_puntajes_enviadas/$objetivo) >= 0.75) {
+      $clase_medidor = 'class="text-yellow"';
+      $progressbar = 'progress-bar-yellow';
+      $puntajePorciento = round(($total_puntajes_enviadas) * 100 /$objetivo,2);
+      $txtPuntajePorciento = round($total_puntajes_enviadas * 100/$objetivo,2);
     } else {
-      $clase_medidor = 'class="info-box bg-yellow"';
+      $clase_medidor = 'class="text-red"';
+      $progressbar = 'progress-bar-red';
       $puntajePorciento = round(($total_puntajes_enviadas) * 100 /$objetivo,2);
       $txtPuntajePorciento = round($total_puntajes_enviadas * 100/$objetivo,2);
     }
 
   } else {
-    $clase_medidor = 'class="info-box bg-yellow"';
+    $clase_medidor = 'class="text-yellow"';
+    $progressbar = 'progress-bar-yellow';
     $puntajePorciento = 50;
     $txtPuntajePorciento = 50.00;
   }
@@ -129,40 +137,43 @@
     <div class="box-header with-border">
         <h3 class="box-title"><i class="ion-calculator"></i> PUNTAJE. <span class="text-yellow"><b><?php echo strtoupper($nombreMES) ?> <?php echo $anioMES ?></b></span></h3>
     </div>    
-    <div class="box-body">
-
-      <div class="col-xs-12 no-padding">
-        <div <?php echo $clase_medidor; ?>>
-          <span class="info-box-icon"><i class="ion-calculator"></i></span>
-          <div class="info-box-content">
-            <span class="info-box-text">PUNTAJE</span>
-            <span class="info-box-number"><?php echo $txtPuntajePorciento."%"; ?></span>
-
-            <div class="progress">
-              <div class="progress-bar" style="width: <?php echo $puntajePorciento ?>%"></div>
+    <div class="box-body no-padding">
+      <div class="col-md-6 no-padding border-right">
+        <div class="col-xs-12 no-padding text-center">
+          <h3 class="text-gray">PUNTAJE</h3>
+          <h1 <?php echo $clase_medidor ?>><?php echo $total_puntajes_enviadas ?> <small>/ <?php echo number_format($objetivo,0,'',''); ?> </small></h1>
+          <div class="col-xs-10 col-xs-offset-1">
+            <div class="progress progress-xs" style="border-radius: 50px; height: 10px; margin-bottom: 5px;">
+              <div class="progress-bar <?php echo $progressbar; ?>" role="progressbar" aria-valuenow="<?php echo $puntajePorciento ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $puntajePorciento; ?>%; background-image: none;">
+              </div>
+                
             </div>
-            <span class="progress-description">
-              <small>Enviados: </small><?php echo $total_puntajes_enviadas ?> <span class="pull-right"><small>Objetivo: </small><?php echo $objetivo; ?></span>
-            </span>
           </div>
+           <h2 <?php echo $clase_medidor ?>><?php echo number_format(($puntajePorciento),2) ?>%</h2>
         </div>
-        </div>
-        <div class="col-xs-6 col-md-3 border-right">
-          <p class="text-center text-olive">CERRADOS<br>
-          <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios_cerrados; ?></span></p>
-        </div>
-        <div class="col-xs-6 col-md-3 border-right">
-          <p class="text-center text-aqua">ENVIADOS<br>
-          <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios_enviadas; ?></span></p>
-        </div>
-        <div class="col-xs-6 col-md-3 border-right">
-          <p class="text-center text-blue">TOTAL<br>
-          <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios; ?></span></p>
-        </div>
-        <div class="col-xs-6 col-md-3">
-          <p <?php echo $clase_efectividad; ?>>EFECTIVIDAD<br>
-          <span style="font-weight: bold;font-size: 20px"><?php echo $total_efectividad; ?>%</span></p>
-        </div>                
+          <div class="col-xs-6 border-right">
+            <p class="text-center text-olive">CERRADOS<br>
+            <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios_cerrados; ?></span></p>
+          </div>
+          <div class="col-xs-6">
+            <p class="text-center text-aqua">ENVIADOS<br>
+            <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios_enviadas; ?></span></p>
+          </div>
+          <div class="col-xs-6 border-right">
+            <p class="text-center text-blue">TOTAL<br>
+            <span style="font-weight: bold;font-size: 20px"><?php echo $total_servicios; ?></span></p>
+          </div>
+          <div class="col-xs-6">
+            <p <?php echo $clase_efectividad; ?>>EFECTIVIDAD<br>
+            <span style="font-weight: bold;font-size: 20px"><?php echo $total_efectividad; ?>%</span></p>
+          </div> 
+      </div>
+      <div class="col-md-6 no-padding">
+        <?php $puntajeMes = $total_puntajes_enviadas + $total_puntajes_cerrados; ?>
+            <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/Puntaje/gestor_proy.php"; ?>
+
+      </div>
       </div>
     </div>
     </a>
+    

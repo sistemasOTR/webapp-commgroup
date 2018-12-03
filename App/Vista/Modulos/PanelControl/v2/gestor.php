@@ -61,15 +61,15 @@
             <?php //include_once PATH_VISTA."Modulos/PanelControl/Widget/ProgresoMensual/gestor.php"; ?>
           </div> 
           <div class="col-md-6">
-          <div class="col-md-12">
+          <div class="col-md-12 no-padding">
             <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/GestionMensualEfectividad/gestor.php"; ?>
           </div>
 
-          <div class="col-md-12">
+          <div class="col-md-12 no-padding">
             <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/ServiciosMensualEfectividad/gestor.php"; ?>
           </div>
 
-          <div class="col-md-12">
+          <div class="col-md-12 no-padding">
             <?php include_once PATH_VISTA."Modulos/PanelControl/Widget/Puntaje/gestor.php"; ?>
           </div>
         </div>
