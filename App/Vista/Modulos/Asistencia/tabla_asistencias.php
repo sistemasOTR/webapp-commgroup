@@ -18,7 +18,9 @@
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());
   $estados = (isset($_GET["estados"])?$_GET["estados"]:"");
   $licencias = (isset($_GET["licencias"])?$_GET["licencias"]:"");
+  $ausente = (isset($_GET["ausente"])?$_GET["ausente"]:"");
   $modo = (isset($_GET["modo"])?$_GET["modo"]:'');//
+  $notificacion = (isset($_GET["notificacion"])?$_GET["notificacion"]:'no');//
   $id = $user->getUserPlaza();
   $empleados =(isset($_GET["fusuario"])?$_GET["fusuario"]:'0');
   $url_ajax =PATH_VISTA.'Modulos/Asistencia/select_usuario.php';
@@ -108,8 +110,15 @@
                        <option value="<?php echo $valueLic->getId();?>" ><?php echo $valueLic->getNombre(); ?></option>
                     <?php } }?>              
                   </select>
+                </div>            
+                <div class="col-md-2" id="filtro_ausente">
+                  <label>MODALIDAD</label> 
+                  <select id="f_ausente" class="form-control" style="display: show;"  onchange="crearHref()" style="width: 100%" name="ausente" >                
+                  <option value="todas">Todas</option>
+                  <option value="presentes" <?php if($ausente=="presentes") echo "selected"; ?> >Presentes</option>
+                  <option value="ausentes" <?php if($ausente=="ausentes") echo "selected";?> >Ausentes</option>                 
+                  </select>
                 </div>
-
                  <div class='col-md-2 pull-right'>                
                   <label></label>                
                   <a class="btn btn-block btn-success" id="filtro_reporte" onclick="crearHref()"><i class='fa fa-filter'></i> Filtrar</a>
@@ -274,7 +283,11 @@
                         } 
                          else{
                            $a+=1;
-                          echo "<td><font color='red'>A</font></td>";
+                           if ($FECHA==$dFecha->FechaActual()) {
+                           echo "<td><span class='label label-danger pull-left'><b>S/Logueo</b></span> </td>";
+                          }else{
+                          echo "<td><font color='red'>A</font> </td>";//
+                          }
                          }  
                          
                         $FECHA = date('Y-m-d',strtotime('+1 day',strtotime($FECHA)));  
@@ -303,28 +316,81 @@
                         $FECHA = $dFecha->FormatearFechas($fechaDesde,"Y-m-d","Y-m-d");
                         $HASTA = $dFecha->FormatearFechas($fechaHasta,"Y-m-d","Y-m-d"); 
                           while (strtotime($FECHA) <= strtotime($HASTA)) { 
-                         $arrLicencias= $handlerLic->seleccionarByFiltrosRRHH($FECHA,$FECHA,$value->getId(),2);
-                         if (!empty($arrLicencias)) {
+                         $arrLicenciass= $handlerLic->seleccionarByFiltrosRRHH($FECHA,$FECHA,$value->getId(),2);
+                         if (!empty($arrLicenciass)) {
                          	$l+=1;
                          }
                          $FECHA = date('Y-m-d',strtotime('+1 day',strtotime($FECHA)));  
                        }
-                        
 
+                        if ($licencias==0 && $ausente=='todas') {   
+                        echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+                        $seguir=true;
+                         } 
+                         elseif ($licencias==0 && $ausente=='presentes') {   
+                        $asistencias4=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
 
-                        if ($licencias==0) {   
+                          if (!empty($asistencias4)) {
+                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+
+                           $seguir=true;
+                            }
+                         } 
+                          elseif ($licencias==0 && $ausente=='ausentes') {   
+                        $asistencias4=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
+
+                          if (empty($asistencias4)) {
+                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+
+                           $seguir=true;
+                            }
+                         }
+                        elseif ($licencias==88888888 && empty($arrLicenciass) && $ausente=='todas') {   
+                        echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+                        $seguir=true;
+                         } 
+                         elseif ($licencias==88888888 && empty($arrLicenciass) && $ausente=='presentes') {   
+                        $asistencias4=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
+
+                          if (!empty($asistencias4)) {
+                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+
+                           $seguir=true;
+                            }
+                         } 
+                         elseif ($licencias==88888888 && empty($arrLicenciass) && $ausente=='ausentes') {   
+                        $asistencias4=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
+
+                          if (empty($asistencias4)) {
+                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+
+                           $seguir=true;
+                            }
+                         } 
+                        elseif ($licencias==99999999 && !empty($arrLicenciass) && $ausente=='todas') {   
                         echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
                         $seguir=true;
                          }
-                        elseif ($licencias==88888888 && empty($l)) {   
-                        echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
-                        $seguir=true;
+                         elseif ($licencias==99999999 && !empty($arrLicenciass) && $ausente=='presentes') {   
+                         $asistencias4=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
+
+                          if (!empty($asistencias4)) {
+                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+
+                           $seguir=true;
+                            }
                          } 
-                        elseif ($licencias==99999999 && !empty($l)) {   
-                        echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
-                        $seguir=true;
-                         } 
-                         elseif (($licencias!=99999999 ||$licencias!=0 ||$licencias!=88888888) && !empty($l)) { 
+                         elseif ($licencias==99999999 && !empty($arrLicenciass) && $ausente=='ausentes') {   
+                         $asistencias4=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
+
+                          if (empty($asistencias4)) {
+                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+
+                           $seguir=true;
+                            }
+                         }
+
+                         elseif (($licencias!=99999999 ||$licencias!=0 ||$licencias!=88888888) && !empty($arrLicenciass) && $ausente=='todas') { 
                         $l=0;
                         $fechaDesde = date('Y-m-d',strtotime($fdesde));
                         $fechaHasta = date('Y-m-d',strtotime($fhasta));
@@ -344,7 +410,8 @@
                         $datolic=true;
                            }  
                        
-                         } 
+                         }
+              
                          if ($seguir) {
                          
                         $p=0;
@@ -365,9 +432,16 @@
 
 
                           if (!empty($asistencias)) {
-             
-                        echo "<td><span class='label label-success'>P</span></td>";
+
+                        $servicios=$handlerSistema->selectCountServicios($FECHA,$FECHA,null,null,$value->getId(),null,null,null);
+                        if (!empty($servicios[0]->CANTIDAD_SERVICIOS)) {
+                          $cantidadServ="<b style='color:green;'>".$servicios[0]->CANTIDAD_SERVICIOS." Serv</b>";
+                        }else{
+                          $cantidadServ="";
+                        }
+                        echo "<td><span class='label label-success'>P</span>".$cantidadServ."</td>";
                          $p+=1;
+
 
                          }elseif(!empty($arrLicencias)){
                             foreach ($arrLicencias as $key => $valuue) {
@@ -390,8 +464,20 @@
                          }elseif ($feriado || $diadelasemana==7) {
                           echo "<td style='background-color:rgb(232, 234, 246); text-align:center;'><i>-</i></td>";
                         }else{
-                          $a+=1;
-                          echo "<td><font color='red'>A</font></td>";
+                          $a+=1; 
+                           $servicios=$handlerSistema->selectCountServicios($FECHA,$FECHA,null,null,$value->getId(),null,null,null);
+                        //    var_dump();
+                        //    exit();
+                        if (!empty($servicios[0]->CANTIDAD_SERVICIOS)) {
+                          $cantidadServ="<b style='color:green;'>".$servicios[0]->CANTIDAD_SERVICIOS." Serv</b>";
+                        }else{
+                          $cantidadServ="";
+                        }
+                          if ($FECHA==$dFecha->FechaActual()) {
+                           echo "<td><span class='label label-danger'><b>S/Logueo</b></span>".$cantidadServ."</td>";
+                          }else{
+                          echo "<td><span class='label label-danger pull-left'><b>A</b></span> ".$cantidadServ."</td>";//
+                          }
                          }    
 
                          
@@ -466,6 +552,13 @@
       }).on('change', function (e) { 
       
       });
+    });
+  $(document).ready(function() {
+    $("#f_ausente").select2({
+        placeholder: "Seleccionar",                  
+      }).on('change', function (e) { 
+      
+      });
     }); 
     $(document).ready(function() {
     $("#slt_licencias").select2({
@@ -474,6 +567,32 @@
       
     });
   });
+
+    $(document).ready(function() {
+
+      if ($("#start").val() != $("#fin").val()) {
+      $("#filtro_ausente").hide();
+   }else{
+     $("#filtro_ausente").show();
+   }
+   $("#start").on("change",function() {
+     if ($("#start").val() != $("#fin").val()) {
+      $("#filtro_ausente").hide();
+   }else{
+     $("#filtro_ausente").show();
+   }
+   });
+   $("#fin").on("change",function() {
+     if ($("#start").val() != $("#fin").val()) {
+      $("#filtro_ausente").hide();
+   }else{
+     $("#filtro_ausente").show();
+   }
+   });
+});
+          
+  
+
   $('#sandbox-container .input-daterange').datepicker({
       format: "dd/mm/yyyy",
       clearBtn: false,
@@ -496,8 +615,9 @@
 
       f_usuario = $("#slt_usuario").val();     
       f_licencias = $("#slt_licencias").val();     
+      f_ausente = $("#f_ausente").val();     
       
-      url_filtro_reporte="index.php?view=tabla_asistencias&fdesde="+f_inicio+"&fhasta="+f_fin+"&fusuario="+f_usuario+"&licencias="+f_licencias;
+      url_filtro_reporte="index.php?view=tabla_asistencias&fdesde="+f_inicio+"&fhasta="+f_fin+"&fusuario="+f_usuario+"&licencias="+f_licencias+"&ausente="+f_ausente;
    
       
       $("#filtro_reporte").attr("href", url_filtro_reporte);

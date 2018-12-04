@@ -684,7 +684,7 @@
 			break;
 
 		case 'tabla_asistencias':
-			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador))
+			if($permiso->getModuloLicenciasBoolean()  && ($esCoordinador ||$esBO))
 				$include = 'Modulos/Asistencia/tabla_asistencias.php';
 			break;
 

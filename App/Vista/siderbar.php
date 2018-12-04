@@ -36,7 +36,7 @@
         $url_documento_ayuda = "index.php?view=documento_ayuda";
 
         $url_asistencias = "index.php?view=asistencias";
-        $url_tabla_asistencias = "index.php?view=tabla_asistencias";
+        $url_tabla_asistencias = "index.php?view=tabla_asistencias&ausente=todas";
         $url_asistencias_gestor = "index.php?view=asistencias_gestor";
         $url_asistencias_estados = "index.php?view=asistencias_estados";
         $url_asistencias_gerenciaBO = "index.php?view=asistencias_gerenciaBO";
