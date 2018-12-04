@@ -4,6 +4,7 @@
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
   include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php"; 
   include_once PATH_NEGOCIO."Sistema/handlerconsultas.class.php"; 
+  include_once PATH_NEGOCIO."Sistema/handlersistema.class.php"; 
 
   $user = $usuarioActivoSesion;
   $view_detalle= "index.php?view=puntajes_coordinador_detalle";
@@ -38,6 +39,8 @@
   $total_puntajes_enviadas = 0;
 
   $objetivo=0;
+  $handlerSist = new HandlerSistema;
+
 
 
   $handler =  new HandlerConsultas;
@@ -48,7 +51,17 @@
     foreach ($consulta as $key => $value) { 
 
       $handlerP = new HandlerPuntaje;
-      $objetivo = $handlerP->buscarObjetivoCoordinador($value->NOM_COORDINADOR);                        
+      // $objetivo = $handlerP->buscarObjetivoCoordinador($value->NOM_COORDINADOR);
+      if ($objetivo==0) {
+        $gestoresPlaza = $handlerSist->selectAllGestor($value->NOM_COORDINADOR);
+        foreach ($gestoresPlaza as $indice => $valor) {
+
+          $objGestor = intval($handlerP->buscarObjetivo($valor->GESTOR11_CODIGO));
+          $objetivo += $objGestor;
+        };
+      }
+      
+
       $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
                     $localidad = strtoupper($value->LOCALIDAD);
                     $localidad = str_replace('(', '', $localidad);
