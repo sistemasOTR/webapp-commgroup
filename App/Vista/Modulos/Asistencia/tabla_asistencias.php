@@ -196,15 +196,15 @@
                        }
     
                         if ($licencias==0) {   
-                        echo "<tr style='width:10px;'><td width='30'>".$arrEmpleados->getApellido()."".$arrEmpleados->getNombre()."</td>";
+                        echo "<tr style='width:10px;'><td width='30'>".$arrEmpleados->getApellido()." ".$arrEmpleados->getNombre()."</td>";
                         $seguir=true;
                          }
                         elseif ($licencias==88888888 && empty($l)) {   
-                        echo "<tr style='width:10px;'><td width='30'>".$arrEmpleados->getApellido()."".$arrEmpleados->getNombre()."</td>";
+                        echo "<tr style='width:10px;'><td width='30'>".$arrEmpleados->getApellido()." ".$arrEmpleados->getNombre()."</td>";
                         $seguir=true;
                          } 
                         elseif ($licencias==99999999 && !empty($l)) {   
-                        echo "<tr style='width:10px;'><td width='30'>".$arrEmpleados->getApellido()."".$arrEmpleados->getNombre()."</td>";
+                        echo "<tr style='width:10px;'><td width='30'>".$arrEmpleados->getApellido()." ".$arrEmpleados->getNombre()."</td>";
                         $seguir=true;
                          } 
                          elseif (($licencias!=99999999 ||$licencias!=0 ||$licencias!=88888888) && !empty($l)) { 
@@ -224,7 +224,7 @@
                          
                          if (!empty($l)) {
                          	
-                             echo "<tr style='width:10px;'><td width='30'>".$arrEmpleados->getApellido()."".$arrEmpleados->getNombre()."</td>";
+                             echo "<tr style='width:10px;'><td width='30'>".$arrEmpleados->getApellido()." ".$arrEmpleados->getNombre()."</td>";
                             
                         $seguir=true;
                         $datolic=true;
@@ -324,14 +324,14 @@
                        }
 
                         if ($licencias==0 && $ausente=='todas') {   
-                        echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+                        echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()." ".$value->getNombre()."</td>";
                         $seguir=true;
                          } 
                          elseif ($licencias==0 && $ausente=='presentes') {   
                         $asistencias4=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
 
                           if (!empty($asistencias4)) {
-                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()." ".$value->getNombre()."</td>";
 
                            $seguir=true;
                             }
@@ -340,20 +340,20 @@
                         $asistencias4=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
 
                           if (empty($asistencias4)) {
-                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()." ".$value->getNombre()."</td>";
 
                            $seguir=true;
                             }
                          }
                         elseif ($licencias==88888888 && empty($arrLicenciass) && $ausente=='todas') {   
-                        echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+                        echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()." ".$value->getNombre()."</td>";
                         $seguir=true;
                          } 
                          elseif ($licencias==88888888 && empty($arrLicenciass) && $ausente=='presentes') {   
                         $asistencias4=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
 
                           if (!empty($asistencias4)) {
-                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()." ".$value->getNombre()."</td>";
 
                            $seguir=true;
                             }
@@ -362,20 +362,20 @@
                         $asistencias4=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
 
                           if (empty($asistencias4)) {
-                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()." ".$value->getNombre()."</td>";
 
                            $seguir=true;
                             }
                          } 
                         elseif ($licencias==99999999 && !empty($arrLicenciass) && $ausente=='todas') {   
-                        echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+                        echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()." ".$value->getNombre()."</td>";
                         $seguir=true;
                          }
                          elseif ($licencias==99999999 && !empty($arrLicenciass) && $ausente=='presentes') {   
                          $asistencias4=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
 
                           if (!empty($asistencias4)) {
-                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()." ".$value->getNombre()."</td>";
 
                            $seguir=true;
                             }
@@ -384,7 +384,7 @@
                          $asistencias4=$handlerAsist->selectAsistenciasByFiltro($fdesde,$fdesde,$value->getId());
 
                           if (empty($asistencias4)) {
-                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+                           echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()." ".$value->getNombre()."</td>";
 
                            $seguir=true;
                             }
@@ -405,7 +405,7 @@
                        } 
                          
                          if (!empty($l)) {
-                             echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()."".$value->getNombre()."</td>";
+                             echo "<tr style='width:10px;'><td width='30'>".$value->getApellido()." ".$value->getNombre()."</td>";
                         $seguir=true;
                         $datolic=true;
                            }  
@@ -433,7 +433,7 @@
 
                           if (!empty($asistencias)) {
 
-                        $servicios=$handlerSistema->selectCountServicios($FECHA,$FECHA,null,null,$value->getId(),null,null,null);
+                        $servicios=$handlerSistema->selectCountServicios($FECHA,$FECHA,null,null,$value->getUserSistema(),null,null,null);
                         if (!empty($servicios[0]->CANTIDAD_SERVICIOS)) {
                           $cantidadServ="<b style='color:green;'>".$servicios[0]->CANTIDAD_SERVICIOS." Serv</b>";
                         }else{
@@ -465,7 +465,7 @@
                           echo "<td style='background-color:rgb(232, 234, 246); text-align:center;'><i>-</i></td>";
                         }else{
                           $a+=1; 
-                           $servicios=$handlerSistema->selectCountServicios($FECHA,$FECHA,null,null,$value->getId(),null,null,null);
+                           $servicios=$handlerSistema->selectCountServicios($FECHA,$FECHA,null,null,$value->getUserSistema(),null,null,null);
                         //    var_dump();
                         //    exit();
                         if (!empty($servicios[0]->CANTIDAD_SERVICIOS)) {
