@@ -246,8 +246,18 @@
 
                                  if ($v->getUsuarioPerfil()==0 || $v->getUsuarioPerfil()==$value->getUsuarioPerfil()->getId()) {
                                        if (!empty($act[$v->getId()])) {
+                                        $comp = explode('.', (float) $act[$v->getId()]); 
+                                            $comp1=$comp[0];
+                                            if (isset($comp[1])) {
+                                               $comp2=("0.".$comp[1])*60;
+                                            }else{
+                                              $comp2=0;
+                                            }
+                                           
+                                      
+                                            $totalcomp=$comp1.":".round($comp2);
                                                                    
-                                           $lista2.= "<tr><td>".$v->getNombre()." : ".$act[$v->getId()]." Hs</td></tr>";
+                                           $lista2.= "<tr><td>".$v->getNombre()." : ".$totalcomp." Hs</td></tr>";
                                       
                                          }
                                             if ($v->getProductivo()==1) { 
@@ -282,10 +292,26 @@
  
                       echo $lista2;
                       if (!empty($listaProd)) {
-                      echo "<tr><td class='bg-green'> HRS PRODUCTIVAS : ".$listaProd." Hs</td></tr>";
+                       $compListaProd = explode('.', (float) $listaProd); 
+                       $compP1=$compListaProd[0];
+                        if (isset($compListaProd[1])) {
+                         $compP2=("0.".$compListaProd[1])*60;
+                          }else{
+                           $compP2=0;
+                             }             
+                          $totalcompP=$compP1.":".round($compP2); 
+                      echo "<tr><td class='bg-green'> HRS PRODUCTIVAS : ".$totalcompP." Hs</td></tr>";
                       }
                       if (!empty($listaImprod)) {
-                      echo "<tr><td class='bg-red'> HRS IMPRODUCTIVAS : ".$listaImprod." Hs</td></tr>";
+                        $compListaImprod = explode('.', (float) $listaImprod); 
+                         $compI1=$compListaImprod[0];
+                          if (isset($compListaImprod[1])) {
+                          $compI2=("0.".$compListaImprod[1])*60;
+                           }else{
+                           $compI2=0;
+                            }
+                             $totalcompI=$compI1.":".round($compI2);
+                      echo "<tr><td class='bg-red'> HRS IMPRODUCTIVAS : ".$totalcompI." Hs</td></tr>";
                       }
 
                        

@@ -282,9 +282,29 @@
 
                                if (!empty($act[$v->getId()])) {
                                  if ($v->getId()==$estados || $estados==99999) {
+
+                                  $comp = explode('.', (float) $act[$v->getId()]); 
+                                            $comp1=$comp[0];
+                                            if (isset($comp[1])) {
+                                               $comp2=("0.".$comp[1])*60;
+                                            }else{
+                                              $comp2=0;
+                                            }
+                                           
+                                      
+                                            $totalcomp=$comp1.":".round($comp2);
+
+                                            $cantiP=explode('.', (float) $canti);
+                                            $cantiP1=$cantiP[0];
+                                            if (isset($cantiP[1])) {
+                                               $cantiP2=("0.".$cantiP[1])*60;
+                                            }else{
+                                              $cantiP2=0;
+                                            }
+                                             $totalCantiP=$cantiP1.":".round($cantiP2);
                                               
                                                                   
-                                   $lista2.= "<tr><td>".$v->getNombre()." : ".$act[$v->getId()]." Hs<span style='font-size:10pt;' class='label label-default pull-right'>PROM ".number_format($canti,2)." hs</span></td></tr>";
+                                   $lista2.= "<tr><td>".$v->getNombre()." : ".$totalcomp." Hs<span style='font-size:10pt;' class='label label-default pull-right'>PROM ".$totalCantiP." hs</span></td></tr>";
                                   }
                                  }
 
@@ -335,11 +355,57 @@
                                      if ($estados==99999) {   
 
                                      if (!empty($listaProd)) {
-                                      echo "<tr><td class='bg-green'> HRS PRODUCTIVAS : ".$listaProd." Hs<span style='font-size:10pt;' class='label label-default pull-right'>PROM ".number_format(($listaProd/$diasProd),2)." hs</span></td></tr>";
+                                     $compListaProd = explode('.', (float) $listaProd); 
+                                            $compP1=$compListaProd[0];
+                                            if (isset($compListaProd[1])) {
+                                               $compP2=("0.".$compListaProd[1])*60;
+                                            }else{
+                                              $compP2=0;
+                                            }
+                                           
+                                      
+                                            $totalcompP=$compP1.":".round($compP2);
+                                            $promcompP=number_format(($listaProd/$diasProd),2);
+
+                                            $PROMListaProd = explode('.', (float) $promcompP); 
+                                            $compProme1=$PROMListaProd[0];
+                                            if (isset($PROMListaProd[1])) {
+                                               $compProme2=("0.".$PROMListaProd[1])*60;
+                                            }else{
+                                              $compProme2=0;
+                                            }
+                                           
+                                      
+                                            $totalPROMprod=$compProme1.":".round($compProme2);
+
+                                      echo "<tr><td class='bg-green'> HRS PRODUCTIVAS : ".$totalcompP." Hs<span style='font-size:10pt;' class='label label-default pull-right'>PROM ".$totalPROMprod." hs</span></td></tr>";
                                      }
 
                                    if (!empty($listaImprod)) {
-                                      echo "<tr><td class='bg-red'> HRS IMPRODUCTIVAS : ".$listaImprod." Hs<span style='font-size:10pt;' class='label label-default pull-right'>PROM:".number_format(($listaImprod/$diasImProd),2)." hs</span></td></tr>";
+                                     $compListaImprod = explode('.', (float) $listaImprod); 
+                                            $compI1=$compListaImprod[0];
+                                            if (isset($compListaImprod[1])) {
+                                               $compI2=("0.".$compListaImprod[1])*60;
+                                            }else{
+                                              $compI2=0;
+                                            }
+                                           
+                                      
+                                            $totalcompI=$compI1.":".round($compI2);
+                                            $promcompI=number_format(($listaImprod/$diasImProd),2);
+
+                                            $PROMListaImp = explode('.', (float) $promcompI); 
+                                            $compPromeI=$PROMListaImp[0];
+                                            if (isset($PROMListaImp[1])) {
+                                               $compPromeI2=("0.".$PROMListaImp[1])*60;
+                                            }else{
+                                              $compPromeI2=0;
+                                            }
+                                           
+                                      
+                                            $totalPROMimp=$compPromeI.":".round($compPromeI2);
+
+                                      echo "<tr><td class='bg-red'> HRS IMPRODUCTIVAS : ".$totalcompI." Hs<span style='font-size:10pt;' class='label label-default pull-right'>PROM:".$totalPROMimp." hs</span></td></tr>";
                                      }
                                    }
                                    ?>

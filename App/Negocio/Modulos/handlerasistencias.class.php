@@ -28,12 +28,13 @@
 			}
 		}
 
-		public function newEstado($nombre,$perfil,$color,$productividad){
+		public function newEstado($nombre,$observacion,$perfil,$color,$productividad){
 					try {
 							
 						$handler = new AsistenciasEstados;
 							
 						$handler->setNombre($nombre);		
+						$handler->setObservacion($observacion);		
 						$handler->setUsuarioPerfil($perfil);		
 						$handler->setColor($color);		
 						$handler->setProductivo($productividad);		
@@ -65,12 +66,13 @@
 			}
 		}
 
-		public function updateEstados($id,$nombre,$perfil,$color,$productividad){
+		public function updateEstados($id,$nombre,$observacion2,$perfil,$color,$productividad){
 			try {
 					
 				$handler = new AsistenciasEstados;				
                 $handler->setId($id); 
 				$handler->setNombre($nombre);
+				$handler->setObservacion($observacion2);
 				$handler->setUsuarioPerfil($perfil);
 				$handler->setColor($color);
 				$handler->setProductivo($productividad);

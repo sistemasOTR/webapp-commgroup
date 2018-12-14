@@ -39,6 +39,10 @@
         private $_productivo;
 		public function getProductivo(){return var_export($this->_productivo,true); }
 		public function setProductivo($productivo){ $this->_productivo=$productivo; }
+
+		private $_observacion;
+		public function getObservacion(){ return $this->_observacion; }
+		public function setObservacion($observacion){ $this->_observacion=$observacion; }
 				
 
 		/*#############*/
@@ -52,6 +56,7 @@
 			$this->setEstado(true);
 			$this->setColor('');
 			$this->setProductivo(true);
+			$this->setObservacion('');
 			
 		}
 
@@ -71,13 +76,15 @@
 							estado,
 							tipo_perfil,
 							color,
-							productivo
+							productivo,
+							observacion
 	        			) VALUES (
 							'".$this->getNombre()."',
 							'".$this->getEstado()."',
 							".$this->getUsuarioPerfil().",
 							'".$this->getColor()."',		
-							".$this->getProductivo()."		
+							".$this->getProductivo().",		
+							'".$this->getObservacion()."'		
 	        			)";        
 			
 	        	// echo $query;
@@ -105,7 +112,8 @@
 							estado='".$this->getEstado()."',
 							tipo_perfil=".$this->getUsuarioPerfil().",	
 							color='".$this->getColor()."',
-							productivo=".$this->getProductivo()."
+							productivo=".$this->getProductivo().",
+							observacion='".$this->getObservacion()."'
 								
 							WHERE id=".$this->getId();
 
@@ -181,6 +189,7 @@
 				$this->setUsuarioPerfil($filas['tipo_perfil']);	
 				$this->setColor($filas['color']);	
 				$this->setProductivo($filas['productivo']);	
+				$this->setObservacion($filas['observacion']);	
 			}
 		}
 
@@ -192,6 +201,7 @@
 			$this->setEstado(true);
 			$this->setColor('');
 			$this->setProductivo(true);
+			$this->setObservacion('');
 		}
 
 		private function createTable()
