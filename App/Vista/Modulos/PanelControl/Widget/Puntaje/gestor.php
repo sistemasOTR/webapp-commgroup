@@ -1,9 +1,15 @@
 
 <?php
   include_once PATH_NEGOCIO."Funciones/Fechas/fechas.class.php"; 
-  include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
-  include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php"; 
+  include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php";
   include_once PATH_NEGOCIO."Sistema/handlerconsultas.class.php"; 
+  include_once PATH_NEGOCIO."Sistema/handlersistema.class.php"; 
+  include_once PATH_NEGOCIO."Modulos/handlerobjetivos.class.php"; 
+  include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php";
+  include_once PATH_NEGOCIO."Modulos/handlerlegajos.class.php";
+  include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";
+  include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php";
+  include_once PATH_DATOS.'Entidades/ticketsfechasinhabilitadas.class.php'; 
 
   $user = $usuarioActivoSesion;
 
@@ -16,7 +22,10 @@
 
   $f = new DateTime();
   $f->modify('first day of this month');
-  $fMES = $f->format('Y-m-d'); 
+  $fMES = $f->format('Y-m-d');  
+  $fInicioMes = $f->format('Y-m-d');
+  $f->modify('last day of this month');
+  $fFinMes = $f->format('Y-m-d');  
 
   setlocale(LC_TIME, 'spanish');  
   $nombreMES = strftime("%B",mktime(0, 0, 0, $f->format('m'), 1, 2000));      
@@ -33,16 +42,139 @@
 
   $objetivo=0;
 
+  // Definicion Handlers
+  // ============================
 
+  $handlerObj = new HandlerObjetivos;
+  $handlerSist = new HandlerSistema;
+  $handlerLegajos = new HandlerLegajos;
+  $handlerFInhab = new TicketsFechasInhabilitadas;
   $handler =  new HandlerConsultas;
+  $handlerP = new HandlerPuntaje;
+  $handlerPlazas = new HandlerPlazaUsuarios;
+  $handlerUsuario = new HandlerUsuarios;
+
+
   $consulta = $handler->consultaPuntajes($fMES,$fHOY, $user->getUserSistema());
+
+  // Determinar días laborales
+  // ============================
+  $laborales = 0;
+  while (strtotime($fInicioMes) <= strtotime($fFinMes)) {
+
+    $result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fInicioMes); 
+    // var_dump($result);
+
+    $estado_result = (!empty($result)?true:false);
+
+    if (date('N',strtotime($fInicioMes)) != 7 && !$estado_result) {
+      if (date('N',strtotime($fInicioMes)) != 6) {
+        $laborales += 1;
+      } else {
+        $laborales += 0.5;
+      }
+    }
+
+    $fInicioMes = date('Y-m-d',strtotime('+1 day',strtotime($fInicioMes)));
+  }
+  // ============================
+
+
+  // Gestores / Coordinadores
+  // ============================
+
+  $gestCoor = $handlerObj->allGestCoor();
+  foreach ($gestCoor as $key => $value) {
+    $gc[] = intval($value->getIdGestor());
+  }
+  // ============================
+
+  // Datos Gestor
+  // ============================
+
+  $gestor = $handlerSist->selectGestorById($user->getUserSistema());
+
+  $plazaGestor = $gestor[0]->GESTOR91_ALICOO;
+
+  $objetivosXPlaza = $handlerObj->objetivosXPlaza($plazaGestor);
+
+  // Días trabajados
+  // ============================
+  // echo $user->getId();
+  $legajo = $handlerLegajos->seleccionarLegajos($user->getId());
+  if ($legajo->getFechaBaja()->format('Y-m-d') != '1900-01-01' && $legajo->getFechaBaja()->format('Y-m-d') > $fMES) {
+    $trabajo = 0;
+    if ($legajo->getFechaIngreso()->format('Y-m-d') > $fMES) {
+      $fInicioMes = $legajo->getFechaIngreso()->format('Y-m-d');
+    } else {
+      $fInicioMes= $fMES;
+    }
+    while (strtotime($fInicioMes) <= strtotime($legajo->getFechaBaja()->format('Y-m-d'))) {
+
+      $result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fInicioMes); 
+
+      $estado_result = (!empty($result)?true:false);
+
+      if (date('N',strtotime($fInicioMes)) != 7 && !$estado_result) {
+        if (date('N',strtotime($fInicioMes)) != 6) {
+          $trabajo += 1;
+        } else {
+          $trabajo += 0.5;
+        }
+      }
+
+      $fInicioMes = date('Y-m-d',strtotime('+1 day',strtotime($fInicioMes)));
+    }
+
+    $relativo = $trabajo/$laborales;
+
+  } elseif ($legajo->getFechaIngreso()->format('Y-m-d') > $fMES){
+    $trabajo = 0;
+    $fInicioMes= $legajo->getFechaIngreso()->format('Y-m-d');
+    while (strtotime($fInicioMes) <= strtotime($fFinMes)) {
+
+      $result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fInicioMes); 
+      // var_dump($result);
+
+      $estado_result = (!empty($result)?true:false);
+
+      if (date('N',strtotime($fInicioMes)) != 7 && !$estado_result) {
+        if (date('N',strtotime($fInicioMes)) != 6) {
+          $trabajo += 1;
+        } else {
+          $trabajo += 0.5;
+        }
+      }
+
+      $fInicioMes = date('Y-m-d',strtotime('+1 day',strtotime($fInicioMes)));
+    }
+    
+    $relativo = $trabajo/$laborales;
+  } else {
+    $relativo = 1;
+  }
+
+  // Objetivo x dias trabajados
+  // ============================
+
+  if (!empty($objetivosXPlaza)) {
+    foreach ($objetivosXPlaza as $key => $value) {
+      if ($fHOY >= $value->getVigencia()->format('Y-m-d')) {
+        if (!in_array($gestor[0]->GESTOR11_CODIGO,$gc)) {
+          $objetivo = $value->getBasico() * $relativo;
+        } else {
+          $objetivo = $value->getBasicoGC() * $relativo;
+        }
+        break;
+      }
+    }
+  }
+
 
   if(!empty($consulta))
   {
     foreach ($consulta as $key => $value) { 
-
-      $handlerP = new HandlerPuntaje;
-      $objetivo = $handlerP->buscarObjetivo($user->getUserSistema());                        
+      // $objetivo = $handlerP->buscarObjetivo($user->getUserSistema());                        
       $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
                     $localidad = strtoupper($value->LOCALIDAD);
                     $localidad = str_replace('(', '', $localidad);

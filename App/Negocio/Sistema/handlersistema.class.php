@@ -550,7 +550,7 @@
 			try {
 				
 				if(empty($coordinador))
-					$query = "SELECT GESTOR11_CODIGO, GESTOR21_ALIAS FROM GESTORESTT WHERE GESTOR91_HABILI = 'S' ORDER BY GESTOR91_ALICOO ASC";
+					$query = "SELECT GESTOR11_CODIGO, GESTOR21_ALIAS FROM GESTORESTT ORDER BY GESTOR21_ALIAS ASC";
 				else 
 					$query = "SELECT GESTOR11_CODIGO, GESTOR21_ALIAS FROM GESTORESTT WHERE GESTOR91_HABILI = 'S' AND GESTOR91_ALICOO='".$coordinador."' ORDER BY GESTOR91_ALICOO ASC";
 
@@ -2869,6 +2869,20 @@
 					// var_dump($query,$estado);
 					// exit;
 
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+
+		public function selectEmpresasActivas(){
+			try {
+				
+				$query = "SELECT * FROM EMPRESASTT WHERE EMPTT91_ACTIVA = 'S' ORDER BY EMPTT21_NOMBREFA";
 
 				$result = SQLsistema::selectObject($query);
 						

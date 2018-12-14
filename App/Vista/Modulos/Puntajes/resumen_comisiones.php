@@ -6,34 +6,223 @@
   include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php";         
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
   include_once PATH_NEGOCIO."Sistema/handlerconsultas.class.php";
-  include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php";         
+  include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php"; 
+  include_once PATH_DATOS.'Entidades/ticketsfechasinhabilitadas.class.php'; 
+  include_once PATH_NEGOCIO."Modulos/handlerobjetivos.class.php";
+  include_once PATH_NEGOCIO."Modulos/handlerlegajos.class.php";        
 
   $dFecha = new Fechas;
+  $handler = new HandlerSueldos;
+  $handlerObj = new HandlerObjetivos;
+  $handlerSist = new HandlerSistema;
+  $handlerLegajos = new HandlerLegajos;
+  $handlerFInhab = new TicketsFechasInhabilitadas;
+  $handlerConsultas= new HandlerConsultas;
+  $handlerPuntaje = new HandlerPuntaje;
+  $handlerPlaza = new HandlerPlazaUsuarios;
+  $handlerUsuarios = new HandlerUsuarios;
+
+  // Fechas
+  // ============================
   $fechahoy=$dFecha->FechaActual();
   $fusuario= (isset($_GET["fusuario"])?$_GET["fusuario"]:'');
-  $fplaza= (isset($_GET["fplaza"])?$_GET["fplaza"]:'');
+  $fplaza= (isset($_GET["fplaza"])?$_GET["fplaza"]:null);
   $fperiodo= (isset($_GET["fperiodo"])?$_GET["fperiodo"]:'');
   $fecha = $fperiodo.'-01';
 
   $fDesdeComision = date('Y-m-01',strtotime($fecha));
   $fHastaComision = date('Y-m-t',strtotime($fecha));
 
-  $handler = new HandlerSueldos;
-  $handlerSist = new HandlerSistema;
-  $handlerConsultas= new HandlerConsultas;
-  $handlerPuntaje = new HandlerPuntaje;
+  $fInicioMes = $fDesdeComision;
+  $fFinMes = $fHastaComision;
+
+    
+  $arrPlaza = $handlerSist->selectAllPlazas();
+  $arrGestores = $handlerSist->selectAllGestor($fplaza);
+  $gestoresPlaza = $arrGestores;
+    if(!is_null($fplaza)){
+
+      $consulta = $handlerConsultas->consultaPuntajesCoordinador($fDesdeComision,$fHastaComision, $fplaza);
+  $total_coord_servicios = 0;
+  $total_coord_servicios_cerrados = 0;
+  $total_coord_servicios_enviadas = 0;
+  $total_coord_puntajes_enviadas = 0;
+
+  include_once 'calculo_comisiones_coord.php';
+
+  // Días laborales
+  // ============================
+  $laborales = 0;
+  while (strtotime($fInicioMes) <= strtotime($fFinMes)) {
+
+    $result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fInicioMes); 
+    // var_dump($result);
+
+    $estado_result = (!empty($result)?true:false);
+
+    if (date('N',strtotime($fInicioMes)) != 7 && !$estado_result) {
+      if (date('N',strtotime($fInicioMes)) != 6) {
+        $laborales += 1;
+      } else {
+        $laborales += 0.5;
+      }
+    }
+
+    $fInicioMes = date('Y-m-d',strtotime('+1 day',strtotime($fInicioMes)));
+  }
+
+  // Gestores / Coordinadores
+  // ============================
+  $gestCoor = $handlerObj->allGestCoor();
+  foreach ($gestCoor as $key => $value) {
+    $gc[] = intval($value->getIdGestor());
+  }
+
+
+  // Id PLAZA
+  // ============================
+  $allPlazas = $handlerPlaza->selectTodas();
+  if (!empty($allPlazas)) {
+    foreach ($allPlazas as $plaza) {
+      if ($plaza->getNombre() == $fplaza) {
+        $idPlaza = $plaza->getId();
+      }
+    }
+  }
+
+  // Usuarios Gestores
+  // ============================
+  $allUsuarios = $handlerUsuarios->selectAll();
+  $gestActivosPlaza = '';
+  foreach ($gestPlaza as $ind2 => $gPlaza) {
+    foreach ($allUsuarios as $ind => $usuario) {
+      $tipoUsuario = $usuario->getTipoUsuario();
+      if (is_array($tipoUsuario)) {
+        $tipoUsuario = 0;
+      }else{
+        $tipoUsuario = $tipoUsuario->getId();
+      }
+
+      if ($tipoUsuario == 3 && $usuario->getUserSistema() == intval($gPlaza)) {
+        $gestActivosPlaza[] = array('idGestor' => $usuario->getUserSistema(),
+                                    'nomGestor' => $nomGestores[$gPlaza],
+                                    'idUser' => $usuario->getId());
+      }
+    }
+  }
+
+
+  // Objetivos de la plaza
+  // ============================
+  $objetivosXPlaza = $handlerObj->objetivosXPlaza($fplaza);
+  if (!empty($objetivosXPlaza)) {
+    foreach ($objetivosXPlaza as $key => $value) {
+      if ($fechahoy >= $value->getVigencia()->format('Y-m-d')) {
+          $objetivoBase = $value->getBasico();
+          $objetivoGC = $value->getBasicoGC();
+          $cantCoord = $value->getCantCoord();
+          break;
+        
+      }
+    }
+  }
+
+  // Gestores según fechas trabajadas
+  // ============================
+  $arrGests = '';
+  foreach ($gestActivosPlaza as $idG2 => $gestPortal) {
+        $legajo = $handlerLegajos->seleccionarLegajos($gestPortal['idUser']);
+        if (!is_null($legajo)) {
+          if ($legajo->getFechaBaja()->format('Y-m-d') != '1900-01-01' && $legajo->getFechaBaja()->format('Y-m-d') < $fDesdeComision) {
+            unset($gestoresPlaza[$idG]);
+          } elseif ($legajo->getFechaBaja()->format('Y-m-d') != '1900-01-01' && $legajo->getFechaBaja()->format('Y-m-d') > $fDesdeComision && $legajo->getFechaBaja()->format('Y-m-d') < $fHastaComision) {
+            $trabajo = 0;
+            if ($legajo->getFechaIngreso()->format('Y-m-d') > $fDesdeComision) {
+              $fInicioMes = $legajo->getFechaIngreso()->format('Y-m-d');
+            } else {
+              $fInicioMes= $fDesdeComision;
+            }
+            while (strtotime($fInicioMes) <= strtotime($legajo->getFechaBaja()->format('Y-m-d'))) {
+
+              $result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fInicioMes); 
+
+              $estado_result = (!empty($result)?true:false);
+
+              if (date('N',strtotime($fInicioMes)) != 7 && !$estado_result) {
+                if (date('N',strtotime($fInicioMes)) != 6) {
+                  $trabajo += 1;
+                } else {
+                  $trabajo += 0.5;
+                }
+              }
+
+              $fInicioMes = date('Y-m-d',strtotime('+1 day',strtotime($fInicioMes)));
+            }
+
+            $relativo = $trabajo/$laborales;
+            $arrGests[] = array('cod' => $gestPortal['idGestor'],
+                              'nombre' => $gestPortal['nomGestor'],
+                              'rel' => $relativo );
+          } elseif ($legajo->getFechaIngreso()->format('Y-m-d') > $fDesdeComision){
+            $trabajo = 0;
+            $fInicioMes= $legajo->getFechaIngreso()->format('Y-m-d');
+            while (strtotime($fInicioMes) <= strtotime($fFinMes)) {
+
+              $result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fInicioMes); 
+              // var_dump($result);
+
+              $estado_result = (!empty($result)?true:false);
+
+              if (date('N',strtotime($fInicioMes)) != 7 && !$estado_result) {
+                if (date('N',strtotime($fInicioMes)) != 6) {
+                  $trabajo += 1;
+                } else {
+                  $trabajo += 0.5;
+                }
+              }
+
+              $fInicioMes = date('Y-m-d',strtotime('+1 day',strtotime($fInicioMes)));
+            }
+            
+            $relativo = $trabajo/$laborales;
+            $arrGests[] = array('cod' => $gestPortal['idGestor'],
+                              'nombre' => $gestPortal['nomGestor'],
+                              'rel' => $relativo );
+          } else {
+            $arrGests[] = array('cod' => $gestPortal['idGestor'],
+                              'nombre' => $gestPortal['nomGestor'],
+                              'rel' => 1 );
+          }
+        }
+    }
+
+  // echo "<pre>";
+  // print_r($arrGests);
+  // print_r($gestActivosPlaza);
+  // print_r($arrGestores);
+  // echo "</pre>";
+
+
+  $objetivoCoord = 0;
+  foreach ($arrGests as $indice => $valor) {
+    // echo $valor->GESTOR21_ALIAS;
+    if (!in_array($valor['cod'],$gc)) {
+      $objetivoCoord += $objetivoBase * $valor['rel'];
+    } else {
+      $objetivoCoord += $objetivoGC* $valor['rel'];
+    }
+    
+  }
+
   $arrGestor = $handlerSist->selectAllGestor($fplaza);
   $arrCoordinador = $handlerSist->selectAllPlazasArray();
 
-  $handlerPlaza = new HandlerPlazaUsuarios;
-  $arrPlaza = $handlerPlaza->selectTodas();
-
-  $handlerUsuarios = new HandlerUsuarios;
   $arrUsuarios = $handlerUsuarios->selectEmpleados();
-  $arrGestores = $handlerUsuarios->selectGestores($fplaza);
   if ($fecha != '-01') {
     $comision = $handler->selectByDate($fecha);
   }
+  
+}
 ?>
 
 <div class="content-wrapper">  
@@ -81,10 +270,10 @@
                     <?php
                       if(!empty($arrPlaza)){                        
                         foreach ($arrPlaza as $key => $value) {
-                          if($fplaza == $value->getId()){
-                            echo "<option value='".$value->getId()."' selected>".$value->getNombre()."</option>";
+                          if($fplaza == $value->ALIAS){
+                            echo "<option value='".$value->ALIAS."' selected>".$value->ALIAS."</option>";
                           } else {
-                            echo "<option value='".$value->getId()."'>".$value->getNombre()."</option>";
+                            echo "<option value='".$value->ALIAS."'>".$value->ALIAS."</option>";
                           }
                         }
                       }
@@ -121,29 +310,74 @@
                   </thead>
                   <tbody>
                     <?php 
-                      if (!empty($arrGestores) && $fecha != '-01') {
-                        foreach ($arrGestores as $gestor) {
+                      if (!empty($arrGests) && $fecha != '-01') {
+                        foreach ($arrGests as $gestor) {
                           include 'calculo_comisiones.php';
+                          if (!in_array($gestor['cod'],$gc)) {
+                            $objetivo = $objetivoBase * $gestor['rel'];
+                          } else {
+                            $objetivo = $objetivoGC* $gestor['rel'];
+                          }
                           if ($total_puntajes_enviadas>floatval($objetivo)) {
                             $puntaje_comision = $total_puntajes_enviadas - floatval($objetivo);
                             $valor_comision = $puntaje_comision * $comision['valor'];
+                            if ($objetivo == 0) {
+                              $puntaje_comision = 0;
+                              $valor_comision = 0;
+                            }
                           } else {
                             $puntaje_comision = 0;
                             $valor_comision = 0;
                           }
-                          echo "<tr>";
-                            echo "<td>".$gestor->getApellido()." ".$gestor->getNombre()."</td>";
-                            echo "<td>".$total_servicios."</td>";
-                            echo "<td>".$total_servicios_cerrados."</td>";
-                            echo "<td>".$total_servicios_enviadas."</td>";
-                            echo "<td>".number_format($total_puntajes_enviadas,2)."</td>";
-                            echo "<td>".number_format($objetivo,2,'.','')."</td>";
-                            echo "<td>".number_format($puntaje_comision,2,'.','')."</td>";
-                            echo "<td>$ ".number_format($valor_comision,2,'.','')."</td>";
-                          echo "</tr>";
+                          if ($total_servicios>0) {
+                            echo "<tr>";
+                              echo "<td>".$gestor['nombre']."</td>";
+                              echo "<td>".$total_servicios."</td>";
+                              echo "<td>".$total_servicios_cerrados."</td>";
+                              echo "<td>".$total_servicios_enviadas."</td>";
+                              echo "<td>".number_format($total_puntajes_enviadas,2)."</td>";
+                              echo "<td>".number_format($objetivo,2,'.','')."</td>";
+                              echo "<td>".number_format($puntaje_comision,2,'.','')."</td>";
+                              echo "<td>$ ".number_format($valor_comision,2,'.','')."</td>";
+                            echo "</tr>";
+                          }
                         }
                       }
                     ?>
+
+                    <?php 
+                      if (!is_null($fplaza)) {
+                      if ($total_coord_puntajes_enviadas>floatval($objetivoCoord)) {
+                        $puntaje_comision = $total_coord_puntajes_enviadas - floatval($objetivoCoord);
+                        $valor_comision = $puntaje_comision * $comision['valor'];
+                      } else {
+                        $puntaje_comision = 0;
+                        $valor_comision = 0;
+                      }
+
+                      echo "<tr class='bg-navy'>";
+                        echo "<td>Coordinador/es (".$cantCoord.")</td>";
+                        echo "<td>".$total_coord_servicios."</td>";
+                        echo "<td>".$total_coord_servicios_cerrados."</td>";
+                        echo "<td>".$total_coord_servicios_enviadas."</td>";
+                        echo "<td>".number_format($total_coord_puntajes_enviadas,2,'.','')."</td>";
+                        echo "<td>".number_format($objetivoCoord,2,'.','')."</td>";
+                        echo "<td>".number_format($puntaje_comision,2,'.','')."</td>";
+                        echo "<td>$ ".number_format($valor_comision,2,'.','')."</td>";
+                      echo "</tr>";
+                      echo "<tr class='bg-navy'>";
+                        echo "<td></td>";
+                        echo "<td></td>";
+                        echo "<td></td>";
+                        echo "<td></td>";
+                        echo "<td></td>";
+                        echo "<td></td>";
+                        echo "<td style='text-align: right;'>Por Coordinador: </td>";
+                        echo "<td>$ ".number_format(($valor_comision/$cantCoord),2,'.','')."</td>";
+                      echo "</tr>";
+                      }
+
+                     ?>
                     
                   </tbody>
               </table>

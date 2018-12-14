@@ -6,6 +6,7 @@
 
         $url_servicio = "index.php?view=servicio";
         $url_servicio_resumen = "index.php?view=servicio_resumen";
+        $url_liquidacion = "index.php?view=liquidacion";
         $url_inbox = "index.php?view=inbox";
         $url_usuariosABM = "index.php?view=usuarioABM";
         $url_plazaABM = "index.php?view=plazas";  
@@ -79,6 +80,7 @@
         $url_puntajes_general = "index.php?view=puntajes_general";
         $url_puntajes_supervisor = "index.php?view=puntajes_supervisor";
         $url_resumen_comisiones = "index.php?view=resumen_comisiones";
+        $url_objetivos = "index.php?view=objetivos&vista=1";
 
         $url_stock = "index.php?view=stock";
         $url_enviadas = "index.php?view=enviadas";
@@ -433,6 +435,11 @@
                   <a href=<?php echo $url_resumen_comisiones; ?>> 
                     <i class="fa fa-list"></i> <span>Resumen Comisiones</span> </i>
                   </a>
+                </li>  
+                <li class="treeview" id="mnu_objetivos">
+                  <a href=<?php echo $url_objetivos; ?>> 
+                    <i class="fa fa-check"></i> <span>Config. Objetivos</span> </i>
+                  </a>
                 </li>
               </ul>
             </li>
@@ -461,14 +468,19 @@
               <li class="treeview" id="mnu_servicio">
                 <a href="#"><i class="fa fa-truck"></i> <span>Servicios</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                  <li class="treeview" id="mnu_servicio">
+                  <li class="treeview" id="mnu_servicio_servs">
                     <a href=<?php echo $url_servicio; ?>>
                       <i class="fa fa-truck"></i> <span>Servicios</span> </i>
                     </a>
                   </li>
-                  <li class="treeview" id="mnu_servicio">
+                  <li class="treeview" id="mnu_resumen">
                     <a href=<?php echo $url_servicio_resumen; ?>>
                       <i class="fa fa-list"></i> <span>Resumen</span> </i>
+                    </a>
+                  </li>
+                  <li class="treeview" id="mnu_liquidacion">
+                    <a href=<?php echo $url_liquidacion; ?>>
+                      <i class="fa fa-dollar"></i> <span>Liquidación</span> </i>
                     </a>
                   </li>
                 </ul>

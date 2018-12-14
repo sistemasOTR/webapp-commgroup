@@ -189,6 +189,11 @@
 				$include = 'Modulos/Servicio/resumen.php';
 			break;
 
+		case 'liquidacion':	
+			if($permiso->getModuloServiciosBoolean())
+				$include = 'Modulos/Servicio/liquidacion.php';
+			break;
+
 		case 'detalle_servicio':	
 			if($permiso->getModuloServiciosBoolean())
 				$include = 'Modulos/Servicio/detalle.php';
@@ -777,6 +782,11 @@
 		case 'puntajes_general_xgestor':
 			if($permiso->getModuloPuntajesBoolean() && ($esGerencia || $esCoordinador || $esGestor || $esBO || $esContabilidad || $esRRHH))
 				$include = 'Modulos/Puntajes/view_general_xgestor.php';
+			break;
+
+		case 'objetivos':
+			if($permiso->getModuloPuntajesBoolean() && ($esGerencia || $esBO || $esContabilidad || $esRRHH))
+				$include = 'Modulos/Objetivos/index.php';
 			break;
 
 		  /*##############*/

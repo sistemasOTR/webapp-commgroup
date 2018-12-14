@@ -4,6 +4,7 @@
   include_once PATH_NEGOCIO."Funciones/Array/funcionesarray.class.php"; 
   include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php"; 
   include_once PATH_NEGOCIO."Sistema/handlerconsultas.class.php"; 
+  include_once PATH_NEGOCIO."Sistema/handlersistema.class.php"; 
   include_once PATH_DATOS.'Entidades/ticketsfechasinhabilitadas.class.php'; 
 
   $user = $usuarioActivoSesion;
@@ -38,9 +39,12 @@
   $total_servicios_enviadas = 0;
   $total_puntajes_enviadas = 0;
 
-  $objetivo=0;
+  // $objetivo=0;
 
+  $handlerO = new HandlerObjetivos;
+  $handlerSist =  new HandlerSistema;
 
+  
   $handler =  new HandlerConsultas;
   $consulta = $handler->consultaPuntajes($menos30,$fHOY, $user->getUserSistema());
 
@@ -49,7 +53,7 @@
     foreach ($consulta as $key => $value) { 
 
       $handlerP = new HandlerPuntaje;
-      $objetivo = $handlerP->buscarObjetivo($user->getUserSistema());                        
+      // $objetivo = $handlerP->buscarObjetivo($user->getUserSistema());                        
       $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
       $localidad = strtoupper($value->LOCALIDAD);
       $localidad = str_replace('(', '', $localidad);

@@ -1133,7 +1133,7 @@
 			} catch (Exception $e) {
 				throw new Exception($e->getMessage());	
 			}
-		}	
+		}
 
 		public function consultaResumenServicios($fdesde, $fhasta){
 			try {
@@ -1305,6 +1305,91 @@
 					//echo $query;
 					//exit;
 
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+
+		public function consultaServiciosLiquidacion($fdesde, $fhasta,$empresa,$estados){
+			try {
+
+				// Fechas
+				// ============================
+				$f = new Fechas;
+				if($fdesde==$fhasta)
+				{
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "SERTT41_FECEST='".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "SERTT41_FECEST=DATEADD(d,1,'".$tmp."') AND ";
+					}
+				}
+				else
+				{					
+					$filtro_fdesde="";
+					if(!empty($fdesde)){					
+						$tmp = $f->FormatearFechas($fdesde,"Y-m-d","Y-m-d");				
+						$filtro_fdesde = "SERTT41_FECEST>='".$tmp."' AND ";
+					}
+
+					$filtro_fhasta="";
+					if(!empty($fhasta)){					
+						$tmp = $f->FormatearFechas($fhasta,"Y-m-d","Y-m-d");				
+						$filtro_fhasta = "SERTT41_FECEST<=DATEADD(d,1,'".$tmp."') AND ";
+					}
+				}
+
+				// Empresa
+				// ============================
+				$filtro_empresa="";
+				if(!empty($empresa))								
+					$filtro_empresa = "SERTT91_CODEMPRE = ".$empresa." ";
+
+				// Estado a liquidar
+				// ============================
+				$filtro_estados = "";
+				if (!empty($estados)) {
+					$filtro_estados = "SERTT91_ESTADO IN (".$estados.") AND ";
+				}
+
+
+				$query = "SELECT *, 
+						CASE SERTT91_ESTADO
+						  WHEN 1 THEN 'Pendiente' 
+						  WHEN 2 THEN 'Despachado'  
+						  WHEN 3 THEN 'Cerrado Parcial' 
+						  WHEN 4 THEN 'Re Pactado' 
+						  WHEN 5 THEN 'Re Llamar' 
+						  WHEN 6 THEN 'Cerrado' 
+						  WHEN 7 THEN 'Negativo' 
+						  WHEN 8 THEN 'Cerrado en Problemas' 
+						  WHEN 9 THEN 'Enviado' 
+						  WHEN 10 THEN 'A Liquidar' 
+						  WHEN 11 THEN 'Negativo B.O.' 
+						  WHEN 12 THEN 'Cancelado' 
+						  WHEN 13 THEN 'Problemas B.O.'
+						  WHEN 14 THEN 'Liquidar C. Parcial' 
+						  WHEN 15 THEN 'No Efectivas'					  
+						END as ESTADOS_DESCCI
+						FROM SERVTT 
+						WHERE  				
+							".$filtro_fdesde." 
+							".$filtro_fhasta." 									
+							".$filtro_estados."									
+							".$filtro_empresa."
+						ORDER BY SERTT11_FECSER";
+					// var_dump($query);
+					// exit();
 				$result = SQLsistema::selectObject($query);
 						
 				return $result;

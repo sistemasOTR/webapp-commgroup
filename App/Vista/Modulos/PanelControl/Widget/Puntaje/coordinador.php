@@ -5,6 +5,12 @@
   include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php"; 
   include_once PATH_NEGOCIO."Sistema/handlerconsultas.class.php"; 
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php"; 
+  include_once PATH_NEGOCIO."Modulos/handlerobjetivos.class.php";
+  include_once PATH_NEGOCIO."Modulos/handlerlegajos.class.php";
+  include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";
+  include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php";
+  include_once PATH_DATOS.'Entidades/ticketsfechasinhabilitadas.class.php'; 
+
 
   $user = $usuarioActivoSesion;
   $view_detalle= "index.php?view=puntajes_coordinador_detalle";
@@ -19,6 +25,9 @@
   $f = new DateTime();
   $f->modify('first day of this month');
   $fMES = $f->format('Y-m-d'); 
+  $fInicioMes = $f->format('Y-m-d');
+  $f->modify('last day of this month');
+  $fFinMes = $f->format('Y-m-d');  
 
   setlocale(LC_TIME, 'spanish');  
   $nombreMES = strftime("%B",mktime(0, 0, 0, $f->format('m'), 1, 2000));      
@@ -39,29 +48,199 @@
   $total_puntajes_enviadas = 0;
 
   $objetivo=0;
+
+
+  // Definicion Handlers
+  // ============================
+  $handlerObj = new HandlerObjetivos;
   $handlerSist = new HandlerSistema;
-
-
-
+  $handlerLegajos = new HandlerLegajos;
+  $handlerFInhab = new TicketsFechasInhabilitadas;
   $handler =  new HandlerConsultas;
+  $handlerP = new HandlerPuntaje;
+  $handlerPlazas = new HandlerPlazaUsuarios;
+  $handlerUsuario = new HandlerUsuarios;
+  // ============================
+
+
   $consulta = $handler->consultaPuntajesCoordinador($fMES,$fHOY, $user->getAliasUserSistema());
 
+  $gestoresPlaza = $handlerSist->selectAllGestor($user->getAliasUserSistema());
+
+
+  // Determinar días laborales
+  // ============================
+  $laborales = 0;
+  while (strtotime($fInicioMes) <= strtotime($fFinMes)) {
+
+    $result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fInicioMes); 
+    // var_dump($result);
+
+    $estado_result = (!empty($result)?true:false);
+
+    if (date('N',strtotime($fInicioMes)) != 7 && !$estado_result) {
+      if (date('N',strtotime($fInicioMes)) != 6) {
+        $laborales += 1;
+      } else {
+        $laborales += 0.5;
+      }
+    }
+
+    $fInicioMes = date('Y-m-d',strtotime('+1 day',strtotime($fInicioMes)));
+  }
+  // ============================
+
+
+  // Gestores / Coordinadores
+  // ============================
+
+  $gestCoor = $handlerObj->allGestCoor();
+  foreach ($gestCoor as $key => $value) {
+    $gc[] = intval($value->getIdGestor());
+  }
+  // ============================
+
+
+  // Id PLAZA
+  // ============================
+
+  $allPlazas = $handlerPlazas->selectTodas();
+  if (!empty($allPlazas)) {
+    foreach ($allPlazas as $plaza) {
+      if ($plaza->getNombre() == $user->getAliasUserSistema()) {
+        $idPlaza = $plaza->getId();
+      }
+    }
+  }
+  // ============================
+
+  // Usuarios Gestores
+  // ============================
+  $allUsuarios = $handlerUsuario->selectAll();
+  $gestActivosPlaza = '';
+  foreach ($allUsuarios as $ind => $usuario) {
+    $tipoUsuario = $usuario->getTipoUsuario();
+    if (is_array($tipoUsuario)) {
+      $tipoUsuario = 0;
+    }else{
+      $tipoUsuario = $tipoUsuario->getId();
+    }
+
+    if ($tipoUsuario == 3 && $usuario->getUserPlaza() == $idPlaza) {
+      $gestActivosPlaza[] = array('idGestor' => $usuario->getUserSistema(),
+                                  'idUser' => $usuario->getId());
+    }
+  }
+  // ============================
+
+
+  // Objetivos de la plaza
+  // ============================
+  $objetivosXPlaza = $handlerObj->objetivosXPlaza($user->getAliasUserSistema());
+  if (!empty($objetivosXPlaza)) {
+    foreach ($objetivosXPlaza as $key => $value) {
+      if ($fHOY >= $value->getVigencia()->format('Y-m-d')) {
+          $objetivoBase = $value->getBasico();
+          $objetivoGC = $value->getBasicoGC();
+          break;
+        
+      }
+    }
+  }
+
+  // Gestores según fechas trabajadas
+  // ============================
+
+  $arrGests = '';
+  foreach ($gestoresPlaza as $idG => $gestorTT) {
+    foreach ($gestActivosPlaza as $idG2 => $gestPortal) {
+      if ($gestorTT->GESTOR11_CODIGO == $gestPortal['idGestor']) {
+        $legajo = $handlerLegajos->seleccionarLegajos($gestPortal['idUser']);
+        if (!is_null($legajo)) {
+          if ($legajo->getFechaBaja()->format('Y-m-d') != '1900-01-01' && $legajo->getFechaBaja()->format('Y-m-d') < $fMES) {
+            unset($gestoresPlaza[$idG]);
+          } elseif ($legajo->getFechaBaja()->format('Y-m-d') != '1900-01-01' && $legajo->getFechaBaja()->format('Y-m-d') > $fMES) {
+            $trabajo = 0;
+            if ($legajo->getFechaIngreso()->format('Y-m-d') > $fMES) {
+              $fInicioMes = $legajo->getFechaIngreso()->format('Y-m-d');
+            } else {
+              $fInicioMes= $fMES;
+            }
+            while (strtotime($fInicioMes) <= strtotime($legajo->getFechaBaja()->format('Y-m-d'))) {
+
+              $result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fInicioMes); 
+
+              $estado_result = (!empty($result)?true:false);
+
+              if (date('N',strtotime($fInicioMes)) != 7 && !$estado_result) {
+                if (date('N',strtotime($fInicioMes)) != 6) {
+                  $trabajo += 1;
+                } else {
+                  $trabajo += 0.5;
+                }
+              }
+
+              $fInicioMes = date('Y-m-d',strtotime('+1 day',strtotime($fInicioMes)));
+            }
+
+            $relativo = $trabajo/$laborales;
+            $arrGests[] = array('cod' => $gestorTT->GESTOR11_CODIGO,
+                              'nombre' => $gestorTT->GESTOR21_ALIAS,
+                              'rel' => $relativo );
+          } elseif ($legajo->getFechaIngreso()->format('Y-m-d') > $fMES){
+            $trabajo = 0;
+            $fInicioMes= $legajo->getFechaIngreso()->format('Y-m-d');
+            while (strtotime($fInicioMes) <= strtotime($fFinMes)) {
+
+              $result = $handlerFInhab->selecionarFechasInhabilitadasByFecha($fInicioMes); 
+              // var_dump($result);
+
+              $estado_result = (!empty($result)?true:false);
+
+              if (date('N',strtotime($fInicioMes)) != 7 && !$estado_result) {
+                if (date('N',strtotime($fInicioMes)) != 6) {
+                  $trabajo += 1;
+                } else {
+                  $trabajo += 0.5;
+                }
+              }
+
+              $fInicioMes = date('Y-m-d',strtotime('+1 day',strtotime($fInicioMes)));
+            }
+            
+            $relativo = $trabajo/$laborales;
+            $arrGests[] = array('cod' => $gestorTT->GESTOR11_CODIGO,
+                              'nombre' => $gestorTT->GESTOR21_ALIAS,
+                              'rel' => $relativo );
+          } else {
+            $arrGests[] = array('cod' => $gestorTT->GESTOR11_CODIGO,
+                              'nombre' => $gestorTT->GESTOR21_ALIAS,
+                              'rel' => 1 );
+          }
+        }
+
+
+      }
+    }
+  }
+
+  foreach ($arrGests as $indice => $valor) {
+    // echo $valor->GESTOR21_ALIAS;
+    if (!in_array($valor['cod'],$gc)) {
+      $objetivo += $objetivoBase * $valor['rel'];
+    } else {
+      $objetivo += $objetivoGC* $valor['rel'];
+    }
+    
+  }
+  
   if(!empty($consulta))
   {
     foreach ($consulta as $key => $value) { 
 
-      $handlerP = new HandlerPuntaje;
-      // $objetivo = $handlerP->buscarObjetivoCoordinador($value->NOM_COORDINADOR);
-      if ($objetivo==0) {
-        $gestoresPlaza = $handlerSist->selectAllGestor($value->NOM_COORDINADOR);
-        foreach ($gestoresPlaza as $indice => $valor) {
-
-          $objGestor = intval($handlerP->buscarObjetivo($valor->GESTOR11_CODIGO));
-          $objetivo += $objGestor;
-        };
-      }
       
-
+      // $objetivo = $handlerP->buscarObjetivoCoordinador($value->NOM_COORDINADOR);
+      
       $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
                     $localidad = strtoupper($value->LOCALIDAD);
                     $localidad = str_replace('(', '', $localidad);

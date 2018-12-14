@@ -5,7 +5,6 @@
   include_once PATH_NEGOCIO."Modulos/handlerpuntaje.class.php"; 
   include_once PATH_NEGOCIO."Sistema/handlerconsultas.class.php";
   include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
-  include_once PATH_DATOS.'Entidades/ticketsfechasinhabilitadas.class.php'; 
 
   $user = $usuarioActivoSesion;
 
@@ -44,7 +43,7 @@
   $total_servicios_enviadas = 0;
   $total_puntajes_enviadas = 0;
 
-  $objetivo=0;
+  // $objetivo=0;
 
 
   $handlerSist =  new HandlerSistema;
@@ -57,14 +56,14 @@
 
       $handlerP = new HandlerPuntaje;
       // $objetivo = $handlerP->buscarObjetivoCoordinador($value->NOM_COORDINADOR);
-      if ($objetivo==0) {
-        $gestoresPlaza = $handlerSist->selectAllGestor($value->NOM_COORDINADOR);
-        foreach ($gestoresPlaza as $indice => $valor) {
+      // if ($objetivo==0) {
+      //   $gestoresPlaza = $handlerSist->selectAllGestor($value->NOM_COORDINADOR);
+      //   foreach ($gestoresPlaza as $indice => $valor) {
 
-          $objGestor = intval($handlerP->buscarObjetivo($valor->GESTOR11_CODIGO));
-          $objetivo += $objGestor;
-        };
-      }
+      //     $objGestor = intval($handlerP->buscarObjetivo($valor->GESTOR11_CODIGO));
+      //     $objetivo += $objGestor;
+      //   };
+      // }
       
 
       $fechaPuntajeActual = $handlerP->buscarFechaPuntaje();
