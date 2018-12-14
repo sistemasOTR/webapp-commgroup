@@ -23,7 +23,7 @@
   <section class="content-header">
     <h1 style="text-align: center;">
       ESTADOS
-      <small>Agregar, modificar y eliminar los estados de Asistencia</small>
+      <small>Agregar, modificar y eliminar los Estados de Asistencia</small>
     </h1>
     <ol class="breadcrumb">
       <li><a href="#"><i class="fa fa-dashboard"></i> Inicio</a></li>
@@ -55,6 +55,7 @@
                       <th>NOMBRE</th>
                       <th>PERFIL</th>
                       <th>COLOR</th>
+                      <th>OBSERVACIONES</th>
                       <th colspan="2" style="text-align: center;">ACCIÓN</th>
 
                       <th style="width: 3%;" class='text-center'></th>
@@ -76,7 +77,8 @@
                           <td> <?php echo $value->getNombre();?> </td>
                           <td> <?php echo $perfil;?> </td>
                           <td> <?php echo "<span class='".$value->getColor()."'><b></b></span>";  ?> </td>
-                          <td width="150"> <a href="#" id='<?php echo $value->getId() ?>_edit'  data-id='<?php echo $value->getId() ?>' data-color='<?php echo $value->getColor() ?>' data-perfil='<?php echo $value->getUsuarioPerfil() ?>'data-productivo='<?php echo $value->getProductivo() ?>' data-nombre='<?php echo $value->getNombre() ?>' data-ejemplo='asdadasd'  data-accion='editar' class="btn btn-warning btn-xs" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId();?>)'>Editar</a></td>
+                          <td><?php echo substr(trim(strip_tags($value->getObservacion())),0,30)."...<i class='fa fa-search-plus pull-right' data-toggle='tooltip' title='' data-original-title='".trim(strip_tags($value->getObservacion()))."'></i></td>";?></td>
+                          <td width="150"> <a href="#" id='<?php echo $value->getId() ?>_edit'  data-id='<?php echo $value->getId() ?>' data-color='<?php echo $value->getColor() ?>' data-perfil='<?php echo $value->getUsuarioPerfil() ?>'data-productivo='<?php echo $value->getProductivo() ?>'data-observacion='<?php echo $value->getObservacion() ?>' data-nombre='<?php echo $value->getNombre() ?>' data-ejemplo='asdadasd'  data-accion='editar' class="btn btn-warning btn-xs" data-toggle='modal' data-target='#modal-nuevo' onclick='cargarDatos(<?php echo $value->getId();?>)'>Editar</a></td>
                           <td width="50"> <a href="#" class='btn btn-danger btn-xs' id='<?php echo $value->getId() ?>_elim' data-action="eliminar" onclick='eliminarDatos(<?php echo $value->getId() ?>)' data-id='<?php echo $value->getId() ?>' data-toggle='modal' data-target='#modal-eliminar'>Eliminar</a></td>
                         </tr>
                         <?php 
@@ -108,6 +110,10 @@
                    <input type="number" name="estado" id="estado" style="display:none;">
                   <input type="" name="accion" id="accion" style="display:none;">
                   <input type="" name="tipo_id" id="tipo_id" style="display:none;">
+                </div> 
+                <div class="col-md-12">
+                  <label>OBSERVACIÓN</label>
+                  <input type="text" name="observacion2" id="input_observacion" required="" class="form-control" >
                 </div> 
                 <div class="col-md-4">
                   <label>PERFIL</label>
@@ -191,6 +197,7 @@
 
     
     nombre = document.getElementById(id+"_edit").getAttribute('data-nombre');
+    observacion = document.getElementById(id+"_edit").getAttribute('data-observacion');
     tipo_id = document.getElementById(id+"_edit").getAttribute('data-id');
     accion= document.getElementById(id+"_edit").getAttribute('data-accion');
     perfil= document.getElementById(id+"_edit").getAttribute('data-perfil');
@@ -200,6 +207,7 @@
    
    
     document.getElementById("input_nombre").value = nombre;
+    document.getElementById("input_observacion").value = observacion;
     document.getElementById("tipo_id").value = tipo_id;
     document.getElementById("accion").value = accion;
     document.getElementById("perfil").value = perfil;
@@ -213,6 +221,7 @@
    
     document.getElementById("accion").value = estado;
      document.getElementById("input_nombre").value = '';
+     document.getElementById("input_observacion").value = '';
      document.getElementById("perfil").value = '';
      document.getElementById("color").value = '';
      document.getElementById("productividad").value = '';

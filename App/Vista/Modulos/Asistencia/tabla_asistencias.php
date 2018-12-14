@@ -266,10 +266,16 @@
                                       if($valuue->getAprobado()) {
 
                                            if ($FECHA <= $valuue->getFechaFin()->format('Y-m-d') ) { 
+
                                              $lic+=1;
                                             
                                              $tipolic=$handlerLic->selecionarTiposById($valuue->getTipoLicenciasId()->getId());
-                                             echo "<td><span class='label label-warning'>".trim($tipolic[0]->getAbreviatura())."</span><a href='index.php?view=licencias_controlcoord&fdesde=".$FECHA."&fhasta=".$FECHA."&fusuario=".$arrEmpleados->getId()."&festados=2'> <i data-toggle='tooltip' title data-original-title='".$tipolic[0]->getNombre()."' class='fa fa-plus-square-o'></i></a></td>";
+                                             echo "<td><span class='label label-warning'>".trim($tipolic[0]->getAbreviatura())."</span><a href='index.php?view=licencias_control&fdesde=".$FECHA."&fhasta=".$FECHA."&fusuario=".$arrEmpleados->getId()."&festados=2'> <i data-toggle='tooltip' title data-original-title='".$tipolic[0]->getNombre()."' class='fa fa-plus-square-o'></i></a></td>";
+
+                                             if (!$feriado || $diadelasemana!=7) {
+                                              $a+=1;
+
+                                             }
                                             
 
                                             }
@@ -454,8 +460,11 @@
                                             $lic+=1;
                                             $tipolic=$handlerLic->selecionarTiposById($valuue->getTipoLicenciasId()->getId());
 
-                                             echo "<td><span class='label label-warning'>".trim($tipolic[0]->getAbreviatura())."</span><a href='index.php?view=licencias_controlcoord&fdesde=".$FECHA."&fhasta=".$FECHA."&fusuario=".$value->getId()."&festados=2'> <i data-toggle='tooltip' title data-original-title='".$tipolic[0]->getNombre()."' class='fa fa-plus-square-o'></i></a></td>";
-                                            
+                                             echo "<td><span class='label label-warning'>".trim($tipolic[0]->getAbreviatura())."</span><a href='index.php?view=licencias_control&fdesde=".$FECHA."&fhasta=".$FECHA."&fusuario=".$value->getId()."&festados=2'> <i data-toggle='tooltip' title data-original-title='".$tipolic[0]->getNombre()."' class='fa fa-plus-square-o'></i></a></td>";
+                                             if (!$feriado || $diadelasemana!=7) {
+                                              $a+=1;
+
+                                             }
 
                                             }
                                        }
@@ -463,7 +472,7 @@
                                 }
                          }elseif ($feriado || $diadelasemana==7) {
                           echo "<td style='background-color:rgb(232, 234, 246); text-align:center;'><i>-</i></td>";
-                        }else{
+                        }elseif( !$feriado && $diadelasemana!=7 && empty($asistencias)){
                           $a+=1; 
                            $servicios=$handlerSistema->selectCountServicios($FECHA,$FECHA,null,null,$value->getUserSistema(),null,null,null);
                         //    var_dump();

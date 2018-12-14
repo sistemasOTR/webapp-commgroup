@@ -216,7 +216,7 @@
                               
                                $total_horas=$horass[0];
                                $minutos=$horass[1]/60;
-                            
+                                                                       
                                $total=$total_horas+round($minutos,2);              
                                #-------------------------------------------------------------------
                                $act[intval($id_actAnt)] = $act[intval($id_actAnt)]+$total;  
@@ -233,8 +233,18 @@
 
                                  if (($vv->getUsuarioPerfil()==0) || ($vv->getUsuarioPerfil()==$Idusuario->getUsuarioPerfil()->getId())) {
                                   if (!empty($act[$vv->getId()])) {
+                                    $parts = explode('.', (float) $act[$vv->getId()]); 
+                                    $parts1=$parts[0];
+                                    if (isset($parts[1])) {
+                                       $parts2=("0.".$parts[1])*60;
+                                    }else{
+                                      $parts2=0;
+                                    }
+                                   
+                              
+                                    $totalparcial=$parts1.":".round($parts2);
                                                                    
-                                    $lista1.= "<tr><td>".$vv->getNombre()." : ".$act[$vv->getId()]." Hs</td></tr>";
+                                    $lista1.= "<tr><td>".$vv->getNombre()." : ".$totalparcial." Hs</td></tr>";
                                       
                                          }
                                     if ($vv->getProductivo()==1) {
@@ -273,10 +283,29 @@
 
                       echo $lista1;
                       if (!empty($listaProd1)) {
-                      echo "<tr><td class='bg-green'> HRS PRODUCTIVAS : ".$listaProd1." Hs</td></tr>";
+                       $partlist = explode('.', (float) $listaProd1); 
+                                    $Prod1=$partlist[0];
+                                    if (isset($partlist[1])) {
+                                       $Prod2=("0.".$partlist[1])*60;
+                                    }else{
+                                      $Prod2=0;
+                                    }
+                            
+                                    $totalProd=$Prod1.":".round($Prod2); 
+
+                      echo "<tr><td class='bg-green'> HRS PRODUCTIVAS : ".$totalProd." Hs</td></tr>";
                       }
                       if (!empty($listaImprod1)) {
-                      echo "<tr><td class='bg-red'> HRS IMPRODUCTIVAS : ".$listaImprod1." Hs</td></tr>";
+                        $Implist = explode('.', (float) $listaImprod1); 
+                                    $ImprodProd1=$Implist[0];
+                                    if (isset($Implist[1])) {
+                                       $ImprodProd2=("0.".$Implist[1])*60;
+                                    }else{
+                                      $ImprodProd2=0;
+                                    }
+                            
+                                    $totalImprod=$ImprodProd1.":".round($ImprodProd2); 
+                      echo "<tr><td class='bg-red'> HRS IMPRODUCTIVAS : ".$totalImprod." Hs</td></tr>";
                       }
                      
                      

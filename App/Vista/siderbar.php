@@ -205,12 +205,12 @@
 
             <?php
               if($permiso->getModuloLicenciasBoolean()){ 
-                if($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104 || $esGestor || $esCoordinador || $esBO || $usuarioActivoSesion->getId()==20174 || $usuarioActivoSesion->getId()==10082){   
+                if($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104 || $esGestor || $esCoordinador || $esBO || $usuarioActivoSesion->getId()==20174 || $usuarioActivoSesion->getId()==10082 || $usuarioActivoSesion->getId()==10007){   
             ?>
               <li class="treeview" id="mnu_asistencias">
                 <a href="#"><i class="fa fa-user"></i> <span>Asistencias</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                <?php  if($esCoordinador && ($usuarioActivoSesion->getId()!=10045 || $usuarioActivoSesion->getId()!=20174 || $usuarioActivoSesion->getId()!=10082 )){ //10045   ?>
+                <?php  if($esCoordinador && ($usuarioActivoSesion->getId()!=10045 && $usuarioActivoSesion->getId()!=20174 && $usuarioActivoSesion->getId()!=10082 && $usuarioActivoSesion->getId()!=10007  )){ //10045   ?>
                     <li id="mnu_asistencias_presentismo">
                       <a href=<?php echo $url_asistencias; ?>>
                         <i class="fa fa-check-square-o"></i> <span>Presentismo Coord</span>
@@ -236,7 +236,7 @@
                     </li>  
                 </ul>
               </li>
-                <?php } elseif($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104 || $usuarioActivoSesion->getId()==20174 || $usuarioActivoSesion->getId()==10082 ||$esBO){?> 
+                <?php } elseif($usuarioActivoSesion->getId()==10045 || $usuarioActivoSesion->getId()==3|| $usuarioActivoSesion->getId()==20168 ||$usuarioActivoSesion->getId()==10104 || $usuarioActivoSesion->getId()==20174 || $usuarioActivoSesion->getId()==10082 ||$esBO || $usuarioActivoSesion->getId()==10007){?> 
                    <li id="mnu_asistencias_gerenciaBO">
                       <a href=<?php echo $url_asistencias_gerenciaBO; ?>>
                         <i class="fa fa-check-square-o"></i> <span>Presentismo Global</span>
