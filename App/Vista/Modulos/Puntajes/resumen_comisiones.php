@@ -97,13 +97,19 @@
   foreach ($gestPlaza as $ind2 => $gPlaza) {
     foreach ($allUsuarios as $ind => $usuario) {
       $tipoUsuario = $usuario->getTipoUsuario();
+      $perfilUsuario = $usuario->getUsuarioPerfil();
       if (is_array($tipoUsuario)) {
         $tipoUsuario = 0;
       }else{
         $tipoUsuario = $tipoUsuario->getId();
       }
+      if (is_array($perfilUsuario)) {
+        $perfilUsuario = 0;
+      }else{
+        $perfilUsuario = $perfilUsuario->getId();
+      }
 
-      if ($tipoUsuario == 3 && $usuario->getUserSistema() == intval($gPlaza)) {
+      if ($tipoUsuario == 3 && $usuario->getUserSistema() == intval($gPlaza) && $perfilUsuario = 5 ) {
         $gestActivosPlaza[] = array('idGestor' => $usuario->getUserSistema(),
                                     'nomGestor' => $nomGestores[$gPlaza],
                                     'idUser' => $usuario->getId());
