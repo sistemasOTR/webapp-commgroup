@@ -301,7 +301,7 @@
                                              $totalCantiP=$cantiP1.":".round($cantiP2);
                                         
                                                                      
-                                           $lista2.= "<tr><td><a href='index.php?view=asistencias_historial&userPerfil=gerenciaBO&fdesde=".$fdesde."&fhasta=".$fhasta."&iduser=".$arrEmp->getId()."&plaza=".$arrEmp->getUserPlaza()."'>".$v->getNombre()."</a> : ".$totalcomp." Hs<span class='label label-default pull-right'>PROM ".$totalCantiP."</span></td></tr>";
+                                           $lista2.= "<tr><td><a href='index.php?view=asistencias_historial&userPerfil=gerenciaBO&fdesde=".$fdesde."&fhasta=".$fhasta."&iduser=".$arrEmp->getId()."&plaza=".$arrEmp->getUserPlaza()."&estados=".$v->getId()."'>".$v->getNombre()."</a> : ".$totalcomp." Hs<span class='label label-default pull-right'>PROM ".$totalCantiP."</span></td></tr>";
                                              }
                                          }
 
@@ -354,7 +354,7 @@
                            if ($deLic==1) {
                           echo "<tr><td class='bg-yellow'> LICENCIA : ".$deLic." Dia <a class='fa fa-search pull-right' href='#'></a></td></tr>";
                              }else{
-                              echo "<tr><td class='bg-yellow'> LICENCIAS : ".$deLic." Dias <a class='fa fa-search pull-right' href='index.php?view=licencias_controlcoord&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$arrEmp->getId()."&festados=2'></a></td></tr>";
+                              echo "<tr><td class='bg-yellow'> LICENCIAS : ".$deLic." Dias <a class='fa fa-search pull-right' href='index.php?view=licencias_control&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$arrEmp->getId()."&festados=2'></a></td></tr>";
                              }  
                            }
                      if ($estados==99999) {   

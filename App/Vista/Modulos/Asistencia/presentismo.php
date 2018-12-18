@@ -135,7 +135,7 @@
                     <tr>                                       
                       <th><?php echo $sinSalida1; ?>
                         <b><?php echo $user->getApellido()." ".$user->getNombre() ;?></b>
-                          <a href="index.php?view=asistencias_historial&userPerfil=gerenciaBO&iduser=<?php echo $user->getId();?>&plaza=9999" class="btn btn-primary btn-xs pull-right"> Ver Historial</a> <a href="index.php?view=estadisticas_asis_coord&fplaza=<?php echo $user->getUserPlaza(); ?>"  class="fa fa-bar-chart "></a>
+                          <a href="index.php?view=asistencias_historial&userPerfil=gerenciaBO&iduser=<?php echo $user->getId();?>&plaza=9999&estados=66666" class="btn btn-primary btn-xs pull-right"> Ver Historial</a> <a href="index.php?view=estadisticas_asis_coord&fplaza=<?php echo $user->getUserPlaza(); ?>"  class="fa fa-bar-chart "></a>
                           <?php
                         if($user->getId()==10045 ||$user->getId()==3){ ?>
                         <i class="pull-right"><a href="#" id='<?php echo $user->getId() ?>'data-ide='<?php echo $user->getId() ?>' data-fecha='<?php echo $fdesde;?>'data-usuario='<?php echo $user->getUsuarioPerfil()->getId(); ?>' data-hora='<?php echo date('H:i'); ?>' data-estados='<?php echo $accion; ?>'class="btn btn-default btn-xs" data-toggle='modal' data-target='#modal-presentismo' onclick='cargarDatos(<?php echo $user->getId()?>)'>Nuevo Horario</a></i>
@@ -350,7 +350,7 @@
                         <tr>                                       
                           <th><?php echo $sinSalida; ?>
                             <b><?php echo $value->getApellido()." ".$value->getNombre() ;?></b>
-                            <a href="index.php?view=asistencias_historial&userPerfil=gerenciaBO&iduser=<?php echo $value->getId(); ?>&plaza=<?php echo $id; ?>" class="btn btn-primary btn-xs pull-right">Ver Historial</a> <a href="index.php?view=estadisticas_asistencia_gestor&id_gestor=<?php echo $value->getId(); ?>" style="text-align: center;" class="fa fa-bar-chart "></a>
+                            <a href="index.php?view=asistencias_historial&userPerfil=gerenciaBO&iduser=<?php echo $value->getId(); ?>&plaza=<?php echo $id; ?>&estados=66666" class="btn btn-primary btn-xs pull-right">Ver Historial</a> <a href="index.php?view=estadisticas_asistencia_gestor&id_gestor=<?php echo $value->getId(); ?>" style="text-align: center;" class="fa fa-bar-chart "></a>
                             <?php if($user->getId()==10045 ||$user->getId()==3 ||$user->getId()==2){ ?>     
                             <i class="pull-right"><a href="#" id='<?php echo $value->getId() ?>'data-ide='<?php echo $value->getId() ?>' data-fecha='<?php echo $fdesde;?>' data-usuario='5' data-hora='<?php echo date('H:i'); ?>' class="btn btn-default btn-xs" data-toggle='modal' data-target='#modal-presentismo' onclick='cargarDatos(<?php echo $value->getId() ?>)'>Nuevo Horario</a></i>
                           <?php } ?> 

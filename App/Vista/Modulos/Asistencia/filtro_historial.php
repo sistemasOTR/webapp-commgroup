@@ -13,7 +13,7 @@
   $fhasta = (isset($_GET["fhasta"])?$_GET["fhasta"]:$dFecha->FechaActual());
   $idUser = (isset($_GET["iduser"])?$_GET["iduser"]:'');
   $id = (isset($_GET["plaza"])?$_GET["plaza"]:0);
-
+  $estados = (isset($_GET["estados"])?$_GET["estados"]:"");
   $url_action_agregar = PATH_VISTA.'Modulos/Asistencia/action_add_hours.php?fdesde='.$fdesde.'&fhasta='.$fhasta.'&iduser='.$idUser;
   $url_action_editable = PATH_VISTA.'Modulos/Asistencia/action_edit_hours.php?perfil=historial&fdesde='.$fdesde.'&fhasta='.$fhasta.'&iduser='.$idUser;
   $url_ajax =PATH_VISTA.'Modulos/Asistencia/select_usuario.php';
@@ -29,7 +29,7 @@
   $arrEstados = $handlerAsistencia->selectEstados();
   $handlerplazas=new HandlerPlazaUsuarios();
   $plazasOtr=$handlerplazas->selectTodas();
-
+  $arrEstados = $handlerAsistencia->selectEstados();
    
 
   $arrEmpleados = $handlerUsuarios->selectEmpleados();
@@ -98,6 +98,18 @@
                   } } ?> 
                   
                   </select>
+                </div>
+              <div class="col-md-2">
+                 <label>ESTADOS</label> 
+                <select id="slt_estados" class="form-control" style="width: 100%" name="slt_estados" >                
+                <option value="66666">Todos</option>
+                <?php foreach ($arrEstados as $key => $valEst) {
+                  if($valEst->getId()==$estados){?> 
+                <option value="<?php echo $valEst->getId();?>" selected><?php echo $valEst->getNombre(); ?></option>
+                <?php }else{ ?>
+                   <option value="<?php echo $valEst->getId();?>" ><?php echo $valEst->getNombre(); ?></option>
+                <?php } }?>              
+                </select>
                 </div> 
                   <div class='col-md-2 '>                
                   <label></label>                
@@ -232,7 +244,7 @@
                                 foreach ($arrEstados as $key => $vv) {
 
                                  if (($vv->getUsuarioPerfil()==0) || ($vv->getUsuarioPerfil()==$Idusuario->getUsuarioPerfil()->getId())) {
-                                  if (!empty($act[$vv->getId()])) {
+                                  if (!empty($act[$vv->getId()]) && ($estados==66666 || $estados==$vv->getId())) {
                                     $parts = explode('.', (float) $act[$vv->getId()]); 
                                     $parts1=$parts[0];
                                     if (isset($parts[1])) {
@@ -244,7 +256,7 @@
                               
                                     $totalparcial=$parts1.":".round($parts2);
                                                                    
-                                    $lista1.= "<tr><td>".$vv->getNombre()." : ".$totalparcial." Hs</td></tr>";
+                                    $lista1.= "<tr><td><b>".$vv->getNombre()." : ".$totalparcial." Hs</b></td></tr>";
                                       
                                          }
                                     if ($vv->getProductivo()==1) {
@@ -270,19 +282,43 @@
                          $estadoId=$val->getIngreso();
                          if (!empty($estadoId)) {        
                         $select=$handlerAsistencia->selectEstadosById($estadoId);
-                        if (!empty($select)) {
+                        if (!empty($select) && $estados==66666) {
                           $ingreso=$val->getFecha()->format('H:i');
                           $est=$val->getIngreso();
+
                         ?> 
                          <tr><td>
                                <?php if($user->getId()==10045 ||$user->getId()==3 ||$user->getId()==1){ ?>
                           <a href='#'  id='<?php echo $val->getId();?>' data-ingreso='<?php echo $est;?>' data-edithora='<?php echo $ingreso; ?>' data-editfecha='<?php echo $val->getFecha()->format('Y-m-d'); ?>' data-idi='<?php echo $val->getId();?>' data-user='<?php echo $Idusuario->getUsuarioPerfil()->getId(); ?>' data-toggle='modal' data-target='#modal-editar' class='fa fa-refresh text-yellow btn-modal' onclick='cargarDatos(<?php echo $val->getId();?>)'></a>
                         <?php } ?>
                           <?php echo " ".$val->getFecha()->format('H:i')."<span class='".$select[0]->getColor()." pull-right'><b>".$select[0]->getNombre()."</b></span>"  ?></td></tr> 
-                      <?php } } }  
+                        
+                      <?php }
+                      if (!empty($select) && $estados==$estadoId) {
+                          $ingreso=$val->getFecha()->format('H:i');
+                          
+                          $est=$val->getIngreso();
+                          if (isset($asistencias[($key+1)])) {
+                            $ingreso2=$asistencias[($key+1)]->getFecha()->format('H:i');
+                          }else{
+                            $ingreso2="...";
+                          }
 
+                        ?> 
+                         <tr><td>
+                          <?php echo " ".$val->getFecha()->format('H:i')." a ".$ingreso2."<span class='".$select[0]->getColor()." pull-right'><b>".$select[0]->getNombre()."</b></span>"  ?></td></tr> 
+                        
+                      <?php }
+                     
+
+                       } }  
+                    
                       echo $lista1;
-                      if (!empty($listaProd1)) {
+                       if (empty($lista1)) { 
+                        echo "<tr><td> No Hay Resultados</td></tr>"; 
+                          
+                           }
+                      if (!empty($listaProd1) && $estados==66666) {
                        $partlist = explode('.', (float) $listaProd1); 
                                     $Prod1=$partlist[0];
                                     if (isset($partlist[1])) {
@@ -295,7 +331,7 @@
 
                       echo "<tr><td class='bg-green'> HRS PRODUCTIVAS : ".$totalProd." Hs</td></tr>";
                       }
-                      if (!empty($listaImprod1)) {
+                      if (!empty($listaImprod1) && $estados==66666) {
                         $Implist = explode('.', (float) $listaImprod1); 
                                     $ImprodProd1=$Implist[0];
                                     if (isset($Implist[1])) {
@@ -473,7 +509,12 @@ function cargarDatos(id){
      });
    });
 
-
+$(document).ready(function() {
+    $("#slt_empleados").select2();
+  });
+$(document).ready(function() {
+    $("#slt_estados").select2();
+  });
 
 
   $('#sandbox-container .input-daterange').datepicker({
@@ -496,10 +537,11 @@ crearHref();
       f_inicio = aStart[2] +"-"+ aStart[1] +"-"+ aStart[0];                        
       f_fin = aFin[2] +"-"+ aFin[1] +"-"+ aFin[0];   
       f_empleados= $("#slt_empleados").val();
+      f_estado=$("#slt_estados").val();
       <?php if ($id==9999) {?>  
-      url_filtro_reporte="index.php?view=asistencias_historial&plaza=9999&fdesde="+f_inicio+"&fhasta="+f_fin+"&iduser="+f_empleados;
+      url_filtro_reporte="index.php?view=asistencias_historial&plaza=9999&fdesde="+f_inicio+"&fhasta="+f_fin+"&iduser="+f_empleados+"&estados="+f_estado;
       <?php }else {?>                   
-      url_filtro_reporte="index.php?view=asistencias_historial&plaza=<?php echo $id; ?>&fdesde="+f_inicio+"&fhasta="+f_fin+"&iduser="+f_empleados;  
+      url_filtro_reporte="index.php?view=asistencias_historial&plaza=<?php echo $id; ?>&fdesde="+f_inicio+"&fhasta="+f_fin+"&iduser="+f_empleados+"&estados="+f_estado;  
       <?php } ?>
       $("#filtro_reporte").attr("href", url_filtro_reporte);
   } 

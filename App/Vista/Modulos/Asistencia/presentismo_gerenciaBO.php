@@ -167,7 +167,7 @@
                         <tr>                                       
                           <th><?php echo $sinSalida; ?>
                             <b><?php echo $value->getApellido()." ".$value->getNombre() ;?></b> <a href="index.php?view=estadisticas_asistencia_gestor&id_gestor=<?php echo $value->getId(); ?>" class="fa fa-bar-chart "></a>
-                            <a href="index.php?view=asistencias_historial&userPerfil=gerenciaBO&iduser=<?php echo $value->getId(); ?>&plaza=<?php echo $value->getUserPlaza(); ?>" style="" class="btn btn-primary pull-right btn-xs">Ver Historial</a>
+                            <a href="index.php?view=asistencias_historial&userPerfil=gerenciaBO&iduser=<?php echo $value->getId(); ?>&plaza=<?php echo $value->getUserPlaza(); ?>&estados=66666" style="" class="btn btn-primary pull-right btn-xs">Ver Historial</a>
                             <?php if($user->getId()==10045 ||$user->getId()==3 ||$user->getId()==1){  
                               $seguir=true;
                              $arrLicencias = $handlerLic->seleccionarByFiltrosRRHH($dFechas->FechaActual(),$dFechas->FechaActual(),intval($value->getId()),2);
