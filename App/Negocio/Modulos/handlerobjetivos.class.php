@@ -128,11 +128,12 @@
 		// Nuevo Objetivo por plaza
 		// ============================
 
-		public function nuevoGestCoor($id_gestor){
+		public function nuevoGestCoor($id_gestor,$fechaInicio){
 			try {
 
 				$handler = new ObjetivosGC;
 				$handler->setIdGestor(intval($id_gestor));
+				$handler->setFechaInicio($fechaInicio);
 
 				$handler->insert(null);
 

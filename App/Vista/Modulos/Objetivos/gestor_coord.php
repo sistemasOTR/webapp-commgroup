@@ -22,7 +22,8 @@
 			<table class="table table-striped table-condensed" id="tabla-plazas">
 				<thead>
 					<tr>
-						<th>GESTOR</th>
+            <th>GESTOR</th>
+						<th>FECHA</th>
 						<th style='text-align: right;'>ACCIONES</th>
 					</tr>
 				</thead>
@@ -41,7 +42,8 @@
 
 
 							echo "<tr>";
-								echo "<td>".$gestor[0]->GESTOR21_ALIAS."</td>";
+                echo "<td>".$gestor[0]->GESTOR21_ALIAS."</td>";
+								echo "<td>".$value->getFechaInicio()->format('d-m-Y')."</td>";
 								echo "<td style='text-align: right;'>".$eliminar."</td>";
 							echo "</tr>";
 						}
@@ -80,11 +82,11 @@
                   		}
                   	 ?>
                   </select>
-                </div><!-- 
+                </div> 
                 <div class="col-md-6">
                   <label>Vigencia</label>
-                  <input type="date" name="vigencia" id="vigencia_nuevo" class="form-control" value="<?php echo date('Y-m-d') ?>">
-                </div> -->
+                  <input type="date" name="fechaInicio" id="fechaInicio" class="form-control" value="<?php echo date('Y-m-d') ?>">
+                </div>
             </div>
         </div>
         <div class="modal-footer">

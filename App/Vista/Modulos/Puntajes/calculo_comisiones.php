@@ -17,7 +17,7 @@
     if(!empty($consulta))
     {
         foreach ($consulta as $key => $value) {
-            if ($value->NOM_COORDINADOR == $fplaza) {
+            
                 $fechaPuntajeActual = $handlerPuntaje->buscarFechaPuntaje();
             
                 if ($fechaPuntajeActual->format('Y-m-d') <= $value->FECHA->format('Y-m-d')) {
@@ -71,7 +71,7 @@
                 $total_servicios = $total_servicios + $value->TOTAL_SERVICIOS;
                 $total_servicios_cerrados = $total_servicios_cerrados + $value->CERRADO;
                 $total_servicios_enviadas = $total_servicios_enviadas + $value->ENVIADO;
-            }
+            
         }
     }
 ?>

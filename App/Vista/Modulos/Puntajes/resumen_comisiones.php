@@ -74,8 +74,11 @@
   // Gestores / Coordinadores
   // ============================
   $gestCoor = $handlerObj->allGestCoor();
-  foreach ($gestCoor as $key => $value) {
-    $gc[] = intval($value->getIdGestor());
+  if (!empty($gestCoor)) {
+    foreach ($gestCoor as $key => $value) {
+      $gc[] = intval($value->getIdGestor());
+      $fechaInicioGC[intval($value->getIdGestor())] = $value->getFechaInicio();
+    }
   }
 
 
@@ -351,7 +354,7 @@
                       }
                     ?>
 
-                    <?php 
+                    <!-- <?php 
                       if (!is_null($fplaza)) {
                       if ($total_coord_puntajes_enviadas>floatval($objetivoCoord)) {
                         $puntaje_comision = $total_coord_puntajes_enviadas - floatval($objetivoCoord);
@@ -383,7 +386,7 @@
                       echo "</tr>";
                       }
 
-                     ?>
+                     ?> -->
                     
                   </tbody>
               </table>

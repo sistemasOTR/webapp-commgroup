@@ -22,6 +22,10 @@
 		public function getIdGestor(){ return $this->_idGestor; }
 		public function setIdGestor($idGestor){ $this->_idGestor=$idGestor; }
 
+		private $_fechaInicio;
+		public function getFechaInicio(){ return $this->_fechaInicio; }
+		public function setFechaInicio($fechaInicio){ $this->_fechaInicio=$fechaInicio; }
+
 		private $_estado;
 		public function getEstado(){ return var_export($this->_estado,true); }
 		public function setEstado($estado){ $this->_estado=$estado; }	
@@ -33,6 +37,7 @@
 		function __construct(){
 			$this->setId(0);
 			$this->setIdGestor(0);
+			$this->setFechaInicio('');
 			$this->setEstado(true);			
 		}
 
@@ -51,9 +56,11 @@
 				# Query 			
 				$query="INSERT INTO objetivos_gc (
 		        						id_gestor,
+		        						fecha_inicio,
 		        						estado
 	        			) VALUES (
 	        							".$this->getIdGestor().",
+	        							'".$this->getFechaInicio()."',
 	        							'".$this->getEstado()."'
 	        			)"; 
 				
@@ -82,6 +89,7 @@
 				# Query 			
 				$query="UPDATE objetivos_gc SET
 								id_gestor=".$this->getIdGestor().",
+								fecha_inicio='".$this->getFechaInicio()."',
 								estado='".$this->getEstado()."'
 							WHERE id=".$this->getId();
 
@@ -150,6 +158,7 @@
 			else{
 				$this->setId($filas['id']);
 				$this->setIdGestor(trim($filas['id_gestor']));
+				$this->setFechaInicio($filas['fecha_inicio']);
 				$this->setEstado($filas['estado']);
 			}
 		}
@@ -158,6 +167,7 @@
 		{
 			$this->setId(0);
 			$this->setIdGestor(0);
+			$this->setFechaInicio('');
 			$this->setEstado(true);
 		}
 
@@ -182,6 +192,7 @@
 		// CREATE TABLE [dbo].[objetivos_gc](
 		// 	[id] [int] IDENTITY(1,1) NOT NULL,
 		// 	[id_gestor] [int] NOT NULL,
+		// 	[fecha_inicio] [date] NOT NULL,
 		// 	[estado] [bit] NOT NULL,
 		//  CONSTRAINT [PK_objetivos_gc] PRIMARY KEY CLUSTERED 
 		// (

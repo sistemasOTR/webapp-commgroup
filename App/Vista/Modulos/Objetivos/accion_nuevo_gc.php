@@ -6,6 +6,7 @@
 	$handlerObj = new HandlerObjetivos;
 
 	$id_gestor=(isset($_POST["slt_gestor"])?$_POST["slt_gestor"]:'');
+	$fechaInicio=(isset($_POST["fechaInicio"])?$_POST["fechaInicio"]:'');
 
 
 	$err = "../../../../index.php?view=objetivos&vista=2&err=";     		
@@ -16,7 +17,7 @@
 
 	try {
 
-		$handlerObj->nuevoGestCoor($id_gestor);
+		$handlerObj->nuevoGestCoor($id_gestor,$fechaInicio);
 
 		$msj="Se ha agregado un nuevo gestor con doble función";
 		header("Location: ".$info.$msj);
