@@ -354,7 +354,7 @@
                          }  
                          if (!empty($deLic)) {
                            if ($deLic==1) {
-                          echo "<tr><td class='bg-yellow'> LICENCIA : ".$deLic." Dia <a class='fa fa-search pull-right' href='#'></a></td></tr>";
+                          echo "<tr><td class='bg-yellow'> LICENCIA : ".$deLic." Dia <a class='fa fa-search pull-right' href='index.php?view=licencias_control&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$arrEmp->getId()."&festados=2'></a></td></tr>";
                              }else{
                               echo "<tr><td class='bg-yellow'> LICENCIAS : ".$deLic." Dias <a class='fa fa-search pull-right' href='index.php?view=licencias_control&fdesde=".$fdesde."&fhasta=".$fhasta."&fusuario=".$arrEmp->getId()."&festados=2'></a></td></tr>";
                              }  
