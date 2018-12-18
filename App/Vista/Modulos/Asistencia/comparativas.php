@@ -316,7 +316,12 @@
                                   }
                                 // }
                              
-                             if ($lista2) { ?>
+                             if ($lista2) { 
+                                 if ($contador==1) {
+                              echo "<div class='row'>";
+                              $flag=false;
+                           } 
+                              ?>
                                
                     
                          
@@ -339,10 +344,7 @@
 
                           <?php
 
-                          if ($contador==1) {
-                              echo "<div class='row'>";
-                              $flag=false;
-                           } 
+                       
 
 
                           
