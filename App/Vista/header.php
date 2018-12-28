@@ -2,11 +2,10 @@
   include_once PATH_NEGOCIO."Funciones/String/string.class.php";
   include_once PATH_NEGOCIO.'Notificaciones/handlernotificaciones.class.php';
     include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";
-
+  $url_activar_header=PATH_VISTA.'Modulos/UsuariosAdmin/action_activar_tipo_usuario_header.php?';
 
   $url_perfil= "index.php?view=perfil_usuario";
   $url_logout= PATH_VISTA."Login/action_logout.php";
-  $url_activar_header=PATH_VISTA.'Modulos/UsuariosAdmin/action_activar_tipo_usuario_header.php?';
 
   $handler = new HandlerNotificaciones;
   $handlerSist = new HandlerSistema;
@@ -27,11 +26,12 @@
   $i_contador_empresa=0;
 ?>
       <style>
-        .header-change li:hover {background: orange;}
+        .header-change li:hover {background: #3c8dbc !important;}
         .header-change li:hover > a {color:white;}
         .header-change li {list-style: none;width: 100%;line-height: 30px;padding: 5px}
         .header-change li a {color: #555; display: block;}
-        .label-warning a {color: white;}
+        .bg-blue a {padding: 0px 5px; color: white; font-weight: 100; font-family: monospace;}
+        .bg-blue {padding: 0px 5px; color: white; font-weight: 100; font-family: monospace;}
       </style>
       <header class="main-header">
         <!-- Logo -->
@@ -55,7 +55,8 @@
                 $usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="SUPERVISOR" ){
                 
               if(is_object($usuarioActivoSesion->getTipoUsuario()))
-                $strTipoLogin = $usuarioActivoSesion->getUsuarioPerfil()->getNombre()." - ".$usuarioActivoSesion->getAliasUserSistema();
+                // $strTipoLogin = $usuarioActivoSesion->getUsuarioPerfil()->getNombre()." - ".$usuarioActivoSesion->getAliasUserSistema();
+                $strTipoLogin = substr($usuarioActivoSesion->getUsuarioPerfil()->getNombre(), 0,3)." - ". $usuarioActivoSesion->getAliasUserSistema();
               else
                 $strTipoLogin = "";
 
@@ -70,9 +71,9 @@
                 $usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="CLIENTE" ||
                 $usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="COORDINADOR" || 
                 $usuarioActivoSesion->getUsuarioPerfil()->getNombre()=="SUPERVISOR" ){ ?>
-            <li class="dropdown notifications-menu label-warning" style="list-style: none;">
+            <li class="dropdown notifications-menu bg-blue" style="list-style: none;">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                <span class="" style="padding: 5px;"><?php echo $strTipoLogin; ?> <i class="fa fa-caret-down"></i> </span>
+                <span class="" style=""><?php echo $strTipoLogin; ?> <i class="fa fa-caret-down"></i> </span>
               </a>
               <ul class="dropdown-menu">
                 
@@ -81,28 +82,28 @@
                     <ul class="menu header-change" style="overflow: auto; width: 100%; height: auto; padding: 0px;">
                       <?php $multi = $usuarioActivoSesion->getMultiusuario();
                   
-		                  if(count($multi)==1)
-		                    $multi = array($multi);
+                      if(count($multi)==1)
+                        $multi = array($multi);
 
-		                  if(!empty($multi))
-		                  {
-		                    foreach ($multi as $uType) {
-		                    	switch ($usuarioActivoSesion->getUsuarioPerfil()->getNombre()) {
-		                    		case 'CLIENTE':
-		                    			$tipoUser = 1;
-		                    			break;
-		                    		case 'GESTOR':
-		                    			$tipoUser = 3;
-		                    			break;
-		                    		case 'SUPERVISOR':
-		                    			$tipoUser = 6;
-		                    			break;
-		                    		case 'COORDINADOR':
-		                    			$tipoUser = 4;
-		                    			break;
-		                    	}
+                      if(!empty($multi))
+                      {
+                        foreach ($multi as $uType) {
+                          switch ($usuarioActivoSesion->getUsuarioPerfil()->getNombre()) {
+                            case 'CLIENTE':
+                              $tipoUser = 1;
+                              break;
+                            case 'GESTOR':
+                              $tipoUser = 3;
+                              break;
+                            case 'SUPERVISOR':
+                              $tipoUser = 6;
+                              break;
+                            case 'COORDINADOR':
+                              $tipoUser = 4;
+                              break;
+                          }
 
-		                    	if ($uType->getTipoUsuario()->getId() == $tipoUser) { 
+                          if ($uType->getTipoUsuario()->getId() == $tipoUser) { 
                             if ($tipoUser == 1) {
                               $empresa = $handlerSist->getEmpresaByCodigo($uType->getUserSistema());
 
@@ -111,15 +112,15 @@
                               $name = trim($uType->getAliasUserSistema());
                             }
                             ?>
-		                    		
-			                        <li>
+                            
+                              <li>
 
-			                          <a href='<?php echo $url_activar_header."usuario=".$usuarioActivoSesion->getId()."&tipo_usuario=".$uType->getTipoUsuario()->getId()."&id_usuario_sistema=".$uType->getUserSistema()."&alias_usuario_sistema=".$uType->getAliasUserSistema(); ?>'>
-			                            <?php echo trim($name) ?>
+                                <a href='<?php echo $url_activar_header."usuario=".$usuarioActivoSesion->getId()."&tipo_usuario=".$uType->getTipoUsuario()->getId()."&id_usuario_sistema=".$uType->getUserSistema()."&alias_usuario_sistema=".$uType->getAliasUserSistema(); ?>' style="font-weight: 100; font-family: monospace;">
+                                  <?php echo trim($name) ?>
                                   
-			                          </a>
-			                        </li>
-		                    	<?php }
+                                </a>
+                              </li>
+                          <?php }
                        }
                       }
                       ?>
@@ -129,8 +130,8 @@
               </ul>
             </li>
             <?php } else{ ?>
-	          	<span class="label-warning" style="padding: 3px;"><?php echo $strTipoLogin; ?></span>
-	          <?php } ?>
+              <span class="label-primary" style="padding: 3px;"><?php echo $strTipoLogin; ?></span>
+            <?php } ?>
           </label>
 
           <?php
@@ -158,15 +159,37 @@
               <!-- FIN LICENCIAS -->
               <!-- ASISTENCIAS -->
               <?php include_once PATH_VISTA.'Notificaciones/asistencia.php'; ?>
-              <!-- FIN ASISTENCIAS --> 
+              <!-- FIN ASISTENCIAS -->
               <!-- AUSENTE -->
               <?php include_once PATH_VISTA.'Notificaciones/ausente.php'; ?>
               <!-- FIN AUSENTE -->
-              <!-- KANBAN -->
+              
               <?php include_once PATH_VISTA.'Notificaciones/kanban.php'; ?>
-              <!-- FIN KANBAN -->
 
-              <li class="dropdown user user-menu">
+              <li class="dropdown notifications-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                  <i class="fa fa-bullhorn"></i>                     
+                  <?php 
+                      
+                    if($usuarioActivoSesion->getUsuarioPerfil()->getId()==1 || $usuarioActivoSesion->getUsuarioPerfil()->getId()==3){
+                      echo "<span id='contador_noti_admin' class='label' style='font-size:12px;'></span>";
+                    }
+
+                    if($usuarioActivoSesion->getUsuarioPerfil()->getId()==2){                         
+                      echo "<span id='contador_noti_user' class='label' style='font-size:12px;'></span>";
+                    }
+
+                    if(!is_null($usuarioActivoSesion->getTipoUsuario())){
+                        
+                      if(count($usuarioActivoSesion->getTipoUsuario())==1){
+
+                        if($usuarioActivoSesion->getTipoUsuario()->getId()==1){                                        
+                          echo "<span id='contador_noti_empresa' class='label' style='font-size:12px;'></span>";
+                        }                  
+                      }
+                    }
+                  ?>
+
                 </a>
                 <ul class="dropdown-menu">                
                   <li>                      
@@ -317,6 +340,7 @@
                   else                  
                     $foto_perfil = PATH_CLIENTE.$usuarioActivoSesion->getFotoPerfil();                                      
               ?>
+
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                   <img src=<?php echo $foto_perfil; ?> class="user-image" alt="User Image"/>
@@ -355,13 +379,13 @@
                 </ul>
               </li>
               <?php
-		          if($usuarioActivoSesion->getCambioRol()){               
-		        ?>
-		          <!-- Control Sidebar Toggle Button -->
-		          <li>
-		            <a href="#" data-toggle="control-sidebar"><i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" title="Cambio de Rol"></i></a>
-		          </li>
-		      <?php } ?>
+              if($usuarioActivoSesion->getCambioRol()){               
+              ?>
+                <!-- Control Sidebar Toggle Button -->
+                <li>
+                  <a href="#" data-toggle="control-sidebar"><i class="fa fa-refresh" data-toggle="tooltip" data-placement="bottom" title="Cambio de Rol"></i></a>
+                </li>
+            <?php } ?>
             </ul>
           </div>
         </nav>

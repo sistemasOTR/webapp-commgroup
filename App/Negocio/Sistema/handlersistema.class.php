@@ -2892,6 +2892,41 @@
 				throw new Exception($e->getMessage());	
 			}
 		}
+
+		public function bajaGestor($idGestor,$fecha) {
+			try {
+				
+				$query = "UPDATE GESTORESTT SET GESTOR91_HABILI = 'N', GESTOR91_FECBAJA = '".$fecha."' WHERE GESTOR11_CODIGO = ".$idGestor;
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+
+		public function selectGestoresByPlaza($plaza) {
+			try {
+				
+				$query = "SELECT 
+							GESTOR11_CODIGO AS COD, 
+							GESTOR21_ALIAS AS NOMBRE,
+							GESTOR91_FECBAJA AS BAJA,
+							GESTOR91_FECALT AS ALTA 
+							FROM GESTORESTT 
+							WHERE GESTOR91_PLAZA = '".$plaza."'";
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+
 	}
 	
 ?>

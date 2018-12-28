@@ -65,8 +65,27 @@
 
   $consulta = $handler->consultaPuntajesCoordinador($fMES,$fHOY, $user->getAliasUserSistema());
 
-  $gestoresPlaza = $handlerSist->selectAllGestor($user->getAliasUserSistema());
+  $gestoresPlaza = $handlerSist->selectGestoresByPlaza($user->getAliasUserSistema());
+  // var_dump($gestoresPlaza);
+  // exit();
+  if(!empty($consulta))
+  {
+    $gestPlaza = '';
+    $nomGestores = '';
+    foreach ($consulta as $key => $value) { 
+      if ($gestPlaza == '') {
+        $gestPlaza[] = $value->COD_GESTOR;
+        $nomGestores[$value->COD_GESTOR] = $value->NOM_GESTOR;
+      }
+      if (!in_array($value->COD_GESTOR, $gestPlaza)) {
+        $gestPlaza[] = $value->COD_GESTOR;
+        $nomGestores[$value->COD_GESTOR] = $value->NOM_GESTOR;
+      }
+    }
+  }
 
+  var_dump($gestPlaza);
+  exit();
 
   // Determinar días laborales
   // ============================

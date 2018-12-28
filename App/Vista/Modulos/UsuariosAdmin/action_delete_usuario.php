@@ -17,8 +17,14 @@
 	$info = "../../../../index.php?view=usuarioABM&info=";     		
 
 	try
-	{							
+	{	
+
         $handler = new HandlerUsuarios;        
+        $usuario = $handler->selectById($id);
+        if ($perfil == 5) {
+        	$handlerSist = new HandlerSistema;
+	        $handlerSist->bajaGestor(intval($usuario->getUserSistema()),$fecha);
+        }
         $handler->delete($id);
 
      if (intval($perfil) !=6) {
