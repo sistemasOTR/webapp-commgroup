@@ -375,6 +375,12 @@
 			}
 			break;
 
+		case 'importacion_coordinador':
+			if($esCoordinador){
+				$include = 'Modulos/Importacion/index_form_coordinador.php';
+			}
+			break;
+
 		case 'importacion_1':
 			if($permiso->getModuloImportacionBoolean() && $esCliente){
 				if(is_object($usuarioActivoSesion->getTipoUsuario())){

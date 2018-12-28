@@ -1,6 +1,7 @@
 <?php
 	include_once "../../../Config/config.ini.php";
 	include_once PATH_NEGOCIO."Usuarios/handlerusuarios.class.php";		
+	include_once PATH_NEGOCIO."Usuarios/handlerplazausuarios.class.php";		
 	include_once PATH_NEGOCIO."Usuarios/handlertipousuarios.class.php";		
 	include_once PATH_NEGOCIO."Usuarios/handlerperfiles.class.php";		
 	include_once PATH_NEGOCIO."Sistema/handlersistema.class.php";		
@@ -33,7 +34,8 @@
 
 	$cambio_rol = (isset($_POST['cambio_rol'])? $_POST['cambio_rol']:'');
 	$plaza = (isset($_POST['slt_plaza'])? $_POST['slt_plaza']:'');
-
+	$handlerSistema = new HandlerSistema;
+	$handlerPlaza = new HandlerPlazaUsuarios;
 	if($cambio_rol=="on")
 		$cambio_rol = true;
 	else
@@ -107,6 +109,13 @@
         	throw new Exception("Usuario ya creado con el email ".$email);        	
 
         $handler->insertUsuariosAdmin($nombre,$apellido,$foto,$email,$password,$perfil,$objTU,$id_user_sistema,$alias_user_sistema,$cambio_rol,$plaza);
+
+        if ($slt_perfil == 5) {
+        	$lastGestor = $handlerSistema->lastGestor();
+        	$lastGestor = intval($lastGestor[0]->COD) + 1;
+        	$plazaGestor = $handlerPlaza->selectById($plaza);
+        	$handlerSistema->altaGestor($lastGestor,strtoupper($apellido.' '.$nombre),96,$dni,1234,'S',$ingreso,$plazaGestor->getNombre());
+        }
 
         if ($slt_perfil != 6) {	
 	        $handlerlegajos= new HandlerLegajos;

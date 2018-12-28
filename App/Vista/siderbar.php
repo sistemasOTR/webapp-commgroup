@@ -28,6 +28,7 @@
         $url_configuraciones = "index.php?view=configuraciones";
         $url_importacion = "index.php?view=importacion";
         $url_importacion_manual = "index.php?view=importacion_manual";
+        $url_importacion_coordinador = "index.php?view=importacion_coordinador";
         $url_plaza_cp = "index.php?view=cp_plaza";
         $url_importacion_sin_plaza = "index.php?view=importaciones_sin_plaza";
         $url_importacion_sin_importar = "index.php?view=importaciones_sin_importar";
@@ -488,6 +489,13 @@
             <?php 
               }
             ?>
+            <?php if($esCoordinador){ ?>
+              <li class="treeview" id="mnu_importacion">
+                <a href=<?php echo $url_importacion_coordinador; ?>>
+                  <i class="fa fa-file-text-o"></i> <span>Carga Gestion</span> </i>
+                </a>
+              </li>
+            <?php } ?>
 
             <?php
               if($permiso->getModuloImportacionBoolean()){               

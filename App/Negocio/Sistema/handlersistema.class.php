@@ -2907,6 +2907,55 @@
 			}
 		}
 
+		public function altaGestor($lastGestor,$nombre,$tipodoc,$dni,$carserv,$habili,$ingreso,$plazaGestor) {
+			try {
+				
+				$query = "INSERT INTO GESTORESTT
+	           (GESTOR11_CODIGO
+	           ,GESTOR21_ALIAS
+	           ,GESTOR31_TIPDOC
+	           ,GESTOR32_NUMDOC
+	           ,GESTOR91_CARSERV
+	           ,GESTOR91_HABILI
+	           ,GESTOR91_FECALT
+	           ,GESTOR91_ALICOO
+	           ,GESTOR91_PLAZA)
+	     VALUES
+	           (".$lastGestor.", '"
+	           .$nombre."', "
+	           .$tipodoc.", "
+	           .$dni.", "
+	           .$carserv.", '"
+	           .$habili."', '"
+	           .$ingreso."', '"
+	           .$plazaGestor."', '"
+	           .$plazaGestor."')";
+
+	           // var_dump($query);
+	           // exit();
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+
+		public function lastGestor() {
+			try {
+				
+				$query = "SELECT TOP 1 GESTOR11_CODIGO AS COD FROM GESTORESTT WHERE GESTOR11_CODIGO < 9000 ORDER BY GESTOR11_CODIGO DESC";
+
+				$result = SQLsistema::selectObject($query);
+						
+				return $result;
+
+			} catch (Exception $e) {
+				throw new Exception($e->getMessage());	
+			}
+		}
+
 		public function selectGestoresByPlaza($plaza) {
 			try {
 				

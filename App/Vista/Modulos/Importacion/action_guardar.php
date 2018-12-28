@@ -14,6 +14,7 @@
 	$cols = (isset($_POST['cols'])? $_POST['cols']:'');
 	$rows = (isset($_POST['rows'])? $_POST['rows']:'');
 	$forms = (isset($_POST['forms'])? $_POST['forms']:'');
+	$coordinador = (isset($_POST['coordinador'])? $_POST['coordinador']:'');
 
 
 	if(!empty($forms)){
@@ -23,6 +24,11 @@
 	else{
 		$err = "../../../../index.php?view=importacion&err=";     		
 		$info = "../../../../index.php?view=importacion&info=";     				
+	}
+
+	if ($coordinador == 'si') {
+		$err = "../../../../index.php?view=importaciones_sin_importar&err=";     		
+		$info = "../../../../index.php?view=importaciones_sin_importar&info=";
 	}
 
 	try {
